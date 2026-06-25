@@ -1,10 +1,16 @@
 // public/js/network.js
 
 const Network = {
+  // -----------------------------
+  // AUTH TOKEN
+  // -----------------------------
   token() {
     return localStorage.getItem("networkToken") || "";
   },
 
+  // -----------------------------
+  // GENERIC API WRAPPER
+  // -----------------------------
   async api(path, options = {}) {
     try {
       const res = await fetch(path, {
@@ -15,7 +21,6 @@ const Network = {
         ...options
       });
 
-      // If backend returns HTML (404), avoid JSON crash
       const text = await res.text();
       try {
         return JSON.parse(text);
@@ -32,21 +37,21 @@ const Network = {
   // -----------------------------
   // HOMEPAGE FEEDS
   // -----------------------------
-
   async loadHomeFeeds() {
     this.loadHomeVendors();
-    this.loadHomeServices();
     this.loadHomeProducts();
+    this.loadHomeServices();
   },
 
+  // HOME VENDORS FEED
   async loadHomeVendors() {
     const feed = document.getElementById("vendors-feed");
     if (!feed) return;
 
     const vendors = await this.api("/api/network/vendors");
-    if (!Array.isArray(vendors)) return;
+    const list = Array.isArray(vendors) ? vendors : [];
 
-    feed.innerHTML = vendors.map(v => `
+    feed.innerHTML = list.slice(0, 6).map(v => `
       <div class="feed-card" onclick="Network.goVendor('${v.id}')">
         <img src="${v.photoUrl || '/network/public/img/default-vendor.jpg'}" class="feed-photo">
         <div class="feed-title">${v.name}</div>
@@ -55,36 +60,76 @@ const Network = {
     `).join("");
   },
 
-  async loadHomeServices() {
-    const feed = document.getElementById("services-feed");
-    if (!feed) return;
-
-    let services = await this.api("/api/network/services");
-    if (!Array.isArray(services)) return;
-
-    services.sort((a, b) => (b.featured || 0) - (a.featured || 0));
-
-    feed.innerHTML = services.map(s => `
-      <div class="feed-card" onclick="Network.goService('${s.id}')">
-        <img src="${s.photoUrl || '/network/public/img/default-service.jpg'}" class="feed-photo">
-        <div class="feed-title">${s.name}</div>
-        <div class="feed-sub">$${s.price}</div>
-      </div>
-    `).join("");
-  },
-
+  // HOME PRODUCTS FEED (with starter items)
   async loadHomeProducts() {
     const feed = document.getElementById("products-feed");
     if (!feed) return;
 
     const products = await this.api("/api/network/products");
-    if (!Array.isArray(products)) return;
+    const list = Array.isArray(products) ? products : [];
 
-    feed.innerHTML = products.map(p => `
-      <div class="feed-card" onclick="Network.goProduct('${p.id}')">
+    const starter = [
+      {
+        id: "laundry-bubbles",
+        name: "Laundry Bubbles",
+        price: 25,
+        description: "Door-to-door laundry, shoes, and sewing — powered by Beltline Cloud.",
+        photoUrl: "/assets/img/laundry-bubbles.jpg",
+        external: "https://laundry-bubbles.pages.dev/"
+      },
+      {
+        id: "go-time-software",
+        name: "Go Time Software",
+        price: 0,
+        description: "Cinematic dashboards, course systems, and Beltline‑grade software.",
+        photoUrl: "/assets/img/go-time-logo.jpg",
+        external: "https://go-time.pages.dev/"
+      }
+    ];
+
+    const combined = [...starter, ...list];
+
+    feed.innerHTML = combined.slice(0, 8).map(p => `
+      <div class="feed-card" onclick="Network.goProduct('${p.id}', '${p.external || ""}')">
         <img src="${p.photoUrl || '/network/public/img/default-product.jpg'}" class="feed-photo">
         <div class="feed-title">${p.name}</div>
-        <div class="feed-sub">$${p.price}</div>
+        <div class="feed-sub">
+          ${p.description || ''}<br>
+          ${p.price ? `$${p.price}` : ''}
+        </div>
+      </div>
+    `).join("");
+  },
+
+  // HOME SERVICES FEED (with Fast Roll starter)
+  async loadHomeServices() {
+    const feed = document.getElementById("services-feed");
+    if (!feed) return;
+
+    const services = await this.api("/api/network/services");
+    let list = Array.isArray(services) ? services : [];
+
+    const starter = [
+      {
+        id: "fast-roll-delivery",
+        name: "Fast Roll Delivery",
+        price: 9,
+        description: "One‑tap Beltline delivery for any product on The Network.",
+        photoUrl: "/assets/img/Fast-logo.png",
+        external: "https://fast-roll.pages.dev/"
+      }
+    ];
+
+    list = [...starter, ...list];
+
+    feed.innerHTML = list.slice(0, 8).map(s => `
+      <div class="feed-card" onclick="Network.goService('${s.id}', '${s.external || ""}')">
+        <img src="${s.photoUrl || '/network/public/img/default-service.jpg'}" class="feed-photo">
+        <div class="feed-title">${s.name}</div>
+        <div class="feed-sub">
+          ${s.description || ''}<br>
+          ${s.price ? `$${s.price}` : ''}
+        </div>
       </div>
     `).join("");
   },
@@ -92,7 +137,6 @@ const Network = {
   // -----------------------------
   // EXPLORE PAGE
   // -----------------------------
-
   async loadExplore() {
     const grid = document.getElementById("explore-grid");
     if (!grid) return;
@@ -111,7 +155,6 @@ const Network = {
   // -----------------------------
   // VENDORS LIST PAGE
   // -----------------------------
-
   async loadVendors() {
     const grid = document.getElementById("vendors-grid");
     if (!grid) return;
@@ -119,13 +162,22 @@ const Network = {
     const vendors = await this.api("/api/network/vendors");
     if (!Array.isArray(vendors)) return;
 
-    grid.innerHTML = vendors.map(v => `
-      <div class="card" onclick="Network.goVendor('${v.id}')">
-        <h2>${v.name}</h2>
-        <p>${v.categories || ''}</p>
-        <p>${v.bio || ''}</p>
-      </div>
-    `).join("");
+    // Keep existing signup card (first child), append vendors after
+    const signupCard = grid.querySelector(".signup-card");
+    grid.innerHTML = "";
+    if (signupCard) grid.appendChild(signupCard);
+
+    const html = vendors.map(v => {
+      return `
+        <div class="card" onclick="Network.goVendor('${v.id}')">
+          <h2>${v.name}</h2>
+          <p>${v.categories || ''}</p>
+          <p>${v.bio || ''}</p>
+        </div>
+      `;
+    }).join("");
+
+    grid.insertAdjacentHTML("beforeend", html);
   },
 
   goVendor(id) {
@@ -135,7 +187,6 @@ const Network = {
   // -----------------------------
   // SINGLE VENDOR PAGE
   // -----------------------------
-
   async loadVendor() {
     const container = document.getElementById("vendor-container");
     if (!container) return;
@@ -173,7 +224,8 @@ const Network = {
           <div class="item-card">
             <h3>${p.name}</h3>
             <p>$${p.price}</p>
-            <button onclick="Network.purchase('${vendor.id}','${p.id}')">Purchase</button>
+            <p>${p.description || ""}</p>
+            <button onclick="Network.purchase('${vendor.id}','${p.id}')">Order with Fast Roll</button>
           </div>
         `).join("")}
       </div>
@@ -195,6 +247,7 @@ const Network = {
           <div class="item-card">
             <h3>${s.name}</h3>
             <p>$${s.price}</p>
+            <p>${s.description || ""}</p>
             <button onclick="Network.goService('${s.id}')">View</button>
           </div>
         `).join("")}
@@ -205,7 +258,6 @@ const Network = {
   // -----------------------------
   // WORKSHOPS LIST PAGE
   // -----------------------------
-
   async loadWorkshops() {
     const grid = document.getElementById("workshops-grid");
     if (!grid) return;
@@ -223,9 +275,8 @@ const Network = {
   },
 
   // -----------------------------
-  // PROFILE PAGE
+  // PROFILE PAGE (NETWORK USER)
   // -----------------------------
-
   async loadProfile() {
     const nameEl = document.getElementById("profile-name");
     if (!nameEl) return;
@@ -254,9 +305,8 @@ const Network = {
   },
 
   // -----------------------------
-  // AUTH
+  // AUTH (LOGIN / SIGNUP)
   // -----------------------------
-
   async login() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
@@ -293,11 +343,23 @@ const Network = {
   },
 
   // -----------------------------
-  // PURCHASE + BOOKING
+  // PURCHASE + FAST ROLL
   // -----------------------------
-
   async purchase(vendorId, productId) {
-    alert(`Purchase flow for vendor ${vendorId}, product ${productId}.`);
+    // Call your Worker to create an order, then send to Fast Roll
+    const res = await this.api("/api/network/pay", {
+      method: "POST",
+      body: JSON.stringify({ vendorId, productId })
+    });
+
+    if (res.error) {
+      alert("Could not start order.");
+      return;
+    }
+
+    // Fast Roll: one‑tap delivery
+    const fastUrl = `https://fast-roll.pages.dev/?orderId=${encodeURIComponent(res.orderId)}`;
+    window.open(fastUrl, "_blank");
   },
 
   async bookWorkshop(vendorId, workshopId) {
@@ -307,12 +369,19 @@ const Network = {
   // -----------------------------
   // NAV HELPERS
   // -----------------------------
-
-  goService(id) {
+  goService(id, external = "") {
+    if (external) {
+      window.open(external, "_blank");
+      return;
+    }
     window.location.href = `service.html?id=${encodeURIComponent(id)}`;
   },
 
-  goProduct(id) {
+  goProduct(id, external = "") {
+    if (external) {
+      window.open(external, "_blank");
+      return;
+    }
     window.location.href = `product.html?id=${encodeURIComponent(id)}`;
   }
 };
