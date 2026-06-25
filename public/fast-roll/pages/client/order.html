@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Start Order — The Fast Roll</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/fast-roll/img/Fast-logo.png" />
+
+    <!-- Social Preview -->
+    <meta property="og:title" content="Start a Beltline Delivery — The Fast Roll" />
+    <meta property="og:description" content="Order a Beltline delivery from skaters, longboarders, e‑bikes, scooters & OneWheels." />
+    <meta property="og:image" content="/img/fast-index.jpg" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Start a Beltline Delivery — The Fast Roll" />
+    <meta name="twitter:description" content="Fast Beltline-native delivery by riders on wheels." />
+    <meta name="twitter:image" content="/img/fast-index.jpg" />
+
+    <link rel="stylesheet" href="/fast-roll/css/style.css" />
+
+    <style>
+        /* SCOOTER BACKGROUND */
+        body {
+            position: relative;
+            background: #ffffff;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("/img/fast-scooter-logo.jpg");
+            background-size: 78%;
+            background-repeat: no-repeat;
+            background-position: center 8%;
+            opacity: 0.14;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* FORM WRAPPER */
+        .form-wrapper {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(6px);
+            padding: 32px;
+            border-radius: 12px;
+            max-width: 520px;
+            margin: 80px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <div class="logo">THE FAST ROLL</div>
+        <div class="nav-links">
+            <a href="/fast-roll/index.html">Home</a>
+        </div>
+    </nav>
+
+    <main class="form-wrapper">
+        <h1>Start Your Delivery</h1>
+        <p>Tell us what you bought and where you want it delivered.</p>
+
+        <form id="orderForm">
+
+            <div class="form-group">
+                <label>What did you buy?</label>
+                <input type="text" id="item" placeholder="2 scoops from Jeni’s…" required />
+            </div>
+
+            <div class="form-group">
+                <label>Store name</label>
+                <input type="text" id="store" placeholder="Store or restaurant" required />
+            </div>
+
+            <div class="form-group">
+                <label>Dropoff location</label>
+                <textarea id="dropoff" placeholder="Exact spot or address near the Beltline" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Item value (max $50 for new riders)</label>
+                <input type="number" id="value" min="1" max="50" required />
+            </div>
+
+            <div class="form-group">
+                <label>Item weight (lbs)</label>
+                <input type="number" id="weight" min="1" max="50" required />
+            </div>
+
+            <div class="form-group">
+                <label>Tip Your Rider (optional)</label>
+                <select id="tipPre">
+                    <option value="0">$0</option>
+                    <option value="2">$2</option>
+                    <option value="5">$5</option>
+                    <option value="10">$10</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="customTipWrapper" style="display:none;">
+                <label>Custom Tip Amount</label>
+                <input type="number" id="tipCustom" min="1" />
+            </div>
+
+            <p class="form-note">
+                After submitting, you’ll upload your receipt and complete payment via PayPal.
+            </p>
+
+            <button class="primary-btn" type="submit">Continue</button>
+        </form>
+    </main>
+
+    <script src="/fast-roll/js/app.js"></script>
+</body>
+</html>

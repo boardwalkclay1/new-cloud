@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rider Signup — The Fast Roll</title>
+    <link rel="stylesheet" href="/fast-roll/css/style.css" />
+
+    <style>
+        /* Page-specific background */
+        body {
+            background: url('/img/fast-longboard.jpg') center/cover no-repeat fixed;
+            background-color: #05060a;
+        }
+
+        /* Dark overlay for readability */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.55),
+                rgba(0,0,0,0.75)
+            );
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="nav">
+    <div class="logo">
+        <img src="/fast-roll/img/Fast-logo.png" class="logo-img" alt="The Fast Roll Logo" />
+    </div>
+    <div class="nav-links">
+        <a href="/fast-roll/index.html#how">How It Works</a>
+        <a href="/fast-roll/index.html#order">Order</a>
+        <a href="/fast-roll/index.html#riders">Riders</a>
+    </div>
+</nav>
+
+<div class="form-wrapper" style="margin-top:140px;">
+    <h1>Become a Rider</h1>
+    <p>Longboarders, skaters, e‑bikes, OneWheels — roll the Beltline and get paid.</p>
+
+    <form id="riderSignupForm">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name" required />
+        </div>
+
+        <div class="form-group">
+            <label>Vehicle</label>
+            <select id="vehicle">
+                <option value="longboard">Longboard</option>
+                <option value="inlines">Inline Skates</option>
+                <option value="skateboard">Skateboard</option>
+                <option value="escooter">E‑Scooter</option>
+                <option value="ebike">E‑Bike</option>
+                <option value="onewheel">OneWheel</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>PayPal Email</label>
+            <input type="email" id="paypal" required />
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" required />
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="confirm" required />
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="terms" />
+                I agree that I ride at my own risk and The Fast Roll is not liable.
+            </label>
+        </div>
+
+        <button class="primary-btn" type="submit">Create Rider Account</button>
+    </form>
+</div>
+
+<script src="/fast-roll/js/app.js"></script>
+</body>
+</html>

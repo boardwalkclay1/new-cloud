@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rider Dashboard — The Fast Roll</title>
+
+    <link rel="stylesheet" href="/fast-roll/css/style.css" />
+</head>
+
+<body>
+
+<nav class="nav">
+    <div class="logo">
+        <img src="/fast-roll/img/Fast-logo.png" class="logo-img" alt="The Fast Roll Logo" />
+    </div>
+
+    <div class="nav-links">
+        <a href="/fast-roll/index.html#how">How It Works</a>
+        <a href="/fast-roll/index.html#order">Order</a>
+        <a href="/fast-roll/index.html#riders">Riders</a>
+    </div>
+</nav>
+
+<div class="form-wrapper">
+    <h1>Rider Dashboard</h1>
+    <p>Your zone, your jobs, your tools — all in one place.</p>
+
+    <div class="form-group">
+        <label>Your Beltline Radius</label>
+        <div id="mapContainer" class="rider-card" style="height:260px;">
+            <p style="opacity:0.6; font-size:0.9rem;">
+                Map will load here once your engine is connected.
+            </p>
+        </div>
+
+        <div style="margin-top:10px;">
+            <label>Radius (miles)</label>
+            <input type="range" id="radiusSlider" min="0.5" max="5" step="0.5" value="1.5" />
+            <span id="radiusValue">1.5 mi</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Your Profile</label>
+        <div id="riderProfileSummary" class="form-note"></div>
+        <button class="secondary-btn" onclick="location.href='/pages/rider/profile.html'">
+            Edit Profile
+        </button>
+    </div>
+
+    <div class="form-group">
+        <label>Available Jobs</label>
+        <div id="jobList" class="rider-grid"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Active Delivery</label>
+        <div id="activeDelivery" class="rider-card">No active delivery.</div>
+    </div>
+
+    <div class="form-group">
+        <label>Safety & Status</label>
+        <div id="riderStatus" class="form-note"></div>
+        <button class="secondary-btn" onclick="location.href='/pages/rider/agreement.html'">
+            View Rider Agreement
+        </button>
+        <button class="secondary-btn" onclick="location.href='/pages/rider/how-it-works.html'">
+            How Riding Works
+        </button>
+    </div>
+
+    <button class="secondary-btn" onclick="location.href='/index.html'">
+        Log Out
+    </button>
+</div>
+
+<script src="/fast-roll/js/app.js"></script>
+<script src="/fast-roll/js/rider.js"></script>
+</body>
+</html>
