@@ -81,8 +81,6 @@
             color:#d4e8ff;
         }
 
-        .hidden { display:none; }
-
         @media (max-width:700px) {
             .card {
                 flex:1 1 100%;
@@ -106,34 +104,34 @@
         <p>Edit your vendor identity and categories.</p>
     </div>
 
-    <div class="card" id="card-products" onclick="Staff.go('products.html')">
+    <div class="card" onclick="Staff.go('products.html')">
         <h2>🛍️ Products</h2>
         <p>Manage items you sell.</p>
     </div>
 
-    <div class="card" id="card-services" onclick="Staff.go('services.html')">
+    <div class="card" onclick="Staff.go('services.html')">
         <h2>🧰 Services</h2>
         <p>Manage services you offer.</p>
     </div>
 
-    <div class="card" id="card-workshops" onclick="Staff.go('workshops.html')">
+    <div class="card" onclick="Staff.go('workshops.html')">
         <h2>🎓 Workshops</h2>
         <p>Manage classes and sessions.</p>
     </div>
 
-    <div class="card" id="card-orders" onclick="Staff.go('orders.html')">
+    <div class="card" onclick="Staff.go('orders.html')">
         <h2>📦 Orders</h2>
         <p>View and update customer orders.</p>
     </div>
 
-    <div class="card" id="card-payouts" onclick="Staff.go('payouts.html')">
+    <div class="card" onclick="Staff.go('payouts.html')">
         <h2>💰 Payouts</h2>
         <p>Track your earnings.</p>
     </div>
 
 </section>
 
-<script src="../js/staff.js"></script>
+<script src="/network/staff/js/staff.js"></script>
 <script>
     Staff.initDashboard();
 </script>
