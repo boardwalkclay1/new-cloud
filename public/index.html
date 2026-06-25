@@ -9,127 +9,116 @@
     <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
 
     <!-- SOCIAL PREVIEW -->
-    <meta property="og:title" content="Boardwalk Beltline Inc">
-    <meta property="og:description" content="Movement, music, motion — the Atlanta Beltline through the eyes of Boardwalk Clay.">
-    <meta property="og:image" content="assets/img/bb-train.png">
+    <meta property="og:title" content="Beltline Cloud Inc">
+    <meta property="og:description" content="Music, movement, safety, and community — the Beltline’s first digital cloud.">
+    <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
 
     <!-- MASTER CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 
     <style>
-        /* REMOVE OLD LOGO BACKGROUND */
-        .logo {
-            background: none !important;
-        }
-
+        /* CLOUD LOGO — BIGGER + CLEANER */
         .logo img {
-            height: 60px;
+            height: 95px;
             cursor: pointer;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
-        }
-
-        /* MINIMAL NAV */
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: var(--yellow);
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.25s;
-        }
-
-        .nav-links a:hover {
-            color: #b30000;
-        }
-
-        /* MOBILE MENU */
-        .mobile-menu a {
-            color: var(--yellow);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* LOGO DROPDOWN SYSTEM */
-        .logo-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .logo-box {
-            width: 160px;
-            cursor: pointer;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
             transition: 0.3s;
         }
-
-        .logo-box img {
-            width: 100%;
-            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
-        }
-
-        .logo-box:hover {
+        .logo img:hover {
             transform: scale(1.05);
         }
 
-        .dropdown-panel {
-            display: none;
-            background: rgba(0,0,0,0.85);
-            border: 1px solid var(--ember-soft);
-            border-radius: 14px;
-            padding: 25px;
-            margin: 20px auto;
-            max-width: 900px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .dropdown-panel h3 {
-            margin-top: 0;
+        /* NAV */
+        .nav-links a {
             color: var(--yellow);
-            font-family: 'Cinzel', serif;
-        }
-
-        .dropdown-panel p {
-            line-height: 1.6;
-            color: #eee;
-        }
-
-        .dropdown-panel .btn {
-            margin-top: 15px;
-            display: inline-block;
-            padding: 12px 22px;
-            border-radius: 8px;
-            background: var(--yellow);
-            color: #000;
             font-weight: 700;
             text-decoration: none;
             transition: 0.25s;
         }
-
-        .dropdown-panel .btn:hover {
-            background: #b30000;
-            color: #fff;
+        .nav-links a:hover {
+            color: #ff4444;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 160px 20px 120px;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 3.4rem;
+            font-weight: 800;
+            text-shadow: 0 0 20px rgba(0,0,0,0.6);
+        }
+        .hero p {
+            font-size: 1.4rem;
+            margin-top: 10px;
+            opacity: 0.9;
         }
 
-        /* FOOTER LINKS */
-        .footer a {
+        /* SECTION */
+        .section {
+            max-width: 1100px;
+            margin: 80px auto;
+            padding: 20px;
+            color: white;
+        }
+        .section h2 {
+            font-size: 2.4rem;
+            margin-bottom: 20px;
             color: var(--yellow);
-            text-decoration: none;
-            font-weight: 600;
+        }
+        .section p, .section li {
+            font-size: 1.2rem;
+            line-height: 1.7;
         }
 
-        .footer a:hover {
-            color: #b30000;
+        /* FEATURE BOXES */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-box {
+            background: rgba(0,0,0,0.65);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 14px;
+            transition: 0.3s;
+        }
+        .feature-box:hover {
+            transform: translateY(-6px);
+            border-color: var(--yellow);
+        }
+        .feature-box h3 {
+            color: var(--yellow);
+            margin-bottom: 12px;
+        }
+
+        /* BUTTON */
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: var(--yellow);
+            color: #000;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: 0.25s;
+        }
+        .btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -141,108 +130,92 @@
 
     <!-- NAV -->
     <nav class="nav">
-        <div class="logo" onclick="toggleMenu()">
-            <img src="/assets/img/cloud/cloud-logo.jpg" alt="Boardwalk Beltline Inc Logo">
+        <div class="logo">
+            <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
         </div>
 
-        <!-- MINIMAL NAV LINKS -->
         <ul class="nav-links">
             <li><a href="/pages/about.html">About</a></li>
-            <li><a href="/pages/shop.html">Shop</a></li>
+            <li><a href="/pages/music.html">Music Station</a></li>
+            <li><a href="/events/index.html">Events</a></li>
             <li><a href="/pages/contact.html">Contact</a></li>
         </ul>
-
-        <div class="burger" onclick="toggleMenu()">
-            <div></div><div></div><div></div>
-        </div>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/pages/about.html">About</a>
-            <a href="/pages/workshops.html">Workshops</a>
-            <a href="/pages/shop.html">Shop</a>
-            <a href="/pages/beltline.html">Beltline Feed</a>
-            <a href="/pages/community.html">Community</a>
-            <a href="/pages/map.html">Map</a>
-            <a href="/pages/marker-system.html">Marker System</a>
-            <a href="/pages/beltline-courtesy.html">Courtesy</a>
-            <a href="/pages/contact.html">Contact</a>
-        </div>
     </nav>
 
     <!-- HERO -->
     <header class="hero">
-        <div class="hero-content">
-            <h1>Movement. Music. Motion.</h1>
-            <p>The Atlanta Beltline through the eyes of Boardwalk Clay.</p>
-        </div>
+        <h1>The Beltline’s First Digital Cloud</h1>
+        <p>Music. Movement. Safety. Community. All in one place.</p>
     </header>
 
-    <!-- LOGO DROPDOWN ROW -->
-    <section class="logo-row">
+    <!-- MUSIC STATION -->
+    <section class="section">
+        <h2>Beltline Cloud Music Station</h2>
+        <p>The Beltline’s first always‑on music station — curated for riders, runners, skaters, and creators.</p>
 
-        <!-- NETWORK -->
-        <div class="logo-box" onclick="toggleDropdown('network-panel')">
-            <img src="/assets/img/network-logo.jpg" alt="The Network">
+        <div class="feature-grid">
+            <div class="feature-box">
+                <h3>🎧 Live Cloud Station</h3>
+                <p>Stream the official Beltline soundtrack — updated daily with local artists and curated mixes.</p>
+                <a class="btn" href="/pages/music.html">Listen Now</a>
+            </div>
+
+            <div class="feature-box">
+                <h3>🎶 Listening Rooms</h3>
+                <p>Choose your vibe: Lo‑Fi, House, Hip‑Hop, R&B, Afrobeat, Jazz, Ambient, and more.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>🌩 CloudSync Mode</h3>
+                <p>A world‑first: everyone listens to the same track at the same time — anywhere on the Beltline.</p>
+                <p>Perfect for group rides, meetups, and community flow sessions.</p>
+            </div>
         </div>
-
-        <!-- FAST ROLL -->
-        <div class="logo-box" onclick="toggleDropdown('fastroll-panel')">
-            <img src="/assets/img/Fast-logo.png" alt="Fast Roll Delivery">
-        </div>
-
     </section>
 
-    <!-- NETWORK DROPDOWN -->
-    <div id="network-panel" class="dropdown-panel">
-        <h3>The Network</h3>
-        <p>The Beltline’s official digital ecosystem — vendors, creators, workshops, services, and community.</p>
-        <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
-    </div>
+    <!-- EVENTS -->
+    <section class="section">
+        <h2>Beltline Events</h2>
+        <p>Workshops, rides, meetups, classes, concerts, and community gatherings — all in one place.</p>
+        <a class="btn" href="/events/index.html">View Events</a>
+    </section>
 
-    <!-- FAST ROLL DROPDOWN -->
-    <div id="fastroll-panel" class="dropdown-panel">
-        <h3>Fast Roll Delivery</h3>
-        <p>The Beltline’s first delivery service built by riders, for riders.</p>
-        <a class="btn" href="https://fast-roll.pages.dev/">Request Delivery</a>
-    </div>
-
-    <!-- BOARDWALK BELTLINE MISSION -->
-    <section class="section alt">
-        <h2>What Is Boardwalk Beltline Inc?</h2>
-
-        <p>Boardwalk Beltline Inc uplifts, educates, and connects the Atlanta Beltline community.</p>
+    <!-- SAFETY + COMMUNITY -->
+    <section class="section">
+        <h2>Safety & Community</h2>
+        <p>Beltline Cloud is built to keep the community connected, informed, and safe.</p>
 
         <ul>
-            <li>✔ Beltline Network for vendors, services, and workshops</li>
-            <li>✔ Fast Roll delivery service</li>
-            <li>✔ Marker system for navigation</li>
-            <li>✔ Maps, guides, and safety information</li>
-            <li>✔ Event calendars and community updates</li>
-            <li>✔ Support for local creators and small businesses</li>
+            <li>✔ Real‑time updates and alerts</li>
+            <li>✔ Courtesy guidelines for riders, walkers, and skaters</li>
+            <li>✔ Meet new people through shared music and events</li>
+            <li>✔ A digital home for the Beltline community</li>
         </ul>
+    </section>
 
-        <p>Everything we build is designed to make the Beltline safer, smarter, and more connected.</p>
+    <!-- NETWORK + FAST ROLL -->
+    <section class="section">
+        <h2>The Network & Fast Roll</h2>
+
+        <div class="feature-grid">
+            <div class="feature-box">
+                <h3>🌐 The Network</h3>
+                <p>The Beltline’s official vendor ecosystem — creators, services, workshops, and small businesses.</p>
+                <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
+            </div>
+
+            <div class="feature-box">
+                <h3>⚡ Fast Roll Delivery</h3>
+                <p>The world’s first Beltline‑native delivery service — built by riders, for riders.</p>
+                <a class="btn" href="https://fast-roll.pages.dev/">Request Delivery</a>
+            </div>
+        </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="footer">
-        <p>© 2026 Beltline Cloud Inc — Built with love for Atlanta</p>
+        © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
     </footer>
-
-    <!-- JS -->
-    <script>
-        function toggleDropdown(id) {
-            const panel = document.getElementById(id);
-            const open = panel.style.display === "block";
-            document.querySelectorAll(".dropdown-panel").forEach(p => p.style.display = "none");
-            panel.style.display = open ? "none" : "block";
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-    </script>
 
 </body>
 </html>
