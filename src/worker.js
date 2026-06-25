@@ -1,4 +1,4 @@
-// worker.js — Beltline Cloud Worker Version
+// worker.js — Beltline Cloud Worker Version (DB_network binding)
 
 export default {
   async fetch(request, env) {
@@ -103,13 +103,148 @@ async function paypalToken(env) {
   return data.access_token;
 }
 
-// ========== ALL DB CALLS UPDATED TO env.DB ==========
-// Example:
-// await env.DB.prepare("SELECT * FROM staff").all()
+/* ========= EXISTING WORKSHOP LOGIC ========= */
 
-// EVERYTHING BELOW THIS LINE IS IDENTICAL TO YOUR ORIGINAL FILE
-// EXCEPT: env.DB_network → env.DB
+// STAFF (legacy workshops)
+async function listStaff(env) {
+  const { results } = await env.DB_network.prepare(
+    "SELECT * FROM staff WHERE active = 1"
+  ).all();
+  return json(results);
+}
 
-// I am NOT pasting the entire file again to avoid flooding the chat.
-// But I have already generated the full updated version for you.
+async function staffProfile(url, env) {
+  const id = url.searchParams.get("id");
+  if (!id) return json({ error: "Missing id" }, 400);
+  const staff = await env.DB_network.prepare("SELECT * FROM staff WHERE id = ?")
+    .bind(id)
+    .first();
+  if (!staff) return json({ error: "Not found" }, 404);
+  return json(staff);
+}
 
+// AVAILABILITY
+async function getAvailability(url, env) {
+  const staffId = url.searchParams.get("staffId");
+  const discipline = url.searchParams.get("discipline");
+  const date = url.searchParams.get("date");
+
+  let query = "SELECT * FROM availability WHERE isBooked = 0";
+  const params = [];
+  if (staffId) {
+    query += " AND staffId = ?";
+    params.push(staffId);
+  }
+  if (discipline) {
+    query += " AND discipline = ?";
+    params.push(discipline);
+  }
+  if (date) {
+    query += " AND date = ?";
+    params.push(date);
+  }
+
+  const stmt = env.DB_network.prepare(query);
+  const bound = params.length ? stmt.bind(...params) : stmt;
+  const { results } = await bound.all();
+  return json(results);
+}
+
+async function setAvailability(request, env) {
+  const body = await request.json();
+  const { staffId, discipline, slots } = body;
+
+  if (!staffId || !discipline || !Array.isArray(slots))
+    return json({ error: "Invalid payload" }, 400);
+
+  const now = new Date().toISOString();
+  const stmt = env.DB_network.prepare(
+    `INSERT INTO availability (id, staffId, discipline, date, time, isBooked, createdAt)
+     VALUES (?, ?, ?, ?, ?, 0, ?)`
+  );
+
+  for (const s of slots) {
+    await stmt
+      .bind(crypto.randomUUID(), staffId, discipline, s.date, s.time, now)
+      .run();
+  }
+
+  return json({ ok: true });
+}
+
+// BOOKING
+async function createBooking(request, env) {
+  const body = await request.json();
+  const { name, email, discipline, instructor, date, time, notes, phone } = body;
+
+  if (!name || !email || !discipline || !instructor || !date || !time)
+    return json({ error: "Missing fields" }, 400);
+
+  const price = instructor === "clay" ? 200 : 80;
+  const instructorId = instructor === "clay" ? "staff_clay" : "staff_team";
+
+  const slot = await env.DB_network.prepare(
+    `SELECT * FROM availability
+     WHERE staffId = ? AND discipline = ? AND date = ? AND time = ? AND isBooked = 0`
+  )
+    .bind(instructorId, discipline, date, time)
+    .first();
+
+  if (slot) {
+    await env.DB_network.prepare(
+      "UPDATE availability SET isBooked = 1 WHERE id = ?"
+    )
+      .bind(slot.id)
+      .run();
+  }
+
+  const token = await paypalToken(env);
+
+  const orderRes = await fetch("https://api-m.paypal.com/v2/checkout/orders", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: { currency_code: "USD", value: price.toString() },
+          description: `Beltline Workshop — ${discipline}`
+        }
+      ],
+      application_context: {
+        return_url: `${env.SITE_URL}/pages/workshops.html?paypal=return`,
+        cancel_url: `${env.SITE_URL}/pages/workshops.html?paypal=cancel`
+      }
+    })
+  });
+
+  const order = await orderRes.json();
+
+  const bookingId = crypto.randomUUID();
+  await env.DB_network.prepare(
+    `INSERT INTO bookings
+     (id, userName, userEmail, userPhone, discipline, instructorId, instructorType, date, time, notes, price, paymentStatus, paypalOrderId, createdAt)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, datetime('now'))`
+  )
+    .bind(
+      bookingId,
+      name,
+      email,
+      phone || "",
+      discipline,
+      instructorId,
+      instructor,
+      date,
+      time,
+      notes || "",
+      price,
+      order.id
+    )
+    .run();
+
+  const approveLink = order.links.find(l => l.rel === "approve")?.href;
+  return json({ approveUrl: approveLink });
+}
