@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard — Boardwalk Beltline</title>
+    <title>Beltline Cloud — Admin Dashboard</title>
 
-    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
     <link rel="stylesheet" href="../assets/css/admin.css">
 
     <style>
@@ -32,7 +32,7 @@
 
         .admin-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 22px;
             padding: 30px;
         }
@@ -63,23 +63,14 @@
             font-weight: 600;
         }
 
-        @media (max-width: 700px) {
-            .admin-grid {
-                grid-template-columns: repeat(2, 1fr);
-                padding: 20px;
-            }
-
-            .tile {
-                padding: 40px 15px;
-            }
-
-            .tile-icon {
-                font-size: 3.2rem;
-            }
-
-            .tile-label {
-                font-size: 1.4rem;
-            }
+        button.logout {
+            background:#b30000;
+            color:#fff;
+            padding:10px 20px;
+            border:none;
+            border-radius:8px;
+            font-weight:600;
+            cursor:pointer;
         }
     </style>
 </head>
@@ -87,10 +78,8 @@
 <body>
 
 <header>
-    <h1>Admin Dashboard</h1>
-    <button onclick="logout()" style="background:#b30000;color:#fff;padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
-        Logout
-    </button>
+    <h1>Beltline Cloud — Admin</h1>
+    <button class="logout" onclick="logout()">Logout</button>
 </header>
 
 <section class="admin-grid">
