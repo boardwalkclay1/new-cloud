@@ -1,13 +1,12 @@
-// STAFF SYSTEM — LOCAL STORAGE VERSION
-// This file controls EVERYTHING the vendor can do AFTER login.
-// Auth is handled separately in auth.js (you said we do that last).
+// STAFF SYSTEM — WORKER + D1 VERSION
+// Auth (email + password) handled in auth.js.
+// auth.js should save { email, name } into localStorage["network_staff_user"] after login.
 
 const Staff = {
-
   key: "network_staff_user",
 
   // -----------------------------
-  // GET / SAVE USER
+  // GET / SAVE USER (AUTH CACHE)
   // -----------------------------
   getUser() {
     const raw = localStorage.getItem(this.key);
@@ -21,69 +20,76 @@ const Staff = {
   // -----------------------------
   // DASHBOARD AUTO-ADAPT
   // -----------------------------
-  initDashboard() {
+  async initDashboard() {
     const user = this.getUser();
-    if (!user) {
+    if (!user || !user.email) {
       window.location.href = "/network/staff/pages/login.html";
       return;
     }
 
+    // Load profile from Worker/D1
+    const profile = await this.fetchJSON(`/api/staff/me?email=${encodeURIComponent(user.email)}`);
+    if (!profile || profile.error) {
+      window.location.href = "/network/staff/pages/login.html";
+      return;
+    }
+
+    // Save latest profile locally (name, types, etc.)
+    user.name = profile.name;
+    user.types = profile.types || [];
+    this.saveUser(user);
+
     const types = user.types || [];
 
-    // Hide nodes based on vendor type
     if (!types.includes("product")) {
       document.getElementById("node-products")?.classList.add("hidden");
     }
-
     if (!types.includes("service")) {
       document.getElementById("node-services")?.classList.add("hidden");
     }
-
     if (!types.includes("workshop")) {
       document.getElementById("node-workshops")?.classList.add("hidden");
     }
-
     if (!types.includes("product") && !types.includes("service")) {
       document.getElementById("node-orders")?.classList.add("hidden");
     }
 
-    // Payouts always visible
-    // Show name in header if you want
     const title = document.querySelector(".network-title");
     if (title) title.textContent = `Staff Dashboard — ${user.name}`;
   },
 
   // -----------------------------
-  // PROFILE PAGE
+  // PROFILE PAGE (D1)
   // -----------------------------
-  loadProfile() {
+  async loadProfile() {
     const user = this.getUser();
-    if (!user) return;
+    if (!user || !user.email) return;
 
-    document.getElementById("vendor-name").value = user.name || "";
-    document.getElementById("vendor-bio").value = user.bio || "";
-    document.getElementById("vendor-tags").value = (user.tags || []).join(", ");
-    document.getElementById("vendor-paypal").value = user.paypal || "";
-    document.getElementById("vendor-active").checked = user.active || false;
-    document.getElementById("vendor-location").checked = user.shareLocation || false;
+    const profile = await this.fetchJSON(`/api/staff/me?email=${encodeURIComponent(user.email)}`);
+    if (!profile || profile.error) return;
 
-    // Vendor types
-    const types = user.types || [];
+    document.getElementById("vendor-name").value = profile.name || "";
+    document.getElementById("vendor-bio").value = profile.bio || "";
+    document.getElementById("vendor-tags").value = (profile.tags || "").toString();
+    document.getElementById("vendor-paypal").value = profile.paypal || "";
+    document.getElementById("vendor-active").checked = !!profile.active;
+    document.getElementById("vendor-location").checked = !!profile.shareLocation;
+
+    const types = (profile.types || "").split(",").map(t => t.trim()).filter(Boolean);
     document.getElementById("type-product").checked = types.includes("product");
     document.getElementById("type-service").checked = types.includes("service");
     document.getElementById("type-workshop").checked = types.includes("workshop");
     document.getElementById("type-creator").checked = types.includes("creator");
 
-    // Photo preview
-    if (user.photo) {
+    if (profile.photoUrl) {
       const img = document.getElementById("vendor-photo-preview");
-      if (img) img.src = user.photo;
+      if (img) img.src = profile.photoUrl;
     }
   },
 
-  saveProfile() {
+  async saveProfile() {
     const user = this.getUser();
-    if (!user) return;
+    if (!user || !user.email) return;
 
     const types = [];
     if (document.getElementById("type-product").checked) types.push("product");
@@ -94,166 +100,117 @@ const Staff = {
     const tags = document.getElementById("vendor-tags").value
       .split(",")
       .map(t => t.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .join(", ");
 
-    user.name = document.getElementById("vendor-name").value;
-    user.bio = document.getElementById("vendor-bio").value;
-    user.tags = tags;
-    user.types = types;
-    user.paypal = document.getElementById("vendor-paypal").value;
-    user.active = document.getElementById("vendor-active").checked;
-    user.shareLocation = document.getElementById("vendor-location").checked;
+    const payload = {
+      email: user.email,
+      name: document.getElementById("vendor-name").value,
+      title: "", // optional, not used in UI yet
+      bio: document.getElementById("vendor-bio").value,
+      instagram: "",
+      website: "",
+      // extra fields you may add later:
+      tags,
+      types: types.join(","),
+      paypal: document.getElementById("vendor-paypal").value,
+      active: document.getElementById("vendor-active").checked ? 1 : 0,
+      shareLocation: document.getElementById("vendor-location").checked ? 1 : 0
+    };
 
-    // Save photo if uploaded
-    const fileInput = document.getElementById("vendor-photo");
-    if (fileInput.files && fileInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        user.photo = reader.result;
-        this.saveUser(user);
-        alert("Profile updated");
-      };
-      reader.readAsDataURL(fileInput.files[0]);
-    } else {
-      this.saveUser(user);
+    const res = await this.postJSON("/api/staff/profile/update", payload);
+    if (res && !res.error) {
       alert("Profile updated");
+    } else {
+      alert("Error updating profile");
     }
   },
 
   // -----------------------------
-  // PRODUCT SYSTEM
+  // PRODUCT SYSTEM (D1)
   // -----------------------------
-  loadProducts() {
+  async loadProducts() {
     const user = this.getUser();
-    if (!user) return;
+    if (!user || !user.email) return;
 
-    user.products = user.products || [];
+    const products = await this.fetchJSON(`/api/staff/products?email=${encodeURIComponent(user.email)}`);
+    if (!products || products.error) return;
+
     const list = document.getElementById("product-list");
-
-    list.innerHTML = user.products.map((p, i) => `
+    list.innerHTML = products.map(p => `
       <div class="product">
         <h3>${p.name} — $${p.price}</h3>
-        <p>${p.description}</p>
-        <button onclick="Staff.deleteProduct(${i})">Delete</button>
+        <p>${p.description || ""}</p>
+        <button onclick="Staff.deleteProduct('${p.id}')">Delete</button>
       </div>
     `).join("");
   },
 
-  addProduct() {
+  async addProduct() {
     const user = this.getUser();
-    if (!user) return;
+    if (!user || !user.email) return;
 
-    user.products = user.products || [];
+    const payload = {
+      email: user.email,
+      type: "product",
+      name: document.getElementById("product-name").value,
+      description: document.getElementById("product-description").value,
+      price: parseFloat(document.getElementById("product-price").value || "0")
+    };
 
-    const name = document.getElementById("product-name").value;
-    const price = document.getElementById("product-price").value;
-    const description = document.getElementById("product-description").value;
-
-    user.products.push({ name, price, description });
-
-    this.saveUser(user);
-    location.reload();
+    const res = await this.postJSON("/api/staff/product/create", payload);
+    if (res && !res.error) {
+      location.reload();
+    } else {
+      alert("Error creating product");
+    }
   },
 
-  deleteProduct(i) {
-    const user = this.getUser();
-    if (!user) return;
-
-    user.products.splice(i, 1);
-    this.saveUser(user);
-    location.reload();
+  async deleteProduct(productId) {
+    const res = await this.postJSON("/api/staff/product/delete", { productId });
+    if (res && !res.error) {
+      location.reload();
+    } else {
+      alert("Error deleting product");
+    }
   },
 
   // -----------------------------
-  // SERVICE SYSTEM
+  // ORDERS + PAYOUTS (D1)
   // -----------------------------
-  loadServices() {
+  async loadOrders() {
     const user = this.getUser();
-    if (!user) return;
+    if (!user || !user.email) return;
 
-    user.services = user.services || [];
-    const list = document.getElementById("service-list");
+    const orders = await this.fetchJSON(`/api/staff/orders?email=${encodeURIComponent(user.email)}`);
+    if (!orders || orders.error) return;
 
-    list.innerHTML = user.services.map((s, i) => `
-      <div class="service">
-        <h3>${s.name} — $${s.price}</h3>
-        <p>Duration: ${s.duration}</p>
-        <p>${s.description}</p>
-        <button onclick="Staff.deleteService(${i})">Delete</button>
+    const list = document.getElementById("order-list");
+    list.innerHTML = orders.map(o => `
+      <div class="order">
+        <h3>${o.productName || "Order"} — $${o.price}</h3>
+        <p>Buyer: ${o.buyerName} (${o.buyerEmail})</p>
+        <p>Status: ${o.paymentStatus}</p>
+        <p>Created: ${o.createdAt}</p>
       </div>
     `).join("");
   },
 
-  addService() {
+  async loadPayouts() {
     const user = this.getUser();
-    if (!user) return;
+    if (!user || !user.email) return;
 
-    user.services = user.services || [];
+    const payouts = await this.fetchJSON(`/api/staff/payouts?email=${encodeURIComponent(user.email)}`);
+    if (!payouts || payouts.error) return;
 
-    const name = document.getElementById("service-name").value;
-    const price = document.getElementById("service-price").value;
-    const duration = document.getElementById("service-duration").value;
-    const description = document.getElementById("service-description").value;
-
-    user.services.push({ name, price, duration, description });
-
-    this.saveUser(user);
-    location.reload();
-  },
-
-  deleteService(i) {
-    const user = this.getUser();
-    if (!user) return;
-
-    user.services.splice(i, 1);
-    this.saveUser(user);
-    location.reload();
-  },
-
-  // -----------------------------
-  // WORKSHOP SYSTEM
-  // -----------------------------
-  loadWorkshops() {
-    const user = this.getUser();
-    if (!user) return;
-
-    user.workshops = user.workshops || [];
-    const list = document.getElementById("workshop-list");
-
-    list.innerHTML = user.workshops.map((w, i) => `
-      <div class="workshop">
-        <h3>${w.title} — $${w.price}</h3>
-        <p>${w.schedule}</p>
-        <p>${w.description}</p>
-        <button onclick="Staff.deleteWorkshop(${i})">Delete</button>
+    const list = document.getElementById("payout-list");
+    list.innerHTML = payouts.map(p => `
+      <div class="payout">
+        <h3>$${p.amount}</h3>
+        <p>Status: ${p.status}</p>
+        <p>Created: ${p.createdAt}</p>
       </div>
     `).join("");
-  },
-
-  addWorkshop() {
-    const user = this.getUser();
-    if (!user) return;
-
-    user.workshops = user.workshops || [];
-
-    const title = document.getElementById("workshop-title").value;
-    const schedule = document.getElementById("workshop-schedule").value;
-    const price = document.getElementById("workshop-price").value;
-    const description = document.getElementById("workshop-description").value;
-
-    user.workshops.push({ title, schedule, price, description });
-
-    this.saveUser(user);
-    location.reload();
-  },
-
-  deleteWorkshop(i) {
-    const user = this.getUser();
-    if (!user) return;
-
-    user.workshops.splice(i, 1);
-    this.saveUser(user);
-    location.reload();
   },
 
   // -----------------------------
@@ -268,5 +225,36 @@ const Staff = {
   // -----------------------------
   go(page) {
     window.location.href = `/network/staff/pages/${page}`;
+  },
+
+  // -----------------------------
+  // HELPER: GET JSON
+  // -----------------------------
+  async fetchJSON(url) {
+    try {
+      const res = await fetch(url, { credentials: "include" });
+      return await res.json();
+    } catch (e) {
+      console.error("fetchJSON error", e);
+      return null;
+    }
+  },
+
+  // -----------------------------
+  // HELPER: POST JSON
+  // -----------------------------
+  async postJSON(url, body) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(body)
+      });
+      return await res.json();
+    } catch (e) {
+      console.error("postJSON error", e);
+      return null;
+    }
   }
 };
