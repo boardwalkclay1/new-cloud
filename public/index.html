@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beltline Cloud Inc</title>
 
-    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-
-    <!-- SOCIAL PREVIEW -->
-    <meta property="og:title" content="Beltline Cloud Inc">
-    <meta property="og:description" content="Music, movement, safety, and community — the Beltline’s first digital cloud.">
-    <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
-
-    <!-- MASTER CSS -->
     <link rel="stylesheet" href="/css/style.css">
 
     <style>
-        /* CLOUD LOGO — BIGGER + CLEANER */
+        /* GLOBAL RESET */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* CLOUD LOGO — BIGGER + RESPONSIVE */
         .logo img {
             height: 120px;
+            max-width: 100%;
             cursor: pointer;
             filter: drop-shadow(0 0 14px rgba(255,255,255,0.45));
             transition: 0.3s;
@@ -29,47 +27,81 @@
         }
 
         /* NAV */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
         .nav-links a {
             color: var(--yellow);
             font-weight: 700;
             text-decoration: none;
             transition: 0.25s;
         }
+
         .nav-links a:hover {
             color: #ff4444;
+        }
+
+        /* MOBILE NAV */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
         }
 
         /* HERO */
         .hero {
             text-align: center;
-            padding: 170px 20px 130px;
+            padding: 150px 20px 100px;
             color: white;
         }
+
         .hero h1 {
-            font-size: 3.8rem;
+            font-size: 3rem;
             font-weight: 900;
             text-shadow: 0 0 25px rgba(0,0,0,0.7);
         }
+
         .hero p {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-top: 12px;
             opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
         }
 
         /* SECTION */
         .section {
             max-width: 1100px;
-            margin: 80px auto;
+            margin: 60px auto;
             padding: 20px;
             color: white;
         }
+
         .section h2 {
-            font-size: 2.6rem;
+            font-size: 2.3rem;
             margin-bottom: 20px;
             color: var(--yellow);
+            text-align: center;
         }
+
         .section p, .section li {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             line-height: 1.7;
         }
 
@@ -77,46 +109,54 @@
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            gap: 25px;
+            margin-top: 30px;
         }
+
         .feature-box {
             background: rgba(0,0,0,0.65);
             border: 1px solid rgba(255,255,255,0.15);
-            padding: 25px;
+            padding: 22px;
             border-radius: 14px;
             transition: 0.3s;
         }
+
         .feature-box:hover {
             transform: translateY(-6px);
             border-color: var(--yellow);
         }
+
         .feature-box h3 {
             color: var(--yellow);
             margin-bottom: 12px;
         }
 
-        /* LOGO BOXES */
+        /* LOGO GRID */
         .logo-grid {
             display: flex;
             justify-content: center;
-            gap: 60px;
+            gap: 50px;
             margin-top: 40px;
+            flex-wrap: wrap;
         }
+
         .logo-card {
-            width: 180px;
+            width: 200px;
             cursor: pointer;
             transition: 0.3s;
             text-align: center;
         }
+
         .logo-card img {
             width: 100%;
             border-radius: 12px;
             filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
         }
+
         .logo-card:hover {
             transform: scale(1.07);
         }
+
         .logo-card span {
             display: block;
             margin-top: 10px;
@@ -124,7 +164,28 @@
             color: var(--yellow);
         }
 
-        /* BUTTON */
+        /* DROPDOWN PANELS */
+        .dropdown-panel {
+            display: none;
+            background: rgba(0,0,0,0.85);
+            border: 1px solid var(--ember-soft);
+            border-radius: 14px;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 900px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dropdown-panel h3 {
+            color: var(--yellow);
+            margin-top: 0;
+        }
+
+        .dropdown-panel p {
+            color: #eee;
+            line-height: 1.6;
+        }
+
         .btn {
             display: inline-block;
             padding: 12px 22px;
@@ -136,9 +197,15 @@
             margin-top: 15px;
             transition: 0.25s;
         }
+
         .btn:hover {
             background: #ff4444;
             color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* FOOTER */
@@ -196,29 +263,42 @@
             <div class="feature-box">
                 <h3>🌩 CloudSync Mode</h3>
                 <p>A world‑first: everyone listens to the same track at the same time — anywhere on the Beltline.</p>
-                <p>Perfect for group rides, meetups, and community flow sessions.</p>
             </div>
         </div>
     </section>
 
-    <!-- NETWORK + FAST ROLL LOGO ROW -->
+    <!-- NETWORK + FAST ROLL -->
     <section class="section">
         <h2>Powered by Beltline Innovation</h2>
 
         <div class="logo-grid">
 
             <!-- NETWORK -->
-            <div class="logo-card" onclick="location.href='/network/public/pages/index.html'">
+            <div class="logo-card" onclick="toggleDropdown('network-panel')">
                 <img src="/assets/img/network-logo.jpg" alt="The Network Logo">
                 <span>The Network</span>
             </div>
 
             <!-- FAST ROLL -->
-            <div class="logo-card" onclick="location.href='https://fast-roll.pages.dev/'">
+            <div class="logo-card" onclick="toggleDropdown('fastroll-panel')">
                 <img src="/assets/img/Fast-logo.png" alt="Fast Roll Logo">
                 <span>Fast Roll Delivery</span>
             </div>
 
+        </div>
+
+        <!-- NETWORK DROPDOWN -->
+        <div id="network-panel" class="dropdown-panel">
+            <h3>The Network</h3>
+            <p>The Beltline’s official digital ecosystem — vendors, creators, workshops, services, and community.</p>
+            <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
+        </div>
+
+        <!-- FAST ROLL DROPDOWN -->
+        <div id="fastroll-panel" class="dropdown-panel">
+            <h3>Fast Roll Delivery</h3>
+            <p>The world’s first Beltline‑native delivery service — built by riders, for riders.</p>
+            <a class="btn" href="https://fast-roll.pages.dev/">Request Delivery</a>
         </div>
     </section>
 
@@ -232,8 +312,6 @@
     <!-- SAFETY + COMMUNITY -->
     <section class="section">
         <h2>Safety & Community</h2>
-        <p>Beltline Cloud is built to keep the community connected, informed, and safe.</p>
-
         <ul>
             <li>✔ Real‑time updates and alerts</li>
             <li>✔ Courtesy guidelines for riders, walkers, and skaters</li>
@@ -246,6 +324,15 @@
     <footer class="footer">
         © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
     </footer>
+
+    <script>
+        function toggleDropdown(id) {
+            const panel = document.getElementById(id);
+            const open = panel.style.display === "block";
+            document.querySelectorAll(".dropdown-panel").forEach(p => p.style.display = "none");
+            panel.style.display = open ? "none" : "block";
+        }
+    </script>
 
 </body>
 </html>
