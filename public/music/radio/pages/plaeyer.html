@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Beltline Radio Player</title>
+  <link rel="stylesheet" href="css/radio.css">
+</head>
+<body class="radio-bg">
+
+  <div class="player-container">
+    <h1 class="title">Now Playing — Beltline Radio</h1>
+
+    <div class="radio-player-box">
+      <audio id="beltline-radio">
+        <source src="STREAM_URL_HERE" type="audio/mpeg">
+      </audio>
+
+      <div class="controls">
+        <button id="playPause" class="btn">Play</button>
+        <button id="muteBtn" class="btn">Mute</button>
+
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
+
+        <div class="time-display">
+          <span id="currentTime">00:00</span> /
+          <span id="duration">LIVE</span>
+        </div>
+      </div>
+
+      <div id="visualizer"></div>
+    </div>
+  </div>
+
+  <script src="js/radio.js"></script>
+</body>
+</html>
