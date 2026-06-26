@@ -1,20 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+
   <title>Beltline Cloud — Music</title>
+  <meta name="description" content="Beltline Cloud Listening Rooms — cinematic music experiences and the all‑new Beltline Radio.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="img/favicon.png">
+
+  <!-- Social Preview -->
+  <meta property="og:title" content="Beltline Cloud — Music">
+  <meta property="og:description" content="Experience the Beltline lifestyle through curated listening rooms and Beltline Radio.">
+  <meta property="og:image" content="img/social-preview.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/music.css">
 </head>
-<body>
 
-<h1 class="title">Beltline Listening Rooms</h1>
+<!-- ⭐ BACKGROUND CALLED IN HTML LIKE YOU WANT ⭐ -->
+<body style="
+  margin:0;
+  padding:0;
+  background: url('/music/img/music-cloud.jpg') no-repeat center center fixed;
+  background-size: cover;
+">
 
-<div class="rooms">
-  <a href="rooms/chill.html" class="room-card">Chill Room</a>
-  <a href="rooms/dance.html" class="room-card">Dance Room</a>
-  <a href="rooms/rnb.html" class="room-card">R&B Room</a>
-  <a href="rooms/latenight.html" class="room-card">Late Night</a>
-  <a href="radio/beltline.html" class="room-card">Beltline Radio</a>
-</div>
+  <div class="overlay"></div>
+
+  <h1 class="title">Beltline Listening Rooms</h1>
+
+  <p class="subline">
+    The soundtrack of the Beltline lifestyle — curated rooms, cinematic vibes, and the all‑new 
+    <a href="radio/beltline.html" class="radio-link">Beltline Radio</a>, the heartbeat of the Cloud.
+  </p>
+
+  <div class="rooms">
+    <a href="rooms/chill.html" class="room-card">Chill Room</a>
+    <a href="rooms/dance.html" class="room-card">Dance Room</a>
+    <a href="rooms/rnb.html" class="room-card">R&B Room</a>
+    <a href="rooms/latenight.html" class="room-card">Late Night</a>
+    <a href="radio/beltline.html" class="room-card highlight-radio">Beltline Radio</a>
+  </div>
 
 </body>
 </html>
