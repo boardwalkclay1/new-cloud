@@ -1,25 +1,30 @@
 name = "beltline-cloud"
-main = "src/worker.js"
+main = "src/worker/index.js"
 compatibility_date = "2024-11-20"
 compatibility_flags = ["nodejs_compat"]
 
+# Serve your Pages frontend from /public
 assets = { directory = "./public" }
 
-# Custom domains (NO PATHS ALLOWED)
+# Custom domains for the frontend (NO PATHS)
 routes = [
   { pattern = "beltlinecloud.com", custom_domain = true },
   { pattern = "www.beltlinecloud.com", custom_domain = true }
 ]
 
+# D1 Database (Network + Fast Roll tables)
 [[d1_databases]]
 binding = "DB_network"
 database_name = "network"
 database_id = "813a24be-1b72-426d-ab4a-5de6b6c076e7"
 
+# R2 Bucket (media, uploads, fast roll receipts, etc.)
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "beltlinecloud"
 preview_bucket_name = "beltlinecloud"
 
+# Environment variables
 [vars]
-R2_PUBLIC_URL = "https://pub-xxxxxx.r2.dev"
+R2_PUBLIC_URL = "media.beltlinecloud.com"
+SITE_URL = "https://beltlinecloud.com"
