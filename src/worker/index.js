@@ -12,18 +12,17 @@ export default {
     const url = new URL(request.url)
     const path = url.pathname
 
-    // NETWORK (auth + profiles + pay)
-    if (path.startsWith("/api/network"))
-      return network.handle(request, env)
-
-    // VENDORS + PRODUCTS + SERVICES + EXPLORE
+    // VENDORS + PRODUCTS + SERVICES + EXPLORE + FULL VENDOR PAGE
     if (path.startsWith("/api/network/vendors") ||
         path.startsWith("/api/network/services") ||
         path.startsWith("/api/network/products") ||
         path.startsWith("/api/network/explore") ||
-        path.startsWith("/api/network/vendor") ||
-        path.startsWith("/api/network/workshops"))
+        path.startsWith("/api/network/vendor"))
       return vendors.handle(request, env)
+
+    // NETWORK (auth + profiles + pay)
+    if (path.startsWith("/api/network"))
+      return network.handle(request, env)
 
     // STAFF PORTAL
     if (path.startsWith("/api/staff"))
