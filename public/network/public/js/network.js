@@ -1,16 +1,10 @@
 // public/js/network.js
 
 const Network = {
-  // -----------------------------
-  // AUTH TOKEN
-  // -----------------------------
   token() {
     return localStorage.getItem("networkToken") || "";
   },
 
-  // -----------------------------
-  // GENERIC API WRAPPER
-  // -----------------------------
   async api(path, options = {}) {
     try {
       const res = await fetch(path, {
@@ -43,7 +37,6 @@ const Network = {
     this.loadHomeServices();
   },
 
-  // HOME VENDORS FEED
   async loadHomeVendors() {
     const feed = document.getElementById("vendors-feed");
     if (!feed) return;
@@ -60,7 +53,6 @@ const Network = {
     `).join("");
   },
 
-  // HOME PRODUCTS FEED (with starter items)
   async loadHomeProducts() {
     const feed = document.getElementById("products-feed");
     if (!feed) return;
@@ -101,7 +93,6 @@ const Network = {
     `).join("");
   },
 
-  // HOME SERVICES FEED (with Fast Roll starter)
   async loadHomeServices() {
     const feed = document.getElementById("services-feed");
     if (!feed) return;
@@ -162,20 +153,17 @@ const Network = {
     const vendors = await this.api("/api/network/vendors");
     if (!Array.isArray(vendors)) return;
 
-    // Keep existing signup card (first child), append vendors after
     const signupCard = grid.querySelector(".signup-card");
     grid.innerHTML = "";
     if (signupCard) grid.appendChild(signupCard);
 
-    const html = vendors.map(v => {
-      return `
-        <div class="card" onclick="Network.goVendor('${v.id}')">
-          <h2>${v.name}</h2>
-          <p>${v.categories || ''}</p>
-          <p>${v.bio || ''}</p>
-        </div>
-      `;
-    }).join("");
+    const html = vendors.map(v => `
+      <div class="card" onclick="Network.goVendor('${v.id}')">
+        <h2>${v.name}</h2>
+        <p>${v.categories || ''}</p>
+        <p>${v.bio || ''}</p>
+      </div>
+    `).join("");
 
     grid.insertAdjacentHTML("beforeend", html);
   },
@@ -275,7 +263,7 @@ const Network = {
   },
 
   // -----------------------------
-  // PROFILE PAGE (NETWORK USER)
+  // PROFILE PAGE
   // -----------------------------
   async loadProfile() {
     const nameEl = document.getElementById("profile-name");
@@ -305,7 +293,7 @@ const Network = {
   },
 
   // -----------------------------
-  // AUTH (LOGIN / SIGNUP)
+  // AUTH
   // -----------------------------
   async login() {
     const email = document.getElementById("login-email").value;
@@ -346,7 +334,6 @@ const Network = {
   // PURCHASE + FAST ROLL
   // -----------------------------
   async purchase(vendorId, productId) {
-    // Call your Worker to create an order, then send to Fast Roll
     const res = await this.api("/api/network/pay", {
       method: "POST",
       body: JSON.stringify({ vendorId, productId })
@@ -357,7 +344,6 @@ const Network = {
       return;
     }
 
-    // Fast Roll: one‑tap delivery
     const fastUrl = `https://fast-roll.pages.dev/?orderId=${encodeURIComponent(res.orderId)}`;
     window.open(fastUrl, "_blank");
   },
@@ -386,7 +372,6 @@ const Network = {
   }
 };
 
-// Auto-init for homepage feeds
 window.addEventListener("DOMContentLoaded", () => {
   Network.loadHomeFeeds();
 });
