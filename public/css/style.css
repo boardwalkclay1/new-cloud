@@ -79,7 +79,7 @@ p, a, li, span {
 .logo {
     width: 160px;
     height: 60px;
-    background-image: url('../assets/img/bbi-logo.png');
+    background-image: url('/assets/img/cloud/cloud-logo.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: left center;
