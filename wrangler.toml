@@ -6,10 +6,10 @@ compatibility_flags = ["nodejs_compat"]
 # Serve static assets from /public
 assets = { directory = "./public" }
 
-# Custom domain
+# API routes only (static files served normally)
 routes = [
-  { pattern = "beltlinecloud.com", custom_domain = true },
-  { pattern = "www.beltlinecloud.com", custom_domain = true }
+  { pattern = "beltlinecloud.com/api/*", custom_domain = true },
+  { pattern = "www.beltlinecloud.com/api/*", custom_domain = true }
 ]
 
 # D1 Database binding
@@ -17,3 +17,13 @@ routes = [
 binding = "DB_network"
 database_name = "network"
 database_id = "813a24be-1b72-426d-ab4a-5de6b6c076e7"
+
+# R2 bucket binding
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "beltlinecloud"
+preview_bucket_name = "beltlinecloud"
+
+# Safe, non-secret variables
+[vars]
+R2_PUBLIC_URL = "https://pub-xxxxxx.r2.dev"
