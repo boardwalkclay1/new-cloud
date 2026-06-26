@@ -1,0 +1,57 @@
+/* GLOBAL MUSIC BACKGROUND */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+
+  /* Background image */
+  background: url("../music-cloud.jpg") no-repeat center center fixed;
+  background-size: cover;
+
+  /* Dark cinematic overlay */
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45); /* adjust darkness */
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* PAGE TITLES */
+.title, .room-title {
+  font-size: 42px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 40px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* ROOM CARDS */
+.rooms {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  padding: 40px;
+}
+
+.room-card {
+  background: rgba(0,0,0,0.55);
+  padding: 22px 40px;
+  border-radius: 14px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 24px;
+  backdrop-filter: blur(6px);
+  transition: 0.2s ease;
+}
+
+.room-card:hover {
+  background: rgba(0,0,0,0.75);
+  transform: translateY(-3px);
+}
