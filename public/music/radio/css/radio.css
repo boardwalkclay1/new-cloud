@@ -1,0 +1,110 @@
+/* BACKGROUND */
+.radio-bg {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+
+  background: url("../images/radio.jpg") no-repeat center center fixed;
+  background-size: cover;
+
+  position: relative;
+}
+
+.radio-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: -1;
+}
+
+/* TITLE */
+.title {
+  font-size: 48px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 40px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+}
+
+/* CENTER WRAP */
+.center-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 120px;
+}
+
+/* LAUNCH BUTTON */
+.launch-btn {
+  background: rgba(0,0,0,0.65);
+  padding: 20px 50px;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 26px;
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+  transition: 0.2s ease;
+}
+
+.launch-btn:hover {
+  background: rgba(0,0,0,0.85);
+  transform: translateY(-3px);
+}
+
+/* PLAYER BOX */
+.player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.radio-player-box {
+  background: rgba(0,0,0,0.55);
+  padding: 40px;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 700px;
+  backdrop-filter: blur(8px);
+}
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.btn {
+  background: #111;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #222;
+}
+
+#volumeSlider {
+  width: 150px;
+}
+
+.time-display {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* VISUALIZER */
+#visualizer {
+  margin-top: 30px;
+  height: 80px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
