@@ -7,10 +7,13 @@ compatibility_flags = ["nodejs_compat"]
 assets = { directory = "./public" }
 
 # FRONTEND (Pages)
-routes = [
-  { pattern = "beltlinecloud.com", custom_domain = true },
-  { pattern = "www.beltlinecloud.com", custom_domain = true }
-]
+[[routes]]
+pattern = "beltlinecloud.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.beltlinecloud.com"
+custom_domain = true
 
 # BACKEND (Worker API)
 [[routes]]
