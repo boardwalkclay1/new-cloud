@@ -6,23 +6,16 @@ compatibility_flags = ["nodejs_compat"]
 # Serve your Pages frontend from /public
 assets = { directory = "./public" }
 
-# FRONTEND (Pages)
-[[routes]]
-pattern = "beltlinecloud.com"
-custom_domain = true
+# ALL ROUTES MUST BE IN ONE ARRAY
+routes = [
+  # FRONTEND (Pages)
+  { pattern = "beltlinecloud.com", custom_domain = true },
+  { pattern = "www.beltlinecloud.com", custom_domain = true },
 
-[[routes]]
-pattern = "www.beltlinecloud.com"
-custom_domain = true
-
-# BACKEND (Worker API)
-[[routes]]
-pattern = "beltlinecloud.com/api/*"
-script = "beltline-cloud"
-
-[[routes]]
-pattern = "www.beltlinecloud.com/api/*"
-script = "beltline-cloud"
+  # BACKEND (Worker API)
+  { pattern = "beltlinecloud.com/api/*", script = "beltline-cloud" },
+  { pattern = "www.beltlinecloud.com/api/*", script = "beltline-cloud" }
+]
 
 # D1 Database
 [[d1_databases]]
