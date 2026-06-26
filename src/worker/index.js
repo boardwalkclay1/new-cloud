@@ -9,20 +9,49 @@ export default {
     const url = new URL(request.url)
     const path = url.pathname
 
-    // NETWORK AUTH
-    if (path.startsWith("/api/network")) return network.handle(request, env)
+    //
+    // NETWORK (AUTH + PROFILE + PUBLIC + PAY)
+    //
+    if (path.startsWith("/api/network"))
+      return network.handle(request, env)
 
-    // VENDORS + PRODUCTS + SERVICES
-    if (path.startsWith("/api/network/vendors")) return vendors.handle(request, env)
+    //
+    // VENDORS + PRODUCTS + SERVICES + EXPLORE
+    //
+    if (
+      path.startsWith("/api/network/vendors") ||
+      path.startsWith("/api/network/services") ||
+      path.startsWith("/api/network/products") ||
+      path.startsWith("/api/network/explore") ||
+      path.startsWith("/api/network/vendor") ||
+      path.startsWith("/api/network/workshops")
+    ) {
+      return vendors.handle(request, env)
+    }
 
+    //
     // STAFF PORTAL
-    if (path.startsWith("/api/staff")) return staff.handle(request, env)
+    //
+    if (path.startsWith("/api/staff"))
+      return staff.handle(request, env)
 
-    // WORKSHOPS
-    if (path.startsWith("/api/workshops")) return workshops.handle(request, env)
+    //
+    // WORKSHOPS (legacy booking system)
+    //
+    if (path.startsWith("/api/workshops") || 
+        path.startsWith("/api/availability") ||
+        path.startsWith("/api/book") ||
+        path.startsWith("/api/user/bookings") ||
+        path.startsWith("/api/staff") // some overlap
+    ) {
+      return workshops.handle(request, env)
+    }
 
-    // PAYMENTS
-    if (path.startsWith("/api/paypal")) return payments.handle(request, env)
+    //
+    // PAYMENTS (PayPal)
+    //
+    if (path.startsWith("/api/paypal"))
+      return payments.handle(request, env)
 
     return new Response("Not found", { status: 404 })
   }
