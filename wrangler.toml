@@ -6,19 +6,28 @@ compatibility_flags = ["nodejs_compat"]
 # Serve your Pages frontend from /public
 assets = { directory = "./public" }
 
-# Custom domains for the frontend (NO PATHS)
+# FRONTEND (Pages)
 routes = [
   { pattern = "beltlinecloud.com", custom_domain = true },
   { pattern = "www.beltlinecloud.com", custom_domain = true }
 ]
 
-# D1 Database (Network + Fast Roll tables)
+# BACKEND (Worker API)
+[[routes]]
+pattern = "beltlinecloud.com/api/*"
+script = "beltline-cloud"
+
+[[routes]]
+pattern = "www.beltlinecloud.com/api/*"
+script = "beltline-cloud"
+
+# D1 Database
 [[d1_databases]]
 binding = "DB_network"
 database_name = "network"
 database_id = "813a24be-1b72-426d-ab4a-5de6b6c076e7"
 
-# R2 Bucket (media, uploads, fast roll receipts, etc.)
+# R2 Bucket
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "beltlinecloud"
