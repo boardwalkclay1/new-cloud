@@ -32,17 +32,7 @@ export default {
 
     //
     // ============================================================
-    // NETWORK — GENERAL (AUTH, PROFILE, PAY)
-    // ============================================================
-    //
-
-    if (path.startsWith("/api/network")) {
-      return network.handle(request, env);
-    }
-
-    //
-    // ============================================================
-    // VENDORS
+    // VENDORS — MUST COME BEFORE GENERAL NETWORK ROUTE
     // ============================================================
     //
 
@@ -52,6 +42,16 @@ export default {
 
     if (path.startsWith("/api/network/vendor")) {
       return vendors.handle(request, env);
+    }
+
+    //
+    // ============================================================
+    // NETWORK — GENERAL (AUTH, PROFILE, PAY)
+    // ============================================================
+    //
+
+    if (path.startsWith("/api/network")) {
+      return network.handle(request, env);
     }
 
     //
