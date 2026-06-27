@@ -1,172 +1,153 @@
 import { json } from "../utils/json.js"
-import { getUserFromToken } from "../utils/auth.js"
+
+// ============================================================
+// MAIN ROUTER FOR ALL NETWORK ROUTES
+// ============================================================
 
 export async function handle(request, env) {
-  const url = new URL(request.url)
-  const path = url.pathname
+  try {
+    validateDB(env)
 
-  if (path === "/api/staff/me" && request.method === "GET")
-    return staffMe(request, env)
+    const url = new URL(request.url)
+    const path = url.pathname
+    const method = request.method
 
-  if (path === "/api/staff/profile/update" && request.method === "POST")
-    return staffUpdateProfile(request, env)
+    if (path === "/api/network/vendors" && method === "GET")
+      return listVendors(env)
 
-  if (path === "/api/staff/products" && request.method === "GET")
-    return staffProducts(request, env)
+    if (path === "/api/network/services" && method === "GET")
+      return listServices(env)
 
-  if (path === "/api/staff/product/create" && request.method === "POST")
-    return staffCreateProduct(request, env)
+    if (path === "/api/network/products" && method === "GET")
+      return listProducts(env)
 
-  if (path === "/api/staff/product/update" && request.method === "POST")
-    return staffUpdateProduct(request, env)
+    if (path === "/api/network/explore" && method === "GET")
+      return listExplore(env)
 
-  if (path === "/api/staff/product/delete" && request.method === "POST")
-    return staffDeleteProduct(request, env)
+    if (path === "/api/network/vendor" && method === "GET")
+      return getVendorFull(url, env)
 
-  if (path === "/api/staff/orders" && request.method === "GET")
-    return staffOrders(request, env)
+    if (path === "/api/network/workshops" && method === "GET")
+      return listWorkshops(env)
 
-  if (path === "/api/staff/payouts" && request.method === "GET")
-    return staffPayouts(request, env)
+    return json({ error: "Network route not found" }, 404)
 
-  return json({ error: "Staff route not found" }, 404)
-}
-
-async function staffMe(request, env) {
-  const user = await getUserFromToken(request, env)
-  if (!user) return json({ error: "Unauthorized" }, 401)
-
-  const vendor = await env.DB_network.prepare(
-    "SELECT * FROM network_vendors WHERE ownerId = ?"
-  ).bind(user.id).first()
-
-  return json({ user, vendor })
-}
-
-async function staffUpdateProfile(request, env) {
-  const user = await getUserFromToken(request, env)
-  if (!user) return json({ error: "Unauthorized" }, 401)
-
-  const body = await request.json()
-  const { name, bio, tags, categories, photoUrl } = body
-
-  let vendor = await env.DB_network.prepare(
-    "SELECT * FROM network_vendors WHERE ownerId = ?"
-  ).bind(user.id).first()
-
-  if (!vendor) {
-    const id = crypto.randomUUID()
-    await env.DB_network.prepare(
-      `INSERT INTO network_vendors
-       (id, ownerId, name, bio, tags, categories, photoUrl, active, createdAt)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))`
-    ).bind(id, user.id, name || "", bio || "", tags || "", categories || "", photoUrl || "").run()
-  } else {
-    await env.DB_network.prepare(
-      `UPDATE network_vendors
-       SET name = ?, bio = ?, tags = ?, categories = ?, photoUrl = ?
-       WHERE ownerId = ?`
-    ).bind(name || "", bio || "", tags || "", categories || "", photoUrl || "", user.id).run()
+  } catch (err) {
+    return json({ error: err.message || "Internal error" }, 500)
   }
-
-  return json({ success: true })
 }
 
-async function staffProducts(request, env) {
-  const user = await getUserFromToken(request, env)
-  if (!user) return json({ error: "Unauthorized" }, 401)
+// ============================================================
+// VALIDATE DB BINDING
+// ============================================================
+
+function validateDB(env) {
+  if (!env.DB_network)
+    throw new Error("DB_network binding missing")
+}
+
+// ============================================================
+// VENDORS
+// ============================================================
+
+async function listVendors(env) {
+  const { results } = await env.DB_network.prepare(
+    `SELECT id, name, bio, photoUrl, tags, categories
+     FROM network_vendors
+     WHERE active = 1`
+  ).all()
+
+  return json(results || [])
+}
+
+// ============================================================
+// SERVICES
+// ============================================================
+
+async function listServices(env) {
+  const { results } = await env.DB_network.prepare(
+    `SELECT id, vendorId, name, description, price, photoUrl, featured
+     FROM network_services
+     WHERE active = 1`
+  ).all()
+
+  return json(results || [])
+}
+
+// ============================================================
+// PRODUCTS
+// ============================================================
+
+async function listProducts(env) {
+  const { results } = await env.DB_network.prepare(
+    `SELECT id, vendorId, name, description, price, photoUrl, featured
+     FROM network_products
+     WHERE active = 1`
+  ).all()
+
+  return json(results || [])
+}
+
+// ============================================================
+// EXPLORE FEED
+// ============================================================
+
+async function listExplore(env) {
+  const { results } = await env.DB_network.prepare(
+    `SELECT id, title, description
+     FROM network_explore
+     ORDER BY createdAt DESC
+     LIMIT 50`
+  ).all()
+
+  return json(results || [])
+}
+
+// ============================================================
+// FULL VENDOR PAGE
+// ============================================================
+
+async function getVendorFull(url, env) {
+  const id = url.searchParams.get("id")
+  if (!id) return json({ error: "Missing id" }, 400)
 
   const vendor = await env.DB_network.prepare(
-    "SELECT * FROM network_vendors WHERE ownerId = ?"
-  ).bind(user.id).first()
+    "SELECT * FROM network_vendors WHERE id = ?"
+  ).bind(id).first()
 
-  if (!vendor) return json([])
+  if (!vendor) return json({ error: "Not found" }, 404)
 
-  const { results } = await env.DB_network.prepare(
+  const products = await env.DB_network.prepare(
     "SELECT * FROM network_products WHERE vendorId = ? AND active = 1"
-  ).bind(vendor.id).all()
+  ).bind(id).all()
 
-  return json(results)
+  const services = await env.DB_network.prepare(
+    "SELECT * FROM network_services WHERE vendorId = ? AND active = 1"
+  ).bind(id).all()
+
+  const workshops = await env.DB_network.prepare(
+    "SELECT * FROM network_workshops WHERE vendorId = ? AND active = 1"
+  ).bind(id).all()
+
+  return json({
+    vendor,
+    products: products.results || [],
+    services: services.results || [],
+    workshops: workshops.results || []
+  })
 }
 
-async function staffCreateProduct(request, env) {
-  const user = await getUserFromToken(request, env)
-  if (!user) return json({ error: "Unauthorized" }, 401)
+// ============================================================
+// WORKSHOPS FEED
+// ============================================================
 
-  const vendor = await env.DB_network.prepare(
-    "SELECT * FROM network_vendors WHERE ownerId = ?"
-  ).bind(user.id).first()
-
-  if (!vendor) return json({ error: "No vendor profile" }, 400)
-
-  const body = await request.json()
-  const { name, description, price, photoUrl } = body
-
-  const id = crypto.randomUUID()
-
-  await env.DB_network.prepare(
-    `INSERT INTO network_products
-     (id, vendorId, name, description, price, photoUrl, featured, active, createdAt)
-     VALUES (?, ?, ?, ?, ?, ?, 0, 1, datetime('now'))`
-  ).bind(id, vendor.id, name || "", description || "", price || 0, photoUrl || "").run()
-
-  return json({ success: true, id })
-}
-
-async function staffUpdateProduct(request, env) {
-  const body = await request.json()
-  const { id, name, description, price, photoUrl } = body
-
-  await env.DB_network.prepare(
-    `UPDATE network_products
-     SET name = ?, description = ?, price = ?, photoUrl = ?
-     WHERE id = ?`
-  ).bind(name || "", description || "", price || 0, photoUrl || "", id).run()
-
-  return json({ success: true })
-}
-
-async function staffDeleteProduct(request, env) {
-  const body = await request.json()
-  const { id } = body
-
-  await env.DB_network.prepare(
-    "UPDATE network_products SET active = 0 WHERE id = ?"
-  ).bind(id).run()
-
-  return json({ success: true })
-}
-
-async function staffOrders(request, env) {
-  const user = await getUserFromToken(request, env)
-  if (!user) return json({ error: "Unauthorized" }, 401)
-
-  const vendor = await env.DB_network.prepare(
-    "SELECT * FROM network_vendors WHERE ownerId = ?"
-  ).bind(user.id).first()
-
-  if (!vendor) return json([])
-
+async function listWorkshops(env) {
   const { results } = await env.DB_network.prepare(
-    "SELECT * FROM network_orders WHERE vendorId = ? ORDER BY createdAt DESC"
-  ).bind(vendor.id).all()
+    `SELECT w.id, w.title, w.schedule, v.name AS hostName
+     FROM network_workshops w
+     JOIN network_vendors v ON v.id = w.vendorId
+     WHERE w.active = 1`
+  ).all()
 
-  return json(results)
-}
-
-async function staffPayouts(request, env) {
-  const user = await getUserFromToken(request, env)
-  if (!user) return json({ error: "Unauthorized" }, 401)
-
-  const vendor = await env.DB_network.prepare(
-    "SELECT * FROM network_vendors WHERE ownerId = ?"
-  ).bind(user.id).first()
-
-  if (!vendor) return json([])
-
-  const { results } = await env.DB_network.prepare(
-    "SELECT * FROM payouts WHERE vendorId = ? ORDER BY createdAt DESC"
-  ).bind(vendor.id).all()
-
-  return json(results)
+  return json(results || [])
 }
