@@ -46,6 +46,10 @@ export async function handle(request, env) {
   if (path === "/api/network/explore" && request.method === "GET")
     return explore(env);
 
+  // ⭐ MISSING BEFORE — NOW FIXED
+  if (path === "/api/network/vendor" && request.method === "GET")
+    return singleVendor(url, env);
+
   //
   // PAYMENTS
   //
@@ -203,6 +207,40 @@ async function explore(env) {
     vendors: vendors.results,
     products: products.results,
     services: services.results
+  });
+}
+
+//
+// ⭐ NEW — SINGLE VENDOR ENDPOINT (FRONTEND NEEDS THIS)
+//
+
+async function singleVendor(url, env) {
+  const id = url.searchParams.get("id");
+  if (!id) return json({ error: "Missing id" }, 400);
+
+  const vendor = await env.DB_network.prepare(
+    "SELECT * FROM network_vendors WHERE id = ? AND active = 1"
+  ).bind(id).first();
+
+  if (!vendor) return json({ error: "Vendor not found" }, 404);
+
+  const products = await env.DB_network.prepare(
+    "SELECT * FROM network_products WHERE vendorId = ? AND active = 1"
+  ).bind(id).all();
+
+  const services = await env.DB_network.prepare(
+    "SELECT * FROM network_services WHERE vendorId = ? AND active = 1"
+  ).bind(id).all();
+
+  const workshops = await env.DB_network.prepare(
+    "SELECT * FROM network_workshops WHERE vendorId = ? AND active = 1"
+  ).bind(id).all();
+
+  return json({
+    vendor,
+    products: products.results,
+    services: services.results,
+    workshops: workshops.results
   });
 }
 
