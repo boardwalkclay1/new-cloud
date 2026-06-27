@@ -41,7 +41,7 @@ const Network = {
     const feed = document.getElementById("vendors-feed");
     if (!feed) return;
 
-    const vendors = await this.api("/api/network/network_vendors");
+    const vendors = await this.api("/api/network/vendors");
     const list = Array.isArray(vendors) ? vendors : [];
 
     feed.innerHTML = list.slice(0, 6).map(v => `
@@ -57,7 +57,7 @@ const Network = {
     const feed = document.getElementById("products-feed");
     if (!feed) return;
 
-    const products = await this.api("/api/network/network_products");
+    const products = await this.api("/api/network/products");
     const list = Array.isArray(products) ? products : [];
 
     const starter = [
@@ -97,7 +97,7 @@ const Network = {
     const feed = document.getElementById("services-feed");
     if (!feed) return;
 
-    const services = await this.api("/api/network/network_services");
+    const services = await this.api("/api/network/services");
     let list = Array.isArray(services) ? services : [];
 
     const starter = [
@@ -166,7 +166,7 @@ const Network = {
     const grid = document.getElementById("vendors-grid");
     if (!grid) return;
 
-    const vendors = await this.api("/api/network/network_vendors");
+    const vendors = await this.api("/api/network/vendors");
     if (!Array.isArray(vendors)) return;
 
     const signupCard = grid.querySelector(".signup-card");
@@ -202,7 +202,7 @@ const Network = {
       return;
     }
 
-    const data = await this.api(`/api/network/network_vendor?id=${encodeURIComponent(id)}`);
+    const data = await this.api(`/api/network/vendor?id=${encodeURIComponent(id)}`);
     if (!data || data.error) {
       container.innerHTML = "<p>Vendor not found.</p>";
       return;
@@ -266,7 +266,7 @@ const Network = {
     const grid = document.getElementById("workshops-grid");
     if (!grid) return;
 
-    const workshops = await this.api("/api/network/network_workshops");
+    const workshops = await this.api("/api/network/workshops");
     if (!Array.isArray(workshops)) return;
 
     grid.innerHTML = workshops.map(w => `
