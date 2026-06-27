@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Beltline Cloud</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0a0f1f;
+      color: white;
+      font-family: "Inter", sans-serif;
+    }
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #ffd700;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      background: #111726;
+      border: 1px solid #222b40;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #ffd700;
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    p {
+      text-align: center;
+      margin-top: 20px;
+      opacity: 0.8;
+    }
+    a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Create Account</h1>
+
+    <input id="name" type="text" placeholder="Your Name" />
+    <input id="email" type="email" placeholder="Email Address" />
+    <input id="password" type="password" placeholder="Password" />
+
+    <button id="signupBtn">Create Account</button>
+
+    <p>Already have an account? <a href="/login.html">Log in</a></p>
+  </div>
+
+  <script>
+    const API = "https://api.beltlinecloud.com";
+
+    document.getElementById("signupBtn").addEventListener("click", async () => {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!name || !email || !password) {
+        alert("Please fill out all fields");
+        return;
+      }
+
+      try {
+        const res = await fetch(API + "/api/network/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        // Store user ID for onboarding
+        localStorage.setItem("cloud_user_id", data.id);
+
+        window.location.href = "/onboarding.html";
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>
