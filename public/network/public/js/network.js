@@ -46,7 +46,7 @@ const Network = {
 
     feed.innerHTML = list.slice(0, 6).map(v => `
       <div class="feed-card" onclick="Network.goVendor('${v.id}')">
-        <img src="${v.photoUrl || '/network/public/img/default-vendor.jpg'}" class="feed-photo">
+        <img src="${v.photoUrl || '/img/default-vendor.jpg'}" class="feed-photo">
         <div class="feed-title">${v.name}</div>
         <div class="feed-sub">${v.tags || ''}</div>
       </div>
@@ -83,7 +83,7 @@ const Network = {
 
     feed.innerHTML = combined.slice(0, 8).map(p => `
       <div class="feed-card" onclick="Network.goProduct('${p.id}', '${p.external || ""}')">
-        <img src="${p.photoUrl || '/network/public/img/default-product.jpg'}" class="feed-photo">
+        <img src="${p.photoUrl || '/img/default-product.jpg'}" class="feed-photo">
         <div class="feed-title">${p.name}</div>
         <div class="feed-sub">
           ${p.description || ''}<br>
@@ -115,7 +115,7 @@ const Network = {
 
     feed.innerHTML = list.slice(0, 8).map(s => `
       <div class="feed-card" onclick="Network.goService('${s.id}', '${s.external || ""}')">
-        <img src="${s.photoUrl || '/network/public/img/default-service.jpg'}" class="feed-photo">
+        <img src="${s.photoUrl || '/img/default-service.jpg'}" class="feed-photo">
         <div class="feed-title">${s.name}</div>
         <div class="feed-sub">
           ${s.description || ''}<br>
@@ -133,9 +133,25 @@ const Network = {
     if (!grid) return;
 
     const data = await this.api("/api/network/explore");
-    if (!Array.isArray(data)) return;
 
-    grid.innerHTML = data.map(item => `
+    if (!data || data.error) return;
+
+    const items = [
+      ...data.vendors.map(v => ({
+        title: v.name,
+        description: v.bio || ""
+      })),
+      ...data.products.map(p => ({
+        title: p.name,
+        description: p.description || ""
+      })),
+      ...data.services.map(s => ({
+        title: s.name,
+        description: s.description || ""
+      }))
+    ];
+
+    grid.innerHTML = items.map(item => `
       <div class="card">
         <h2>${item.title}</h2>
         <p>${item.description}</p>
