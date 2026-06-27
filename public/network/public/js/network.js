@@ -41,7 +41,7 @@ const Network = {
     const feed = document.getElementById("vendors-feed");
     if (!feed) return;
 
-    const vendors = await this.api("/api/network/vendors");
+    const vendors = await this.api("/api/network/network_vendors");
     const list = Array.isArray(vendors) ? vendors : [];
 
     feed.innerHTML = list.slice(0, 6).map(v => `
@@ -57,7 +57,7 @@ const Network = {
     const feed = document.getElementById("products-feed");
     if (!feed) return;
 
-    const products = await this.api("/api/network/products");
+    const products = await this.api("/api/network/network_products");
     const list = Array.isArray(products) ? products : [];
 
     const starter = [
@@ -97,7 +97,7 @@ const Network = {
     const feed = document.getElementById("services-feed");
     if (!feed) return;
 
-    const services = await this.api("/api/network/services");
+    const services = await this.api("/api/network/network_services");
     let list = Array.isArray(services) ? services : [];
 
     const starter = [
