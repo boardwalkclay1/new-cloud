@@ -6,9 +6,9 @@ compatibility_flags = ["nodejs_compat"]
 # NO ROUTES HERE
 
 [[d1_databases]]
-binding = "DB_network"
-database_name = "network"
-database_id = "813a24be-1b72-426d-ab4a-5de6b6c076e7"
+binding = "DB_cloud"
+database_name = "cloud"
+database_id = "2f14ac6c-3299-4122-b63e-195c2cf8a3cc"
 
 [[r2_buckets]]
 binding = "R2"
