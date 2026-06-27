@@ -3,26 +3,18 @@ main = "src/worker/index.js"
 compatibility_date = "2024-11-20"
 compatibility_flags = ["nodejs_compat"]
 
-# PURE WORKER ROUTES (frontend + backend)
-routes = [
-  # Serve the entire site through the Worker
-  { pattern = "beltlinecloud.com/*", script = "beltline-cloud" },
-  { pattern = "www.beltlinecloud.com/*", script = "beltline-cloud" }
-]
+# NO ROUTES HERE
 
-# D1 Database
 [[d1_databases]]
 binding = "DB_network"
 database_name = "network"
 database_id = "813a24be-1b72-426d-ab4a-5de6b6c076e7"
 
-# R2 Bucket
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "beltlinecloud"
 preview_bucket_name = "beltlinecloud"
 
-# Environment variables
 [vars]
 R2_PUBLIC_URL = "media.beltlinecloud.com"
 SITE_URL = "https://beltlinecloud.com"
