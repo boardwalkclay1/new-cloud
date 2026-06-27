@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Profile — Beltline Cloud</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0a0f1f;
+      color: white;
+      font-family: "Inter", sans-serif;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #ffd700;
+      margin-bottom: 20px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      background: #111726;
+      border: 1px solid #222b40;
+      border-radius: 10px;
+      color: white;
+    }
+    textarea {
+      min-height: 120px;
+    }
+    .interests {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .interest {
+      padding: 10px 16px;
+      background: #111726;
+      border: 1px solid #222b40;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .interest.active {
+      background: #ffd700;
+      color: black;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #ffd700;
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Your Profile</h1>
+
+    <input type="file" id="photoInput" accept="image/*" />
+    <textarea id="bioInput" placeholder="Your bio..."></textarea>
+
+    <div class="interests" id="interestsList">
+      <div class="interest">Vendors</div>
+      <div class="interest">Products</div>
+      <div class="interest">Services</div>
+      <div class="interest">Workshops</div>
+      <div class="interest">Fast Roll</div>
+      <div class="interest">Events</div>
+      <div class="interest">Petitions</div>
+      <div class="interest">Polls</div>
+    </div>
+
+    <button id="saveBtn">Save Changes</button>
+  </div>
+
+  <script>
+    const API = "https://api.beltlinecloud.com";
+
+    document.querySelectorAll(".interest").forEach(el => {
+      el.addEventListener("click", () => el.classList.toggle("active"));
+    });
+
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+      const bio = document.getElementById("bioInput").value.trim();
+      const interests = [...document.querySelectorAll(".interest.active")].map(i => i.textContent);
+
+      const file = document.getElementById("photoInput").files[0];
+      let photo = "";
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          photo = reader.result;
+          await saveProfile(bio, interests, photo);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await saveProfile(bio, interests, "");
+      }
+    });
+
+    async function saveProfile(bio, interests, photo) {
+      try {
+        const res = await fetch(API + "/api/network/profile/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bio, interests, photo })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert("Profile updated");
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+  </script>
+</body>
+</html>
