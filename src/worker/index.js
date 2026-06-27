@@ -14,32 +14,60 @@ export default {
 
     //
     // -----------------------------
-    // API ROUTES
+    // NETWORK API (AUTH + PROFILES + PRODUCTS + SERVICES + EXPLORE)
     // -----------------------------
     //
 
-    // VENDORS + PRODUCTS + SERVICES + EXPLORE + FULL VENDOR PAGE
-    if (
-      path.startsWith("/api/network/vendors") ||
-      path.startsWith("/api/network/services") ||
-      path.startsWith("/api/network/products") ||
-      path.startsWith("/api/network/explore") ||
-      path.startsWith("/api/network/vendor")
-    ) {
-      return vendors.handle(request, env);
+    // PRODUCTS
+    if (path.startsWith("/api/network/products")) {
+      return network.handle(request, env);
     }
 
-    // NETWORK (auth + profiles + pay)
+    // SERVICES
+    if (path.startsWith("/api/network/services")) {
+      return network.handle(request, env);
+    }
+
+    // EXPLORE
+    if (path.startsWith("/api/network/explore")) {
+      return network.handle(request, env);
+    }
+
+    // AUTH + PROFILE + PAY + LIST + OLD ROUTES
     if (path.startsWith("/api/network")) {
       return network.handle(request, env);
     }
 
+    //
+    // -----------------------------
+    // VENDORS (LIST + SINGLE PAGE)
+    // -----------------------------
+    //
+
+    // VENDORS LIST
+    if (path.startsWith("/api/network/vendors")) {
+      return vendors.handle(request, env);
+    }
+
+    // SINGLE VENDOR PAGE
+    if (path.startsWith("/api/network/vendor")) {
+      return vendors.handle(request, env);
+    }
+
+    //
+    // -----------------------------
     // STAFF PORTAL
+    // -----------------------------
+    //
     if (path.startsWith("/api/staff")) {
       return staff.handle(request, env);
     }
 
-    // WORKSHOPS (legacy)
+    //
+    // -----------------------------
+    // WORKSHOPS (LEGACY)
+    // -----------------------------
+    //
     if (
       path.startsWith("/api/workshops") ||
       path.startsWith("/api/availability") ||
@@ -49,22 +77,38 @@ export default {
       return workshops.handle(request, env);
     }
 
+    //
+    // -----------------------------
     // PAYMENTS
+    // -----------------------------
+    //
     if (path.startsWith("/api/paypal")) {
       return payments.handle(request, env);
     }
 
+    //
+    // -----------------------------
     // FAST ROLL — CLIENT
+    // -----------------------------
+    //
     if (path.startsWith("/api/client")) {
       return client.handle(request, env);
     }
 
+    //
+    // -----------------------------
     // FAST ROLL — RIDER
+    // -----------------------------
+    //
     if (path.startsWith("/api/rider")) {
       return rider.handle(request, env);
     }
 
-    // FAST ROLL — ORDERS (tips, delivery)
+    //
+    // -----------------------------
+    // FAST ROLL — ORDERS
+    // -----------------------------
+    //
     if (
       path.startsWith("/api/order") ||
       path.startsWith("/api/client/tip-post")
@@ -78,10 +122,7 @@ export default {
     // -----------------------------
     //
 
-    // Normalize path
     let key = path === "/" ? "index.html" : path.slice(1);
-
-    // Try to fetch the file from R2
     const object = await env.R2.get(key);
 
     if (object) {
@@ -93,7 +134,6 @@ export default {
       });
     }
 
-    // If file not found, fallback to index.html (SPA)
     const fallback = await env.R2.get("index.html");
     if (fallback) {
       return new Response(fallback.body, {
