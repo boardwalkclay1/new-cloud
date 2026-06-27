@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beltline Cloud — Onboarding</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      background: #0a0f1f;
+      color: white;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #ffd700;
+    }
+
+    p {
+      text-align: center;
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 35px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      background: #111726;
+      border-radius: 10px;
+      border: 1px solid #222b40;
+      color: white;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      background: #111726;
+      border-radius: 10px;
+      border: 1px solid #222b40;
+      color: white;
+      min-height: 100px;
+      resize: none;
+    }
+
+    .interests {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .interest {
+      padding: 10px 16px;
+      background: #111726;
+      border: 1px solid #222b40;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .interest.active {
+      background: #ffd700;
+      color: black;
+      border-color: #ffd700;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #ffd700;
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome In</h1>
+    <p>Let’s set up your Beltline Cloud profile.</p>
+
+    <!-- PHOTO -->
+    <div class="section">
+      <label>Profile Photo</label>
+      <input type="file" id="photoInput" accept="image/*" />
+    </div>
+
+    <!-- BIO -->
+    <div class="section">
+      <label>Your Bio</label>
+      <textarea id="bioInput" placeholder="Tell the Beltline who you are..."></textarea>
+    </div>
+
+    <!-- INTERESTS -->
+    <div class="section">
+      <label>Your Interests</label>
+      <div class="interests" id="interestsList">
+        <div class="interest">Vendors</div>
+        <div class="interest">Products</div>
+        <div class="interest">Services</div>
+        <div class="interest">Workshops</div>
+        <div class="interest">Fast Roll</div>
+        <div class="interest">Events</div>
+        <div class="interest">Petitions</div>
+        <div class="interest">Polls</div>
+      </div>
+    </div>
+
+    <button id="finishBtn">Finish Setup</button>
+  </div>
+
+  <script>
+    const API_BASE = "https://api.beltlinecloud.com";
+
+    // Toggle interest selection
+    document.querySelectorAll(".interest").forEach(el => {
+      el.addEventListener("click", () => {
+        el.classList.toggle("active");
+      });
+    });
+
+    document.getElementById("finishBtn").addEventListener("click", async () => {
+      const bio = document.getElementById("bioInput").value.trim();
+      const interests = [...document.querySelectorAll(".interest.active")].map(i => i.textContent);
+
+      // Photo upload (base64)
+      const file = document.getElementById("photoInput").files[0];
+      let photoBase64 = "";
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          photoBase64 = reader.result;
+
+          await submitOnboarding(bio, interests, photoBase64);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await submitOnboarding(bio, interests, "");
+      }
+    });
+
+    async function submitOnboarding(bio, interests, photo) {
+      try {
+        const res = await fetch(API_BASE + "/api/network/profile/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bio,
+            interests,
+            photo
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed");
+
+        // Redirect into the ecosystem
+        window.location.href = "/home.html";
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
