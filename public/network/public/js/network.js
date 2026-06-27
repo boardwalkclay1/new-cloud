@@ -1,5 +1,7 @@
 // public/js/network.js
 
+const API = "https://api.beltlinecloud.com";
+
 const Network = {
   token() {
     return localStorage.getItem("networkToken") || "";
@@ -7,7 +9,7 @@ const Network = {
 
   async api(path, options = {}) {
     try {
-      const res = await fetch(path, {
+      const res = await fetch(API + path, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": this.token()
