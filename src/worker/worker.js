@@ -187,7 +187,7 @@ async function signup(request, db) {
      VALUES (?, ?, ?, ?, '', '', '', datetime('now'))`
   ).bind(id, email, passwordHash, name).run();
 
-  return json({ success: true });
+  return json({ success: true, id });
 }
 
 async function login(request, db) {
@@ -210,8 +210,31 @@ async function me() {
   return json({ ok: true });
 }
 
-async function updateProfile() {
-  return json({ ok: true });
+//
+// ============================================================
+// PROFILE UPDATE (ONBOARDING)
+// ============================================================
+//
+
+async function updateProfile(request, db) {
+  const body = await request.json();
+  const { bio, interests, photo } = body;
+
+  // TEMP: until auth tokens exist, update the owner for testing
+  const userId = "owner-001";
+
+  await db.prepare(
+    `UPDATE cloud_users
+     SET bio = ?, photoUrl = ?, roles = ?
+     WHERE id = ?`
+  ).bind(
+    bio || "",
+    photo || "",
+    JSON.stringify(interests || []),
+    userId
+  ).run();
+
+  return json({ success: true });
 }
 
 //
@@ -291,7 +314,7 @@ async function explore(db) {
 
 //
 // ============================================================
-// PAYMENTS
+// PAYMENTS (PLACEHOLDERS FOR NOW)
 // ============================================================
 //
 
@@ -300,7 +323,7 @@ async function capture() { return json({ ok: true }); }
 
 //
 // ============================================================
-// OTHER HANDLERS (STAFF / WORKSHOPS / PAYPAL / CLIENT / RIDER / ORDERS)
+// OTHER HANDLERS
 // ============================================================
 //
 
@@ -351,7 +374,9 @@ function getMimeType(path) {
 async function hash(str) {
   const data = new TextEncoder().encode(str);
   const digest = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+  return [...new Uint8Array(digest)]
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 async function verify(str, hashValue) {
