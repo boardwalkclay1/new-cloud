@@ -1,76 +1,96 @@
 import { json } from "../utils/json.js"
 
-// MAIN ROUTER FOR ALL VENDOR + PRODUCT + SERVICE ROUTES
+// ============================================================
+// MAIN ROUTER FOR ALL NETWORK ROUTES
+// ============================================================
+
 export async function handle(request, env) {
-  const url = new URL(request.url)
-  const path = url.pathname
+  try {
+    validateDB(env)
 
-  if (path === "/api/network/vendors" && request.method === "GET")
-    return listVendors(env)
+    const url = new URL(request.url)
+    const path = url.pathname
+    const method = request.method
 
-  if (path === "/api/network/services" && request.method === "GET")
-    return listServices(env)
+    if (path === "/api/network/vendors" && method === "GET")
+      return listVendors(env)
 
-  if (path === "/api/network/products" && request.method === "GET")
-    return listProducts(env)
+    if (path === "/api/network/services" && method === "GET")
+      return listServices(env)
 
-  if (path === "/api/network/explore" && request.method === "GET")
-    return listExplore(env)
+    if (path === "/api/network/products" && method === "GET")
+      return listProducts(env)
 
-  if (path === "/api/network/vendor" && request.method === "GET")
-    return getVendorFull(url, env)
+    if (path === "/api/network/explore" && method === "GET")
+      return listExplore(env)
 
-  if (path === "/api/network/workshops" && request.method === "GET")
-    return listWorkshops(env)
+    if (path === "/api/network/vendor" && method === "GET")
+      return getVendorFull(url, env)
 
-  return json({ error: "Vendor route not found" }, 404)
+    if (path === "/api/network/workshops" && method === "GET")
+      return listWorkshops(env)
+
+    return json({ error: "Network route not found" }, 404)
+
+  } catch (err) {
+    return json({ error: err.message || "Internal error" }, 500)
+  }
 }
 
-//
-// ========== VENDORS ==========
-//
+// ============================================================
+// VALIDATE DB BINDING
+// ============================================================
+
+function validateDB(env) {
+  if (!env.DB_network)
+    throw new Error("DB_network binding missing")
+}
+
+// ============================================================
+// VENDORS
+// ============================================================
 
 async function listVendors(env) {
   const { results } = await env.DB_network.prepare(
-    `SELECT v.id, v.name, v.bio, v.photoUrl, v.tags, v.categories
-     FROM network_vendors v
-     WHERE v.active = 1`
+    `SELECT id, name, bio, photoUrl, tags, categories
+     FROM network_vendors
+     WHERE active = 1`
   ).all()
 
-  return json(results)
+  return json(results || [])
 }
 
-//
-// ========== SERVICES ==========
-//
+// ============================================================
+// SERVICES
+// ============================================================
 
 async function listServices(env) {
   const { results } = await env.DB_network.prepare(
-    `SELECT s.id, s.vendorId, s.name, s.description, s.price, s.photoUrl, s.featured
-     FROM network_services s
-     WHERE s.active = 1`
+    `SELECT id, vendorId, name, description, price, photoUrl, featured
+     FROM network_services
+     WHERE active = 1`
   ).all()
 
-  return json(results)
+  return json(results || [])
 }
 
-//
-// ========== PRODUCTS ==========
-//
+// ============================================================
+// PRODUCTS
+// ============================================================
 
 async function listProducts(env) {
   const { results } = await env.DB_network.prepare(
-    `SELECT p.id, p.vendorId, p.name, p.description, p.price, p.photoUrl, p.featured
-     FROM network_products p
-     WHERE p.active = 1`
+    `SELECT id, vendorId, name, description, price, photoUrl, featured
+     FROM network_products
+     WHERE active = 1`
   ).all()
 
-  return json(results)
+  return json(results || [])
 }
 
-//
-// ========== EXPLORE FEED ==========
-//
+// ============================================================
+// EXPLORE FEED
+// ============================================================
 
 async function listExplore(env) {
   const { results } = await env.DB_network.prepare(
@@ -80,12 +100,12 @@ async function listExplore(env) {
      LIMIT 50`
   ).all()
 
-  return json(results)
+  return json(results || [])
 }
 
-//
-// ========== FULL VENDOR PAGE ==========
-//
+// ============================================================
+// FULL VENDOR PAGE
+// ============================================================
 
 async function getVendorFull(url, env) {
   const id = url.searchParams.get("id")
@@ -117,9 +137,9 @@ async function getVendorFull(url, env) {
   })
 }
 
-//
-// ========== WORKSHOPS FEED ==========
-//
+// ============================================================
+// WORKSHOPS FEED
+// ============================================================
 
 async function listWorkshops(env) {
   const { results } = await env.DB_network.prepare(
@@ -129,5 +149,5 @@ async function listWorkshops(env) {
      WHERE w.active = 1`
   ).all()
 
-  return json(results)
+  return json(results || [])
 }
