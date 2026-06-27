@@ -32,15 +32,15 @@ export async function handle(request, env) {
     return getProfile(url, env);
 
   //
-  // NEW — MATCHING YOUR FRONTEND EXACTLY
+  // NEW — MATCHING FRONTEND EXACTLY
   //
-  if (path === "/api/network/network_vendors" && request.method === "GET")
+  if (path === "/api/network/vendors" && request.method === "GET")
     return listVendors(env);
 
-  if (path === "/api/network/network_products" && request.method === "GET")
+  if (path === "/api/network/products" && request.method === "GET")
     return listProducts(env);
 
-  if (path === "/api/network/network_services" && request.method === "GET")
+  if (path === "/api/network/services" && request.method === "GET")
     return listServices(env);
 
   if (path === "/api/network/explore" && request.method === "GET")
@@ -159,7 +159,7 @@ async function getProfile(url, env) {
 }
 
 //
-// ========== NEW — MATCHING YOUR FRONTEND ==========
+// ========== NEW — MATCHING FRONTEND EXACTLY ==========
 //
 
 async function listVendors(env) {
