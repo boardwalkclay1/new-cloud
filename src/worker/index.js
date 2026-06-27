@@ -11,145 +11,144 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
+    const method = request.method;
 
     //
     // ============================================================
-    // NETWORK — SPECIFIC ROUTES (MUST COME FIRST)
+    // CORS — MUST COME FIRST
     // ============================================================
     //
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    };
 
-    if (path.startsWith("/api/network/products")) {
-      return network.handle(request, env);
-    }
-
-    if (path.startsWith("/api/network/services")) {
-      return network.handle(request, env);
-    }
-
-    if (path.startsWith("/api/network/explore")) {
-      return network.handle(request, env);
-    }
-
-    //
-    // ============================================================
-    // VENDORS — MUST COME BEFORE GENERAL NETWORK ROUTE
-    // ============================================================
-    //
-
-    if (path.startsWith("/api/network/vendors")) {
-      return vendors.handle(request, env);
-    }
-
-    if (path.startsWith("/api/network/vendor")) {
-      return vendors.handle(request, env);
+    // Preflight
+    if (method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: cors });
     }
 
     //
     // ============================================================
-    // NETWORK — GENERAL (AUTH, PROFILE, PAY)
+    // API ROUTES
     // ============================================================
     //
 
-    if (path.startsWith("/api/network")) {
-      return network.handle(request, env);
-    }
+    try {
+      // NETWORK — SPECIFIC
+      if (path.startsWith("/api/network/products")) {
+        return withCORS(await network.handle(request, env), cors);
+      }
 
-    //
-    // ============================================================
-    // STAFF PORTAL
-    // ============================================================
-    //
+      if (path.startsWith("/api/network/services")) {
+        return withCORS(await network.handle(request, env), cors);
+      }
 
-    if (path.startsWith("/api/staff")) {
-      return staff.handle(request, env);
-    }
+      if (path.startsWith("/api/network/explore")) {
+        return withCORS(await network.handle(request, env), cors);
+      }
 
-    //
-    // ============================================================
-    // WORKSHOPS (LEGACY)
-    // ============================================================
-    //
+      // VENDORS
+      if (path.startsWith("/api/network/vendors")) {
+        return withCORS(await vendors.handle(request, env), cors);
+      }
 
-    if (
-      path.startsWith("/api/workshops") ||
-      path.startsWith("/api/availability") ||
-      path.startsWith("/api/book") ||
-      path.startsWith("/api/user/bookings")
-    ) {
-      return workshops.handle(request, env);
-    }
+      if (path.startsWith("/api/network/vendor")) {
+        return withCORS(await vendors.handle(request, env), cors);
+      }
 
-    //
-    // ============================================================
-    // PAYMENTS
-    // ============================================================
-    //
+      // NETWORK — GENERAL
+      if (path.startsWith("/api/network")) {
+        return withCORS(await network.handle(request, env), cors);
+      }
 
-    if (path.startsWith("/api/paypal")) {
-      return payments.handle(request, env);
-    }
+      // STAFF
+      if (path.startsWith("/api/staff")) {
+        return withCORS(await staff.handle(request, env), cors);
+      }
 
-    //
-    // ============================================================
-    // FAST ROLL — CLIENT
-    // ============================================================
-    //
+      // WORKSHOPS (LEGACY)
+      if (
+        path.startsWith("/api/workshops") ||
+        path.startsWith("/api/availability") ||
+        path.startsWith("/api/book") ||
+        path.startsWith("/api/user/bookings")
+      ) {
+        return withCORS(await workshops.handle(request, env), cors);
+      }
 
-    if (path.startsWith("/api/client")) {
-      return client.handle(request, env);
-    }
+      // PAYMENTS
+      if (path.startsWith("/api/paypal")) {
+        return withCORS(await payments.handle(request, env), cors);
+      }
 
-    //
-    // ============================================================
-    // FAST ROLL — RIDER
-    // ============================================================
-    //
+      // CLIENT
+      if (path.startsWith("/api/client")) {
+        return withCORS(await client.handle(request, env), cors);
+      }
 
-    if (path.startsWith("/api/rider")) {
-      return rider.handle(request, env);
-    }
+      // RIDER
+      if (path.startsWith("/api/rider")) {
+        return withCORS(await rider.handle(request, env), cors);
+      }
 
-    //
-    // ============================================================
-    // FAST ROLL — ORDERS
-    // ============================================================
-    //
+      // ORDERS
+      if (
+        path.startsWith("/api/order") ||
+        path.startsWith("/api/client/tip-post")
+      ) {
+        return withCORS(await orders.handle(request, env), cors);
+      }
 
-    if (
-      path.startsWith("/api/order") ||
-      path.startsWith("/api/client/tip-post")
-    ) {
-      return orders.handle(request, env);
-    }
+      //
+      // ============================================================
+      // STATIC FILES (R2)
+      // ============================================================
+      //
 
-    //
-    // ============================================================
-    // STATIC FILES (R2)
-    // ============================================================
-    //
+      let key = path === "/" ? "index.html" : path.slice(1);
 
-    let key = path === "/" ? "index.html" : path.slice(1);
-    const object = await env.R2.get(key);
+      // Support folder paths → index.html
+      if (key.endsWith("/")) key += "index.html";
 
-    if (object) {
-      return new Response(object.body, {
-        headers: {
-          "Content-Type": getMimeType(key),
-          "Cache-Control": "public, max-age=3600"
-        }
+      const object = await env.R2.get(key);
+
+      if (object) {
+        return new Response(object.body, {
+          headers: {
+            ...cors,
+            "Content-Type": getMimeType(key),
+            "Cache-Control": "public, max-age=3600",
+          },
+        });
+      }
+
+      // Fallback to root index.html
+      const fallback = await env.R2.get("index.html");
+      if (fallback) {
+        return new Response(fallback.body, {
+          headers: { ...cors, "Content-Type": "text/html" },
+        });
+      }
+
+      return new Response("Not found", { status: 404, headers: cors });
+
+    } catch (err) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-
-    const fallback = await env.R2.get("index.html");
-    if (fallback) {
-      return new Response(fallback.body, {
-        headers: { "Content-Type": "text/html" }
-      });
-    }
-
-    return new Response("Not found", { status: 404 });
-  }
+  },
 };
+
+// Attach CORS to API responses
+function withCORS(response, cors) {
+  const headers = new Headers(response.headers);
+  for (const [k, v] of Object.entries(cors)) headers.set(k, v);
+  return new Response(response.body, { status: response.status, headers });
+}
 
 // MIME TYPES
 function getMimeType(path) {
