@@ -32,7 +32,7 @@ export async function handle(request, env) {
     return getProfile(url, env);
 
   //
-  // NEW — VENDORS / PRODUCTS / SERVICES / EXPLORE
+  // NEW — MATCHING YOUR FRONTEND EXACTLY
   //
   if (path === "/api/network/network_vendors" && request.method === "GET")
     return listVendors(env);
@@ -159,7 +159,7 @@ async function getProfile(url, env) {
 }
 
 //
-// ========== NEW — VENDORS / PRODUCTS / SERVICES / EXPLORE ==========
+// ========== NEW — MATCHING YOUR FRONTEND ==========
 //
 
 async function listVendors(env) {
