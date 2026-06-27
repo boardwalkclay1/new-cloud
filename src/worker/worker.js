@@ -1,8 +1,13 @@
 export default {
   async fetch(request, env) {
-    const db = env.DB_cloud; // NEW DB BINDING
+    const db = env.DB_cloud;
     const url = new URL(request.url);
     const path = url.pathname;
+
+    // CORS preflight
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: corsHeaders() });
+    }
 
     //
     // ============================================================
@@ -131,6 +136,7 @@ export default {
     if (object) {
       return new Response(object.body, {
         headers: {
+          ...corsHeaders(),
           "Content-Type": getMimeType(key),
           "Cache-Control": "public, max-age=3600"
         }
@@ -140,11 +146,17 @@ export default {
     const fallback = await env.R2.get("index.html");
     if (fallback) {
       return new Response(fallback.body, {
-        headers: { "Content-Type": "text/html" }
+        headers: {
+          ...corsHeaders(),
+          "Content-Type": "text/html"
+        }
       });
     }
 
-    return new Response("Not found", { status: 404 });
+    return new Response("Not found", {
+      status: 404,
+      headers: corsHeaders()
+    });
   }
 };
 
@@ -305,10 +317,22 @@ async function ordersHandler() { return json({ ok: true }); }
 // ============================================================
 //
 
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "https://beltlinecloud.com",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Credentials": "true"
+  };
+}
+
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
-    headers: { "Content-Type": "application/json" }
+    headers: {
+      "Content-Type": "application/json",
+      ...corsHeaders()
+    }
   });
 }
 
