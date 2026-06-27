@@ -166,7 +166,7 @@ const Network = {
     const grid = document.getElementById("vendors-grid");
     if (!grid) return;
 
-    const vendors = await this.api("/api/network/vendors");
+    const vendors = await this.api("/api/network/network_vendors");
     if (!Array.isArray(vendors)) return;
 
     const signupCard = grid.querySelector(".signup-card");
@@ -202,7 +202,7 @@ const Network = {
       return;
     }
 
-    const data = await this.api(`/api/network/vendor?id=${encodeURIComponent(id)}`);
+    const data = await this.api(`/api/network/network_vendor?id=${encodeURIComponent(id)}`);
     if (!data || data.error) {
       container.innerHTML = "<p>Vendor not found.</p>";
       return;
@@ -266,7 +266,7 @@ const Network = {
     const grid = document.getElementById("workshops-grid");
     if (!grid) return;
 
-    const workshops = await this.api("/api/network/workshops");
+    const workshops = await this.api("/api/network/network_workshops");
     if (!Array.isArray(workshops)) return;
 
     grid.innerHTML = workshops.map(w => `
