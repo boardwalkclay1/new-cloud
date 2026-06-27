@@ -18,23 +18,16 @@ export default {
     // -----------------------------
     //
 
-    // PRODUCTS
+    // SPECIFIC ROUTES FIRST — these MUST come before /api/network
     if (path.startsWith("/api/network/products")) {
       return network.handle(request, env);
     }
 
-    // SERVICES
     if (path.startsWith("/api/network/services")) {
       return network.handle(request, env);
     }
 
-    // EXPLORE
     if (path.startsWith("/api/network/explore")) {
-      return network.handle(request, env);
-    }
-
-    // AUTH + PROFILE + PAY + LIST + OLD ROUTES
-    if (path.startsWith("/api/network")) {
       return network.handle(request, env);
     }
 
@@ -44,14 +37,22 @@ export default {
     // -----------------------------
     //
 
-    // VENDORS LIST
     if (path.startsWith("/api/network/vendors")) {
       return vendors.handle(request, env);
     }
 
-    // SINGLE VENDOR PAGE
     if (path.startsWith("/api/network/vendor")) {
       return vendors.handle(request, env);
+    }
+
+    //
+    // -----------------------------
+    // NETWORK GENERAL (AUTH + PROFILE + PAY)
+    // -----------------------------
+    //
+
+    if (path.startsWith("/api/network")) {
+      return network.handle(request, env);
     }
 
     //
