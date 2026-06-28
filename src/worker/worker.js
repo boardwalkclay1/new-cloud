@@ -212,16 +212,30 @@ async function me() {
 
 //
 // ============================================================
-// PROFILE UPDATE (ONBOARDING)
+// PROFILE UPDATE (ONBOARDING + ROLES)
 // ============================================================
 //
 
 async function updateProfile(request, db) {
   const body = await request.json();
-  const { bio, interests, photo } = body;
+  const { bio, interests, photo, roles } = body;
 
   // TEMP: until auth tokens exist, update the owner for testing
   const userId = "owner-001";
+
+  // roles can come in as array or string; store as string
+  let rolesValue = "";
+  if (Array.isArray(roles)) {
+    rolesValue = roles.join(",");
+  } else if (typeof roles === "string") {
+    rolesValue = roles;
+  } else {
+    // if not provided, keep existing roles
+    const existing = await db.prepare(
+      "SELECT roles FROM cloud_users WHERE id = ?"
+    ).bind(userId).first();
+    rolesValue = existing?.roles || "";
+  }
 
   await db.prepare(
     `UPDATE cloud_users
@@ -230,7 +244,7 @@ async function updateProfile(request, db) {
   ).bind(
     bio || "",
     photo || "",
-    JSON.stringify(interests || []),
+    rolesValue,
     userId
   ).run();
 
