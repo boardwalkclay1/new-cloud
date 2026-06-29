@@ -1,33 +1,42 @@
 * { box-sizing: border-box; }
 
+:root {
+  --yellow: #ffd54f;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
 .page-bg {
   position: fixed;
   inset: 0;
+  background-image: url('/assets/img/cloud/cloud.jpg');
   background-size: cover;
   background-position: center;
   filter: brightness(0.45);
   z-index: -1;
 }
 
+/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 25px;
-  color: white;
 }
 
 .header-logo {
   height: 120px;
   cursor: pointer;
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
 }
 
 .header-user {
   display: flex;
   align-items: center;
   gap: 15px;
-  font-size: 1.1rem;
   color: var(--yellow);
 }
 
@@ -40,26 +49,81 @@
   cursor: pointer;
 }
 
-.status-bar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  padding: 20px;
-  color: white;
+/* FULL SCREEN MENU */
+.cloud-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  z-index: 999;
+  overflow-y: auto;
 }
 
-.status-item {
-  background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.2);
+.menu-header {
+  display: flex;
+  justify-content: space-between;
   padding: 20px;
-  border-radius: 14px;
 }
 
-.status-item h3 {
+.menu-logo {
+  height: 100px;
+}
+
+.menu-close {
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+.menu-content {
+  padding: 20px;
+}
+
+.menu-category {
+  margin-bottom: 40px;
+}
+
+.menu-category h3 {
   color: var(--yellow);
+  font-size: 1.8rem;
   margin-bottom: 10px;
 }
 
+.menu-category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-category li {
+  margin: 8px 0;
+}
+
+.menu-category a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+/* QUICK DRAWER */
+.quick-drawer {
+  position: fixed;
+  right: 0;
+  top: 150px;
+  width: 260px;
+  background: rgba(0,0,0,0.75);
+  padding: 20px;
+  border-left: 1px solid rgba(255,255,255,0.2);
+}
+
+.drawer-section {
+  margin-bottom: 25px;
+}
+
+.drawer-section h4 {
+  color: var(--yellow);
+  margin-bottom: 8px;
+}
+
+/* TOGGLES */
 .toggle {
   position: relative;
   display: inline-block;
@@ -73,10 +137,10 @@
 
 .slider {
   position: absolute;
-  cursor: pointer;
   inset: 0;
   background: #555;
   border-radius: 999px;
+  cursor: pointer;
   transition: .3s;
 }
 
@@ -100,6 +164,7 @@ input:checked + .slider:before {
   transform: translateX(24px);
 }
 
+/* TILE GRID */
 .grid {
   max-width: 1100px;
   margin: 40px auto;
@@ -114,8 +179,8 @@ input:checked + .slider:before {
   padding: 20px;
   border-radius: 14px;
   text-align: center;
-  color: white;
   text-decoration: none;
+  color: white;
   transition: .3s;
 }
 
