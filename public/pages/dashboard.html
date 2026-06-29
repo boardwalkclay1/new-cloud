@@ -1,501 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Beltline Cloud — Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beltline Cloud Dashboard</title>
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Inter", sans-serif;
-      background: #050814;
-      color: #fff;
-    }
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
 
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
+  <!-- SOCIAL PREVIEW -->
+  <meta property="og:title" content="Beltline Cloud Dashboard">
+  <meta property="og:description" content="Your Beltline Cloud dashboard — access Network, Fast Roll, Safety Cloud, Events, Music, Chatrooms, and your Vendor/Rider tools.">
+  <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
+  <meta property="og:url" content="https://beltlinecloud.com/dashboard.html">
+  <meta property="og:type" content="website">
 
-    /* Sidebar */
-    .sidebar {
-      width: 260px;
-      background: #05060b;
-      border-right: 1px solid #151827;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beltline Cloud Dashboard">
+  <meta name="twitter:description" content="Your Beltline Cloud dashboard — connect with the Beltline community.">
+  <meta name="twitter:image" content="/assets/img/cloud/cloud-preview.jpg">
 
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: #ffd700;
-      margin-bottom: 30px;
-    }
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/dashboard.css">
 
-    .nav-section-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      opacity: 0.6;
-      margin: 20px 0 8px;
-    }
-
-    .nav-link {
-      padding: 10px 0;
-      font-size: 14px;
-      cursor: pointer;
-      opacity: 0.85;
-    }
-
-    .nav-link:hover {
-      opacity: 1;
-    }
-
-    /* Main */
-    .main {
-      flex: 1;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .top-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #ffd700;
-    }
-
-    .user-pill {
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: #111726;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .user-pill span.role {
-      font-size: 11px;
-      text-transform: uppercase;
-      opacity: 0.7;
-    }
-
-    /* Cards grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: #0a0f1f;
-      border-radius: 16px;
-      padding: 16px;
-      border: 1px solid #151827;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .card-title {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .card-sub {
-      font-size: 12px;
-      opacity: 0.7;
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #ffd700;
-      color: #000;
-    }
-
-    .card-body {
-      font-size: 13px;
-      opacity: 0.85;
-      margin-bottom: 12px;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .btn-primary {
-      background: #ffd700;
-      color: #000;
-      font-weight: 600;
-    }
-
-    .btn-ghost {
-      background: #111726;
-      color: #fff;
-      border: 1px solid #222b40;
-    }
-
-    /* Side Cloud section */
-    .section-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      margin-top: 10px;
-    }
-
-    details {
-      background: #0a0f1f;
-      border-radius: 12px;
-      border: 1px solid #151827;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    summary {
-      cursor: pointer;
-      list-style: none;
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .side-app-actions {
-      margin-top: 8px;
-    }
-
-    .side-app-actions .btn {
-      margin-right: 6px;
-      margin-bottom: 4px;
-    }
-
-    @media (max-width: 800px) {
-      .layout {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #151827;
-      }
-    }
-  </style>
+  <!-- AUTH -->
+  <script type="module">
+    import { Auth } from "/js/auth.js";
+    Auth.require();
+  </script>
 </head>
 
 <body>
-  <div class="layout">
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="logo">Beltline Cloud</div>
 
-      <div class="nav-section-title">Main</div>
-      <div class="nav-link" onclick="goHome()">Cloud Dashboard</div>
-      <div class="nav-link" onclick="goProfile()">Profile</div>
+  <!-- BACKGROUND (cloud.jpg) -->
+  <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud.jpg');"></div>
 
-      <div class="nav-section-title">Network</div>
-      <div class="nav-link" onclick="goNetwork()">Explore Network</div>
-      <div class="nav-link" onclick="goOrders()">Your Orders</div>
+  <!-- HEADER -->
+  <header class="header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="location.href='/'">
 
-      <div class="nav-section-title">Roles</div>
-      <div class="nav-link" onclick="goVendor()">Vendor Dashboard</div>
-      <div class="nav-link" onclick="goRider()">Rider Dashboard</div>
+    <div class="header-user">
+      <span id="userName">Loading...</span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
 
-      <div class="nav-section-title">Side Cloud</div>
-      <div class="nav-link" onclick="scrollToSideCloud()">Cloud Apps</div>
-    </aside>
+  <!-- STATUS BAR -->
+  <section class="status-bar">
 
-    <!-- MAIN -->
-    <main class="main">
-      <div class="topbar">
-        <div class="top-title">Cloud Dashboard</div>
-        <div class="user-pill" id="userPill">
-          <span id="userName">Loading...</span>
-          <span class="role" id="userRoles"></span>
-        </div>
-      </div>
+    <div class="status-item">
+      <h3>Your Role</h3>
+      <p id="userRole">Cloud User</p>
+    </div>
 
-      <!-- PRIMARY GRID -->
-      <div class="grid">
-        <!-- Identity / Profile -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Your Cloud Identity</div>
-              <div class="card-sub">Manage who you are in the Beltline Cloud.</div>
-            </div>
-          </div>
-          <div class="card-body">
-            Update your profile, bio, photo, and interests. This is the identity that buys, books,
-            signs petitions, and interacts with the Network.
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="goProfile()">Open Profile</button>
-          </div>
-        </div>
+    <div class="status-item">
+      <h3>Vendor Mode</h3>
+      <label class="toggle">
+        <input type="checkbox" id="vendorToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
 
-        <!-- Network Explore -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Network Explore</div>
-              <div class="card-sub">Vendors, services, workshops, and more.</div>
-            </div>
-          </div>
-          <div class="card-body">
-            Browse vendors, products, services, and workshops. Place orders, book sessions, and see
-            what’s live on the Beltline.
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="goNetwork()">Explore Network</button>
-            <button class="btn btn-ghost" onclick="goOrders()">View Your Orders</button>
-          </div>
-        </div>
+    <div class="status-item">
+      <h3>Rider Mode</h3>
+      <label class="toggle">
+        <input type="checkbox" id="riderToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
 
-        <!-- Vendor Role -->
-        <div class="card" id="vendorCard">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Vendor Mode</div>
-              <div class="card-sub">Sell products, services, and workshops.</div>
-            </div>
-            <span class="badge" id="vendorBadge">Inactive</span>
-          </div>
-          <div class="card-body" id="vendorBody">
-            Activate Vendor Mode to create offerings in the Network: products, services, and
-            workshops. Manage orders and storefront from your Vendor Dashboard.
-          </div>
-          <div class="card-actions" id="vendorActions">
-            <button class="btn btn-primary" onclick="activateVendor()">Become a Vendor</button>
-          </div>
-        </div>
+    <div class="status-item">
+      <h3>Beltline Weather</h3>
+      <p id="weather">Loading...</p>
+    </div>
 
-        <!-- Rider Role -->
-        <div class="card" id="riderCard">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Rider Mode (Fast Roll)</div>
-              <div class="card-sub">Deliver orders across the Beltline.</div>
-            </div>
-            <span class="badge" id="riderBadge">Inactive</span>
-          </div>
-          <div class="card-body" id="riderBody">
-            Activate Rider Mode to join Fast Roll. Go online, accept deliveries, and earn from
-            moving through the city.
-          </div>
-          <div class="card-actions" id="riderActions">
-            <button class="btn btn-primary" onclick="activateRider()">Become a Rider</button>
-          </div>
-        </div>
-      </div>
+  </section>
 
-      <!-- SIDE CLOUD APPS SECTION -->
-      <div id="sideCloudSection">
-        <div class="section-title">Side Cloud — Apps & Experiences</div>
+  <!-- GRID -->
+  <section class="grid">
 
-        <details>
-          <summary>Meetups & Sessions</summary>
-          <p>
-            Join group rides, workshops, and live sessions on the Beltline. This is where Cloud
-            identity meets real‑world movement.
-          </p>
-          <div class="side-app-actions">
-            <button class="btn btn-primary">Enter Meetups</button>
-            <button class="btn btn-ghost">View Calendar</button>
-          </div>
-        </details>
+    <!-- NETWORK -->
+    <a class="tile" href="/network/public/pages/index.html">
+      <img src="/assets/img/network-logo.jpg">
+      <h3>The Network</h3>
+      <p>Explore vendors, workshops, services, and creators.</p>
+    </a>
 
-        <details>
-          <summary>Games & Interactive Flow</summary>
-          <p>
-            Longboard mini‑games, flow challenges, and interactive experiences that turn the Beltline
-            into a playable space.
-          </p>
-          <div class="side-app-actions">
-            <button class="btn btn-primary">Open Games</button>
-          </div>
-        </details>
+    <!-- FAST ROLL -->
+    <a class="tile" href="/fast-roll/pages/index.html">
+      <img src="/assets/img/Fast-logo.png">
+      <h3>Fast Roll Delivery</h3>
+      <p>Rider-powered Beltline delivery.</p>
+    </a>
 
-        <details>
-          <summary>Cloud Map & Menus</summary>
-          <p>
-            See vendors, puddle lights, food spots, and experiences on a live map. Browse menus and
-            plan your route.
-          </p>
-          <div class="side-app-actions">
-            <button class="btn btn-primary">Open Map</button>
-            <button class="btn btn-ghost">Browse Menus</button>
-          </div>
-        </details>
+    <!-- SAFETY CLOUD -->
+    <a class="tile" href="/pages/safety.html">
+      <img src="/public/music/img/safety-cloud.jpg">
+      <h3>Safety Cloud</h3>
+      <p>Parking zones, etiquette, alerts, and emergency markers.</p>
+    </a>
 
-        <details>
-          <summary>Social & Dating Layer</summary>
-          <p>
-            A Beltline‑style social layer for meeting people who move like you. Intentional, cinematic,
-            and grounded in real‑world flow.
-          </p>
-          <div class="side-app-actions">
-            <button class="btn btn-primary">Enter Social Layer</button>
-          </div>
-        </details>
-      </div>
-    </main>
-  </div>
+    <!-- EVENTS -->
+    <a class="tile" href="/events/index.html">
+      <img src="/assets/img/events/events-preview.jpg">
+      <h3>Beltline Events</h3>
+      <p>Workshops, rides, meetups, concerts, and more.</p>
+    </a>
 
-  <script>
-    const API = "https://api.beltlinecloud.com";
+    <!-- MUSIC -->
+    <a class="tile" href="/pages/music.html">
+      <img src="/assets/img/music/music-logo.jpg">
+      <h3>Cloud Radio</h3>
+      <p>Live Beltline soundtrack + listening rooms.</p>
+    </a>
 
-    function goHome() {
-      // already here, but keep for consistency
-      window.location.href = "/dashboard.html";
-    }
-    function goProfile() {
-      window.location.href = "/profile.html";
-    }
-    function goNetwork() {
-      window.location.href = "/home.html"; // your main network explore page
-    }
-    function goOrders() {
-      window.location.href = "/orders.html"; // you can create this later
-    }
-    function goVendor() {
-      window.location.href = "/vendor-dashboard.html"; // future page
-    }
-    function goRider() {
-      window.location.href = "/rider-dashboard.html"; // future page
-    }
-    function scrollToSideCloud() {
-      document.getElementById("sideCloudSection").scrollIntoView({ behavior: "smooth" });
+    <!-- CHATROOMS -->
+    <a class="tile" href="/pages/chatrooms.html">
+      <img src="/assets/img/chat/chat-logo.jpg">
+      <h3>Chatrooms</h3>
+      <p>Talk with riders, skaters, creators, and neighbors.</p>
+    </a>
+
+    <!-- VENDOR DASHBOARD -->
+    <a class="tile" id="vendorDash" href="/vendor-dashboard.html" style="display:none;">
+      <img src="/assets/img/vendor/vendor-logo.jpg">
+      <h3>Vendor Dashboard</h3>
+      <p>Manage storefront, products, services, and Fast Roll.</p>
+    </a>
+
+    <!-- RIDER DASHBOARD -->
+    <a class="tile" id="riderDash" href="/rider-dashboard.html" style="display:none;">
+      <img src="/assets/img/rider/rider-logo.jpg">
+      <h3>Rider Dashboard</h3>
+      <p>Go online, accept deliveries, track earnings.</p>
+    </a>
+
+  </section>
+
+  <!-- JS -->
+  <script type="module">
+    import { Auth } from "/js/auth.js";
+
+    const user = Auth.current();
+    document.getElementById("userName").textContent = user.name || user.email;
+
+    const roles = (user.roles || "").split(",");
+
+    if (roles.includes("vendor")) {
+      document.getElementById("vendorDash").style.display = "block";
+      document.getElementById("vendorToggle").checked = true;
+      document.getElementById("userRole").textContent = "Vendor";
     }
 
-    // Load user from localStorage and set roles
-    function loadUser() {
-      const raw = localStorage.getItem("cloud_user");
-      if (!raw) {
-        document.getElementById("userName").textContent = "Guest";
-        document.getElementById("userRoles").textContent = "Not logged in";
-        return;
-      }
-
-      const user = JSON.parse(raw);
-      document.getElementById("userName").textContent = user.name || user.email || "Cloud User";
-      document.getElementById("userRoles").textContent = user.roles || "";
-
-      const roles = (user.roles || "").split(",").map(r => r.trim()).filter(Boolean);
-
-      // Vendor card state
-      if (roles.includes("vendor")) {
-        document.getElementById("vendorBadge").textContent = "Active";
-        document.getElementById("vendorBody").textContent =
-          "You are a Vendor in the Network. Open your Vendor Dashboard to manage products, services, and workshops.";
-        document.getElementById("vendorActions").innerHTML =
-          '<button class="btn btn-primary" onclick="goVendor()">Open Vendor Dashboard</button>';
-      }
-
-      // Rider card state
-      if (roles.includes("rider")) {
-        document.getElementById("riderBadge").textContent = "Active";
-        document.getElementById("riderBody").textContent =
-          "You are a Rider in Fast Roll. Open your Rider Dashboard to go online, accept deliveries, and track earnings.";
-        document.getElementById("riderActions").innerHTML =
-          '<button class="btn btn-primary" onclick="goRider()">Open Rider Dashboard</button>';
-      }
+    if (roles.includes("rider")) {
+      document.getElementById("riderDash").style.display = "block";
+      document.getElementById("riderToggle").checked = true;
+      document.getElementById("userRole").textContent = "Rider";
     }
 
-    // Activation flows (placeholder: update roles via profile/update)
-    async function activateVendor() {
-      const raw = localStorage.getItem("cloud_user");
-      if (!raw) {
-        alert("You need to log in first.");
-        return;
-      }
-      const user = JSON.parse(raw);
-      const roles = (user.roles || "").split(",").map(r => r.trim()).filter(Boolean);
-      if (!roles.includes("vendor")) roles.push("vendor");
+    document.getElementById("vendorToggle").addEventListener("change", async (e) => {
+      const active = e.target.checked;
+      const newRoles = new Set((user.roles || "").split(","));
+      active ? newRoles.add("vendor") : newRoles.delete("vendor");
+      await Auth.updateProfile({ roles: Array.from(newRoles) });
+      location.reload();
+    });
 
+    document.getElementById("riderToggle").addEventListener("change", async (e) => {
+      const active = e.target.checked;
+      const newRoles = new Set((user.roles || "").split(","));
+      active ? newRoles.add("rider") : newRoles.delete("rider");
+      await Auth.updateProfile({ roles: Array.from(newRoles) });
+      location.reload();
+    });
+
+    async function loadWeather() {
       try {
-        const res = await fetch(API + "/api/network/profile/update", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bio: user.bio || "",
-            interests: [],
-            photo: user.photoUrl || "",
-            roles
-          })
-        });
+        const res = await fetch("https://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=Atlanta");
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed");
-
-        user.roles = roles.join(",");
-        localStorage.setItem("cloud_user", JSON.stringify(user));
-        loadUser();
-        alert("Vendor Mode activated.");
-      } catch (err) {
-        alert(err.message);
+        document.getElementById("weather").textContent =
+          `${data.current.temp_f}°F • ${data.current.condition.text}`;
+      } catch {
+        document.getElementById("weather").textContent = "Unavailable";
       }
     }
+    loadWeather();
 
-    async function activateRider() {
-      const raw = localStorage.getItem("cloud_user");
-      if (!raw) {
-        alert("You need to log in first.");
-        return;
-      }
-      const user = JSON.parse(raw);
-      const roles = (user.roles || "").split(",").map(r => r.trim()).filter(Boolean);
-      if (!roles.includes("rider")) roles.push("rider");
-
-      try {
-        const res = await fetch(API + "/api/network/profile/update", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bio: user.bio || "",
-            interests: [],
-            photo: user.photoUrl || "",
-            roles
-          })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed");
-
-        user.roles = roles.join(",");
-        localStorage.setItem("cloud_user", JSON.stringify(user));
-        loadUser();
-        alert("Rider Mode activated.");
-      } catch (err) {
-        alert(err.message);
-      }
+    function logout() {
+      Auth.logout();
     }
-
-    document.addEventListener("DOMContentLoaded", loadUser);
+    window.logout = logout;
   </script>
+
 </body>
 </html>
