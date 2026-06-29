@@ -62,7 +62,7 @@ export const Auth = {
   require() {
     const user = this.current();
     if (!user) {
-      window.location.href = "/cloud/login.html";
+      window.location.href = "/pages/login.html";
       return false;
     }
     return true;
