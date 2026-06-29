@@ -65,7 +65,7 @@
 
     <button id="loginBtn">Log In</button>
 
-    <p>Don’t have an account? <a href="/signup.html">Create one</a></p>
+    <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
   <script>
@@ -93,7 +93,7 @@
         // Save user
         localStorage.setItem("cloud_user", JSON.stringify(data.user));
 
-        window.location.href = "/home.html";
+        window.location.href = "/index.html";
       } catch (err) {
         alert(err.message);
       }
