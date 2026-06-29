@@ -1,0 +1,138 @@
+* { box-sizing: border-box; }
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45);
+  z-index: -1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  color: white;
+}
+
+.header-logo {
+  height: 120px;
+  cursor: pointer;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.1rem;
+  color: var(--yellow);
+}
+
+.logout-btn {
+  padding: 8px 14px;
+  background: var(--yellow);
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  color: white;
+}
+
+.status-item {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.status-item h3 {
+  color: var(--yellow);
+  margin-bottom: 10px;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #555;
+  border-radius: 999px;
+  transition: .3s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background: var(--yellow);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.grid {
+  max-width: 1100px;
+  margin: 40px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.tile {
+  background: rgba(0,0,0,0.65);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 20px;
+  border-radius: 14px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.tile:hover {
+  transform: translateY(-6px);
+  border-color: var(--yellow);
+}
+
+.tile img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.tile h3 {
+  color: var(--yellow);
+  margin-bottom: 8px;
+}
