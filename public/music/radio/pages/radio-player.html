@@ -1,0 +1,130 @@
+<!-- CLOUD RADIO PLAYER -->
+<div class="cloud-radio" id="cloudRadio">
+  <img src="/assets/img/cloud/radio.jpg" id="radioImage" alt="Cloud Radio Console">
+
+  <div class="radio-controls">
+    <button id="playPause">▶</button>
+    <button id="muteUnmute">🔇</button>
+    <button id="nextStation">⏭</button>
+  </div>
+
+  <div class="led-strip" id="ledStrip">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <audio id="radioAudio">
+    <source src="/media/cloud-radio-stream.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<style>
+.cloud-radio {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cloud-radio img {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 0 25px rgba(255,123,0,0.45);
+}
+
+/* Controls */
+.radio-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+}
+
+.radio-controls button {
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.radio-controls button:hover {
+  background: #ff7b00;
+  transform: scale(1.1);
+}
+
+/* LED Strip */
+.led-strip {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+.led-strip span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,255,0,0.3);
+  box-shadow: 0 0 6px rgba(0,255,0,0.4);
+  animation: pulse 1.2s infinite alternate;
+}
+@keyframes pulse {
+  from { opacity: 0.3; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+</style>
+
+<script>
+const radioAudio = document.getElementById('radioAudio');
+const playPause = document.getElementById('playPause');
+const muteUnmute = document.getElementById('muteUnmute');
+const nextStation = document.getElementById('nextStation');
+const radioImage = document.getElementById('radioImage');
+const ledStrip = document.getElementById('ledStrip');
+
+let clickCount = 0;
+let walkieMode = false;
+
+playPause.addEventListener('click', () => {
+  if (radioAudio.paused) {
+    radioAudio.play();
+    playPause.textContent = '⏸';
+    ledStrip.style.opacity = '1';
+  } else {
+    radioAudio.pause();
+    playPause.textContent = '▶';
+    ledStrip.style.opacity = '0.3';
+  }
+});
+
+muteUnmute.addEventListener('click', () => {
+  radioAudio.muted = !radioAudio.muted;
+  muteUnmute.textContent = radioAudio.muted ? '🔈' : '🔇';
+});
+
+nextStation.addEventListener('click', () => {
+  radioAudio.src = '/media/cloud-radio-alt.mp3';
+  radioAudio.play();
+  playPause.textContent = '⏸';
+});
+
+radioImage.addEventListener('click', () => {
+  clickCount++;
+  setTimeout(() => (clickCount = 0), 600);
+  if (clickCount === 3) {
+    walkieMode = !walkieMode;
+    radioImage.src = walkieMode
+      ? '/assets/img/cloud/cloud-talk.jpg'
+      : '/assets/img/cloud/radio.jpg';
+  }
+});
+</script>
