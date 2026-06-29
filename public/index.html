@@ -1,338 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beltline Cloud Inc</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beltline Cloud Inc</title>
 
-    <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-    <link rel="stylesheet" href="/css/style.css">
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
 
-    <style>
-        /* GLOBAL RESET */
-        * {
-            box-sizing: border-box;
-        }
+  <!-- SOCIAL PREVIEW -->
+  <meta property="og:title" content="Beltline Cloud Inc">
+  <meta property="og:description" content="The Beltline’s first digital cloud — music, movement, safety, vendors, Fast Roll delivery, and community in one place.">
+  <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
+  <meta property="og:url" content="https://beltlinecloud.com">
+  <meta property="og:type" content="website">
 
-        /* CLOUD LOGO — BIGGER + RESPONSIVE */
-        .logo img {
-            height: 120px;
-            max-width: 100%;
-            cursor: pointer;
-            filter: drop-shadow(0 0 14px rgba(255,255,255,0.45));
-            transition: 0.3s;
-        }
-        .logo img:hover {
-            transform: scale(1.07);
-        }
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beltline Cloud Inc">
+  <meta name="twitter:description" content="Music. Movement. Safety. Community. Vendors. Fast Roll delivery. All in one place.">
+  <meta name="twitter:image" content="/assets/img/cloud/cloud-preview.jpg">
 
-        /* NAV */
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 20px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: var(--yellow);
-            font-weight: 700;
-            text-decoration: none;
-            transition: 0.25s;
-        }
-
-        .nav-links a:hover {
-            color: #ff4444;
-        }
-
-        /* MOBILE NAV */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-        }
-
-        /* HERO */
-        .hero {
-            text-align: center;
-            padding: 150px 20px 100px;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            text-shadow: 0 0 25px rgba(0,0,0,0.7);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-top: 12px;
-            opacity: 0.9;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.4rem;
-            }
-            .hero p {
-                font-size: 1.1rem;
-            }
-        }
-
-        /* SECTION */
-        .section {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 20px;
-            color: white;
-        }
-
-        .section h2 {
-            font-size: 2.3rem;
-            margin-bottom: 20px;
-            color: var(--yellow);
-            text-align: center;
-        }
-
-        .section p, .section li {
-            font-size: 1.15rem;
-            line-height: 1.7;
-        }
-
-        /* FEATURE GRID */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .feature-box {
-            background: rgba(0,0,0,0.65);
-            border: 1px solid rgba(255,255,255,0.15);
-            padding: 22px;
-            border-radius: 14px;
-            transition: 0.3s;
-        }
-
-        .feature-box:hover {
-            transform: translateY(-6px);
-            border-color: var(--yellow);
-        }
-
-        .feature-box h3 {
-            color: var(--yellow);
-            margin-bottom: 12px;
-        }
-
-        /* LOGO GRID */
-        .logo-grid {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .logo-card {
-            width: 200px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .logo-card img {
-            width: 100%;
-            border-radius: 12px;
-            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
-        }
-
-        .logo-card:hover {
-            transform: scale(1.07);
-        }
-
-        .logo-card span {
-            display: block;
-            margin-top: 10px;
-            font-weight: 700;
-            color: var(--yellow);
-        }
-
-        /* DROPDOWN PANELS */
-        .dropdown-panel {
-            display: none;
-            background: rgba(0,0,0,0.85);
-            border: 1px solid var(--ember-soft);
-            border-radius: 14px;
-            padding: 25px;
-            margin: 20px auto;
-            max-width: 900px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .dropdown-panel h3 {
-            color: var(--yellow);
-            margin-top: 0;
-        }
-
-        .dropdown-panel p {
-            color: #eee;
-            line-height: 1.6;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 22px;
-            background: var(--yellow);
-            color: #000;
-            font-weight: 700;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-top: 15px;
-            transition: 0.25s;
-        }
-
-        .btn:hover {
-            background: #ff4444;
-            color: white;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            padding: 40px;
-            color: white;
-            opacity: 0.8;
-        }
-    </style>
+  <!-- EXTERNAL CSS -->
+  <link rel="stylesheet" href="/css/cloud-index.css">
 </head>
 
 <body>
 
-    <!-- BACKGROUND -->
-    <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud-index.jpg');"></div>
+  <!-- BACKGROUND (kept in HTML as requested) -->
+  <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud-index.jpg');"></div>
 
-    <!-- NAV -->
-    <nav class="nav">
-        <div class="logo">
-            <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
-        </div>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    </div>
 
-        <ul class="nav-links">
-            <li><a href="/pages/about.html">About</a></li>
-            <li><a href="/pages/music.html">Music Station</a></li>
-            <li><a href="/events/index.html">Events</a></li>
-            <li><a href="/pages/contact.html">Contact</a></li>
-        </ul>
-    </nav>
+    <div class="nav-links">
+      <a href="/pages/about.html">About</a>
+      <a href="/pages/music.html">Music Station</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/pages/contact.html">Contact</a>
+      <a href="/pages/safety.html">Safety Cloud</a>
 
-    <!-- HERO -->
-    <header class="hero">
-        <h1>The Beltline’s First Digital Cloud</h1>
-        <p>Music. Movement. Safety. Community. All in one place.</p>
-    </header>
+      <span class="auth-links">
+        <a href="/cloud/login.html">Login</a>
+        <a href="/cloud/signup.html">Join Cloud</a>
+      </span>
+    </div>
 
-    <!-- MUSIC STATION -->
-    <section class="section">
-        <h2>Beltline Cloud Music Station</h2>
-        <p>The Beltline’s first always‑on music station — curated for riders, runners, skaters, and creators.</p>
+    <div class="burger" onclick="toggleBurger()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
 
-        <div class="feature-grid">
-            <div class="feature-box">
-                <h3>🎧 Live Cloud Station</h3>
-                <p>Stream the official Beltline soundtrack — updated daily with local artists and curated mixes.</p>
-                <a class="btn" href="/music/index.html">Listen Now</a>
-            </div>
+  <!-- BURGER PANEL -->
+  <div id="burger-panel" class="burger-panel">
+    <h3>Explore Beltline Cloud</h3>
+    <p>This area is for visitors who haven’t signed up yet.</p>
 
-            <div class="feature-box">
-                <h3>🎶 Listening Rooms</h3>
-                <p>Choose your vibe: Lo‑Fi, House, Hip‑Hop, R&B, Afrobeat, Jazz, Ambient, and more.</p>
-            </div>
+    <a href="/pages/music.html">Cloud Radio Station</a>
+    <a href="/events/index.html">Community Events</a>
+    <a href="/pages/safety.html">Safety Cloud</a>
+    <a href="/network/public/pages/index.html">Network Map (public)</a>
+    <a href="/pages/products.html">Featured Products</a>
+    <a href="/pages/services.html">Featured Services</a>
 
-            <div class="feature-box">
-                <h3>🌩 CloudSync Mode</h3>
-                <p>A world‑first: everyone listens to the same track at the same time — anywhere on the Beltline.</p>
-            </div>
-        </div>
-    </section>
+    <p style="margin-top:10px;">
+      To see full vendor profiles, dashboards, and the internal map with parking zones and vendor locations,
+      you’ll need to <a href="/cloud/signup.html" style="color:var(--yellow);">join the Cloud</a>.
+    </p>
+  </div>
 
-    <!-- NETWORK + FAST ROLL -->
-    <section class="section">
-        <h2>Powered by Beltline Innovation</h2>
+  <!-- HERO -->
+  <header class="hero">
+    <h1>The Beltline’s First Digital Cloud</h1>
+    <p>Music. Movement. Safety. Community. All in one place.</p>
+  </header>
 
-        <div class="logo-grid">
+  <!-- MUSIC STATION -->
+  <section class="section">
+    <h2>Beltline Cloud Music Station</h2>
+    <p>The Beltline’s first always‑on music station — curated for riders, runners, skaters, and creators.</p>
 
-            <!-- NETWORK -->
-            <div class="logo-card" onclick="toggleDropdown('network-panel')">
-                <img src="/assets/img/network-logo.jpg" alt="The Network Logo">
-                <span>The Network</span>
-            </div>
+    <div class="feature-grid">
+      <div class="feature-box">
+        <h3>🎧 Live Cloud Station</h3>
+        <p>Stream the official Beltline soundtrack — updated daily.</p>
+        <a class="btn" href="/music/index.html">Listen Now</a>
+      </div>
 
-            <!-- FAST ROLL -->
-            <div class="logo-card" onclick="toggleDropdown('fastroll-panel')">
-                <img src="/assets/img/Fast-logo.png" alt="Fast Roll Logo">
-                <span>Fast Roll Delivery</span>
-            </div>
+      <div class="feature-box">
+        <h3>🎶 Listening Rooms</h3>
+        <p>Choose your vibe: Lo‑Fi, House, Hip‑Hop, R&B, Afrobeat, Jazz, Ambient.</p>
+      </div>
 
-        </div>
+      <div class="feature-box">
+        <h3>🌩 CloudSync Mode</h3>
+        <p>Everyone listens to the same track at the same time — anywhere on the Beltline.</p>
+      </div>
+    </div>
+  </section>
 
-        <!-- NETWORK DROPDOWN -->
-        <div id="network-panel" class="dropdown-panel">
-            <h3>The Network</h3>
-            <p>The Beltline’s official digital ecosystem — vendors, creators, workshops, services, and community.</p>
-            <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
-        </div>
+  <!-- CLOUD / NETWORK / FAST ROLL / SAFETY -->
+  <section class="section">
+    <h2>Powered by Beltline Innovation</h2>
 
-        <!-- FAST ROLL DROPDOWN -->
-        <div id="fastroll-panel" class="dropdown-panel">
-            <h3>Fast Roll Delivery</h3>
-            <p>The world’s first Beltline‑native delivery service — built by riders, for riders.</p>
-            <a class="btn" href="https://fast-roll.pages.dev/">Request Delivery</a>
-        </div>
-    </section>
+    <div class="logo-grid">
+      <div class="logo-card" onclick="toggleDropdown('cloud-panel')">
+        <img src="/assets/img/cloud/cloud-logo.jpg">
+        <span>Beltline Cloud</span>
+      </div>
 
-    <!-- EVENTS -->
-    <section class="section">
-        <h2>Beltline Events</h2>
-        <p>Workshops, rides, meetups, classes, concerts, and community gatherings — all in one place.</p>
-        <a class="btn" href="/events/index.html">View Events</a>
-    </section>
+      <div class="logo-card" onclick="toggleDropdown('network-panel')">
+        <img src="/assets/img/network-logo.jpg">
+        <span>The Network</span>
+      </div>
 
-    <!-- SAFETY + COMMUNITY -->
-    <section class="section">
-        <h2>Safety & Community</h2>
-        <ul>
-            <li>✔ Real‑time updates and alerts</li>
-            <li>✔ Courtesy guidelines for riders, walkers, and skaters</li>
-            <li>✔ Meet new people through shared music and events</li>
-            <li>✔ A digital home for the Beltline community</li>
-        </ul>
-    </section>
+      <div class="logo-card" onclick="toggleDropdown('fastroll-panel')">
+        <img src="/assets/img/Fast-logo.png">
+        <span>Fast Roll Delivery</span>
+      </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
-    </footer>
+      <div class="logo-card" onclick="toggleDropdown('safety-panel')">
+        <img src="/assets/img/cloud/safety-cloud.jpg">
+        <span>Safety Cloud</span>
+      </div>
+    </div>
 
-    <script>
-        function toggleDropdown(id) {
-            const panel = document.getElementById(id);
-            const open = panel.style.display === "block";
-            document.querySelectorAll(".dropdown-panel").forEach(p => p.style.display = "none");
-            panel.style.display = open ? "none" : "block";
-        }
-    </script>
+    <!-- CLOUD PANEL -->
+    <div id="cloud-panel" class="dropdown-panel">
+      <h3>Beltline Cloud</h3>
+      <p>The Cloud connects music, movement, safety, vendors, riders, and events into one living system.</p>
+      <ul>
+        <li>Cloud users can listen to the radio, see events, and explore the Network.</li>
+        <li>Cloud users can sign up as vendors and riders.</li>
+        <li>The Cloud organizes dashboards, maps, safety, and communication.</li>
+      </ul>
+      <a class="btn" href="/cloud/signup.html">Join Beltline Cloud</a>
+    </div>
+
+    <!-- NETWORK PANEL -->
+    <div id="network-panel" class="dropdown-panel">
+      <h3>The Network</h3>
+      <p>The Network is the Beltline’s official digital ecosystem for local vendors.</p>
+      <ul>
+        <li>Vendors get profiles, products, and services listed.</li>
+        <li>The Network acts as advertisement for Beltline businesses.</li>
+        <li>Cloud users are encouraged to support local vendors.</li>
+        <li>Internal map shows vendor locations and workshops.</li>
+      </ul>
+      <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
+    </div>
+
+    <!-- FAST ROLL PANEL -->
+    <div id="fastroll-panel" class="dropdown-panel">
+      <h3>Fast Roll Delivery</h3>
+      <p>Fast Roll is the Beltline’s native delivery service — built by Beltline Cloud.</p>
+      <ul>
+        <li>Vendors request delivery with one click.</li>
+        <li>Riders go online and earn from movement.</li>
+        <li>Cloud users see delivery availability before purchase.</li>
+        <li>Fast Roll connects vendors, riders, and neighbors.</li>
+      </ul>
+      <a class="btn" href="https://fast-roll.pages.dev/">Request Delivery</a>
+    </div>
+
+    <!-- SAFETY CLOUD PANEL -->
+    <div id="safety-panel" class="dropdown-panel">
+      <h3>Safety Cloud</h3>
+      <p>Safety Cloud helps you know where to park, how to move with courtesy, and what’s happening around you.</p>
+      <ul>
+        <li>Public safety guidelines for riders, walkers, skaters.</li>
+        <li>Map shows recommended parking zones.</li>
+        <li>Inside the Cloud: alerts, event locations, safe meetup spots.</li>
+      </ul>
+      <a class="btn" href="/pages/safety.html">Open Safety Cloud</a>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="section">
+    <h2>Beltline Events</h2>
+    <p>Workshops, rides, meetups, classes, concerts, and community gatherings.</p>
+    <a class="btn" href="/events/index.html">View Events</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
+  </footer>
+
+  <script>
+    function toggleDropdown(id) {
+      const panel = document.getElementById(id);
+      const open = panel.style.display === "block";
+      document.querySelectorAll(".dropdown-panel").forEach(p => p.style.display = "none");
+      panel.style.display = open ? "none" : "block";
+    }
+
+    function toggleBurger() {
+      const panel = document.getElementById("burger-panel");
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
+    }
+  </script>
 
 </body>
 </html>
