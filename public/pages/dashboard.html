@@ -5,25 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Beltline Cloud Dashboard</title>
 
-  <!-- FAVICON -->
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
 
-  <!-- SOCIAL PREVIEW -->
+  <!-- Social Preview -->
   <meta property="og:title" content="Beltline Cloud Dashboard">
-  <meta property="og:description" content="Your Beltline Cloud dashboard — access Network, Fast Roll, Safety Cloud, Events, Music, Chatrooms, and your Vendor/Rider tools.">
+  <meta property="og:description" content="Your Beltline Cloud dashboard — full navigation, chatrooms, trail chat, safety, map, community, games, events, and more.">
   <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
-  <meta property="og:url" content="https://beltlinecloud.com/dashboard.html">
   <meta property="og:type" content="website">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Beltline Cloud Dashboard">
-  <meta name="twitter:description" content="Your Beltline Cloud dashboard — connect with the Beltline community.">
-  <meta name="twitter:image" content="/assets/img/cloud/cloud-preview.jpg">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="/css/dashboard.css">
 
-  <!-- AUTH -->
   <script type="module">
     import { Auth } from "/js/auth.js";
     Auth.require();
@@ -32,165 +24,160 @@
 
 <body>
 
-  <!-- BACKGROUND (cloud.jpg) -->
-  <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud.jpg');"></div>
+  <!-- BACKGROUND -->
+  <div class="page-bg"></div>
 
   <!-- HEADER -->
   <header class="header">
-    <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="location.href='/'">
-
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
     <div class="header-user">
       <span id="userName">Loading...</span>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </header>
 
-  <!-- STATUS BAR -->
-  <section class="status-bar">
+  <!-- FULL SCREEN MENU -->
+  <div id="cloudMenu" class="cloud-menu">
 
-    <div class="status-item">
-      <h3>Your Role</h3>
-      <p id="userRole">Cloud User</p>
+    <div class="menu-header">
+      <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo">
+      <span class="menu-close" id="menuClose">×</span>
     </div>
 
-    <div class="status-item">
-      <h3>Vendor Mode</h3>
+    <div class="menu-content">
+
+      <!-- CATEGORY: Communication -->
+      <div class="menu-category">
+        <h3>Communication</h3>
+        <ul>
+          <li><a href="/pages/chatrooms.html">Chatrooms</a></li>
+          <li><a href="/pages/trail-chat.html">Trail Chat</a></li>
+          <li><a href="/pages/community.html">Community Hub</a></li>
+        </ul>
+      </div>
+
+      <!-- CATEGORY: Movement & Safety -->
+      <div class="menu-category">
+        <h3>Movement & Safety</h3>
+        <ul>
+          <li><a href="/pages/safety.html">Safety Cloud</a></li>
+          <li><a href="/pages/map.html">Beltline Map</a></li>
+          <li><a href="/pages/parking-map.html">Parking Zones</a></li>
+          <li><a href="/pages/marker-system.html">Emergency Marker System</a></li>
+        </ul>
+      </div>
+
+      <!-- CATEGORY: Entertainment -->
+      <div class="menu-category">
+        <h3>Entertainment</h3>
+        <ul>
+          <li><a href="/pages/music.html">Cloud Radio</a></li>
+          <li><a href="/events/index.html">Events</a></li>
+          <li><a href="/pages/games.html">Games</a></li>
+        </ul>
+      </div>
+
+      <!-- CATEGORY: Vendor & Rider -->
+      <div class="menu-category">
+        <h3>Vendor & Rider</h3>
+        <ul id="vendorLinks" style="display:none;">
+          <li><a href="/vendor-dashboard.html">Vendor Dashboard</a></li>
+          <li><a href="/pages/vendor-zones.html">Vendor Zones</a></li>
+        </ul>
+
+        <ul id="riderLinks" style="display:none;">
+          <li><a href="/rider-dashboard.html">Rider Dashboard</a></li>
+          <li><a href="/fast-roll/pages/index.html">Fast Roll Delivery</a></li>
+        </ul>
+      </div>
+
+      <!-- CATEGORY: Cloud System -->
+      <div class="menu-category">
+        <h3>Cloud System</h3>
+        <ul>
+          <li><a href="/dashboard.html">Dashboard Home</a></li>
+          <li><a href="/pages/settings.html">Settings</a></li>
+          <li><a href="/cloud/login.html">Account</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QUICK ACTION DRAWER -->
+  <div class="quick-drawer" id="quickDrawer">
+
+    <div class="drawer-section">
+      <h4>Weather</h4>
+      <p id="weather">Loading...</p>
+    </div>
+
+    <div class="drawer-section" id="vendorToggleSection" style="display:none;">
+      <h4>Vendor Mode</h4>
       <label class="toggle">
         <input type="checkbox" id="vendorToggle">
         <span class="slider"></span>
       </label>
     </div>
 
-    <div class="status-item">
-      <h3>Rider Mode</h3>
+    <div class="drawer-section" id="riderToggleSection" style="display:none;">
+      <h4>Rider Mode</h4>
       <label class="toggle">
         <input type="checkbox" id="riderToggle">
         <span class="slider"></span>
       </label>
     </div>
 
-    <div class="status-item">
-      <h3>Beltline Weather</h3>
-      <p id="weather">Loading...</p>
-    </div>
+  </div>
 
-  </section>
-
-  <!-- GRID -->
+  <!-- TILE GRID -->
   <section class="grid">
 
-    <!-- NETWORK -->
-    <a class="tile" href="/network/public/pages/index.html">
-      <img src="/assets/img/network-logo.jpg">
-      <h3>The Network</h3>
-      <p>Explore vendors, workshops, services, and creators.</p>
-    </a>
-
-    <!-- FAST ROLL -->
-    <a class="tile" href="/fast-roll/pages/index.html">
-      <img src="/assets/img/Fast-logo.png">
-      <h3>Fast Roll Delivery</h3>
-      <p>Rider-powered Beltline delivery.</p>
-    </a>
-
-    <!-- SAFETY CLOUD -->
-    <a class="tile" href="/pages/safety.html">
-      <img src="/public/music/img/safety-cloud.jpg">
-      <h3>Safety Cloud</h3>
-      <p>Parking zones, etiquette, alerts, and emergency markers.</p>
-    </a>
-
-    <!-- EVENTS -->
-    <a class="tile" href="/events/index.html">
-      <img src="/assets/img/events/events-preview.jpg">
-      <h3>Beltline Events</h3>
-      <p>Workshops, rides, meetups, concerts, and more.</p>
-    </a>
-
-    <!-- MUSIC -->
-    <a class="tile" href="/pages/music.html">
-      <img src="/assets/img/music/music-logo.jpg">
-      <h3>Cloud Radio</h3>
-      <p>Live Beltline soundtrack + listening rooms.</p>
-    </a>
-
-    <!-- CHATROOMS -->
     <a class="tile" href="/pages/chatrooms.html">
       <img src="/assets/img/chat/chat-logo.jpg">
       <h3>Chatrooms</h3>
       <p>Talk with riders, skaters, creators, and neighbors.</p>
     </a>
 
-    <!-- VENDOR DASHBOARD -->
-    <a class="tile" id="vendorDash" href="/vendor-dashboard.html" style="display:none;">
-      <img src="/assets/img/vendor/vendor-logo.jpg">
-      <h3>Vendor Dashboard</h3>
-      <p>Manage storefront, products, services, and Fast Roll.</p>
+    <a class="tile" href="/pages/trail-chat.html">
+      <img src="/assets/img/chat/trail-chat.jpg">
+      <h3>Trail Chat</h3>
+      <p>Live Beltline conversation feed.</p>
     </a>
 
-    <!-- RIDER DASHBOARD -->
-    <a class="tile" id="riderDash" href="/rider-dashboard.html" style="display:none;">
-      <img src="/assets/img/rider/rider-logo.jpg">
-      <h3>Rider Dashboard</h3>
-      <p>Go online, accept deliveries, track earnings.</p>
+    <a class="tile" href="/pages/safety.html">
+      <img src="/public/music/img/safety-cloud.jpg">
+      <h3>Safety Cloud</h3>
+      <p>Parking zones, etiquette, alerts, and emergency markers.</p>
+    </a>
+
+    <a class="tile" href="/pages/map.html">
+      <img src="/assets/img/map/map.jpg">
+      <h3>Beltline Map</h3>
+      <p>Trail layout, zones, and navigation.</p>
+    </a>
+
+    <a class="tile" href="/events/index.html">
+      <img src="/assets/img/events/events-preview.jpg">
+      <h3>Events</h3>
+      <p>Workshops, rides, meetups, concerts, and more.</p>
+    </a>
+
+    <a class="tile" href="/pages/music.html">
+      <img src="/assets/img/music/music-logo.jpg">
+      <h3>Cloud Radio</h3>
+      <p>Live Beltline soundtrack + listening rooms.</p>
+    </a>
+
+    <a class="tile" href="/pages/games.html">
+      <img src="/assets/img/games/games.jpg">
+      <h3>Games</h3>
+      <p>Community games and challenges.</p>
     </a>
 
   </section>
 
-  <!-- JS -->
-  <script type="module">
-    import { Auth } from "/js/auth.js";
-
-    const user = Auth.current();
-    document.getElementById("userName").textContent = user.name || user.email;
-
-    const roles = (user.roles || "").split(",");
-
-    if (roles.includes("vendor")) {
-      document.getElementById("vendorDash").style.display = "block";
-      document.getElementById("vendorToggle").checked = true;
-      document.getElementById("userRole").textContent = "Vendor";
-    }
-
-    if (roles.includes("rider")) {
-      document.getElementById("riderDash").style.display = "block";
-      document.getElementById("riderToggle").checked = true;
-      document.getElementById("userRole").textContent = "Rider";
-    }
-
-    document.getElementById("vendorToggle").addEventListener("change", async (e) => {
-      const active = e.target.checked;
-      const newRoles = new Set((user.roles || "").split(","));
-      active ? newRoles.add("vendor") : newRoles.delete("vendor");
-      await Auth.updateProfile({ roles: Array.from(newRoles) });
-      location.reload();
-    });
-
-    document.getElementById("riderToggle").addEventListener("change", async (e) => {
-      const active = e.target.checked;
-      const newRoles = new Set((user.roles || "").split(","));
-      active ? newRoles.add("rider") : newRoles.delete("rider");
-      await Auth.updateProfile({ roles: Array.from(newRoles) });
-      location.reload();
-    });
-
-    async function loadWeather() {
-      try {
-        const res = await fetch("https://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=Atlanta");
-        const data = await res.json();
-        document.getElementById("weather").textContent =
-          `${data.current.temp_f}°F • ${data.current.condition.text}`;
-      } catch {
-        document.getElementById("weather").textContent = "Unavailable";
-      }
-    }
-    loadWeather();
-
-    function logout() {
-      Auth.logout();
-    }
-    window.logout = logout;
-  </script>
+  <script type="module" src="/js/dashboard.js"></script>
 
 </body>
 </html>
