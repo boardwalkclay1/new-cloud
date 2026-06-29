@@ -1,3 +1,4 @@
+<!-- public/dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,7 @@
 
   <!-- Social Preview -->
   <meta property="og:title" content="Beltline Cloud Dashboard">
-  <meta property="og:description" content="Your Beltline Cloud dashboard — full navigation, chatrooms, trail chat, safety, map, community, games, events, and more.">
+  <meta property="og:description" content="Your Beltline Cloud dashboard — Trail Chat, Cloud Radio, safety, map, community, games, events, and more.">
   <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
   <meta property="og:type" content="website">
 
@@ -36,6 +37,27 @@
     </div>
   </header>
 
+  <!-- TOP BAR: RADIO + WEATHER + LOCATION STATUS -->
+  <section class="top-bar">
+    <div class="top-item">
+      <h3>Cloud Radio</h3>
+      <audio id="cloudRadioPlayer" controls>
+        <source src="/media/cloud-radio-stream.mp3" type="audio/mpeg">
+      </audio>
+      <a class="top-link" href="/pages/music.html">Open Full Cloud Radio</a>
+    </div>
+
+    <div class="top-item">
+      <h3>Weather</h3>
+      <p id="weather">Loading...</p>
+    </div>
+
+    <div class="top-item">
+      <h3>Location Status</h3>
+      <p id="locationStatus">Detecting location...</p>
+    </div>
+  </section>
+
   <!-- FULL SCREEN MENU -->
   <div id="cloudMenu" class="cloud-menu">
 
@@ -50,7 +72,6 @@
       <div class="menu-category">
         <h3>Communication</h3>
         <ul>
-          <li><a href="/pages/chatrooms.html">Chatrooms</a></li>
           <li><a href="/pages/trail-chat.html">Trail Chat</a></li>
           <li><a href="/pages/community.html">Community Hub</a></li>
         </ul>
@@ -109,7 +130,7 @@
 
     <div class="drawer-section">
       <h4>Weather</h4>
-      <p id="weather">Loading...</p>
+      <p id="weatherDrawer">Loading...</p>
     </div>
 
     <div class="drawer-section" id="vendorToggleSection" style="display:none;">
@@ -133,16 +154,10 @@
   <!-- TILE GRID -->
   <section class="grid">
 
-    <a class="tile" href="/pages/chatrooms.html">
-      <img src="/assets/img/chat/chat-logo.jpg">
-      <h3>Chatrooms</h3>
-      <p>Talk with riders, skaters, creators, and neighbors.</p>
-    </a>
-
     <a class="tile" href="/pages/trail-chat.html">
       <img src="/assets/img/chat/trail-chat.jpg">
       <h3>Trail Chat</h3>
-      <p>Live Beltline conversation feed.</p>
+      <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
     </a>
 
     <a class="tile" href="/pages/safety.html">
@@ -166,7 +181,7 @@
     <a class="tile" href="/pages/music.html">
       <img src="/assets/img/music/music-logo.jpg">
       <h3>Cloud Radio</h3>
-      <p>Live Beltline soundtrack + listening rooms.</p>
+      <p>Full Beltline soundtrack and listening rooms.</p>
     </a>
 
     <a class="tile" href="/pages/games.html">
