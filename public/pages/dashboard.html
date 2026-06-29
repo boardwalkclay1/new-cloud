@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
-<link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
 
 <style>
-/* GLOBAL */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -21,7 +19,7 @@ body {
 .page-bg {
   position: fixed;
   inset: 0;
-  background: url('/assets/img/cloud/cloud-preview.jpg') center/cover no-repeat;
+  background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;
   filter: brightness(0.35);
   z-index: -1;
 }
@@ -35,7 +33,6 @@ body {
 }
 .header-logo {
   height: 90px;
-  cursor: pointer;
 }
 .header-user {
   display: flex;
@@ -53,15 +50,59 @@ body {
 
 /* TOP BAR */
 .top-bar {
-  display: flex;
-  justify-content: space-around;
+  text-align: center;
   padding: 20px;
-  background: rgba(0,0,0,0.45);
-  border-bottom: 1px solid rgba(255,255,255,0.2);
 }
-.top-item h3 {
-  color: #ffdd00;
+
+/* SMALL RADIO PLAYER */
+.cloud-radio {
+  position: relative;
+  width: 300px;
+  margin: 0 auto 20px auto;
+}
+.cloud-radio img {
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 0 18px rgba(255,255,0,0.45);
+}
+.radio-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+.radio-controls button {
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.radio-controls button:hover {
+  background: #00b86b;
+}
+
+/* WEATHER */
+.weather-box {
+  margin-top: 20px;
+  font-size: 2.4rem;
+}
+.weather-desc {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* TIME */
+#timeDisplay {
+  margin-top: 10px;
+  font-size: 1.4rem;
   font-weight: 700;
+  color: #ffdd00;
 }
 
 /* GRID */
@@ -86,72 +127,9 @@ body {
   width: 100%;
   border-radius: 10px;
 }
-
-/* CLOUD RADIO PLAYER */
-.cloud-radio {
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  margin: 40px auto;
-}
-.cloud-radio img {
-  width: 100%;
-  border-radius: 18px;
-  box-shadow: 0 0 25px rgba(255,255,0,0.45);
-}
-.radio-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 20px;
-}
-.radio-controls button {
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.radio-controls button:hover {
-  background: #00b86b;
-  transform: scale(1.1);
-}
-.led-strip {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-}
-.led-strip span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(0,255,0,0.3);
-  box-shadow: 0 0 6px rgba(0,255,0,0.4);
-  animation: pulse 1.2s infinite alternate;
-}
-@keyframes pulse {
-  from { opacity: 0.3; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1.2); }
-}
-
-/* TIME */
-#timeDisplay {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #00b86b;
-}
 </style>
-
 </head>
+
 <body>
 
 <div class="page-bg"></div>
@@ -166,40 +144,29 @@ body {
 </header>
 
 <section class="top-bar">
-  <div class="top-item">
-    <h3>Cloud Radio</h3>
-    <p>Now Playing…</p>
+
+  <!-- SMALL RADIO PLAYER -->
+  <div class="cloud-radio" id="cloudRadio">
+    <img src="/assets/img/cloud/radio.jpg" id="radioImage">
+
+    <div class="radio-controls">
+      <button id="playPause">▶</button>
+      <button id="muteUnmute">🔇</button>
+      <button id="nextStation">⏭</button>
+    </div>
+
+    <audio id="radioAudio">
+      <source src="/media/cloud-radio-stream.mp3" type="audio/mpeg">
+    </audio>
   </div>
 
-  <div class="top-item">
-    <h3>Atlanta Weather</h3>
-    <p id="weather">Loading...</p>
+  <!-- WEATHER -->
+  <div class="weather-box">
+    <span id="weatherEmoji">⛅</span>
+    <div class="weather-desc" id="weatherDesc">Loading weather…</div>
   </div>
 
-  <div class="top-item">
-    <h3>Location Status</h3>
-    <p id="locationStatus">Detecting…</p>
-  </div>
 </section>
-
-<!-- CLOUD RADIO PLAYER -->
-<div class="cloud-radio" id="cloudRadio">
-  <img src="/assets/img/cloud/radio.jpg" id="radioImage">
-
-  <div class="radio-controls">
-    <button id="playPause">▶</button>
-    <button id="muteUnmute">🔇</button>
-    <button id="nextStation">⏭</button>
-  </div>
-
-  <div class="led-strip" id="ledStrip">
-    <span></span><span></span><span></span><span></span><span></span>
-  </div>
-
-  <audio id="radioAudio">
-    <source src="/media/cloud-radio-stream.mp3" type="audio/mpeg">
-  </audio>
-</div>
 
 <section class="grid">
 
@@ -252,13 +219,25 @@ setInterval(updateTime, 1000);
 updateTime();
 
 // WEATHER (Atlanta)
-fetch("https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true")
-  .then(res => res.json())
-  .then(data => {
-    const w = data.current_weather;
-    document.getElementById("weather").textContent =
-      `${w.temperature}°F — ${w.weathercode}`;
-  });
+async function loadWeather() {
+  const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true");
+  const data = await res.json();
+  const w = data.current_weather;
+
+  let emoji = "⛅";
+  if (w.weathercode === 0) emoji = "☀️";
+  if ([1,2,3].includes(w.weathercode)) emoji = "🌤️";
+  if ([45,48].includes(w.weathercode)) emoji = "🌫️";
+  if ([51,53,55].includes(w.weathercode)) emoji = "🌦️";
+  if ([61,63,65].includes(w.weathercode)) emoji = "🌧️";
+  if ([71,73,75].includes(w.weathercode)) emoji = "❄️";
+  if ([95,96,99].includes(w.weathercode)) emoji = "⛈️";
+
+  document.getElementById("weatherEmoji").textContent = emoji;
+  document.getElementById("weatherDesc").textContent =
+    `${w.temperature}°F — Code ${w.weathercode}`;
+}
+loadWeather();
 
 // RADIO PLAYER LOGIC
 const radioAudio = document.getElementById('radioAudio');
@@ -266,7 +245,6 @@ const playPause = document.getElementById('playPause');
 const muteUnmute = document.getElementById('muteUnmute');
 const nextStation = document.getElementById('nextStation');
 const radioImage = document.getElementById('radioImage');
-const ledStrip = document.getElementById('ledStrip');
 
 let clickCount = 0;
 let walkieMode = false;
@@ -275,11 +253,9 @@ playPause.addEventListener('click', () => {
   if (radioAudio.paused) {
     radioAudio.play();
     playPause.textContent = '⏸';
-    ledStrip.style.opacity = '1';
   } else {
     radioAudio.pause();
     playPause.textContent = '▶';
-    ledStrip.style.opacity = '0.3';
   }
 });
 
