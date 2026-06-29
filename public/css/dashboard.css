@@ -1,3 +1,4 @@
+/* public/css/dashboard.css */
 * { box-sizing: border-box; }
 
 :root {
@@ -47,6 +48,39 @@ body {
   border-radius: 999px;
   font-weight: 700;
   cursor: pointer;
+}
+
+/* TOP BAR */
+.top-bar {
+  max-width: 1100px;
+  margin: 10px auto 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.top-item {
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 15px;
+  border-radius: 14px;
+}
+
+.top-item h3 {
+  color: var(--yellow);
+  margin-bottom: 8px;
+}
+
+#cloudRadioPlayer {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.top-link {
+  color: var(--yellow);
+  font-size: 0.95rem;
+  text-decoration: none;
 }
 
 /* FULL SCREEN MENU */
@@ -167,10 +201,11 @@ input:checked + .slider:before {
 /* TILE GRID */
 .grid {
   max-width: 1100px;
-  margin: 40px auto;
+  margin: 20px auto 40px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 25px;
+  padding: 0 20px;
 }
 
 .tile {
