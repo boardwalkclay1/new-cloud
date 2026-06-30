@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cloud Events</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/public/css/dashboard.css">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #001f3f;
+  color: #fff;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  background: url('/assets/img/cloud/events-bg.jpg') center/cover no-repeat;
+  filter: brightness(0.35);
+  z-index: -1;
+}
+
+.header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-logo {
+  height: 70px;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin: 20px 0 10px 0;
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.tile {
+  background: rgba(0,0,0,0.6);
+  border-radius: 14px;
+  padding: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.tile:hover {
+  transform: scale(1.03);
+}
+
+.tile-icon {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.event-card {
+  background: rgba(0,0,0,0.55);
+  border-radius: 14px;
+  padding: 16px;
+  transition: 0.2s;
+}
+
+.event-card:hover {
+  transform: scale(1.02);
+}
+
+.event-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.event-info {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+
+.event-btn {
+  background: #0074D9;
+  padding: 10px 14px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="page-bg"></div>
+
+<header class="header">
+  <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="header-logo">
+  <h2>Cloud Events</h2>
+</header>
+
+<!-- CREATE + MY EVENTS -->
+<section>
+  <h3 class="section-title">Your Event Tools</h3>
+
+  <div class="grid">
+    <div class="tile" onclick="goTo('/public/pages/events/create.html')">
+      <div class="tile-icon">🎟️</div>
+      <div>Create Event</div>
+    </div>
+
+    <div class="tile" onclick="goTo('/public/pages/events/mine.html')">
+      <div class="tile-icon">📁</div>
+      <div>My Events</div>
+    </div>
+  </div>
+</section>
+
+<!-- UPCOMING EVENTS FEED -->
+<section>
+  <h3 class="section-title">Upcoming Events</h3>
+
+  <div id="eventsFeed" class="grid">
+    <!-- JS will inject event cards here -->
+  </div>
+</section>
+
+<script>
+// Navigation helper
+function goTo(path) {
+  window.location.href = path;
+}
+
+// Example event feed (replace with API later)
+const events = [
+  {
+    id: 44,
+    title: "Sunset Beltline Ride",
+    date: "July 12, 2026 • 7:00 PM",
+    location: "Eastside Trail",
+    price: "$20",
+  },
+  {
+    id: 45,
+    title: "Vendor Pop-Up Market",
+    date: "July 15, 2026 • 3:00 PM",
+    location: "Old Fourth Ward",
+    price: "Free",
+  },
+  {
+    id: 46,
+    title: "Night Flow Jam",
+    date: "July 18, 2026 • 9:00 PM",
+    location: "Ponce City Market",
+    price: "$15",
+  }
+];
+
+// Inject event cards
+const feed = document.getElementById('eventsFeed');
+
+events.forEach(evt => {
+  const card = document.createElement('div');
+  card.className = 'event-card';
+  card.innerHTML = `
+    <div class="event-title">${evt.title}</div>
+    <div class="event-info">${evt.date}</div>
+    <div class="event-info">${evt.location}</div>
+    <div class="event-info">Price: ${evt.price}</div>
+    <div class="event-btn" onclick="goTo('/public/pages/events/event.html?id=${evt.id}')">
+      View Event
+    </div>
+  `;
+  feed.appendChild(card);
+});
+</script>
+
+</body>
+</html>
