@@ -4,10 +4,33 @@
   <meta charset="UTF-8">
   <title>Create Event • Cloud Events</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- APPLE TOUCH ICON -->
+  <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- SOCIAL PREVIEW -->
+  <meta property="og:title" content="Create Event • Cloud Events">
+  <meta property="og:description" content="Create, host, and publish Beltline Cloud events. Workshops, rides, meetups, concerts, and more.">
+  <meta property="og:image" content="/public/assets/img/cloud/events-cloud.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://beltlinecloud.com/events/create">
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Create Event • Cloud Events">
+  <meta name="twitter:description" content="Create, host, and publish Beltline Cloud events.">
+  <meta name="twitter:image" content="/public/assets/img/cloud/events-cloud.jpg">
+
+  <!-- EVENTS CSS -->
   <link rel="stylesheet" href="/pages/events/css/events.css">
 </head>
+
 <body>
 
+<!-- BACKGROUND -->
 <div class="events-bg"></div>
 
 <header class="events-header">
@@ -17,6 +40,7 @@
 
 <section class="events-section">
   <form id="createEventForm" class="events-form">
+
     <label>Event Title
       <input type="text" name="title" required>
     </label>
@@ -53,6 +77,7 @@
   </form>
 </section>
 
-<script src="/public/pages/events/js/create.js"></script>
+<!-- UNIFIED EVENTS JS -->
+<script src="/pages/events/js/events.js"></script>
 </body>
 </html>
