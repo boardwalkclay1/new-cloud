@@ -3,18 +3,12 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #001f3f;
+  background: #001f3f; /* solid fallback */
   color: #fff;
 }
 
-/* GLOBAL BACKGROUND FOR ALL PAGES */
-.events-bg {
-  position: fixed;
-  inset: 0;
-  background: url('/public/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
-  filter: brightness(0.35);
-  z-index: -1;
-}
+/* REMOVED BACKGROUND LOGIC */
+/* .events-bg { } — completely removed */
 
 .events-header {
   padding: 20px;
