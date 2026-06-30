@@ -54,10 +54,10 @@ body {
   padding: 20px;
 }
 
-/* RADIO PLAYER — YOUR REAL radio.jpg */
+/* SMALL RADIO PLAYER */
 .cloud-radio {
   position: relative;
-  width: 260px;
+  width: 300px;
   margin: 0 auto 20px auto;
 }
 .cloud-radio img {
@@ -90,7 +90,7 @@ body {
 /* WEATHER */
 .weather-box {
   margin-top: 20px;
-  font-size: 3rem;
+  font-size: 2.4rem;
 }
 .weather-desc {
   font-size: 1.2rem;
@@ -135,7 +135,7 @@ body {
 <div class="page-bg"></div>
 
 <header class="header">
-  <img src="/public/assets/img/cloud/cloud-logo.jpg" class="header-logo">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo">
   <div class="header-user">
     <span id="userName">Loading...</span>
     <span id="timeDisplay"></span>
@@ -145,9 +145,9 @@ body {
 
 <section class="top-bar">
 
-  <!-- RADIO PLAYER USING ONLY radio.jpg -->
+  <!-- SMALL RADIO PLAYER -->
   <div class="cloud-radio" id="cloudRadio">
-    <img src="/public/assets/img/cloud/radio.jpg" id="radioImage">
+    <img src="/assets/img/cloud/radio.jpg" id="radioImage">
 
     <div class="radio-controls">
       <button id="playPause">▶</button>
@@ -170,38 +170,38 @@ body {
 
 <section class="grid">
 
-  <a class="tile" href="/pages/cloud-chat.html">
-    <img src="/public/assets/img/cloud/cloud-chat-logo.jpg">
+  <a class="tile" href="/pages/trail-chat.html">
+    <img src="/assets/img/chat/cloud-chat.jpg">
     <h3>Cloud Chat</h3>
     <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
   </a>
 
   <a class="tile" href="/pages/safety.html">
-    <img src="/public/assets/img/cloud/safety-cloud-logo.jpg">
+    <img src="/assets/img/cloud/safety-cloud-logo.jpg">
     <h3>Safety Cloud</h3>
     <p>Parking zones, etiquette, alerts, and emergency markers.</p>
   </a>
 
   <a class="tile" href="/pages/map.html">
-    <img src="/public/assets/img/map/beltline-full.png">
+    <img src="/assets/img/map/map.jpg">
     <h3>Beltline Map</h3>
     <p>Trail layout, zones, and navigation.</p>
   </a>
 
   <a class="tile" href="/events/index.html">
-    <img src="/public/assets/img/events/events-preview.jpg">
+    <img src="/assets/img/events/events-preview.jpg">
     <h3>Events</h3>
     <p>Workshops, rides, meetups, concerts, and more.</p>
   </a>
 
   <a class="tile" href="/pages/music.html">
-    <img src="/public/assets/img/cloud/radio.jpg">
+    <img src="/assets/img/music/music-logo.jpg">
     <h3>Cloud Radio</h3>
     <p>Full Beltline soundtrack and listening rooms.</p>
   </a>
 
   <a class="tile" href="/pages/games.html">
-    <img src="/public/assets/img/games/games.jpg">
+    <img src="/assets/img/games/games.jpg">
     <h3>Games</h3>
     <p>Community games and challenges.</p>
   </a>
@@ -244,6 +244,10 @@ const radioAudio = document.getElementById('radioAudio');
 const playPause = document.getElementById('playPause');
 const muteUnmute = document.getElementById('muteUnmute');
 const nextStation = document.getElementById('nextStation');
+const radioImage = document.getElementById('radioImage');
+
+let clickCount = 0;
+let walkieMode = false;
 
 playPause.addEventListener('click', () => {
   if (radioAudio.paused) {
@@ -264,6 +268,17 @@ nextStation.addEventListener('click', () => {
   radioAudio.src = '/media/cloud-radio-alt.mp3';
   radioAudio.play();
   playPause.textContent = '⏸';
+});
+
+radioImage.addEventListener('click', () => {
+  clickCount++;
+  setTimeout(() => (clickCount = 0), 600);
+  if (clickCount === 3) {
+    walkieMode = !walkieMode;
+    radioImage.src = walkieMode
+      ? '/assets/img/cloud/cloud-talk.jpg'
+      : '/assets/img/cloud/radio.jpg';
+  }
 });
 </script>
 
