@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event • Cloud Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/pages/events/css/events.css">
+</head>
+<body>
+
+<div class="events-bg"></div>
+
+<header class="events-header">
+  <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="events-logo">
+  <h2 id="eventTitle">Event</h2>
+</header>
+
+<section class="events-section">
+  <div id="eventDetails" class="event-details-card">
+    <!-- JS injects title, date, location, description, price, host -->
+  </div>
+
+  <div class="event-ticket-panel">
+    <label>Tickets
+      <input type="number" id="ticketQuantity" min="1" value="1">
+    </label>
+
+    <div id="ticketPriceDisplay" class="event-price-display"></div>
+
+    <button id="buyTicketBtn" class="events-btn-primary">
+      Buy Ticket
+    </button>
+  </div>
+</section>
+
+<script src="/public/pages/events/js/event.js"></script>
+</body>
+</html>
