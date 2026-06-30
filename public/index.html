@@ -26,13 +26,13 @@
 
 <body>
 
-  <!-- BACKGROUND (kept in HTML as requested) -->
+  <!-- BACKGROUND -->
   <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud-index.jpg');"></div>
 
   <!-- NAV -->
   <nav class="nav">
-    <div class="logo">
-      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    <div class="logo" onclick="toggleLogoMenu()">
+      <img src="/assets/img/cloud/cloud-logo.jpg">
     </div>
 
     <div class="nav-links">
@@ -40,7 +40,7 @@
       <a href="/pages/music.html">Music Station</a>
       <a href="/events/index.html">Events</a>
       <a href="/pages/contact.html">Contact</a>
-      <a href="/pages/safety.html">Safety Cloud</a>
+      <a href="/pages/index-safety.html">Index Safety Cloud</a>
 
       <span class="auth-links">
         <a href="/pages/login.html">Login</a>
@@ -53,21 +53,50 @@
     </div>
   </nav>
 
-  <!-- BURGER PANEL -->
+  <!-- LOGO MENU (FULL SCREEN) -->
+  <div id="logo-menu" class="logo-menu">
+    <div class="logo-menu-header">
+      <img src="/assets/img/cloud/cloud-logo.jpg">
+      <span class="close-logo-menu" onclick="toggleLogoMenu()">×</span>
+    </div>
+
+    <div class="logo-menu-content">
+      <h2>Welcome to Beltline Cloud</h2>
+      <p>Your digital ecosystem for music, movement, safety, vendors, riders, and events.</p>
+
+      <a href="/cloud/dashboard.html">Cloud Dashboard</a>
+      <a href="/pages/index-safety.html">Index Safety Cloud</a>
+      <a href="/pages/music.html">Cloud Radio Station</a>
+      <a href="/pages/chat/cloud-chat.html">Cloud Chat</a>
+      <a href="/network/public/pages/index.html">The Network (Public)</a>
+      <a href="/fast-roll/pages/index.html">Fast Roll Delivery</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/pages/products.html">Products</a>
+      <a href="/pages/services.html">Services</a>
+      <a href="/pages/contact.html">Contact</a>
+
+      <p class="menu-note">
+        Full access requires a Cloud User Account.  
+        Vendors, Riders, and Creators apply from the Cloud Dashboard.
+      </p>
+    </div>
+  </div>
+
+  <!-- BURGER PANEL (MOBILE) -->
   <div id="burger-panel" class="burger-panel">
     <h3>Explore Beltline Cloud</h3>
     <p>This area is for visitors who haven’t signed up yet.</p>
 
     <a href="/pages/music.html">Cloud Radio Station</a>
     <a href="/events/index.html">Community Events</a>
-    <a href="/pages/safety.html">Safety Cloud</a>
-    <a href="/network/public/pages/index.html">Network Map (public)</a>
+    <a href="/pages/index-safety.html">Index Safety Cloud</a>
+    <a href="/network/public/pages/index.html">Network Map (Public)</a>
     <a href="/pages/products.html">Featured Products</a>
     <a href="/pages/services.html">Featured Services</a>
 
-    <p style="margin-top:10px;">
-      To see full vendor profiles, dashboards, and the internal map with parking zones and vendor locations,
-      you’ll need to <a href="/cloud/signup.html" style="color:var(--yellow);">join the Cloud</a>.
+    <p class="menu-note">
+      To see vendor dashboards, rider tools, delivery controls, and internal maps,  
+      you must <a href="/pages/signup.html">Join the Cloud</a>.
     </p>
   </div>
 
@@ -86,7 +115,7 @@
       <div class="feature-box">
         <h3>🎧 Live Cloud Station</h3>
         <p>Stream the official Beltline soundtrack — updated daily.</p>
-        <a class="btn" href="/music/index.html">Listen Now</a>
+        <a class="btn" href="/pages/music.html">Listen Now</a>
       </div>
 
       <div class="feature-box">
@@ -132,9 +161,13 @@
       <h3>Beltline Cloud</h3>
       <p>The Cloud connects music, movement, safety, vendors, riders, and events into one living system.</p>
       <ul>
-        <li>Cloud users can listen to the radio, see events, and explore the Network.</li>
-        <li>Cloud users can sign up as vendors and riders.</li>
-        <li>The Cloud organizes dashboards, maps, safety, and communication.</li>
+        <li>Cloud Radio + Listening Rooms</li>
+        <li>Cloud Chat + Walkie Channels</li>
+        <li>Vendor & Rider Applications</li>
+        <li>Internal Maps + Parking Zones</li>
+        <li>Event Hosting + Ticket Distribution</li>
+        <li>Product Selling + Service Listings</li>
+        <li>Cloud Services Phonebook</li>
       </ul>
       <a class="btn" href="/pages/signup.html">Join Beltline Cloud</a>
     </div>
@@ -144,10 +177,11 @@
       <h3>The Network</h3>
       <p>The Network is the Beltline’s official digital ecosystem for local vendors.</p>
       <ul>
-        <li>Vendors get profiles, products, and services listed.</li>
-        <li>The Network acts as advertisement for Beltline businesses.</li>
-        <li>Cloud users are encouraged to support local vendors.</li>
-        <li>Internal map shows vendor locations and workshops.</li>
+        <li>Vendor Profiles</li>
+        <li>Products & Services</li>
+        <li>Workshops & Classes</li>
+        <li>Vendor Map Locations</li>
+        <li>Cloud Delivery Integration</li>
       </ul>
       <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
     </div>
@@ -157,12 +191,12 @@
       <h3>Fast Roll Delivery</h3>
       <p>Fast Roll is the Beltline’s native delivery service — built by Beltline Cloud.</p>
       <ul>
-        <li>Vendors request delivery with one click.</li>
-        <li>Riders go online and earn from movement.</li>
-        <li>Cloud users see delivery availability before purchase.</li>
-        <li>Fast Roll connects vendors, riders, and neighbors.</li>
+        <li>Vendor Delivery Requests</li>
+        <li>Rider Online Mode</li>
+        <li>Live Delivery Availability</li>
+        <li>CloudSync Movement Tracking</li>
       </ul>
-      <a class="btn" href="https://fast-roll.pages.dev/">Request Delivery</a>
+      <a class="btn" href="/fast-roll/pages/index.html">Request Delivery</a>
     </div>
 
     <!-- SAFETY CLOUD PANEL -->
@@ -170,11 +204,13 @@
       <h3>Safety Cloud</h3>
       <p>Safety Cloud helps you know where to park, how to move with courtesy, and what’s happening around you.</p>
       <ul>
-        <li>Public safety guidelines for riders, walkers, skaters.</li>
-        <li>Map shows recommended parking zones.</li>
-        <li>Inside the Cloud: alerts, event locations, safe meetup spots.</li>
+        <li>Parking Zones</li>
+        <li>Movement Etiquette</li>
+        <li>Blocking Flow Rules</li>
+        <li>Live Feed Page</li>
+        <li>Emergency Marker System</li>
       </ul>
-      <a class="btn" href="/pages/safety.html">Open Safety Cloud</a>
+      <a class="btn" href="/pages/index-safety.html">Open Index Safety Cloud</a>
     </div>
   </section>
 
@@ -190,19 +226,7 @@
     © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
   </footer>
 
-  <script>
-    function toggleDropdown(id) {
-      const panel = document.getElementById(id);
-      const open = panel.style.display === "block";
-      document.querySelectorAll(".dropdown-panel").forEach(p => p.style.display = "none");
-      panel.style.display = open ? "none" : "block";
-    }
-
-    function toggleBurger() {
-      const panel = document.getElementById("burger-panel");
-      panel.style.display = panel.style.display === "block" ? "none" : "block";
-    }
-  </script>
+  <script src="/js/index.js"></script>
 
 </body>
 </html>
