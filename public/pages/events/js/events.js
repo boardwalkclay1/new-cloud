@@ -45,7 +45,7 @@ if (document.getElementById("eventsFeed")) {
       <div class="event-info">${evt.date}</div>
       <div class="event-info">${evt.location}</div>
       <div class="event-info">Price: ${evt.price}</div>
-      <div class="events-btn-primary" onclick="goTo('/public/pages/events/pages/event.html?id=${evt.id}')">
+      <div class="events-btn-primary" onclick="goTo('/pages/events/pages/event.html?id=${evt.id}')">
         View Event
       </div>
     `;
@@ -66,7 +66,7 @@ if (document.getElementById("createEventForm")) {
     localStorage.setItem("newEvent", JSON.stringify(eventObj));
 
     alert("Event Published!");
-    goTo("/public/pages/events/pages/events.html");
+    goTo("/pages/events/pages/events.html");
   });
 }
 
