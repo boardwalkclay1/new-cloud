@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Chat — Beltline Cloud</title>
+
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
+  <link rel="stylesheet" href="/pages/chat/css/cloud-chat.css">
+
+  <meta property="og:title" content="Cloud Chat — Beltline Cloud">
+  <meta property="og:description" content="Real-time Beltline chatrooms, walkie-talkie channels, games, safety, and Cloud Radio.">
+  <meta property="og:image" content="/assets/img/chat/cloud-chat.jpg">
+  <meta property="og:type" content="website">
+</head>
+
+<body>
+
+  <!-- BACKGROUND -->
+  <div class="page-bg"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/dashboard.html'">
+    </div>
+
+    <div class="nav-links">
+      <a href="/dashboard.html">Cloud Dash</a>
+      <a href="/pages/safety.html">Safety Cloud</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/pages/music.html">Cloud Radio</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <h1>Cloud Chat</h1>
+    <p>
+      Real-time Beltline communication — global chat, trail rooms, walkie-talkie channels, games, and safety-first interaction.
+    </p>
+  </header>
+
+  <!-- RADIO + WALKIE BAR -->
+  <section class="radio-walkie-bar">
+
+    <div class="radio-section card">
+      <h2>Cloud Radio — Mini Player</h2>
+      <audio id="cloudRadioMini" controls>
+        <source src="/media/cloud-radio-stream.mp3" type="audio/mpeg">
+      </audio>
+      <a class="radio-link" href="/pages/music.html">Open Full Cloud Radio</a>
+    </div>
+
+    <div class="walkie-section card">
+      <h2>Walkie-Talkie Channels</h2>
+      <select id="walkieChannel" class="walkie-select">
+        <option value="general">Beltline General</option>
+        <option value="skatepark">Skatepark Voice</option>
+        <option value="riderops">Rider Ops</option>
+        <option value="vendorops">Vendor Ops</option>
+        <option value="relay">Emergency Relay</option>
+      </select>
+
+      <button id="walkieRecordBtn" class="walkie-btn">Push to Talk</button>
+      <div id="walkieStatus" class="walkie-status">Ready</div>
+    </div>
+
+  </section>
+
+  <!-- GLOBAL CHAT -->
+  <section class="section">
+    <h2>Global Beltline Chat</h2>
+    <p>Everyone on the Beltline can talk here in real time.</p>
+
+    <div class="chat-window card">
+      <h3>Global Chat</h3>
+      <div id="globalMessages" class="chat-messages"></div>
+
+      <div class="chat-input-row">
+        <input type="text" id="globalInput" class="chat-input" placeholder="Type a message...">
+        <button id="globalSendBtn" class="send-btn">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAIL ROOMS -->
+  <section class="section">
+    <h2>Trail Rooms</h2>
+    <p>Location-based chatrooms for real-time Beltline conversation.</p>
+
+    <div class="chat-grid">
+
+      <button class="room-btn" data-room="skatepark">Skatepark</button>
+      <button class="room-btn" data-room="piedmont">Piedmont Park</button>
+      <button class="room-btn" data-room="eastside">Eastside Trail</button>
+      <button class="room-btn" data-room="westside">Westside Trail</button>
+      <button class="room-btn" data-room="o4w">Old Fourth Ward</button>
+      <button class="room-btn" data-room="pcm">Ponce City Market</button>
+      <button class="room-btn" data-room="krog">Krog Street</button>
+
+    </div>
+
+    <div class="chat-window card">
+      <h3 id="roomTitle">Select a Trail Room</h3>
+      <div id="roomMessages" class="chat-messages"></div>
+
+      <div class="chat-input-row">
+        <input type="text" id="roomInput" class="chat-input" placeholder="Type a message...">
+        <button id="roomSendBtn" class="send-btn">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAMES -->
+  <section class="section">
+    <h2>Cloud Chat Games</h2>
+
+    <div class="games-grid">
+
+      <div class="game-card card">
+        <h3>Chat Games</h3>
+        <ul>
+          <li>Spot the Landmark</li>
+          <li>Flow Check</li>
+          <li>Gratitude Drop</li>
+          <li>Beltline Trivia</li>
+        </ul>
+      </div>
+
+      <div class="game-card card">
+        <h3>Trail Games</h3>
+        <ul>
+          <li>Courtesy Challenge</li>
+          <li>Safety Spotter</li>
+          <li>Pace Partner</li>
+          <li>Beltline Bingo</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SAFETY -->
+  <section class="section">
+    <h2>Safety Layer</h2>
+    <p>Safety is the first priority on Cloud Chat.</p>
+
+    <ul class="list">
+      <li>No harassment or unsafe coordination.</li>
+      <li>No encouraging reckless riding.</li>
+      <li>Respect families, kids, elders, pedestrians.</li>
+      <li>Use Cloud Chat to support safety.</li>
+      <li>Emergency? Call 911.</li>
+    </ul>
+  </section>
+
+  <footer class="footer">
+    © 2026 Beltline Cloud Inc — Cloud Chat keeps the Beltline connected and safe.
+  </footer>
+
+  <script type="module" src="/pages/chat/js/cloud-chat.js"></script>
+</body>
+</html>
