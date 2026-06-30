@@ -7,10 +7,11 @@ body {
   color: #fff;
 }
 
+/* GLOBAL BACKGROUND FOR ALL PAGES */
 .events-bg {
   position: fixed;
   inset: 0;
-  background: url('/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
+  background: url('/public/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
   filter: brightness(0.35);
   z-index: -1;
 }
