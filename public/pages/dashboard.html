@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
+<!-- FAVICON -->
+<link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
+
+<!-- APPLE TOUCH ICON -->
+<link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
+
+<!-- SOCIAL PREVIEW -->
+<meta property="og:title" content="Beltline Cloud Dashboard">
+<meta property="og:description" content="Live Beltline dashboard — chat, safety, events, radio, games, and navigation.">
+<meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://beltlinecloud.com">
+
+<!-- TWITTER CARD -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Beltline Cloud Dashboard">
+<meta name="twitter:description" content="Live Beltline dashboard — chat, safety, events, radio, games, and navigation.">
+<meta name="twitter:image" content="/assets/img/cloud/cloud-logo.jpg">
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
 
 <style>
@@ -33,6 +52,7 @@ body {
 }
 .header-logo {
   height: 90px;
+  cursor: pointer;
 }
 .header-user {
   display: flex;
@@ -46,6 +66,32 @@ body {
   border-radius: 8px;
   color: white;
   cursor: pointer;
+}
+
+/* BURGER MENU */
+.burger-menu {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 240px;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  padding: 20px;
+  transition: 0.3s;
+  z-index: 999;
+}
+.burger-menu a {
+  display: block;
+  padding: 12px 0;
+  color: white;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+.burger-menu a:hover {
+  color: #00b86b;
+}
+.burger-open {
+  left: 0;
 }
 
 /* TOP BAR */
@@ -134,8 +180,19 @@ body {
 
 <div class="page-bg"></div>
 
+<!-- BURGER MENU -->
+<nav id="burgerMenu" class="burger-menu">
+  <a href="/index.html">🏠 Dashboard</a>
+  <a href="/pages/trail-chat.html">💬 Cloud Chat</a>
+  <a href="/pages/safety.html">🛡️ Safety Cloud</a>
+  <a href="/pages/map.html">🗺️ Beltline Map</a>
+  <a href="/public/pages/events/pages/events.html">🎟️ Events</a>
+  <a href="/pages/music.html">🎧 Cloud Radio</a>
+  <a href="/pages/games.html">🎮 Games</a>
+</nav>
+
 <header class="header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="toggleMenu()">
   <div class="header-user">
     <span id="userName">Loading...</span>
     <span id="timeDisplay"></span>
@@ -188,7 +245,7 @@ body {
     <p>Trail layout, zones, and navigation.</p>
   </a>
 
-  <a class="tile" href="/events/index.html">
+  <a class="tile" href="/public/pages/events/pages/events.html">
     <img src="/assets/img/cloud/events-cloud.jpg">
     <h3>Events</h3>
     <p>Workshops, rides, meetups, concerts, and more.</p>
@@ -209,7 +266,13 @@ body {
 </section>
 
 <script>
-// TIME
+/* BURGER MENU */
+function toggleMenu() {
+  const menu = document.getElementById("burgerMenu");
+  menu.classList.toggle("burger-open");
+}
+
+/* TIME */
 function updateTime() {
   const now = new Date();
   document.getElementById('timeDisplay').textContent =
@@ -218,7 +281,7 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// WEATHER (Atlanta)
+/* WEATHER (Atlanta) */
 async function loadWeather() {
   const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true");
   const data = await res.json();
@@ -239,7 +302,7 @@ async function loadWeather() {
 }
 loadWeather();
 
-// RADIO PLAYER LOGIC
+/* RADIO PLAYER */
 const radioAudio = document.getElementById('radioAudio');
 const playPause = document.getElementById('playPause');
 const muteUnmute = document.getElementById('muteUnmute');
