@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Event • Cloud Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/pages/events/css/events.css">
+</head>
+<body>
+
+<div class="events-bg"></div>
+
+<header class="events-header">
+  <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="events-logo">
+  <h2>Create Event</h2>
+</header>
+
+<section class="events-section">
+  <form id="createEventForm" class="events-form">
+    <label>Event Title
+      <input type="text" name="title" required>
+    </label>
+
+    <label>Date & Time
+      <input type="datetime-local" name="datetime" required>
+    </label>
+
+    <label>Location (Beltline zone)
+      <input type="text" name="location" required>
+    </label>
+
+    <label>Description
+      <textarea name="description" rows="4" required></textarea>
+    </label>
+
+    <label>Ticket Price (USD)
+      <input type="number" name="price" min="0" step="0.01" required>
+    </label>
+
+    <label>Max Attendees
+      <input type="number" name="max" min="1" required>
+    </label>
+
+    <label>Cover Image URL
+      <input type="text" name="cover">
+    </label>
+
+    <label>Safety Notes
+      <textarea name="safety" rows="3"></textarea>
+    </label>
+
+    <button type="submit" class="events-btn-primary">Publish Event</button>
+  </form>
+</section>
+
+<script src="/public/pages/events/js/create.js"></script>
+</body>
+</html>
