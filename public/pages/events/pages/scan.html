@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scan Tickets • Cloud Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/pages/events/css/events.css">
+</head>
+<body>
+
+<div class="events-bg"></div>
+
+<header class="events-header">
+  <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="events-logo">
+  <h2>Scan Tickets</h2>
+</header>
+
+<section class="events-section">
+  <div id="scannerContainer" class="scanner-container">
+    <!-- JS will mount camera scanner here -->
+  </div>
+
+  <div id="scanResult" class="scan-result">
+    <!-- VALID / INVALID / USED -->
+  </div>
+</section>
+
+<script src="/public/pages/events/js/qr-scan.js"></script>
+</body>
+</html>
