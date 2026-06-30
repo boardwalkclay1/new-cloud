@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cloud Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/pages/events/css/events.css">
+</head>
+<body>
+
+<div class="events-bg"></div>
+
+<header class="events-header">
+  <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="events-logo">
+  <h2>Cloud Events</h2>
+</header>
+
+<section class="events-section">
+  <h3 class="events-section-title">Your Event Tools</h3>
+
+  <div class="events-grid">
+    <div class="events-tile" onclick="goTo('/public/pages/events/pages/create.html')">
+      <div class="events-tile-icon">🎟️</div>
+      <div>Create Event</div>
+    </div>
+
+    <div class="events-tile" onclick="goTo('/public/pages/events/pages/mine.html')">
+      <div class="events-tile-icon">📁</div>
+      <div>My Events</div>
+    </div>
+  </div>
+</section>
+
+<section class="events-section">
+  <h3 class="events-section-title">Upcoming Events</h3>
+  <div id="eventsFeed" class="events-grid"></div>
+</section>
+
+<script src="/public/pages/events/js/events.js"></script>
+</body>
+</html>
