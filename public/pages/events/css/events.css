@@ -10,7 +10,7 @@ body {
 .events-bg {
   position: fixed;
   inset: 0;
-  background: url('/assets/img/cloud/events-bg.jpg') center/cover no-repeat;
+  background: url('/music/img/events-cloud.jpg') center/cover no-repeat;
   filter: brightness(0.35);
   z-index: -1;
 }
