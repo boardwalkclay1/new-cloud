@@ -4,14 +4,43 @@
   <meta charset="UTF-8">
   <title>Scan Tickets • Cloud Events</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- APPLE TOUCH ICON -->
+  <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- SOCIAL PREVIEW -->
+  <meta property="og:title" content="Scan Tickets • Cloud Events">
+  <meta property="og:description" content="Scan and validate Beltline Cloud event tickets instantly.">
+  <meta property="og:image" content="/public/assets/img/cloud/events-cloud.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://beltlinecloud.com/events/scan">
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Scan Tickets • Cloud Events">
+  <meta name="twitter:description" content="Scan and validate Beltline Cloud event tickets instantly.">
+  <meta name="twitter:image" content="/assets/img/cloud/events-cloud.jpg">
+
+  <!-- EVENTS CSS -->
   <link rel="stylesheet" href="/pages/events/css/events.css">
 </head>
+
 <body>
 
-<div class="events-bg"></div>
+<!-- BACKGROUND IN HTML -->
+<div style="
+  position: fixed;
+  inset: 0;
+  background: url('/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
+  filter: brightness(0.35);
+  z-index: -1;
+"></div>
 
 <header class="events-header">
-  <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="events-logo">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo">
   <h2>Scan Tickets</h2>
 </header>
 
@@ -25,6 +54,7 @@
   </div>
 </section>
 
-<script src="/pages/events/js/qr-scan.js"></script>
+<!-- UNIFIED EVENTS JS -->
+<script src="/pages/events/js/events.js"></script>
 </body>
 </html>
