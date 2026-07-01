@@ -28,28 +28,53 @@
 body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:white; }
 .page-bg { position:fixed; inset:0; background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat; filter:brightness(0.35); z-index:-1; }
 
+/* HEADER */
 .header { display:flex; justify-content:space-between; align-items:center; padding:20px; }
 .header-logo { height:120px; cursor:pointer; border-radius:10px; }
 
+/* SAFETY CLOUD TOP DROPDOWN */
 .header-top-right {
+  position:relative;
   display:flex;
   flex-direction:column;
-  justify-content:center;
   align-items:center;
-  text-align:center;
   margin-left:20px;
 }
 
-.header-top-right a {
+.safety-logo {
+  height:110px;
+  cursor:pointer;
+  border-radius:10px;
+}
+
+.safety-dropdown {
+  display:none;
+  position:absolute;
+  top:120px;
+  background:rgba(0,0,0,0.92);
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(0,0,0,0.6);
+  width:220px;
+}
+
+.safety-dropdown a {
+  display:block;
+  padding:8px 0;
   color:#ffdd00;
-  font-size:1.6rem;
-  font-weight:700;
+  font-size:1.1rem;
   text-decoration:none;
 }
 
+.safety-dropdown a:hover {
+  color:#00b86b;
+}
+
+/* USER INFO */
 .header-user { display:flex; align-items:center; gap:20px; }
 .logout-btn { background:#00b86b; border:none; padding:10px 20px; border-radius:8px; color:white; cursor:pointer; }
 
+/* BURGER MENU */
 #cloudMenu { position:fixed; top:0; left:-320px; width:300px; height:100%; background:rgba(0,0,0,0.92); padding:25px; transition:0.35s; z-index:999; overflow-y:auto; }
 #cloudMenu.open { left:0; }
 #cloudMenu h2 { margin-top:25px; margin-bottom:10px; font-size:1.4rem; color:#ffdd00; }
@@ -57,11 +82,14 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 #cloudMenu a:hover { color:#00b86b; }
 #menuClose { margin-top:20px; display:block; color:#ff4444; font-weight:700; }
 
+/* WEATHER + LOCATION */
 #weather { margin:20px 40px; font-size:1.2rem; opacity:0.85; }
 #beltlineLocation { margin:20px 40px; font-size:1.2rem; font-weight:600; color:#ffdd00; }
 
+/* ROLES */
 .role-summary { margin:20px 40px; font-size:1rem; opacity:0.85; }
 
+/* GRID */
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; padding:40px; }
 .tile { background:rgba(0,0,0,0.55); border-radius:14px; padding:20px; text-decoration:none; color:white; transition:0.3s; }
 .tile:hover { transform:scale(1.05); }
@@ -69,6 +97,7 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 
 .section-title { font-size:1.8rem; font-weight:700; margin:40px 40px 10px 40px; }
 
+/* BOTTOM BAR */
 .bottom-bar { margin-top:60px; padding:40px; text-align:center; }
 .bottom-logo { height:200px; display:block; margin:0 auto 10px auto; cursor:pointer; border-radius:16px; box-shadow:0 0 25px rgba(0,0,0,0.7); transition:0.3s; }
 .bottom-logo:hover { transform:scale(1.05); }
@@ -113,8 +142,18 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 <header class="header">
   <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
 
+  <!-- SAFETY CLOUD DROPDOWN -->
   <div class="header-top-right">
-    <a href="/pages/safety.html">Safety Cloud</a>
+    <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" id="safetyDropdownTrigger">
+
+    <div id="safetyDropdown" class="safety-dropdown">
+      <a href="/pages/safety.html">Enter Safety Cloud</a>
+      <a href="/pages/safety/lost-found.html">Lost & Found</a>
+      <a href="/pages/safety/stolen.html">Stolen Items</a>
+      <a href="/pages/safety/markers.html">Marker System</a>
+      <a href="/pages/safety/live-feed.html">Live Feed</a>
+      <a href="/pages/safety/alerts.html">Alerts</a>
+    </div>
   </div>
 
   <div class="header-user">
@@ -150,7 +189,7 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
     <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
   </a>
 
-  <!-- SAFETY CLOUD REMOVED FROM CARD SECTION -->
+  <!-- SAFETY CLOUD REMOVED FROM CARDS -->
 
   <a class="tile" href="/pages/map.html">
     <img src="/assets/img/map/map.jpg">
@@ -298,6 +337,12 @@ document.getElementById("menuTrigger").onclick = () => {
 };
 document.getElementById("menuClose").onclick = () => {
   document.getElementById("cloudMenu").classList.remove("open");
+};
+
+// SAFETY DROPDOWN
+document.getElementById("safetyDropdownTrigger").onclick = () => {
+  const menu = document.getElementById("safetyDropdown");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
 };
 
 // LOGOUT
