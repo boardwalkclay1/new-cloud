@@ -40,7 +40,7 @@ body {
   padding: 20px;
 }
 .header-logo {
-  height: 90px;
+  height: 120px;
   cursor: pointer;
   border-radius: 10px;
 }
@@ -84,7 +84,7 @@ body {
   left: 0;
 }
 
-/* GRID */
+/* GRID (for cloud tools only) */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -114,20 +114,40 @@ body {
   margin: 40px 40px 10px 40px;
 }
 
+/* ROLE SUMMARY */
+.role-summary {
+  margin: 0 40px 10px 40px;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
 /* BOTTOM LOGO BAR */
 .bottom-bar {
-  margin-top: 60px;
+  margin-top: 40px;
   padding: 40px;
   text-align: center;
 }
-.bottom-bar img {
-  height: 90px;
-  margin: 0 30px;
+.bottom-logo {
+  height: 180px; /* twice the previous size */
+  margin: 0 40px 10px 40px;
   cursor: pointer;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.7);
   transition: 0.3s;
 }
-.bottom-bar img:hover {
-  transform: scale(1.1);
+.bottom-logo:hover {
+  transform: scale(1.05);
+}
+.bottom-link {
+  display: inline-block;
+  margin: 0 40px 0 40px;
+  color: #ffdd00;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+.bottom-link:hover {
+  text-decoration: underline;
 }
 </style>
 </head>
@@ -159,16 +179,14 @@ body {
   </div>
 </header>
 
-<!-- USER SECTIONS -->
+<!-- ROLE SUMMARY (no cards for Network/Fast Roll) -->
 <div id="vendorSection"></div>
 <div id="riderSection"></div>
 
-<!-- UNIVERSAL SECTIONS -->
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
 <section class="grid">
-
-  <a class="tile" href="/pages/cloud-chat.html">
+  <a class="tile" href="/pages/trail-chat.html">
     <img src="/assets/img/cloud/cloud-chat.jpg">
     <h3>Cloud Chat</h3>
     <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
@@ -203,13 +221,39 @@ body {
     <h3>Games</h3>
     <p>Community games and challenges.</p>
   </a>
-
 </section>
 
-<!-- BOTTOM LOGO BAR -->
+<!-- BOTTOM LOGO BAR (NO CARDS, JUST BIG LOGOS + LINKS UNDER) -->
 <div class="bottom-bar">
-  <img src="/network/public/img/network-logo.jpg" onclick="location.href='/network/public/pages/explore.html'">
-  <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/index.html'">
+  <div>
+    <img
+      src="/network/public/img/network-logo.jpg"
+      class="bottom-logo"
+      alt="The Network Logo"
+      onclick="location.href='/network/public/pages/explore.html'"
+    >
+  </div>
+  <a
+    href="/network/public/pages/explore.html"
+    class="bottom-link"
+  >
+    Enter The Network — Vendors, Services & Products
+  </a>
+
+  <div style="margin-top:40px;">
+    <img
+      src="/fast-roll/img/Fast-logo.png"
+      class="bottom-logo"
+      alt="The Fast Roll Logo"
+      onclick="location.href='/fast-roll/index.html'"
+    >
+  </div>
+  <a
+    href="/fast-roll/pages/order.html"
+    class="bottom-link"
+  >
+    Place a Fast Roll Delivery
+  </a>
 </div>
 
 <script src="/network/public/js/auth.js"></script>
@@ -231,7 +275,7 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-/* LOAD USER */
+/* LOAD USER + ROLE SUMMARY (no cards for Network/Fast Roll) */
 document.addEventListener("DOMContentLoaded", () => {
   const user = Auth.current();
   const rider = FastRiderAuth.current();
@@ -243,46 +287,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("userName").textContent = user.name;
 
- /* VENDOR SECTION */
-if (user.roles && user.roles.includes("vendor")) {
-  document.getElementById("vendorSection").innerHTML = `
-    <h2 class="section-title">Vendor Tools</h2>
-    <section class="grid">
+  // Vendor summary text only
+  if (user.roles && user.roles.includes("vendor")) {
+    document.getElementById("vendorSection").innerHTML = `
+      <p class="role-summary">
+        You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops
+        from the Staff Dashboard inside The Network.
+      </p>
+    `;
+  }
 
-      <a class="tile" href="/network/staff/pages/dashboard.html">
-        <img src="/network/public/img/network-logo.jpg">
-        <h3>Your Vendor Dashboard</h3>
-        <p>Manage products, services, workshops, and payouts.</p>
-      </a>
+  // Rider summary text only
+  if (rider) {
+    document.getElementById("riderSection").innerHTML = `
+      <p class="role-summary">
+        You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
+      </p>
+    `;
+  }
+});
 
-      <a class="tile" href="/network/public/pages/explore.html">
-        <img src="/network/public/img/network-logo.jpg">
-        <h3>Explore The Network</h3>
-        <p>Browse vendors, services, products, and workshops.</p>
-      </a>
-
-    </section>
-  `;
+/* LOGOUT */
+function logout() {
+  Auth.logout();
 }
+</script>
 
-/* RIDER SECTION */
-if (rider) {
-  document.getElementById("riderSection").innerHTML = `
-    <h2 class="section-title">Fast Roll Rider Tools</h2>
-    <section class="grid">
-
-      <a class="tile" href="/fast-roll/pages/rider/dashboard.html">
-        <img src="/fast-roll/img/Fast-logo.png">
-        <h3>Your Rider Dashboard</h3>
-        <p>View jobs, deliveries, payouts, and profile.</p>
-      </a>
-
-      <a class="tile" href="/fast-roll/pages/order.html">
-        <img src="/fast-roll/img/Fast-logo.png">
-        <h3>Place Delivery</h3>
-        <p>Create a Fast Roll order from your dashboard.</p>
-      </a>
-
-    </section>
-  `;
-}
+</body>
+</html>
