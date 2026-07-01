@@ -39,13 +39,8 @@ body {
   align-items: center;
   padding: 20px;
 }
-.header-logos {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
 .header-logo {
-  height: 70px;
+  height: 90px;
   cursor: pointer;
   border-radius: 10px;
 }
@@ -118,6 +113,22 @@ body {
   font-weight: 700;
   margin: 40px 40px 10px 40px;
 }
+
+/* BOTTOM LOGO BAR */
+.bottom-bar {
+  margin-top: 60px;
+  padding: 40px;
+  text-align: center;
+}
+.bottom-bar img {
+  height: 90px;
+  margin: 0 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.bottom-bar img:hover {
+  transform: scale(1.1);
+}
 </style>
 </head>
 
@@ -139,11 +150,7 @@ body {
 </nav>
 
 <header class="header">
-  <div class="header-logos">
-    <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="toggleMenu()">
-    <img src="/network/public/img/network-logo.jpg" class="header-logo">
-    <img src="/fast-roll/img/Fast-logo.png" class="header-logo">
-  </div>
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="toggleMenu()">
 
   <div class="header-user">
     <span id="userName">Loading...</span>
@@ -210,6 +217,12 @@ body {
   </a>
 
 </section>
+
+<!-- BOTTOM LOGO BAR -->
+<div class="bottom-bar">
+  <img src="/network/public/img/network-logo.jpg" onclick="location.href='/network/public/pages/explore.html'">
+  <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/index.html'">
+</div>
 
 <script src="/network/public/js/auth.js"></script>
 <script src="/fast-roll/js/rider.js"></script>
