@@ -1,12 +1,11 @@
-// STAFF SYSTEM — WORKER + D1 VERSION
-// Auth (email + password) handled in auth.js.
-// auth.js should save { email, name } into localStorage["network_staff_user"] after login.
+// STAFF SYSTEM — FULL VENDOR + PRODUCT + SERVICE + WORKSHOP + ORDERS + PAYOUTS
+// Works with the full Worker logic you approved.
 
 const Staff = {
   key: "network_staff_user",
 
   // -----------------------------
-  // GET / SAVE USER (AUTH CACHE)
+  // AUTH CACHE
   // -----------------------------
   getUser() {
     const raw = localStorage.getItem(this.key);
@@ -18,7 +17,7 @@ const Staff = {
   },
 
   // -----------------------------
-  // DASHBOARD AUTO-ADAPT
+  // DASHBOARD INIT
   // -----------------------------
   async initDashboard() {
     const user = this.getUser();
@@ -27,39 +26,30 @@ const Staff = {
       return;
     }
 
-    // Load profile from Worker/D1
     const profile = await this.fetchJSON(`/api/staff/me?email=${encodeURIComponent(user.email)}`);
     if (!profile || profile.error) {
       window.location.href = "/network/staff/pages/login.html";
       return;
     }
 
-    // Save latest profile locally (name, types, etc.)
     user.name = profile.name;
-    user.types = profile.types || [];
+    user.types = profile.types ? profile.types.split(",") : [];
     this.saveUser(user);
 
-    const types = user.types || [];
+    const types = user.types;
 
-    if (!types.includes("product")) {
-      document.getElementById("node-products")?.classList.add("hidden");
-    }
-    if (!types.includes("service")) {
-      document.getElementById("node-services")?.classList.add("hidden");
-    }
-    if (!types.includes("workshop")) {
-      document.getElementById("node-workshops")?.classList.add("hidden");
-    }
-    if (!types.includes("product") && !types.includes("service")) {
+    if (!types.includes("product")) document.getElementById("node-products")?.classList.add("hidden");
+    if (!types.includes("service")) document.getElementById("node-services")?.classList.add("hidden");
+    if (!types.includes("workshop")) document.getElementById("node-workshops")?.classList.add("hidden");
+    if (!types.includes("product") && !types.includes("service"))
       document.getElementById("node-orders")?.classList.add("hidden");
-    }
 
     const title = document.querySelector(".network-title");
     if (title) title.textContent = `Staff Dashboard — ${user.name}`;
   },
 
   // -----------------------------
-  // PROFILE PAGE (D1)
+  // LOAD PROFILE
   // -----------------------------
   async loadProfile() {
     const user = this.getUser();
@@ -70,12 +60,12 @@ const Staff = {
 
     document.getElementById("vendor-name").value = profile.name || "";
     document.getElementById("vendor-bio").value = profile.bio || "";
-    document.getElementById("vendor-tags").value = (profile.tags || "").toString();
+    document.getElementById("vendor-tags").value = profile.tags || "";
     document.getElementById("vendor-paypal").value = profile.paypal || "";
     document.getElementById("vendor-active").checked = !!profile.active;
     document.getElementById("vendor-location").checked = !!profile.shareLocation;
 
-    const types = (profile.types || "").split(",").map(t => t.trim()).filter(Boolean);
+    const types = (profile.types || "").split(",").map(t => t.trim());
     document.getElementById("type-product").checked = types.includes("product");
     document.getElementById("type-service").checked = types.includes("service");
     document.getElementById("type-workshop").checked = types.includes("workshop");
@@ -87,6 +77,9 @@ const Staff = {
     }
   },
 
+  // -----------------------------
+  // SAVE PROFILE
+  // -----------------------------
   async saveProfile() {
     const user = this.getUser();
     if (!user || !user.email) return;
@@ -97,43 +90,30 @@ const Staff = {
     if (document.getElementById("type-workshop").checked) types.push("workshop");
     if (document.getElementById("type-creator").checked) types.push("creator");
 
-    const tags = document.getElementById("vendor-tags").value
-      .split(",")
-      .map(t => t.trim())
-      .filter(Boolean)
-      .join(", ");
-
     const payload = {
       email: user.email,
       name: document.getElementById("vendor-name").value,
-      title: "", // optional, not used in UI yet
       bio: document.getElementById("vendor-bio").value,
-      instagram: "",
-      website: "",
-      // extra fields you may add later:
-      tags,
-      types: types.join(","),
+      tags: document.getElementById("vendor-tags").value,
       paypal: document.getElementById("vendor-paypal").value,
       active: document.getElementById("vendor-active").checked ? 1 : 0,
-      shareLocation: document.getElementById("vendor-location").checked ? 1 : 0
+      shareLocation: document.getElementById("vendor-location").checked ? 1 : 0,
+      types: types.join(",")
     };
 
     const res = await this.postJSON("/api/staff/profile/update", payload);
-    if (res && !res.error) {
-      alert("Profile updated");
-    } else {
-      alert("Error updating profile");
-    }
+    if (res && !res.error) alert("Profile updated");
+    else alert("Error updating profile");
   },
 
   // -----------------------------
-  // PRODUCT SYSTEM (D1)
+  // PRODUCTS
   // -----------------------------
   async loadProducts() {
     const user = this.getUser();
     if (!user || !user.email) return;
 
-    const products = await this.fetchJSON(`/api/staff/products?email=${encodeURIComponent(user.email)}`);
+    const products = await this.fetchJSON(`/api/network/products?vendor=${encodeURIComponent(user.email)}`);
     if (!products || products.error) return;
 
     const list = document.getElementById("product-list");
@@ -151,32 +131,111 @@ const Staff = {
     if (!user || !user.email) return;
 
     const payload = {
-      email: user.email,
-      type: "product",
+      vendorId: user.email,
       name: document.getElementById("product-name").value,
       description: document.getElementById("product-description").value,
       price: parseFloat(document.getElementById("product-price").value || "0")
     };
 
-    const res = await this.postJSON("/api/staff/product/create", payload);
-    if (res && !res.error) {
-      location.reload();
-    } else {
-      alert("Error creating product");
-    }
+    const res = await this.postJSON("/api/network/product/create", payload);
+    if (res && !res.error) location.reload();
+    else alert("Error creating product");
   },
 
-  async deleteProduct(productId) {
-    const res = await this.postJSON("/api/staff/product/delete", { productId });
-    if (res && !res.error) {
-      location.reload();
-    } else {
-      alert("Error deleting product");
-    }
+  async deleteProduct(id) {
+    const res = await this.postJSON("/api/network/product/delete", { id });
+    if (res && !res.error) location.reload();
+    else alert("Error deleting product");
   },
 
   // -----------------------------
-  // ORDERS + PAYOUTS (D1)
+  // SERVICES
+  // -----------------------------
+  async loadServices() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const services = await this.fetchJSON(`/api/network/services?vendor=${encodeURIComponent(user.email)}`);
+    if (!services || services.error) return;
+
+    const list = document.getElementById("service-list");
+    list.innerHTML = services.map(s => `
+      <div class="service">
+        <h3>${s.name} — $${s.price}</h3>
+        <p>${s.description || ""}</p>
+        <button onclick="Staff.deleteService('${s.id}')">Delete</button>
+      </div>
+    `).join("");
+  },
+
+  async addService() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const payload = {
+      vendorId: user.email,
+      name: document.getElementById("service-name").value,
+      description: document.getElementById("service-description").value,
+      price: parseFloat(document.getElementById("service-price").value || "0")
+    };
+
+    const res = await this.postJSON("/api/network/service/create", payload);
+    if (res && !res.error) location.reload();
+    else alert("Error creating service");
+  },
+
+  async deleteService(id) {
+    const res = await this.postJSON("/api/network/service/delete", { id });
+    if (res && !res.error) location.reload();
+    else alert("Error deleting service");
+  },
+
+  // -----------------------------
+  // WORKSHOPS
+  // -----------------------------
+  async loadWorkshops() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const workshops = await this.fetchJSON(`/api/network/workshops?vendor=${encodeURIComponent(user.email)}`);
+    if (!workshops || workshops.error) return;
+
+    const list = document.getElementById("workshop-list");
+    list.innerHTML = workshops.map(w => `
+      <div class="workshop">
+        <h3>${w.title} — $${w.price}</h3>
+        <p>${w.description || ""}</p>
+        <button onclick="Staff.deleteWorkshop('${w.id}')">Delete</button>
+      </div>
+    `).join("");
+  },
+
+  async addWorkshop() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const payload = {
+      vendorId: user.email,
+      title: document.getElementById("workshop-title").value,
+      description: document.getElementById("workshop-description").value,
+      date: document.getElementById("workshop-date").value,
+      price: parseFloat(document.getElementById("workshop-price").value || "0"),
+      maxSeats: parseInt(document.getElementById("workshop-max").value || "0")
+    };
+
+    const res = await this.postJSON("/api/network/workshop/create", payload);
+    if (res && !res.error) location.reload();
+    else alert("Error creating workshop");
+  },
+
+  async deleteWorkshop(id) {
+    const res = await this.postJSON("/api/network/workshop/delete", { id });
+    if (res && !res.error) location.reload();
+    else alert("Error deleting workshop");
+  },
+
+  // -----------------------------
+  // ORDERS
   // -----------------------------
   async loadOrders() {
     const user = this.getUser();
@@ -196,6 +255,9 @@ const Staff = {
     `).join("");
   },
 
+  // -----------------------------
+  // PAYOUTS
+  // -----------------------------
   async loadPayouts() {
     const user = this.getUser();
     if (!user || !user.email) return;
@@ -214,7 +276,7 @@ const Staff = {
   },
 
   // -----------------------------
-  // PREVIEW PUBLIC PAGE
+  // PUBLIC PAGE PREVIEW
   // -----------------------------
   previewPage() {
     window.location.href = `/network/public/pages/vendor.html?id=me`;
@@ -228,7 +290,7 @@ const Staff = {
   },
 
   // -----------------------------
-  // HELPER: GET JSON
+  // FETCH JSON
   // -----------------------------
   async fetchJSON(url) {
     try {
@@ -241,7 +303,7 @@ const Staff = {
   },
 
   // -----------------------------
-  // HELPER: POST JSON
+  // POST JSON
   // -----------------------------
   async postJSON(url, body) {
     try {
