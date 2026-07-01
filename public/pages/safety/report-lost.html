@@ -1,0 +1,35 @@
+<body data-page="lost-found">
+  <h1>Report Lost Item</h1>
+
+  <form id="lostForm">
+    <input name="status" value="lost" type="hidden">
+
+    <label>Category</label>
+    <input name="category" required>
+
+    <label>Description</label>
+    <textarea name="description" required></textarea>
+
+    <label>Time Lost</label>
+    <input name="lost_time" type="datetime-local" required>
+
+    <label>Place Lost</label>
+    <input name="lost_place" required>
+
+    <label>Photo</label>
+    <input name="photo" type="file" accept="image/*">
+
+    <button type="submit">Submit Lost Item</button>
+  </form>
+
+  <script type="module">
+    import { submitLostFound } from "/public/js/safety-cloud.js";
+
+    document.getElementById("lostForm").onsubmit = async e => {
+      e.preventDefault();
+      await submitLostFound(e.target);
+      alert("Lost item submitted.");
+      location.href = "/pages/safety/lost-found.html";
+    };
+  </script>
+</body>
