@@ -11,7 +11,22 @@ export default {
 
     //
     // ============================================================
-    // NETWORK — SPECIFIC ROUTES (MUST COME FIRST)
+    // EVENTS — NEW SYSTEM
+    // ============================================================
+    //
+
+    if (path.startsWith("/api/events/list"))
+      return listEvents(db);
+
+    if (path.startsWith("/api/events/get"))
+      return getEvent(url, db);
+
+    if (path.startsWith("/api/events/create") && request.method === "POST")
+      return createEvent(request, db);
+
+    //
+    // ============================================================
+    // NETWORK — SPECIFIC ROUTES
     // ============================================================
     //
 
@@ -26,7 +41,7 @@ export default {
 
     //
     // ============================================================
-    // VENDORS — MUST COME BEFORE GENERAL NETWORK ROUTE
+    // VENDORS
     // ============================================================
     //
 
@@ -162,6 +177,51 @@ export default {
 
 //
 // ============================================================
+// EVENTS — HANDLERS
+// ============================================================
+//
+
+async function listEvents(db) {
+  const { results } = await db.prepare(
+    "SELECT * FROM cloud_events ORDER BY date ASC"
+  ).all();
+  return json(results);
+}
+
+async function getEvent(url, db) {
+  const id = url.searchParams.get("id");
+  if (!id) return json({ error: "Missing id" }, 400);
+
+  const event = await db.prepare(
+    "SELECT * FROM cloud_events WHERE id = ?"
+  ).bind(id).first();
+
+  if (!event) return json({ error: "Event not found" }, 404);
+
+  return json(event);
+}
+
+async function createEvent(request, db) {
+  const body = await request.json();
+  const id = crypto.randomUUID();
+
+  await db.prepare(
+    `INSERT INTO cloud_events (id, title, description, location, date, price)
+     VALUES (?, ?, ?, ?, ?, ?)`
+  ).bind(
+    id,
+    body.title,
+    body.description,
+    body.location,
+    body.datetime,
+    body.price
+  ).run();
+
+  return json({ success: true, id });
+}
+
+//
+// ============================================================
 // NETWORK HANDLERS
 // ============================================================
 //
@@ -210,27 +270,16 @@ async function me() {
   return json({ ok: true });
 }
 
-//
-// ============================================================
-// PROFILE UPDATE (ONBOARDING + ROLES)
-// ============================================================
-//
-
 async function updateProfile(request, db) {
   const body = await request.json();
   const { bio, interests, photo, roles } = body;
 
-  // TEMP: until auth tokens exist, update the owner for testing
   const userId = "owner-001";
 
-  // roles can come in as array or string; store as string
   let rolesValue = "";
-  if (Array.isArray(roles)) {
-    rolesValue = roles.join(",");
-  } else if (typeof roles === "string") {
-    rolesValue = roles;
-  } else {
-    // if not provided, keep existing roles
+  if (Array.isArray(roles)) rolesValue = roles.join(",");
+  else if (typeof roles === "string") rolesValue = roles;
+  else {
     const existing = await db.prepare(
       "SELECT roles FROM cloud_users WHERE id = ?"
     ).bind(userId).first();
@@ -328,7 +377,7 @@ async function explore(db) {
 
 //
 // ============================================================
-// PAYMENTS (PLACEHOLDERS FOR NOW)
+// PAYMENTS (PLACEHOLDERS)
 // ============================================================
 //
 
