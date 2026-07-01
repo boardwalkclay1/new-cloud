@@ -38,15 +38,31 @@ document.getElementById("riderToggle")?.addEventListener("change", async (e) => 
   location.reload();
 });
 
-// Weather
+// Weather (accurate Atlanta, Fahrenheit)
 async function loadWeather() {
   try {
-    const res = await fetch("https://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=Atlanta");
+    const res = await fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true&temperature_unit=fahrenheit"
+    );
     const data = await res.json();
+    const w = data.current_weather;
+
+    const temp = w.temperature;
+    const code = w.weathercode;
+
+    let emoji = "⛅";
+    if (code === 0) emoji = "☀️";
+    if ([1, 2, 3].includes(code)) emoji = "🌤️";
+    if ([45, 48].includes(code)) emoji = "🌫️";
+    if ([51, 53, 55].includes(code)) emoji = "🌦️";
+    if ([61, 63, 65].includes(code)) emoji = "🌧️";
+    if ([71, 73, 75].includes(code)) emoji = "❄️";
+    if ([95, 96, 99].includes(code)) emoji = "⛈️";
+
     document.getElementById("weather").textContent =
-      `${data.current.temp_f}°F • ${data.current.condition.text}`;
-  } catch {
-    document.getElementById("weather").textContent = "Unavailable";
+      `${emoji} ${temp}°F • Atlanta`;
+  } catch (err) {
+    document.getElementById("weather").textContent = "Weather unavailable";
   }
 }
 loadWeather();
