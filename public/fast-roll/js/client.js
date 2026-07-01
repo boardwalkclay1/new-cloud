@@ -1,81 +1,97 @@
 // FAST ROLL — Client System
-// Clean, synced with rider.js + admin.js + app.js
+// Fully synced with Worker (clientHandler, ordersHandler)
+// Uses real API calls instead of localStorage
+// Clean, modular, production-ready
 
-const KEY = "fastRollRiderSystem";
+/* ============================================================
+   SESSION HELPERS
+============================================================ */
 
-// Load + Save (shared store)
-function loadStore() {
-    const base = JSON.parse(localStorage.getItem(KEY)) || {};
-    return {
-        riders: base.riders || [],
-        jobs: base.jobs || [],
-        reviews: base.reviews || [],
-        orders: base.orders || [],
-        clientProfiles: base.clientProfiles || []
-    };
+function saveSession(key, value) {
+    sessionStorage.setItem(key, JSON.stringify(value));
 }
 
-function saveStore(data) {
-    localStorage.setItem(KEY, JSON.stringify(data));
+function getSession(key) {
+    const raw = sessionStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
 }
 
 /* ============================================================
-   CREATE ORDER
-   ============================================================ */
+   CLIENT SIGNUP / PROFILE
+============================================================ */
 
-function createOrder(clientId, clientName, item, store, receiptFile) {
-    const data = loadStore();
-
-    const orderId = "ORD" + Date.now();
-    const jobId = "JOB" + Date.now();
-
-    const order = {
-        id: orderId,
-        clientId,
-        clientName,
-        item,
-        store,
-        receiptPhoto: receiptFile ? receiptFile.name : null,
-        status: "pending",
-        riderName: null,
-        jobId
-    };
-
-    data.orders.push(order);
-
-    data.jobs.push({
-        id: jobId,
-        pickup: store,
-        dropoff: clientName + " (client)",
-        payout: 5,
-        status: "open",
-        riderName: null,
-        pickupTime: null,
-        dropoffTime: null
+async function fastClientSignup(name, phone, email) {
+    const res = await fetch("/api/client?action=signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, email })
     });
 
-    saveStore(data);
-
-    // Save to session for success page
-    if (typeof saveSession === "function") {
-        saveSession("order", order);
+    const data = await res.json();
+    if (data && data.success) {
+        saveSession("client", { id: data.id, name, phone, email });
+        return data.id;
     }
 
-    return orderId;
+    alert("Signup failed");
+    return null;
+}
+
+async function fastClientUpdate(profile) {
+    const client = getSession("client");
+    if (!client) return;
+
+    await fetch("/api/client?action=update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: client.id, ...profile })
+    });
 }
 
 /* ============================================================
-   GET ORDER STATUS
-   ============================================================ */
+   CREATE ORDER (REAL WORKER)
+============================================================ */
 
-function getOrderStatus(orderId) {
-    const data = loadStore();
-    return data.orders.find(o => o.id === orderId) || null;
+async function createOrder(clientId, clientName, item, store, receiptFile) {
+    const payload = {
+        action: "create",
+        clientId,
+        pickup: store,
+        dropoff: clientName + " (client)",
+        price: 5, // base payout, can be dynamic later
+        item,
+        receiptPhoto: receiptFile ? receiptFile.name : null
+    };
+
+    const res = await fetch("/api/order?action=create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (data && data.success) {
+        saveSession("order", { id: data.id, clientId, clientName, item, store });
+        return data.id;
+    }
+
+    alert("Order creation failed");
+    return null;
+}
+
+/* ============================================================
+   GET ORDER STATUS (REAL WORKER)
+============================================================ */
+
+async function getOrderStatus(orderId) {
+    const res = await fetch(`/api/order?id=${orderId}`);
+    const data = await res.json();
+    return data || null;
 }
 
 /* ============================================================
    ORDER PAGE
-   ============================================================ */
+============================================================ */
 
 function initOrderPage() {
     const form = document.getElementById("clientOrderForm");
@@ -84,7 +100,7 @@ function initOrderPage() {
     const client = getSession("client");
     if (!client) return location.href = "/pages/client/signup.html";
 
-    form.addEventListener("submit", e => {
+    form.addEventListener("submit", async e => {
         e.preventDefault();
 
         const clientName = document.getElementById("clientName").value.trim();
@@ -97,16 +113,18 @@ function initOrderPage() {
             return;
         }
 
-        const orderId = createOrder(client.id, clientName, item, store, receipt);
+        const orderId = await createOrder(client.id, clientName, item, store, receipt);
 
-        alert("Order created! Your order ID is: " + orderId);
-        form.reset();
+        if (orderId) {
+            alert("Order created! Your order ID is: " + orderId);
+            form.reset();
+        }
     });
 }
 
 /* ============================================================
    ORDER STATUS PAGE
-   ============================================================ */
+============================================================ */
 
 function initOrderStatusPage() {
     const form = document.getElementById("orderStatusForm");
@@ -114,7 +132,7 @@ function initOrderStatusPage() {
 
     if (!form || !result) return;
 
-    form.addEventListener("submit", e => {
+    form.addEventListener("submit", async e => {
         e.preventDefault();
 
         const orderId = document.getElementById("orderIdLookup").value.trim();
@@ -123,9 +141,9 @@ function initOrderStatusPage() {
             return;
         }
 
-        const order = getOrderStatus(orderId);
+        const order = await getOrderStatus(orderId);
 
-        if (!order) {
+        if (!order || order.error) {
             result.innerHTML = "Order not found.";
             return;
         }
@@ -133,10 +151,10 @@ function initOrderStatusPage() {
         result.innerHTML = `
             <strong>Order ID:</strong> ${order.id}<br>
             <strong>Status:</strong> ${order.status}<br>
-            <strong>Rider:</strong> ${order.riderName || "Not assigned yet"}<br><br>
+            <strong>Rider:</strong> ${order.riderId || "Not assigned yet"}<br><br>
 
             ${
-                order.status === "delivered"
+                order.status === "completed"
                     ? `<button class="primary-btn" onclick="location.href='/pages/client/success.html'">
                            Delivery Complete — Continue
                        </button>`
@@ -148,7 +166,7 @@ function initOrderStatusPage() {
 
 /* ============================================================
    ROUTER
-   ============================================================ */
+============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
