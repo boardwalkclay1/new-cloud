@@ -42,6 +42,8 @@ body {
   cursor: pointer;
   border-radius: 10px;
 }
+
+/* USER INFO */
 .header-user {
   display: flex;
   align-items: center;
@@ -56,79 +58,33 @@ body {
   cursor: pointer;
 }
 
-/* BURGER MENU */
-.burger-menu {
-  position: fixed;
-  top: 0;
-  left: -260px;
-  width: 240px;
-  height: 100%;
-  background: rgba(0,0,0,0.85);
+/* FULL NAV MENU */
+.full-menu {
+  margin: 40px;
   padding: 20px;
-  transition: 0.3s;
-  z-index: 999;
-}
-.burger-menu a {
-  display: block;
-  padding: 12px 0;
-  color: white;
-  font-size: 1.1rem;
-  text-decoration: none;
-}
-.burger-menu a:hover {
-  color: #00b86b;
-}
-.burger-open {
-  left: 0;
-}
-
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 40px;
-}
-.tile {
   background: rgba(0,0,0,0.55);
-  border-radius: 14px;
-  padding: 20px;
+  border-radius: 16px;
+}
+.full-menu h2 {
+  margin-bottom: 10px;
+  font-size: 1.6rem;
+}
+.full-menu a {
+  display: block;
+  padding: 8px 0;
+  color: #ffdd00;
   text-decoration: none;
-  color: white;
-  transition: 0.3s;
+  font-size: 1.1rem;
 }
-.tile:hover {
-  transform: scale(1.05);
-}
-.tile img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* SECTION TITLES */
-.section-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 40px 40px 10px 40px;
+.full-menu a:hover {
+  text-decoration: underline;
 }
 
 /* ROLE SUMMARY */
 .role-summary {
-  margin: 0 40px 10px 40px;
-  font-size: 0.95rem;
-  opacity: 0.85;
-}
-
-/* TOGGLE SECTIONS */
-.toggle-section {
   margin: 20px 40px;
-  padding: 15px;
-  background: rgba(0,0,0,0.45);
-  border-radius: 12px;
-  display: none;
-}
-.toggle-section label {
   font-size: 1rem;
+  opacity: 0.85;
 }
 
 /* WEATHER */
@@ -146,7 +102,7 @@ body {
 }
 
 .bottom-logo {
-  height: 200px; /* TWICE SIZE */
+  height: 200px;
   display: block;
   margin: 0 auto 10px auto;
   cursor: pointer;
@@ -176,20 +132,6 @@ body {
 
 <div class="page-bg"></div>
 
-<!-- BURGER MENU -->
-<nav id="cloudMenu" class="burger-menu">
-  <a href="/pages/dashboard.html">🏠 Dashboard</a>
-  <a href="/pages/trail-chat.html">💬 Cloud Chat</a>
-  <a href="/pages/safety.html">🛡️ Safety Cloud</a>
-  <a href="/pages/map.html">🗺️ Beltline Map</a>
-  <a href="/network/public/pages/explore.html">🛍️ The Network</a>
-  <a href="/fast-roll/pages/order.html">🛵 Fast Roll Delivery</a>
-  <a href="/pages/music.html">🎧 Cloud Radio</a>
-  <a href="/pages/games.html">🎮 Games</a>
-  <a id="menuClose">❌ Close</a>
-  <a href="/index.html">🚪 Exit</a>
-</nav>
-
 <header class="header">
   <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
 
@@ -203,72 +145,43 @@ body {
 <!-- WEATHER -->
 <div id="weather">Loading weather…</div>
 
-<!-- VENDOR SECTION -->
-<div id="vendorLinks" style="display:none;">
-  <p class="role-summary">
-    You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops inside The Network.
-  </p>
+<!-- ROLE SECTIONS -->
+<div id="vendorLinks" style="display:none;" class="role-summary">
+  You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops inside The Network.
 </div>
 
-<div id="vendorToggleSection" class="toggle-section">
-  <label>
-    <input type="checkbox" id="vendorToggle"> Vendor Mode
-  </label>
+<div id="riderLinks" style="display:none;" class="role-summary">
+  You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
 </div>
 
-<!-- RIDER SECTION -->
-<div id="riderLinks" style="display:none;">
-  <p class="role-summary">
-    You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
-  </p>
+<!-- FULL NAV MENU -->
+<div class="full-menu">
+
+  <h2>Safety Cloud</h2>
+  <a href="/pages/safety.html">Safety Overview</a>
+  <a href="/pages/safety/lost-found.html">Lost & Found</a>
+  <a href="/pages/safety/stolen.html">Stolen Items</a>
+  <a href="/pages/safety/markers.html">Marker System</a>
+  <a href="/pages/safety/live-feed.html">Live Feed</a>
+  <a href="/pages/safety/alerts.html">Alerts</a>
+
+  <h2>News Cloud</h2>
+  <a href="/pages/news/beltline-news.html">Beltline News</a>
+  <a href="/pages/news/weather.html">Weather</a>
+  <a href="/pages/news/updates.html">Updates</a>
+
+  <h2>Trail Tools</h2>
+  <a href="/pages/map.html">Trail Map</a>
+  <a href="/pages/map/zones.html">Zones</a>
+  <a href="/pages/map/etiquette.html">Etiquette</a>
+
+  <h2>Community Cloud</h2>
+  <a href="/pages/trail-chat.html">Cloud Chat</a>
+  <a href="/public/pages/events/pages/events.html">Events</a>
+  <a href="/pages/music.html">Cloud Radio</a>
+  <a href="/pages/games.html">Games</a>
+
 </div>
-
-<div id="riderToggleSection" class="toggle-section">
-  <label>
-    <input type="checkbox" id="riderToggle"> Rider Mode
-  </label>
-</div>
-
-<!-- CLOUD FEATURES -->
-<h2 class="section-title">Explore Beltline Cloud</h2>
-
-<section class="grid">
-  <a class="tile" href="/pages/trail-chat.html">
-    <img src="/assets/img/cloud/cloud-chat.jpg">
-    <h3>Cloud Chat</h3>
-    <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
-  </a>
-
-  <a class="tile" href="/pages/safety.html">
-    <img src="/assets/img/cloud/safety-cloud-logo.jpg">
-    <h3>Safety Cloud</h3>
-    <p>Parking zones, etiquette, alerts, and emergency markers.</p>
-  </a>
-
-  <a class="tile" href="/pages/map.html">
-    <img src="/assets/img/map/map.jpg">
-    <h3>Beltline Map</h3>
-    <p>Trail layout, zones, and navigation.</p>
-  </a>
-
-  <a class="tile" href="/public/pages/events/pages/events.html">
-    <img src="/assets/img/cloud/events-cloud.jpg">
-    <h3>Events</h3>
-    <p>Workshops, rides, meetups, concerts, and more.</p>
-  </a>
-
-  <a class="tile" href="/pages/music.html">
-    <img src="/assets/img/music/music-logo.jpg">
-    <h3>Cloud Radio</h3>
-    <p>Full Beltline soundtrack and listening rooms.</p>
-  </a>
-
-  <a class="tile" href="/pages/games.html">
-    <img src="/assets/img/games/games.jpg">
-    <h3>Games</h3>
-    <p>Community games and challenges.</p>
-  </a>
-</section>
 
 <!-- BOTTOM LOGO BAR -->
 <div class="bottom-bar">
