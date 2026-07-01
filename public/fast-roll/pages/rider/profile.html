@@ -4,9 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rider Profile — The Fast Roll</title>
+
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
+
+    <style>
+        body {
+            background: url('/fast-roll/img/fast-longboard.jpg') center/cover no-repeat fixed;
+            background-color: #05060a;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.55),
+                rgba(0,0,0,0.75)
+            );
+            z-index: -1;
+        }
+    </style>
 </head>
+
 <body>
+
 <nav class="nav">
     <div class="logo">
         <img src="/fast-roll/img/Fast-logo.png" class="logo-img" alt="The Fast Roll Logo" />
@@ -18,7 +39,7 @@
     </div>
 </nav>
 
-<div class="form-wrapper">
+<div class="form-wrapper" style="margin-top:140px;">
     <h1>Your Rider Profile</h1>
     <p>Edit your info so clients and The Fast Roll know who’s rolling.</p>
 
@@ -26,6 +47,11 @@
         <div class="form-group">
             <label>Name</label>
             <input type="text" id="profileName" required />
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" id="profilePhone" required />
         </div>
 
         <div class="form-group">
@@ -44,13 +70,45 @@
         </div>
 
         <button class="primary-btn" type="submit">Save Profile</button>
-        <button class="secondary-btn" type="button" onclick="location.href='/pages/rider/dashboard.html'">
+        <button class="secondary-btn" type="button" onclick="location.href='/fast-roll/pages/rider/dashboard.html'">
             Back to Dashboard
         </button>
     </form>
 </div>
 
-<script src="/fast-roll/js/app.js"></script>
 <script src="/fast-roll/js/rider.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const rider = FastRiderAuth.current();
+    if (!rider) {
+        window.location.href = "/fast-roll/pages/rider/login.html";
+        return;
+    }
+
+    // Load existing profile
+    document.getElementById("profileName").value = rider.name || "";
+    document.getElementById("profilePhone").value = rider.phone || "";
+    document.getElementById("profileVehicle").value = rider.vehicle || "longboard";
+    document.getElementById("profilePaypal").value = rider.paypal || "";
+
+    // Save profile
+    document.getElementById("riderProfileForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const updated = {
+            name: document.getElementById("profileName").value.trim(),
+            phone: document.getElementById("profilePhone").value.trim(),
+            vehicle: document.getElementById("profileVehicle").value,
+            paypal: document.getElementById("profilePaypal").value.trim()
+        };
+
+        await FastRiderAuth.update(updated);
+
+        alert("Profile updated!");
+        location.href = "/fast-roll/pages/rider/dashboard.html";
+    });
+});
+</script>
+
 </body>
 </html>
