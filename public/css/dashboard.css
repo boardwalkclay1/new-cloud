@@ -13,6 +13,24 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: var(--white);
+
+  /* DESKTOP — cinematic */
+  background: #000 url('/assets/img/cloud/cloud.jpg') center center / cover no-repeat fixed;
+}
+
+/* MOBILE — full image, no cropping, no white bars */
+@media (max-width: 768px) {
+  body {
+    background: #000 url('/assets/img/cloud/cloud.jpg') center center / contain no-repeat;
+    background-attachment: scroll;
+    height: 100vh;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .page-bg {
+    display: none;
+  }
 }
 
 .page-bg {
@@ -31,7 +49,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 25px;
-  background: rgba(10, 42, 67, 0.55); /* blue overlay */
+  background: rgba(10, 42, 67, 0.55);
   border-bottom: 2px solid var(--green);
 }
 
@@ -69,7 +87,7 @@ body {
 }
 
 .top-item {
-  background: rgba(10, 42, 67, 0.75); /* deep blue */
+  background: rgba(10, 42, 67, 0.75);
   border: 2px solid var(--green);
   padding: 15px;
   border-radius: 14px;
@@ -96,7 +114,7 @@ body {
 .cloud-menu {
   position: fixed;
   inset: 0;
-  background: rgba(10, 42, 67, 0.97); /* blue */
+  background: rgba(10, 42, 67, 0.97);
   display: none;
   z-index: 999;
   overflow-y: auto;
