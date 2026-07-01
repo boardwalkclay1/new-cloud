@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Create Event • Cloud Events</title>
+  <title>Cloud Events</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- FAVICON -->
@@ -12,16 +12,16 @@
   <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
 
   <!-- SOCIAL PREVIEW -->
-  <meta property="og:title" content="Create Event • Cloud Events">
-  <meta property="og:description" content="Create, host, and publish Beltline Cloud events. Workshops, rides, meetups, concerts, and more.">
+  <meta property="og:title" content="Cloud Events">
+  <meta property="og:description" content="Create, host, and explore Beltline Cloud events. Workshops, rides, meetups, concerts, and more.">
   <meta property="og:image" content="/assets/img/cloud/events-cloud.jpg">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://beltlinecloud.com/events/create">
+  <meta property="og:url" content="https://beltlinecloud.com/events">
 
   <!-- TWITTER CARD -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Create Event • Cloud Events">
-  <meta name="twitter:description" content="Create, host, and publish Beltline Cloud events.">
+  <meta name="twitter:title" content="Cloud Events">
+  <meta name="twitter:description" content="Create, host, and explore Beltline Cloud events.">
   <meta name="twitter:image" content="/assets/img/cloud/events-cloud.jpg">
 
   <!-- EVENTS CSS -->
@@ -30,6 +30,7 @@
 
 <body>
 
+<!-- BACKGROUND IN HTML (NO PUBLIC, CORRECT PATH) -->
 <div style="
   position: fixed;
   inset: 0;
@@ -40,46 +41,28 @@
 
 <header class="events-header">
   <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo">
-  <h2>Create Event</h2>
+  <h2>Cloud Events</h2>
 </header>
 
 <section class="events-section">
-  <form id="createEventForm" class="events-form">
+  <h3 class="events-section-title">Your Event Tools</h3>
 
-    <label>Event Title
-      <input type="text" name="title" required>
-    </label>
+  <div class="events-grid">
+    <div class="events-tile" onclick="goTo('/pages/events/pages/create.html')">
+      <div class="events-tile-icon">🎟️</div>
+      <div>Create Event</div>
+    </div>
 
-    <label>Date & Time
-      <input type="datetime-local" name="datetime" required>
-    </label>
+    <div class="events-tile" onclick="goTo('/pages/events/pages/mine.html')">
+      <div class="events-tile-icon">📁</div>
+      <div>My Events</div>
+    </div>
+  </div>
+</section>
 
-    <label>Location (Beltline zone)
-      <input type="text" name="location" required>
-    </label>
-
-    <label>Description
-      <textarea name="description" rows="4" required></textarea>
-    </label>
-
-    <label>Ticket Price (USD)
-      <input type="number" name="price" min="0" step="0.01" required>
-    </label>
-
-    <label>Max Attendees
-      <input type="number" name="max" min="1" required>
-    </label>
-
-    <label>Cover Image URL
-      <input type="text" name="cover">
-    </label>
-
-    <label>Safety Notes
-      <textarea name="safety" rows="3"></textarea>
-    </label>
-
-    <button type="submit" class="events-btn-primary">Publish Event</button>
-  </form>
+<section class="events-section">
+  <h3 class="events-section-title">Upcoming Events</h3>
+  <div id="eventsFeed" class="events-grid"></div>
 </section>
 
 <script src="/pages/events/js/events.js"></script>
