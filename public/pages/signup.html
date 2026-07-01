@@ -9,7 +9,7 @@
     body {
       margin: 0;
       padding: 0;
-      background: #0a0f1f;
+      background: url('/assets/img/cloud/cloud-signup.jpg') center/cover no-repeat;
       color: white;
       font-family: "Inter", sans-serif;
     }
@@ -17,6 +17,9 @@
       max-width: 420px;
       margin: 0 auto;
       padding: 40px 20px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 14px;
+      margin-top: 60px;
     }
     h1 {
       text-align: center;
@@ -92,7 +95,6 @@
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
 
-        // Store user ID for onboarding
         localStorage.setItem("cloud_user_id", data.id);
 
         window.location.href = "/pages/onboarding.html";
