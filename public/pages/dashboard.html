@@ -5,11 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
+<!-- FAVICON -->
 <link rel="icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
+<link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
 
+<!-- SOCIAL PREVIEW -->
 <meta property="og:title" content="Beltline Cloud Dashboard">
 <meta property="og:description" content="Your Beltline hub — Network, Fast Roll, chat, safety, events, radio, and navigation.">
 <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://beltlinecloud.com">
+
+<!-- TWITTER CARD -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Beltline Cloud Dashboard">
+<meta name="twitter:description" content="Your Beltline hub — Network, Fast Roll, chat, safety, events, radio, and navigation.">
+<meta name="twitter:image" content="/assets/img/cloud/cloud-logo.jpg">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
 
@@ -58,26 +69,50 @@ body {
   cursor: pointer;
 }
 
-/* FULL NAV MENU */
-.full-menu {
-  margin: 40px;
-  padding: 20px;
-  background: rgba(0,0,0,0.55);
-  border-radius: 16px;
+/* BURGER MENU */
+#cloudMenu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100%;
+  background: rgba(0,0,0,0.92);
+  padding: 25px;
+  transition: 0.35s;
+  z-index: 999;
+  overflow-y: auto;
 }
-.full-menu h2 {
+#cloudMenu.open {
+  left: 0;
+}
+#cloudMenu h2 {
+  margin-top: 25px;
   margin-bottom: 10px;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  color: #ffdd00;
 }
-.full-menu a {
+#cloudMenu a {
   display: block;
   padding: 8px 0;
-  color: #ffdd00;
+  color: white;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
-.full-menu a:hover {
-  text-decoration: underline;
+#cloudMenu a:hover {
+  color: #00b86b;
+}
+#menuClose {
+  margin-top: 20px;
+  display: block;
+  color: #ff4444;
+  font-weight: 700;
+}
+
+/* WEATHER */
+#weather {
+  margin: 20px 40px;
+  font-size: 1.2rem;
+  opacity: 0.85;
 }
 
 /* ROLE SUMMARY */
@@ -87,11 +122,34 @@ body {
   opacity: 0.85;
 }
 
-/* WEATHER */
-#weather {
-  margin: 20px 40px;
-  font-size: 1.2rem;
-  opacity: 0.85;
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+.tile {
+  background: rgba(0,0,0,0.55);
+  border-radius: 14px;
+  padding: 20px;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+.tile:hover {
+  transform: scale(1.05);
+}
+.tile img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* SECTION TITLE */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 40px 40px 10px 40px;
 }
 
 /* BOTTOM LOGO BAR */
@@ -132,31 +190,8 @@ body {
 
 <div class="page-bg"></div>
 
-<header class="header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
-
-  <div class="header-user">
-    <span id="userName">Loading...</span>
-    <span id="timeDisplay"></span>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
-</header>
-
-<!-- WEATHER -->
-<div id="weather">Loading weather…</div>
-
-<!-- ROLE SECTIONS -->
-<div id="vendorLinks" style="display:none;" class="role-summary">
-  You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops inside The Network.
-</div>
-
-<div id="riderLinks" style="display:none;" class="role-summary">
-  You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
-</div>
-
-<!-- FULL NAV MENU -->
-<div class="full-menu">
-
+<!-- FULL CATEGORY MENU -->
+<nav id="cloudMenu">
   <h2>Safety Cloud</h2>
   <a href="/pages/safety.html">Safety Overview</a>
   <a href="/pages/safety/lost-found.html">Lost & Found</a>
@@ -181,7 +216,72 @@ body {
   <a href="/pages/music.html">Cloud Radio</a>
   <a href="/pages/games.html">Games</a>
 
+  <a id="menuClose">Close Menu</a>
+  <a href="/index.html">Exit</a>
+</nav>
+
+<header class="header">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
+
+  <div class="header-user">
+    <span id="userName">Loading...</span>
+    <span id="timeDisplay"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<!-- WEATHER -->
+<div id="weather">Loading weather…</div>
+
+<!-- ROLE SECTIONS -->
+<div id="vendorLinks" style="display:none;" class="role-summary">
+  You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops inside The Network.
 </div>
+
+<div id="riderLinks" style="display:none;" class="role-summary">
+  You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
+</div>
+
+<!-- CLOUD FEATURES -->
+<h2 class="section-title">Explore Beltline Cloud</h2>
+
+<section class="grid">
+  <a class="tile" href="/pages/trail-chat.html">
+    <img src="/assets/img/cloud/cloud-chat.jpg">
+    <h3>Cloud Chat</h3>
+    <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
+  </a>
+
+  <a class="tile" href="/pages/safety.html">
+    <img src="/assets/img/cloud/safety-cloud-logo.jpg">
+    <h3>Safety Cloud</h3>
+    <p>Parking zones, etiquette, alerts, and emergency markers.</p>
+  </a>
+
+  <a class="tile" href="/pages/map.html">
+    <img src="/assets/img/map/map.jpg">
+    <h3>Beltline Map</h3>
+    <p>Trail layout, zones, and navigation.</p>
+  </a>
+
+  <a class="tile" href="/public/pages/events/pages/events.html">
+    <img src="/assets/img/cloud/events-cloud.jpg">
+    <h3>Events</h3>
+    <p>Workshops, rides, meetups, concerts, and more.</p>
+  </a>
+
+  <a class="tile" href="/pages/music.html">
+    <img src="/assets/img/music/music-logo.jpg">
+    <h3>Cloud Radio</h3>
+    <p>Full Beltline soundtrack and listening rooms.</p>
+  </a>
+
+  <a class="tile" href="/pages/games.html">
+    <img src="/assets/img/games/games.jpg">
+    <h3>Games</h3>
+    <p>Community games and challenges.</p>
+  </a>
+</section>
 
 <!-- BOTTOM LOGO BAR -->
 <div class="bottom-bar">
