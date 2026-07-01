@@ -1,0 +1,33 @@
+<body data-page="stolen">
+  <h1>Report Stolen Item</h1>
+
+  <form id="stolenForm">
+    <label>Title</label>
+    <input name="title" required>
+
+    <label>Description</label>
+    <textarea name="description" required></textarea>
+
+    <label>Time Stolen</label>
+    <input name="stolen_time" type="datetime-local" required>
+
+    <label>Place Stolen</label>
+    <input name="stolen_place" required>
+
+    <label>Photo</label>
+    <input name="photo" type="file" accept="image/*">
+
+    <button type="submit">Submit Stolen Item</button>
+  </form>
+
+  <script type="module">
+    import { submitStolen } from "/public/js/safety-cloud.js";
+
+    document.getElementById("stolenForm").onsubmit = async e => {
+      e.preventDefault();
+      await submitStolen(e.target);
+      alert("Stolen item submitted.");
+      location.href = "/pages/safety/stolen.html";
+    };
+  </script>
+</body>
