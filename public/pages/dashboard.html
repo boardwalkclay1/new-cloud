@@ -25,164 +25,38 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: #001f3f;
-  color: white;
-}
+body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:white; }
+.page-bg { position:fixed; inset:0; background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat; filter:brightness(0.35); z-index:-1; }
 
-/* BACKGROUND */
-.page-bg {
-  position: fixed;
-  inset: 0;
-  background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;
-  filter: brightness(0.35);
-  z-index: -1;
-}
+.header { display:flex; justify-content:space-between; align-items:center; padding:20px; }
+.header-logo { height:120px; cursor:pointer; border-radius:10px; }
+.header-user { display:flex; align-items:center; gap:20px; }
+.logout-btn { background:#00b86b; border:none; padding:10px 20px; border-radius:8px; color:white; cursor:pointer; }
 
-/* HEADER */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-.header-logo {
-  height: 120px;
-  cursor: pointer;
-  border-radius: 10px;
-}
+#cloudMenu { position:fixed; top:0; left:-320px; width:300px; height:100%; background:rgba(0,0,0,0.92); padding:25px; transition:0.35s; z-index:999; overflow-y:auto; }
+#cloudMenu.open { left:0; }
+#cloudMenu h2 { margin-top:25px; margin-bottom:10px; font-size:1.4rem; color:#ffdd00; }
+#cloudMenu a { display:block; padding:8px 0; color:white; text-decoration:none; font-size:1.05rem; }
+#cloudMenu a:hover { color:#00b86b; }
+#menuClose { margin-top:20px; display:block; color:#ff4444; font-weight:700; }
 
-/* USER INFO */
-.header-user {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.logout-btn {
-  background: #00b86b;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
+#weather { margin:20px 40px; font-size:1.2rem; opacity:0.85; }
+#beltlineLocation { margin:20px 40px; font-size:1.2rem; font-weight:600; color:#ffdd00; }
 
-/* BURGER MENU */
-#cloudMenu {
-  position: fixed;
-  top: 0;
-  left: -320px;
-  width: 300px;
-  height: 100%;
-  background: rgba(0,0,0,0.92);
-  padding: 25px;
-  transition: 0.35s;
-  z-index: 999;
-  overflow-y: auto;
-}
-#cloudMenu.open {
-  left: 0;
-}
-#cloudMenu h2 {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  font-size: 1.4rem;
-  color: #ffdd00;
-}
-#cloudMenu a {
-  display: block;
-  padding: 8px 0;
-  color: white;
-  text-decoration: none;
-  font-size: 1.05rem;
-}
-#cloudMenu a:hover {
-  color: #00b86b;
-}
-#menuClose {
-  margin-top: 20px;
-  display: block;
-  color: #ff4444;
-  font-weight: 700;
-}
+.role-summary { margin:20px 40px; font-size:1rem; opacity:0.85; }
 
-/* WEATHER */
-#weather {
-  margin: 20px 40px;
-  font-size: 1.2rem;
-  opacity: 0.85;
-}
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; padding:40px; }
+.tile { background:rgba(0,0,0,0.55); border-radius:14px; padding:20px; text-decoration:none; color:white; transition:0.3s; }
+.tile:hover { transform:scale(1.05); }
+.tile img { width:100%; border-radius:10px; }
 
-/* ROLE SUMMARY */
-.role-summary {
-  margin: 20px 40px;
-  font-size: 1rem;
-  opacity: 0.85;
-}
+.section-title { font-size:1.8rem; font-weight:700; margin:40px 40px 10px 40px; }
 
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 40px;
-}
-.tile {
-  background: rgba(0,0,0,0.55);
-  border-radius: 14px;
-  padding: 20px;
-  text-decoration: none;
-  color: white;
-  transition: 0.3s;
-}
-.tile:hover {
-  transform: scale(1.05);
-}
-.tile img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* SECTION TITLE */
-.section-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 40px 40px 10px 40px;
-}
-
-/* BOTTOM LOGO BAR */
-.bottom-bar {
-  margin-top: 60px;
-  padding: 40px;
-  text-align: center;
-}
-
-.bottom-logo {
-  height: 200px;
-  display: block;
-  margin: 0 auto 10px auto;
-  cursor: pointer;
-  border-radius: 16px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.7);
-  transition: 0.3s;
-}
-.bottom-logo:hover {
-  transform: scale(1.05);
-}
-
-.bottom-link {
-  display: block;
-  margin-top: 10px;
-  color: #ffdd00;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 1.2rem;
-}
-.bottom-link:hover {
-  text-decoration: underline;
-}
+.bottom-bar { margin-top:60px; padding:40px; text-align:center; }
+.bottom-logo { height:200px; display:block; margin:0 auto 10px auto; cursor:pointer; border-radius:16px; box-shadow:0 0 25px rgba(0,0,0,0.7); transition:0.3s; }
+.bottom-logo:hover { transform:scale(1.05); }
+.bottom-link { display:block; margin-top:10px; color:#ffdd00; font-weight:600; text-decoration:none; font-size:1.2rem; }
+.bottom-link:hover { text-decoration:underline; }
 </style>
 </head>
 
@@ -190,7 +64,7 @@ body {
 
 <div class="page-bg"></div>
 
-<!-- FULL CATEGORY MENU -->
+<!-- BURGER MENU -->
 <nav id="cloudMenu">
   <h2>Safety Cloud</h2>
   <a href="/pages/safety.html">Safety Overview</a>
@@ -233,13 +107,16 @@ body {
 <!-- WEATHER -->
 <div id="weather">Loading weather…</div>
 
+<!-- BELTLINE LOCATION -->
+<div id="beltlineLocation">Detecting Beltline location…</div>
+
 <!-- ROLE SECTIONS -->
 <div id="vendorLinks" style="display:none;" class="role-summary">
-  You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops inside The Network.
+  You are a <strong>Network Vendor</strong>.
 </div>
 
 <div id="riderLinks" style="display:none;" class="role-summary">
-  You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
+  You are a <strong>Fast Roll Rider</strong>.
 </div>
 
 <!-- CLOUD FEATURES -->
@@ -286,31 +163,148 @@ body {
 <!-- BOTTOM LOGO BAR -->
 <div class="bottom-bar">
 
-  <!-- NETWORK -->
-  <img
-    src="/network/public/img/network-logo.jpg"
-    class="bottom-logo"
-    onclick="location.href='/network/public/pages/explore.html'"
-  >
-  <a href="/network/public/pages/explore.html" class="bottom-link">
-    Explore
-  </a>
+  <img src="/network/public/img/network-logo.jpg" class="bottom-logo"
+       onclick="location.href='/network/public/pages/explore.html'">
+  <a href="/network/public/pages/explore.html" class="bottom-link">Explore</a>
 
-  <!-- FAST ROLL -->
-  <img
-    src="/fast-roll/img/Fast-logo.png"
-    class="bottom-logo"
-    onclick="location.href='/fast-roll/index.html'"
-    style="margin-top:40px;"
-  >
-  <a href="/fast-roll/pages/order.html" class="bottom-link">
-    Place Delivery
-  </a>
+  <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" style="margin-top:40px;"
+       onclick="location.href='/fast-roll/index.html'">
+  <a href="/fast-roll/pages/order.html" class="bottom-link">Place Delivery</a>
 
 </div>
 
 <script type="module" src="/js/auth.js"></script>
 <script type="module" src="/js/dashboard.js"></script>
+
+<!-- REAL TIME -->
+<script>
+function updateTime() {
+  const now = new Date();
+  const options = {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+    timeZone: "America/New_York"
+  };
+  document.getElementById("timeDisplay").textContent =
+    now.toLocaleTimeString("en-US", options);
+}
+setInterval(updateTime, 1000);
+updateTime();
+</script>
+
+<!-- REAL WEATHER -->
+<script>
+async function loadWeather() {
+  try {
+    const res = await fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true"
+    );
+    const data = await res.json();
+    const w = data.current_weather;
+
+    const temp = w.temperature;
+    const code = w.weathercode;
+
+    let emoji = "⛅";
+    if (code === 0) emoji = "☀️";
+    if ([1,2,3].includes(code)) emoji = "🌤️";
+    if ([45,48].includes(code)) emoji = "🌫️";
+    if ([51,53,55].includes(code)) emoji = "🌦️";
+    if ([61,63,65].includes(code)) emoji = "🌧️";
+    if ([71,73,75].includes(code)) emoji = "❄️";
+    if ([95,96,99].includes(code)) emoji = "⛈️";
+
+    document.getElementById("weather").textContent =
+      `${emoji} ${temp}°F — Atlanta`;
+  } catch {
+    document.getElementById("weather").textContent = "Weather unavailable";
+  }
+}
+loadWeather();
+</script>
+
+<!-- BELTLINE LOCATION DETECTION -->
+<script>
+const beltlineZones = [
+  {
+    name: "Eastside Trail (Ponce City Market)",
+    lat: 33.7725,
+    lon: -84.3652
+  },
+  {
+    name: "Westside Trail (Lee + White)",
+    lat: 33.7358,
+    lon: -84.4173
+  },
+  {
+    name: "Northside Trail",
+    lat: 33.8082,
+    lon: -84.4021
+  },
+  {
+    name: "Southside Trail",
+    lat: 33.7089,
+    lon: -84.3890
+  }
+];
+
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI/180;
+  const dLon = (lon2 - lon1) * Math.PI/180;
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180) *
+    Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function detectBeltlineLocation() {
+  if (!navigator.geolocation) {
+    document.getElementById("beltlineLocation").textContent =
+      "Location unavailable.";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude, longitude } = pos.coords;
+
+    let closest = null;
+    let closestDist = Infinity;
+
+    beltlineZones.forEach(zone => {
+      const dist = getDistance(latitude, longitude, zone.lat, zone.lon);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = zone;
+      }
+    });
+
+    if (closestDist < 0.5) {
+      document.getElementById("beltlineLocation").textContent =
+        `You are currently on: ${closest.name}`;
+    } else {
+      document.getElementById("beltlineLocation").textContent =
+        "You are not currently on the Beltline Trail.";
+    }
+  });
+}
+
+detectBeltlineLocation();
+</script>
+
+<!-- MENU -->
+<script>
+document.getElementById("menuTrigger").onclick = () => {
+  document.getElementById("cloudMenu").classList.add("open");
+};
+document.getElementById("menuClose").onclick = () => {
+  document.getElementById("cloudMenu").classList.remove("open");
+};
+</script>
 
 </body>
 </html>
