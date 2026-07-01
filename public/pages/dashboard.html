@@ -6,23 +6,12 @@
 <title>Beltline Cloud Dashboard</title>
 
 <!-- FAVICON -->
-<link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-
-<!-- APPLE TOUCH ICON -->
-<link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
+<link rel="icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
 
 <!-- SOCIAL PREVIEW -->
 <meta property="og:title" content="Beltline Cloud Dashboard">
-<meta property="og:description" content="Live Beltline dashboard — chat, safety, events, radio, games, and navigation.">
+<meta property="og:description" content="Your Beltline hub — Network, Fast Roll, chat, safety, events, radio, and navigation.">
 <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://beltlinecloud.com">
-
-<!-- TWITTER CARD -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Beltline Cloud Dashboard">
-<meta name="twitter:description" content="Live Beltline dashboard — chat, safety, events, radio, games, and navigation.">
-<meta name="twitter:image" content="/assets/img/cloud/cloud-logo.jpg">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
 
@@ -50,9 +39,15 @@ body {
   align-items: center;
   padding: 20px;
 }
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 .header-logo {
-  height: 90px;
+  height: 70px;
   cursor: pointer;
+  border-radius: 10px;
 }
 .header-user {
   display: flex;
@@ -94,63 +89,6 @@ body {
   left: 0;
 }
 
-/* TOP BAR */
-.top-bar {
-  text-align: center;
-  padding: 20px;
-}
-
-/* SMALL RADIO PLAYER */
-.cloud-radio {
-  position: relative;
-  width: 300px;
-  margin: 0 auto 20px auto;
-}
-.cloud-radio img {
-  width: 100%;
-  border-radius: 14px;
-  box-shadow: 0 0 18px rgba(255,255,0,0.45);
-}
-.radio-controls {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-}
-.radio-controls button {
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-.radio-controls button:hover {
-  background: #00b86b;
-}
-
-/* WEATHER */
-.weather-box {
-  margin-top: 20px;
-  font-size: 2.4rem;
-}
-.weather-desc {
-  font-size: 1.2rem;
-  opacity: 0.9;
-}
-
-/* TIME */
-#timeDisplay {
-  margin-top: 10px;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #ffdd00;
-}
-
 /* GRID */
 .grid {
   display: grid;
@@ -173,6 +111,13 @@ body {
   width: 100%;
   border-radius: 10px;
 }
+
+/* SECTION TITLES */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 40px 40px 10px 40px;
+}
 </style>
 </head>
 
@@ -182,17 +127,24 @@ body {
 
 <!-- BURGER MENU -->
 <nav id="burgerMenu" class="burger-menu">
-  <a href="/index.html">🏠 Dashboard</a>
+  <a href="/pages/dashboard.html">🏠 Dashboard</a>
   <a href="/pages/trail-chat.html">💬 Cloud Chat</a>
   <a href="/pages/safety.html">🛡️ Safety Cloud</a>
   <a href="/pages/map.html">🗺️ Beltline Map</a>
-  <a href="/public/pages/events/pages/events.html">🎟️ Events</a>
+  <a href="/network/public/pages/explore.html">🛍️ The Network</a>
+  <a href="/fast-roll/pages/order.html">🛵 Fast Roll Order</a>
   <a href="/pages/music.html">🎧 Cloud Radio</a>
   <a href="/pages/games.html">🎮 Games</a>
+  <a href="/index.html">🚪 Exit</a>
 </nav>
 
 <header class="header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="toggleMenu()">
+  <div class="header-logos">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="toggleMenu()">
+    <img src="/network/public/img/network-logo.jpg" class="header-logo">
+    <img src="/fast-roll/img/Fast-logo.png" class="header-logo">
+  </div>
+
   <div class="header-user">
     <span id="userName">Loading...</span>
     <span id="timeDisplay"></span>
@@ -200,32 +152,26 @@ body {
   </div>
 </header>
 
-<section class="top-bar">
+<!-- USER SECTIONS -->
+<div id="vendorSection"></div>
+<div id="riderSection"></div>
 
-  <!-- SMALL RADIO PLAYER -->
-  <div class="cloud-radio" id="cloudRadio">
-    <img src="/assets/img/cloud/radioo.jpg" id="radioImage">
-
-    <div class="radio-controls">
-      <button id="playPause">▶</button>
-      <button id="muteUnmute">🔇</button>
-      <button id="nextStation">⏭</button>
-    </div>
-
-    <audio id="radioAudio">
-      <source src="/media/cloud-radio-stream.mp3" type="audio/mpeg">
-    </audio>
-  </div>
-
-  <!-- WEATHER -->
-  <div class="weather-box">
-    <span id="weatherEmoji">⛅</span>
-    <div class="weather-desc" id="weatherDesc">Loading weather…</div>
-  </div>
-
-</section>
+<!-- UNIVERSAL SECTIONS -->
+<h2 class="section-title">Explore Beltline Cloud</h2>
 
 <section class="grid">
+
+  <a class="tile" href="/network/public/pages/explore.html">
+    <img src="/assets/img/cloud/network.jpg">
+    <h3>The Network</h3>
+    <p>Browse vendors, services, workshops, and products.</p>
+  </a>
+
+  <a class="tile" href="/fast-roll/pages/order.html">
+    <img src="/fast-roll/img/fast-order.jpg">
+    <h3>Fast Roll Delivery</h3>
+    <p>Order anything from the Beltline — delivered fast.</p>
+  </a>
 
   <a class="tile" href="/pages/trail-chat.html">
     <img src="/assets/img/cloud/cloud-chat.jpg">
@@ -245,7 +191,7 @@ body {
     <p>Trail layout, zones, and navigation.</p>
   </a>
 
-  <a class="tile" href="/pages/events/pages/events.html">
+  <a class="tile" href="/public/pages/events/pages/events.html">
     <img src="/assets/img/cloud/events-cloud.jpg">
     <h3>Events</h3>
     <p>Workshops, rides, meetups, concerts, and more.</p>
@@ -265,6 +211,9 @@ body {
 
 </section>
 
+<script src="/network/public/js/auth.js"></script>
+<script src="/fast-roll/js/rider.js"></script>
+
 <script>
 /* BURGER MENU */
 function toggleMenu() {
@@ -281,68 +230,51 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-/* WEATHER (Atlanta) */
-async function loadWeather() {
-  const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true");
-  const data = await res.json();
-  const w = data.current_weather;
+/* LOAD USER */
+document.addEventListener("DOMContentLoaded", () => {
+  const user = Auth.current();
+  const rider = FastRiderAuth.current();
 
-  let emoji = "⛅";
-  if (w.weathercode === 0) emoji = "☀️";
-  if ([1,2,3].includes(w.weathercode)) emoji = "🌤️";
-  if ([45,48].includes(w.weathercode)) emoji = "🌫️";
-  if ([51,53,55].includes(w.weathercode)) emoji = "🌦️";
-  if ([61,63,65].includes(w.weathercode)) emoji = "🌧️";
-  if ([71,73,75].includes(w.weathercode)) emoji = "❄️";
-  if ([95,96,99].includes(w.weathercode)) emoji = "⛈️";
+  if (!user) {
+    window.location.href = "/pages/login.html";
+    return;
+  }
 
-  document.getElementById("weatherEmoji").textContent = emoji;
-  document.getElementById("weatherDesc").textContent =
-    `${w.temperature}°F — Code ${w.weathercode}`;
+  document.getElementById("userName").textContent = user.name;
+
+  /* VENDOR SECTION */
+  if (user.roles && user.roles.includes("vendor")) {
+    document.getElementById("vendorSection").innerHTML = `
+      <h2 class="section-title">Vendor Tools</h2>
+      <section class="grid">
+        <a class="tile" href="/network/staff/pages/dashboard.html">
+          <img src="/network/public/img/network-logo.jpg">
+          <h3>Your Vendor Dashboard</h3>
+          <p>Manage products, services, workshops, and payouts.</p>
+        </a>
+      </section>
+    `;
+  }
+
+  /* RIDER SECTION */
+  if (rider) {
+    document.getElementById("riderSection").innerHTML = `
+      <h2 class="section-title">Fast Roll Rider Tools</h2>
+      <section class="grid">
+        <a class="tile" href="/fast-roll/pages/rider/dashboard.html">
+          <img src="/fast-roll/img/Fast-logo.png">
+          <h3>Your Rider Dashboard</h3>
+          <p>View jobs, deliveries, payouts, and profile.</p>
+        </a>
+      </section>
+    `;
+  }
+});
+
+/* LOGOUT */
+function logout() {
+  Auth.logout();
 }
-loadWeather();
-
-/* RADIO PLAYER */
-const radioAudio = document.getElementById('radioAudio');
-const playPause = document.getElementById('playPause');
-const muteUnmute = document.getElementById('muteUnmute');
-const nextStation = document.getElementById('nextStation');
-const radioImage = document.getElementById('radioImage');
-
-let clickCount = 0;
-let walkieMode = false;
-
-playPause.addEventListener('click', () => {
-  if (radioAudio.paused) {
-    radioAudio.play();
-    playPause.textContent = '⏸';
-  } else {
-    radioAudio.pause();
-    playPause.textContent = '▶';
-  }
-});
-
-muteUnmute.addEventListener('click', () => {
-  radioAudio.muted = !radioAudio.muted;
-  muteUnmute.textContent = radioAudio.muted ? '🔈' : '🔇';
-});
-
-nextStation.addEventListener('click', () => {
-  radioAudio.src = '/media/cloud-radio-alt.mp3';
-  radioAudio.play();
-  playPause.textContent = '⏸';
-});
-
-radioImage.addEventListener('click', () => {
-  clickCount++;
-  setTimeout(() => (clickCount = 0), 600);
-  if (clickCount === 3) {
-    walkieMode = !walkieMode;
-    radioImage.src = walkieMode
-      ? '/assets/img/cloud/cloud-talk.jpg'
-      : '/assets/img/cloud/radio.jpg';
-  }
-});
 </script>
 
 </body>
