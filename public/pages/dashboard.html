@@ -30,6 +30,23 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 
 .header { display:flex; justify-content:space-between; align-items:center; padding:20px; }
 .header-logo { height:120px; cursor:pointer; border-radius:10px; }
+
+.header-top-right {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  margin-left:20px;
+}
+
+.header-top-right a {
+  color:#ffdd00;
+  font-size:1.6rem;
+  font-weight:700;
+  text-decoration:none;
+}
+
 .header-user { display:flex; align-items:center; gap:20px; }
 .logout-btn { background:#00b86b; border:none; padding:10px 20px; border-radius:8px; color:white; cursor:pointer; }
 
@@ -87,7 +104,6 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
   <h2>Community Cloud</h2>
   <a href="/pages/trail-chat.html">Cloud Chat</a>
   <a href="/public/pages/events/pages/events.html">Events</a>
-  <a href="/pages/music.html">Cloud Radio</a>
   <a href="/pages/games.html">Games</a>
 
   <a id="menuClose">Close Menu</a>
@@ -96,6 +112,10 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 
 <header class="header">
   <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
+
+  <div class="header-top-right">
+    <a href="/pages/safety.html">Safety Cloud</a>
+  </div>
 
   <div class="header-user">
     <span id="userName">Loading...</span>
@@ -123,17 +143,14 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
 <section class="grid">
+
   <a class="tile" href="/pages/trail-chat.html">
     <img src="/assets/img/cloud/cloud-chat.jpg">
     <h3>Cloud Chat</h3>
     <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
   </a>
 
-  <a class="tile" href="/pages/safety.html">
-    <img src="/assets/img/cloud/safety-cloud-logo.jpg">
-    <h3>Safety Cloud</h3>
-    <p>Parking zones, etiquette, alerts, and emergency markers.</p>
-  </a>
+  <!-- SAFETY CLOUD REMOVED FROM CARD SECTION -->
 
   <a class="tile" href="/pages/map.html">
     <img src="/assets/img/map/map.jpg">
@@ -147,17 +164,14 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
     <p>Workshops, rides, meetups, concerts, and more.</p>
   </a>
 
-  <a class="tile" href="/pages/music.html">
-    <img src="/assets/img/music/music-logo.jpg">
-    <h3>Cloud Radio</h3>
-    <p>Full Beltline soundtrack and listening rooms.</p>
-  </a>
+  <!-- CLOUD RADIO REMOVED -->
 
   <a class="tile" href="/pages/games.html">
     <img src="/assets/img/games/games.jpg">
     <h3>Games</h3>
     <p>Community games and challenges.</p>
   </a>
+
 </section>
 
 <!-- BOTTOM LOGO BAR -->
@@ -173,9 +187,6 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 
 </div>
 
-<script type="module" src="/js/auth.js"></script>
-
-<!-- DASHBOARD JS -->
 <script type="module">
 import { Auth } from "/js/auth.js";
 
@@ -184,34 +195,22 @@ document.getElementById("userName").textContent = user.name || user.email;
 
 // ROLES
 const roles = (user.roles || "").split(",");
+if (roles.includes("vendor")) document.getElementById("vendorLinks").style.display = "block";
+if (roles.includes("rider")) document.getElementById("riderLinks").style.display = "block";
 
-// Vendor links + toggle
-if (roles.includes("vendor")) {
-  document.getElementById("vendorLinks").style.display = "block";
-}
-
-// Rider links + toggle
-if (roles.includes("rider")) {
-  document.getElementById("riderLinks").style.display = "block";
-}
-
-// REAL TIME
+// TIME
 function updateTime() {
   const now = new Date();
-  const options = {
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: true,
-    timeZone: "America/New_York"
-  };
   document.getElementById("timeDisplay").textContent =
-    now.toLocaleTimeString("en-US", options);
+    now.toLocaleTimeString("en-US", {
+      hour:"numeric", minute:"numeric", second:"numeric",
+      hour12:true, timeZone:"America/New_York"
+    });
 }
 setInterval(updateTime, 1000);
 updateTime();
 
-// REAL WEATHER (Fahrenheit)
+// WEATHER (Fahrenheit)
 async function loadWeather() {
   try {
     const res = await fetch(
@@ -242,16 +241,16 @@ loadWeather();
 
 // BELTLINE LOCATION
 const beltlineZones = [
-  { name: "Eastside Trail (Ponce City Market)", lat: 33.7725, lon: -84.3652 },
-  { name: "Westside Trail (Lee + White)", lat: 33.7358, lon: -84.4173 },
-  { name: "Northside Trail", lat: 33.8082, lon: -84.4021 },
-  { name: "Southside Trail", lat: 33.7089, lon: -84.3890 }
+  { name:"Eastside Trail (Ponce City Market)", lat:33.7725, lon:-84.3652 },
+  { name:"Westside Trail (Lee + White)", lat:33.7358, lon:-84.4173 },
+  { name:"Northside Trail", lat:33.8082, lon:-84.4021 },
+  { name:"Southside Trail", lat:33.7089, lon:-84.3890 }
 ];
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI/180;
-  const dLon = (lon2 - lon1) * Math.PI/180;
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLon = (lon2-lon1)*Math.PI/180;
   const a =
     Math.sin(dLat/2)**2 +
     Math.cos(lat1*Math.PI/180) *
