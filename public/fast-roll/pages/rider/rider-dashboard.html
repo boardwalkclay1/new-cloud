@@ -5,7 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rider Dashboard — The Fast Roll</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="/fast-roll/img/Fast-logo.jpg">
+
+    <!-- Social Preview -->
+    <meta property="og:title" content="Rider Dashboard — The Fast Roll">
+    <meta property="og:description" content="Your jobs, tools, and profile — all in one place.">
+    <meta property="og:image" content="/fast-roll/img/rider.jpg">
+
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
+
+    <style>
+        body {
+            background: url('/fast-roll/img/rider.jpg') center/cover no-repeat fixed;
+            background-color: #05060a;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.55),
+                rgba(0,0,0,0.75)
+            );
+            z-index: -1;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,60 +48,107 @@
     </div>
 </nav>
 
-<div class="form-wrapper">
+<div class="form-wrapper" style="margin-top:140px;">
     <h1>Rider Dashboard</h1>
     <p>Your zone, your jobs, your tools — all in one place.</p>
 
-    <div class="form-group">
-        <label>Your Beltline Radius</label>
-        <div id="mapContainer" class="rider-card" style="height:260px;">
-            <p style="opacity:0.6; font-size:0.9rem;">
-                Map will load here once your engine is connected.
-            </p>
-        </div>
-
-        <div style="margin-top:10px;">
-            <label>Radius (miles)</label>
-            <input type="range" id="radiusSlider" min="0.5" max="5" step="0.5" value="1.5" />
-            <span id="radiusValue">1.5 mi</span>
-        </div>
-    </div>
-
+    <!-- PROFILE SUMMARY -->
     <div class="form-group">
         <label>Your Profile</label>
         <div id="riderProfileSummary" class="form-note"></div>
-        <button class="secondary-btn" onclick="location.href='/pages/rider/profile.html'">
+        <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/profile.html'">
             Edit Profile
         </button>
     </div>
 
+    <!-- JOB LIST -->
     <div class="form-group">
         <label>Available Jobs</label>
         <div id="jobList" class="rider-grid"></div>
     </div>
 
+    <!-- ACTIVE DELIVERY -->
     <div class="form-group">
         <label>Active Delivery</label>
         <div id="activeDelivery" class="rider-card">No active delivery.</div>
     </div>
 
+    <!-- STATUS -->
     <div class="form-group">
         <label>Safety & Status</label>
         <div id="riderStatus" class="form-note"></div>
-        <button class="secondary-btn" onclick="location.href='/pages/rider/agreement.html'">
-            View Rider Agreement
+
+        <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/agreement.html'">
+            Rider Agreement
         </button>
-        <button class="secondary-btn" onclick="location.href='/pages/rider/how-it-works.html'">
+
+        <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/how-it-works.html'">
             How Riding Works
         </button>
     </div>
 
-    <button class="secondary-btn" onclick="location.href='/index.html'">
+    <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/login.html'">
         Log Out
     </button>
 </div>
 
-<script src="/fast-roll/js/app.js"></script>
 <script src="/fast-roll/js/rider.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const rider = FastRiderAuth.current();
+    if (!rider) {
+        window.location.href = "/fast-roll/pages/rider/login.html";
+        return;
+    }
+
+    // PROFILE SUMMARY
+    document.getElementById("riderProfileSummary").innerHTML = `
+        <strong>${rider.name}</strong><br>
+        Vehicle: ${rider.vehicle}<br>
+        Phone: ${rider.phone}<br>
+        PayPal: ${rider.paypal || "Not set"}
+    `;
+
+    // STATUS
+    document.getElementById("riderStatus").innerHTML = `
+        Status: <strong>${rider.status || "offline"}</strong>
+    `;
+
+    // JOB LIST
+    const jobs = await fastRiderLoadJobs();
+    const jobList = document.getElementById("jobList");
+
+    if (!jobs.length) {
+        jobList.innerHTML = `<p style="opacity:0.7;">No jobs available right now.</p>`;
+    } else {
+        jobList.innerHTML = jobs.map(job => `
+            <div class="rider-card">
+                <h3>${job.id}</h3>
+                <p><strong>Pickup:</strong> ${job.pickup}</p>
+                <p><strong>Dropoff:</strong> ${job.dropoff}</p>
+                <p><strong>Payout:</strong> $${job.price || job.payout || 0}</p>
+                <button class="primary-btn" onclick="fastRiderAcceptJob('${job.id}')">
+                    Accept Job
+                </button>
+            </div>
+        `).join("");
+    }
+
+    // ACTIVE DELIVERY
+    const active = jobs.find(j => j.status === "assigned");
+    if (active) {
+        document.getElementById("activeDelivery").innerHTML = `
+            <strong>Delivery Active</strong><br>
+            Pickup: ${active.pickup}<br>
+            Dropoff: ${active.dropoff}<br>
+            <button class="primary-btn" onclick="fastRiderCompleteJob('${active.id}')">
+                Mark Complete
+            </button>
+        `;
+    }
+});
+</script>
+
 </body>
 </html>
