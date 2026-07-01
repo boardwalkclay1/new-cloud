@@ -1,0 +1,27 @@
+<body data-page="alerts">
+  <h1>Send Safety Alert</h1>
+
+  <form id="alertForm">
+    <label>Title</label>
+    <input name="title" required>
+
+    <label>Message</label>
+    <textarea name="message" required></textarea>
+
+    <label>Photo (optional)</label>
+    <input name="photo" type="file" accept="image/*">
+
+    <button type="submit">Send Alert</button>
+  </form>
+
+  <script type="module">
+    import { submitUserAlert } from "/public/js/safety-cloud.js";
+
+    document.getElementById("alertForm").onsubmit = async e => {
+      e.preventDefault();
+      await submitUserAlert(e.target);
+      alert("Alert sent.");
+      location.href = "/pages/safety/alerts.html";
+    };
+  </script>
+</body>
