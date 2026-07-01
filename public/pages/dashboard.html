@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
-<!-- FAVICON -->
 <link rel="icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
 
-<!-- SOCIAL PREVIEW -->
 <meta property="og:title" content="Beltline Cloud Dashboard">
 <meta property="og:description" content="Your Beltline hub — Network, Fast Roll, chat, safety, events, radio, and navigation.">
 <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
@@ -84,7 +82,7 @@ body {
   left: 0;
 }
 
-/* GRID (for cloud tools only) */
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -121,6 +119,25 @@ body {
   opacity: 0.85;
 }
 
+/* TOGGLE SECTIONS */
+.toggle-section {
+  margin: 20px 40px;
+  padding: 15px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 12px;
+  display: none;
+}
+.toggle-section label {
+  font-size: 1rem;
+}
+
+/* WEATHER */
+#weather {
+  margin: 20px 40px;
+  font-size: 1.2rem;
+  opacity: 0.85;
+}
+
 /* BOTTOM LOGO BAR */
 .bottom-bar {
   margin-top: 40px;
@@ -128,7 +145,7 @@ body {
   text-align: center;
 }
 .bottom-logo {
-  height: 180px; /* twice the previous size */
+  height: 180px;
   margin: 0 40px 10px 40px;
   cursor: pointer;
   border-radius: 16px;
@@ -157,7 +174,7 @@ body {
 <div class="page-bg"></div>
 
 <!-- BURGER MENU -->
-<nav id="burgerMenu" class="burger-menu">
+<nav id="cloudMenu" class="burger-menu">
   <a href="/pages/dashboard.html">🏠 Dashboard</a>
   <a href="/pages/trail-chat.html">💬 Cloud Chat</a>
   <a href="/pages/safety.html">🛡️ Safety Cloud</a>
@@ -166,11 +183,12 @@ body {
   <a href="/fast-roll/pages/order.html">🛵 Fast Roll Order</a>
   <a href="/pages/music.html">🎧 Cloud Radio</a>
   <a href="/pages/games.html">🎮 Games</a>
+  <a id="menuClose">❌ Close</a>
   <a href="/index.html">🚪 Exit</a>
 </nav>
 
 <header class="header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" onclick="toggleMenu()">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
 
   <div class="header-user">
     <span id="userName">Loading...</span>
@@ -179,10 +197,36 @@ body {
   </div>
 </header>
 
-<!-- ROLE SUMMARY (no cards for Network/Fast Roll) -->
-<div id="vendorSection"></div>
-<div id="riderSection"></div>
+<!-- WEATHER -->
+<div id="weather">Loading weather…</div>
 
+<!-- VENDOR SECTION -->
+<div id="vendorLinks" style="display:none;">
+  <p class="role-summary">
+    You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops inside The Network.
+  </p>
+</div>
+
+<div id="vendorToggleSection" class="toggle-section">
+  <label>
+    <input type="checkbox" id="vendorToggle"> Vendor Mode
+  </label>
+</div>
+
+<!-- RIDER SECTION -->
+<div id="riderLinks" style="display:none;">
+  <p class="role-summary">
+    You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
+  </p>
+</div>
+
+<div id="riderToggleSection" class="toggle-section">
+  <label>
+    <input type="checkbox" id="riderToggle"> Rider Mode
+  </label>
+</div>
+
+<!-- CLOUD FEATURES -->
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
 <section class="grid">
@@ -223,20 +267,15 @@ body {
   </a>
 </section>
 
-<!-- BOTTOM LOGO BAR (NO CARDS, JUST BIG LOGOS + LINKS UNDER) -->
+<!-- BOTTOM LOGO BAR -->
 <div class="bottom-bar">
-  <div>
-    <img
-      src="/network/public/img/network-logo.jpg"
-      class="bottom-logo"
-      alt="The Network Logo"
-      onclick="location.href='/network/public/pages/explore.html'"
-    >
-  </div>
-  <a
-    href="/network/public/pages/explore.html"
-    class="bottom-link"
+
+  <img
+    src="/network/public/img/network-logo.jpg"
+    class="bottom-logo"
+    onclick="location.href='/network/public/pages/explore.html'"
   >
+  <a href="/network/public/pages/explore.html" class="bottom-link">
     Enter The Network — Vendors, Services & Products
   </a>
 
@@ -244,74 +283,17 @@ body {
     <img
       src="/fast-roll/img/Fast-logo.png"
       class="bottom-logo"
-      alt="The Fast Roll Logo"
       onclick="location.href='/fast-roll/index.html'"
     >
   </div>
-  <a
-    href="/fast-roll/pages/order.html"
-    class="bottom-link"
-  >
+  <a href="/fast-roll/pages/order.html" class="bottom-link">
     Place a Fast Roll Delivery
   </a>
+
 </div>
 
-<script src="/network/public/js/auth.js"></script>
-<script src="/fast-roll/js/rider.js"></script>
-
-<script>
-/* BURGER MENU */
-function toggleMenu() {
-  const menu = document.getElementById("burgerMenu");
-  menu.classList.toggle("burger-open");
-}
-
-/* TIME */
-function updateTime() {
-  const now = new Date();
-  document.getElementById('timeDisplay').textContent =
-    now.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
-}
-setInterval(updateTime, 1000);
-updateTime();
-
-/* LOAD USER + ROLE SUMMARY (no cards for Network/Fast Roll) */
-document.addEventListener("DOMContentLoaded", () => {
-  const user = Auth.current();
-  const rider = FastRiderAuth.current();
-
-  if (!user) {
-    window.location.href = "/pages/login.html";
-    return;
-  }
-
-  document.getElementById("userName").textContent = user.name;
-
-  // Vendor summary text only
-  if (user.roles && user.roles.includes("vendor")) {
-    document.getElementById("vendorSection").innerHTML = `
-      <p class="role-summary">
-        You are a <strong>Network Vendor</strong>. Manage your products, services, and workshops
-        from the Staff Dashboard inside The Network.
-      </p>
-    `;
-  }
-
-  // Rider summary text only
-  if (rider) {
-    document.getElementById("riderSection").innerHTML = `
-      <p class="role-summary">
-        You are a <strong>Fast Roll Rider</strong>. View jobs, deliveries, and payouts from your Rider Dashboard.
-      </p>
-    `;
-  }
-});
-
-/* LOGOUT */
-function logout() {
-  Auth.logout();
-}
-</script>
+<script type="module" src="/js/auth.js"></script>
+<script type="module" src="/js/dashboard.js"></script>
 
 </body>
 </html>
