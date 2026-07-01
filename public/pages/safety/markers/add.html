@@ -1,0 +1,34 @@
+<body data-page="markers">
+  <h1>Add Marker</h1>
+
+  <form id="markerForm">
+    <label>Marker Category</label>
+    <select name="category" required>
+      <option value="water">Water</option>
+      <option value="danger">Danger</option>
+      <option value="rest">Rest Area</option>
+      <option value="info">Information</option>
+    </select>
+
+    <label>Note</label>
+    <textarea name="note" required></textarea>
+
+    <label>Photo (optional)</label>
+    <input type="file" name="photo" accept="image/*">
+
+    <button type="submit">Add Marker</button>
+  </form>
+
+  <script type="module">
+    import { submitMarker } from "/public/js/safety-cloud.js";
+
+    document.getElementById("markerForm").onsubmit = async e => {
+      e.preventDefault();
+      await submitMarker(new FormData(e.target));
+      alert("Marker added.");
+      location.href = "/pages/safety/markers/index.html";
+    };
+  </script>
+
+  <link rel="stylesheet" href="marker.css">
+</body>
