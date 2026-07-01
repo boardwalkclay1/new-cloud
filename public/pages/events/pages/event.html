@@ -30,10 +30,42 @@
 
 <body>
 
+<!-- BACKGROUND IN HTML (CORRECT PATH, NO PUBLIC) -->
 <div style="
   position: fixed;
   inset: 0;
   background: url('/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
+  filter: brightness(0.35);
+  z-index: -1;
+"></div>
+
+<header class="events-header">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo">
+  <h2 id="eventTitle">Event</h2>
+</header>
+
+<section class="events-section">
+  <div id="eventDetails" class="event-details-card">
+    <!-- JS injects title, date, location, description, price, host -->
+  </div>
+
+  <div class="event-ticket-panel">
+    <label>Tickets
+      <input type="number" id="ticketQuantity" min="1" value="1">
+    </label>
+
+    <div id="ticketPriceDisplay" class="event-price-display"></div>
+
+    <button id="buyTicketBtn" class="events-btn-primary">
+      Buy Ticket
+    </button>
+  </div>
+</section>
+
+<!-- UNIFIED EVENTS JS -->
+<script src="/pages/events/js/events.js"></script>
+</body>
+</html>
   filter: brightness(0.35);
   z-index: -1;
 "></div>
