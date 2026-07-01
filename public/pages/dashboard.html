@@ -243,40 +243,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("userName").textContent = user.name;
 
-  /* VENDOR SECTION */
-  if (user.roles && user.roles.includes("vendor")) {
-    document.getElementById("vendorSection").innerHTML = `
-      <h2 class="section-title">Vendor Tools</h2>
-      <section class="grid">
-        <a class="tile" href="/network/staff/pages/dashboard.html">
-          <img src="/network/public/img/network-logo.jpg">
-          <h3>Your Vendor Dashboard</h3>
-          <p>Manage products, services, workshops, and payouts.</p>
-        </a>
-      </section>
-    `;
-  }
+ /* VENDOR SECTION */
+if (user.roles && user.roles.includes("vendor")) {
+  document.getElementById("vendorSection").innerHTML = `
+    <h2 class="section-title">Vendor Tools</h2>
+    <section class="grid">
 
-  /* RIDER SECTION */
-  if (rider) {
-    document.getElementById("riderSection").innerHTML = `
-      <h2 class="section-title">Fast Roll Rider Tools</h2>
-      <section class="grid">
-        <a class="tile" href="/fast-roll/pages/rider/dashboard.html">
-          <img src="/fast-roll/img/Fast-logo.png">
-          <h3>Your Rider Dashboard</h3>
-          <p>View jobs, deliveries, payouts, and profile.</p>
-        </a>
-      </section>
-    `;
-  }
-});
+      <a class="tile" href="/network/staff/pages/dashboard.html">
+        <img src="/network/public/img/network-logo.jpg">
+        <h3>Your Vendor Dashboard</h3>
+        <p>Manage products, services, workshops, and payouts.</p>
+      </a>
 
-/* LOGOUT */
-function logout() {
-  Auth.logout();
+      <a class="tile" href="/network/public/pages/explore.html">
+        <img src="/network/public/img/network-logo.jpg">
+        <h3>Explore The Network</h3>
+        <p>Browse vendors, services, products, and workshops.</p>
+      </a>
+
+    </section>
+  `;
 }
-</script>
 
-</body>
-</html>
+/* RIDER SECTION */
+if (rider) {
+  document.getElementById("riderSection").innerHTML = `
+    <h2 class="section-title">Fast Roll Rider Tools</h2>
+    <section class="grid">
+
+      <a class="tile" href="/fast-roll/pages/rider/dashboard.html">
+        <img src="/fast-roll/img/Fast-logo.png">
+        <h3>Your Rider Dashboard</h3>
+        <p>View jobs, deliveries, payouts, and profile.</p>
+      </a>
+
+      <a class="tile" href="/fast-roll/pages/order.html">
+        <img src="/fast-roll/img/Fast-logo.png">
+        <h3>Place Delivery</h3>
+        <p>Create a Fast Roll order from your dashboard.</p>
+      </a>
+
+    </section>
+  `;
+}
