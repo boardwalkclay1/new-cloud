@@ -174,10 +174,28 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 </div>
 
 <script type="module" src="/js/auth.js"></script>
-<script type="module" src="/js/dashboard.js"></script>
 
-<!-- REAL TIME -->
-<script>
+<!-- DASHBOARD JS -->
+<script type="module">
+import { Auth } from "/js/auth.js";
+
+const user = Auth.current();
+document.getElementById("userName").textContent = user.name || user.email;
+
+// ROLES
+const roles = (user.roles || "").split(",");
+
+// Vendor links + toggle
+if (roles.includes("vendor")) {
+  document.getElementById("vendorLinks").style.display = "block";
+}
+
+// Rider links + toggle
+if (roles.includes("rider")) {
+  document.getElementById("riderLinks").style.display = "block";
+}
+
+// REAL TIME
 function updateTime() {
   const now = new Date();
   const options = {
@@ -192,14 +210,12 @@ function updateTime() {
 }
 setInterval(updateTime, 1000);
 updateTime();
-</script>
 
-<!-- REAL WEATHER -->
-<script>
+// REAL WEATHER (Fahrenheit)
 async function loadWeather() {
   try {
     const res = await fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true"
+      "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true&temperature_unit=fahrenheit"
     );
     const data = await res.json();
     const w = data.current_weather;
@@ -217,37 +233,19 @@ async function loadWeather() {
     if ([95,96,99].includes(code)) emoji = "⛈️";
 
     document.getElementById("weather").textContent =
-      `${emoji} ${temp}°F — Atlanta`;
+      `${emoji} ${temp}°F • Atlanta`;
   } catch {
     document.getElementById("weather").textContent = "Weather unavailable";
   }
 }
 loadWeather();
-</script>
 
-<!-- BELTLINE LOCATION DETECTION -->
-<script>
+// BELTLINE LOCATION
 const beltlineZones = [
-  {
-    name: "Eastside Trail (Ponce City Market)",
-    lat: 33.7725,
-    lon: -84.3652
-  },
-  {
-    name: "Westside Trail (Lee + White)",
-    lat: 33.7358,
-    lon: -84.4173
-  },
-  {
-    name: "Northside Trail",
-    lat: 33.8082,
-    lon: -84.4021
-  },
-  {
-    name: "Southside Trail",
-    lat: 33.7089,
-    lon: -84.3890
-  }
+  { name: "Eastside Trail (Ponce City Market)", lat: 33.7725, lon: -84.3652 },
+  { name: "Westside Trail (Lee + White)", lat: 33.7358, lon: -84.4173 },
+  { name: "Northside Trail", lat: 33.8082, lon: -84.4021 },
+  { name: "Southside Trail", lat: 33.7089, lon: -84.3890 }
 ];
 
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -255,10 +253,10 @@ function getDistance(lat1, lon1, lat2, lon2) {
   const dLat = (lat2 - lat1) * Math.PI/180;
   const dLon = (lon2 - lon1) * Math.PI/180;
   const a =
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.sin(dLat/2)**2 +
     Math.cos(lat1*Math.PI/180) *
     Math.cos(lat2*Math.PI/180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
+    Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
@@ -294,15 +292,18 @@ function detectBeltlineLocation() {
 }
 
 detectBeltlineLocation();
-</script>
 
-<!-- MENU -->
-<script>
+// MENU
 document.getElementById("menuTrigger").onclick = () => {
   document.getElementById("cloudMenu").classList.add("open");
 };
 document.getElementById("menuClose").onclick = () => {
   document.getElementById("cloudMenu").classList.remove("open");
+};
+
+// LOGOUT
+window.logout = function () {
+  Auth.logout();
 };
 </script>
 
