@@ -140,13 +140,15 @@ body {
 
 /* BOTTOM LOGO BAR */
 .bottom-bar {
-  margin-top: 40px;
+  margin-top: 60px;
   padding: 40px;
   text-align: center;
 }
+
 .bottom-logo {
-  height: 180px;
-  margin: 0 40px 10px 40px;
+  height: 200px; /* TWICE SIZE */
+  display: block;
+  margin: 0 auto 10px auto;
   cursor: pointer;
   border-radius: 16px;
   box-shadow: 0 0 25px rgba(0,0,0,0.7);
@@ -155,13 +157,14 @@ body {
 .bottom-logo:hover {
   transform: scale(1.05);
 }
+
 .bottom-link {
-  display: inline-block;
-  margin: 0 40px 0 40px;
+  display: block;
+  margin-top: 10px;
   color: #ffdd00;
   font-weight: 600;
   text-decoration: none;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
 }
 .bottom-link:hover {
   text-decoration: underline;
@@ -180,7 +183,7 @@ body {
   <a href="/pages/safety.html">🛡️ Safety Cloud</a>
   <a href="/pages/map.html">🗺️ Beltline Map</a>
   <a href="/network/public/pages/explore.html">🛍️ The Network</a>
-  <a href="/fast-roll/pages/order.html">🛵 Fast Roll Order</a>
+  <a href="/fast-roll/pages/order.html">🛵 Fast Roll Delivery</a>
   <a href="/pages/music.html">🎧 Cloud Radio</a>
   <a href="/pages/games.html">🎮 Games</a>
   <a id="menuClose">❌ Close</a>
@@ -270,24 +273,25 @@ body {
 <!-- BOTTOM LOGO BAR -->
 <div class="bottom-bar">
 
+  <!-- NETWORK -->
   <img
     src="/network/public/img/network-logo.jpg"
     class="bottom-logo"
     onclick="location.href='/network/public/pages/explore.html'"
   >
   <a href="/network/public/pages/explore.html" class="bottom-link">
-    Enter The Network — Vendors, Services & Products
+    Explore
   </a>
 
-  <div style="margin-top:40px;">
-    <img
-      src="/fast-roll/img/Fast-logo.png"
-      class="bottom-logo"
-      onclick="location.href='/fast-roll/index.html'"
-    >
-  </div>
+  <!-- FAST ROLL -->
+  <img
+    src="/fast-roll/img/Fast-logo.png"
+    class="bottom-logo"
+    onclick="location.href='/fast-roll/index.html'"
+    style="margin-top:40px;"
+  >
   <a href="/fast-roll/pages/order.html" class="bottom-link">
-    Place a Fast Roll Delivery
+    Place Delivery
   </a>
 
 </div>
