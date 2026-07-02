@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Thread</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/pages/chat/css/chat.css">
+</head>
+
+<body data-page="chat-thread">
+
+  <div class="thread-header">
+    <button onclick="history.back()" class="back-btn">←</button>
+    <h2 id="threadName"></h2>
+  </div>
+
+  <div id="messageBox" class="message-box"></div>
+
+  <div class="message-input">
+    <input id="msgInput" type="text" placeholder="Type a message…">
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <script type="module">
+    import { loadThread, sendMessage } from "./js/chat.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const threadId = params.get("id");
+    const userId = localStorage.getItem("cloud_user_id");
+
+    loadThread(threadId, userId);
+
+    document.getElementById("sendBtn").onclick = () => {
+      const text = document.getElementById("msgInput").value;
+      sendMessage(threadId, userId, text);
+      document.getElementById("msgInput").value = "";
+    };
+  </script>
+
+</body>
+</html>
