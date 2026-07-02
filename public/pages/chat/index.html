@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cloud Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/pages/chat/css/chat.css">
+</head>
+
+<body data-page="chat-index">
+
+  <!-- Global Nav -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages/music.html">Cloud Radio</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/network/public/pages/index.html">Network</a>
+      <a href="/pages/safety/index.html">Safety CLOUD</a>
+      <a href="/pages/feed/index.html">Feed</a>
+      <a href="/pages/profile/index.html">Profile</a>
+    </div>
+  </nav>
+
+  <h1>Messages</h1>
+
+  <div id="chatList" class="chat-list"></div>
+
+  <script type="module">
+    import { loadChatList } from "./js/chat.js";
+    const userId = localStorage.getItem("cloud_user_id");
+    loadChatList(userId);
+  </script>
+
+</body>
+</html>
