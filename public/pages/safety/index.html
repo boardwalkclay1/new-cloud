@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Safety Cloud Dashboard — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safety Cloud — Beltline Cloud</title>
 
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
   <link rel="stylesheet" href="/css/safety-cloud.css">
 
   <!-- Social Preview -->
-  <meta property="og:title" content="Safety Cloud — Beltline Cloud">
-  <meta property="og:description" content="Safety Cloud is dedicated to keeping the Beltline community safe, informed, and moving with courtesy.">
+  <meta property="og:title" content="Safety Cloud Dashboard — Beltline Cloud">
+  <meta property="og:description" content="Your Beltline safety dashboard with alerts, Safe‑Clod motion detection, markers, and emergency tools.">
   <meta property="og:image" content="/public/music/img/safety-cloud.jpg">
   <meta property="og:type" content="website">
 </head>
 
-<body>
+<body data-page="safety-home">
 
   <!-- BACKGROUND -->
   <div class="page-bg" style="background-image:url('/music/img/safety-cloud.jpg');"></div>
@@ -35,215 +35,115 @@
     </div>
   </nav>
 
+  <!-- GLOBAL ALERT BUTTON -->
+  <button id="globalAlertBtn" class="global-alert-btn">
+    ⚠️ Send Emergency Alert
+  </button>
+
   <!-- HERO -->
   <header class="hero">
-    <h1>Safety Cloud</h1>
-    <p>The Beltline’s digital safety layer — built to protect, guide, and uplift the community.</p>
+    <h1>Safety Cloud Dashboard</h1>
+    <p>Your Beltline safety command center — alerts, motion safety, markers, and emergency tools.</p>
   </header>
 
-  <!-- SECTION: INTRO -->
-  <section class="section">
-    <h2>What is Safety Cloud?</h2>
-    <p>
-      Safety Cloud is here purely for the Beltline community’s safety.  
-      It exists to make the Beltline a safer, more respectful, and more enjoyable place for everyone —
-      riders, walkers, skaters, runners, families, vendors, and visitors.
-    </p>
+  <!-- DASHBOARD GRID -->
+  <section class="dashboard-grid">
 
-    <p>
-      Our mission is simple:  
-      <strong>Do everything in our power to keep the Beltline safe, informed, and moving smoothly.</strong>
-    </p>
+    <!-- SAFE‑CLOD MODULE -->
+    <div class="dash-card">
+      <h3>Safe‑Clod Motion Safety</h3>
+      <p>Smart motion detection for kidnapping, falls, snatches, and dangerous movement.</p>
 
-    <p>
-      Safety Cloud explains:
-    </p>
+      <label>Safety Mode</label>
+      <select id="safeClodMode">
+        <option value="kidnapping">Kidnapping Mode — Max sensitivity</option>
+        <option value="night">Night Rider Mode — For skaters/riders</option>
+        <option value="solo">Solo Walker Mode — Walking alone</option>
+        <option value="vendor">Vendor Mode — Stationary safety</option>
+        <option value="highrisk">High‑Risk Zone Mode — Dark/crowded areas</option>
+        <option value="snatch">Phone Snatch Mode — Theft protection</option>
+        <option value="fall">Sudden Fall Mode — Elderly/skaters</option>
+      </select>
 
-    <ul class="list">
-      <li>✔ Beltline etiquette and courtesy rules</li>
-      <li>✔ How to move safely with riders, walkers, and skaters</li>
-      <li>✔ Where to park and where NOT to park</li>
-      <li>✔ The Beltline pole marker system (emergency location numbers)</li>
-      <li>✔ The Beltline emergency sticker system</li>
-      <li>✔ Night riding safety and visibility</li>
-      <li>✔ Community alerts and hazard updates</li>
-      <li>✔ How Safety Cloud works inside Beltline Cloud</li>
-    </ul>
+      <label>Alert Routing</label>
+      <select id="safeClodAlertTarget">
+        <option value="cloud">Cloud Users Only</option>
+        <option value="contacts">Emergency Contacts Only</option>
+        <option value="police">Authorities Only</option>
+        <option value="all">All Three</option>
+      </select>
 
-    <p>
-      Some topics — like the emergency marker system, courtesy rules, and parking map — will have their own
-      dedicated pages inside the Cloud for deeper detail.
-    </p>
-  </section>
-
-  <!-- SECTION: ETIQUETTE -->
-  <section class="section">
-    <h2>Beltline Etiquette & Courtesy</h2>
-    <p>
-      The Beltline is a shared movement space. Safety Cloud teaches the etiquette that keeps everyone safe:
-    </p>
-
-    <div class="grid">
-      <div class="card">
-        <h3>Movement Flow</h3>
-        <ul>
-          <li>• Walkers stay to the right</li>
-          <li>• Riders, skaters, and wheels pass through the middle</li>
-          <li>• Always call out “On your left!” when passing</li>
-          <li>• Keep pets close and avoid long leashes</li>
-          <li>• Move to the side when stopping or checking your phone</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h3>Respect & Awareness</h3>
-        <ul>
-          <li>• Treat everyone with kindness — we’re all here to enjoy the Beltline</li>
-          <li>• Slow down near families, crowds, or tight spaces</li>
-          <li>• Avoid weaving unpredictably</li>
-          <li>• Be aware of headphones — you may not hear riders approaching</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h3>Walking Courtesy</h3>
-        <ul>
-          <li>• Walkers stay right</li>
-          <li>• If walking as a couple, the man walks on the inside (trail side)</li>
-          <li>• Keep groups tight — avoid blocking the trail</li>
-        </ul>
-      </div>
+      <label class="toggle">
+        <input type="checkbox" id="safeClodToggle">
+        <span class="slider"></span>
+      </label>
+      <p class="small-note">Safe‑Clod listens for dangerous motion when enabled.</p>
     </div>
 
-    <p class="note">
-      A full “Beltline Courtesy Guide” page will be available inside the Cloud.
-    </p>
-  </section>
-
-  <!-- SECTION: PARKING -->
-  <section class="section">
-    <h2>Parking & Stopping Zones</h2>
-    <p>
-      Parking incorrectly is one of the biggest causes of accidents and blocked movement on the Beltline.
-      Safety Cloud teaches exactly where to stop — and where not to.
-    </p>
-
-    <div class="grid">
-      <div class="card">
-        <h3>✔ Safe Parking Zones</h3>
-        <ul>
-          <li>• Wide trail edges</li>
-          <li>• Designated rest areas</li>
-          <li>• Vendor pickup zones</li>
-          <li>• Event meetup spots</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h3>✘ Do NOT Park Here</h3>
-        <ul>
-          <li>• Narrow trail sections</li>
-          <li>• Blind corners</li>
-          <li>• Bridge entrances/exits</li>
-          <li>• Directly in front of vendors</li>
-          <li>• Middle of the trail (never stop here)</li>
-        </ul>
-      </div>
+    <!-- LOST & FOUND -->
+    <div class="dash-card">
+      <h3>Lost & Found</h3>
+      <p>Report lost or found items and help the Beltline community recover belongings.</p>
+      <a class="dash-btn" href="/pages/safety/lost-found.html">Open Lost & Found</a>
     </div>
 
-    <p class="note">
-      The Safety Cloud Parking Map will have its own dedicated page inside the Cloud.
-    </p>
+    <!-- STOLEN ITEMS -->
+    <div class="dash-card">
+      <h3>Stolen Items</h3>
+      <p>Report stolen items and view community reports.</p>
+      <a class="dash-btn" href="/pages/safety/stolen.html">Open Stolen Reports</a>
+    </div>
+
+    <!-- COMMUNITY ALERTS -->
+    <div class="dash-card">
+      <h3>Community Alerts</h3>
+      <p>Trail closures, hazards, lost pets, and emergency updates.</p>
+      <a class="dash-btn" href="/pages/safety/alerts.html">View Alerts</a>
+    </div>
+
+    <!-- WEATHER SAFETY -->
+    <div class="dash-card">
+      <h3>Weather Safety</h3>
+      <p>Storm warnings, heat advisories, and Beltline weather hazards.</p>
+      <a class="dash-btn" href="/pages/safety/alerts.html#weather">Weather Alerts</a>
+    </div>
+
+    <!-- MARKER SYSTEM -->
+    <div class="dash-card">
+      <h3>Marker System</h3>
+      <p>Learn how to use Beltline emergency pole markers and location stickers.</p>
+      <a class="dash-btn" href="/pages/safety/markers/index.html">Marker System</a>
+    </div>
+
+    <!-- EMERGENCY TOOLS -->
+    <div class="dash-card">
+      <h3>Emergency Tools</h3>
+      <p>Quick access to emergency instructions and location reporting.</p>
+      <a class="dash-btn" href="/pages/safety/emergency.html">Emergency Tools</a>
+    </div>
+
   </section>
 
-  <!-- SECTION: MARKER SYSTEM -->
+  <!-- SAFE‑CLOD COUNTDOWN -->
   <section class="section">
-    <h2>Beltline Emergency Marker System</h2>
-    <p>
-      The Beltline uses a pole number system — small stickers placed on trail poles that tell emergency
-      responders exactly where you are.
-    </p>
-
-    <p>
-      Safety Cloud teaches you:
-    </p>
-
-    <ul class="list">
-      <li>✔ What the stickers look like</li>
-      <li>✔ How to read the pole number</li>
-      <li>✔ How to report your location using the number</li>
-      <li>✔ How APD Path Force uses the marker system</li>
-      <li>✔ What to do if you can’t find a pole</li>
-    </ul>
-
-    <p class="note">
-      The full Marker System Guide will have its own page inside the Cloud.
-    </p>
+    <div id="safeClodCountdown" class="countdown hidden">
+      <p>Emergency detected. Sending alert in <span id="safeClodCountdownValue">7</span> seconds…</p>
+      <button id="safeClodCancelBtn">Cancel Alert</button>
+    </div>
   </section>
 
-  <!-- SECTION: NIGHT SAFETY -->
-  <section class="section">
-    <h2>Night Riding Safety</h2>
-    <p>
-      The Beltline transforms at night — and visibility becomes the #1 safety factor.
-    </p>
+  <!-- SAFETY CLOUD LOGO HELPER -->
+  <div id="safetyHelper" class="safety-helper">
+    <img src="/assets/img/cloud/cloud-logo.jpg" id="helperLogo">
+    <div id="helperBubble" class="helper-bubble hidden">
+      <p>Welcome to Safety Cloud! I’m here to help you stay safe on the Beltline. Click me anytime for guidance.</p>
+    </div>
+  </div>
 
-    <ul class="list">
-      <li>✔ Use bright lights (front + rear)</li>
-      <li>✔ Wear reflective clothing or LED straps</li>
-      <li>✔ Avoid dark, unlit sections</li>
-      <li>✔ Ride in pairs when possible</li>
-      <li>✔ Slow down — visibility drops dramatically</li>
-      <li>✔ Stay aware of pedestrians who may not see you</li>
-    </ul>
-
-    <p class="note">
-      Night Visibility Zones will have their own page inside the Cloud.
-    </p>
-  </section>
-
-  <!-- SECTION: COMMUNITY ALERTS -->
-  <section class="section">
-    <h2>Community Alerts</h2>
-    <p>
-      Safety Cloud keeps you informed about:
-    </p>
-
-    <ul class="list">
-      <li>✔ Trail closures</li>
-      <li>✔ Construction zones</li>
-      <li>✔ High-traffic events</li>
-      <li>✔ Weather hazards</li>
-      <li>✔ Lost items or pets</li>
-      <li>✔ Emergency situations</li>
-    </ul>
-
-    <p>
-      Cloud users receive real-time alerts inside the app, and vendors/riders get updates relevant to their routes.
-    </p>
-  </section>
-
-  <!-- SECTION: EMERGENCY -->
-  <section class="section">
-    <h2>Emergency Information</h2>
-    <p>If you encounter an emergency on the Beltline:</p>
-
-    <ul class="list">
-      <li>✔ Call 911 immediately</li>
-      <li>✔ Move yourself and others out of the main trail</li>
-      <li>✔ Notify nearby vendors or Cloud users</li>
-      <li>✔ Use Safety Cloud to mark the incident location</li>
-    </ul>
-
-    <p class="note">
-      Emergency Marker Tools will have their own page inside the Cloud.
-    </p>
-  </section>
-
-  <!-- FOOTER -->
   <footer class="footer">
-    © 2026 Beltline Cloud Inc — Safety Cloud is here to protect the Beltline community.
+    © 2026 Beltline Cloud Inc — Safety Cloud protects the Beltline community.
   </footer>
 
+  <script type="module" src="/public/js/safe-clod.js"></script>
 </body>
 </html>
