@@ -1,12 +1,98 @@
-<body data-page="alerts">
-  <h1>Safety Motion Detection</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Safe‑Clod — Beltline Cloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <label class="toggle">
-    <input type="checkbox" id="safetyMotionToggle">
-    <span class="slider"></span>
-  </label>
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
+  <link rel="stylesheet" href="/css/safety-cloud.css">
 
-  <p>When enabled, suspicious movement triggers an emergency alert.</p>
+  <meta property="og:title" content="Safe‑Clod — Beltline Cloud">
+  <meta property="og:description" content="Safe‑Clod monitors motion and falls to protect Beltline users with smart emergency alerts.">
+  <meta property="og:image" content="/public/music/img/safety-cloud.jpg">
+  <meta property="og:type" content="website">
+</head>
+
+<body data-page="safe-clod">
+
+  <div class="page-bg" style="background-image:url('/music/img/safety-cloud.jpg');"></div>
+
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages/music.html">Cloud Radio</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/network/public/pages/index.html">Network</a>
+      <a href="/cloud/login.html">Login</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Safe‑Clod Motion Safety</h1>
+    <p>Smart motion and fall detection for Beltline riders, walkers, skaters, and elders.</p>
+  </header>
+
+  <section class="section">
+    <h2>Safe‑Clod Settings</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Safety Mode</h3>
+        <p>Select how sensitive Safe‑Clod should be based on your situation.</p>
+        <select id="safeClodMode">
+          <option value="kidnapping">Kidnapping Mode (Max Sensitivity)</option>
+          <option value="night">Night Rider Mode</option>
+          <option value="solo">Solo Walker Mode</option>
+          <option value="vendor">Vendor Mode</option>
+          <option value="highrisk">High‑Risk Zone Mode</option>
+          <option value="snatch">Phone Snatch Mode</option>
+          <option value="fall">Sudden Fall Mode (Elderly / Skaters)</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <h3>Alert Routing</h3>
+        <p>Choose who gets notified when Safe‑Clod detects an emergency.</p>
+        <select id="safeClodAlertTarget">
+          <option value="cloud">Cloud Users Only</option>
+          <option value="contacts">Emergency Contacts Only</option>
+          <option value="police">Authorities Only</option>
+          <option value="all">All Three</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <h3>Safe‑Clod Toggle</h3>
+        <p>Turn motion monitoring on or off. When on, Safe‑Clod listens for dangerous patterns.</p>
+        <label class="toggle">
+          <input type="checkbox" id="safeClodToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <p class="note">
+      If Safe‑Clod detects a serious event, it starts a 7‑second countdown before sending alerts,
+      giving you time to cancel if it was accidental.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Emergency Countdown</h2>
+    <div id="safeClodCountdown" class="countdown hidden">
+      <p>Emergency detected. Sending alert in <span id="safeClodCountdownValue">7</span> seconds…</p>
+      <button id="safeClodCancelBtn">Cancel Alert</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    © 2026 Beltline Cloud Inc — Safe‑Clod is built to protect the Beltline community.
+  </footer>
 
   <script type="module" src="/public/js/safety-cloud.js"></script>
 </body>
+</html>
