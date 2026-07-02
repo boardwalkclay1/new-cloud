@@ -5,259 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
-<link rel="icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
-<link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
+<link rel="stylesheet" href="/public/css/dashboard.css">
+<link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
-
-<style>
-body {
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:#001f3f;
-  color:white;
-}
-
-.page-bg {
-  position:fixed;
-  inset:0;
-  background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;
-  filter:brightness(0.35);
-  z-index:-1;
-}
-
-/* HEADER */
-.header {
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  padding:15px 20px;
-}
-
-/* MAIN LOGO + INFO */
-.header-left {
-  display:flex;
-  flex-direction:column;
-}
-
-.header-logo {
-  height:110px;
-  cursor:pointer;
-  border-radius:12px;
-}
-
-/* PROFILE LINK ON MAIN PAGE */
-.profile-main-link {
-  margin-top:10px;
-  color:#00b86b;
-  font-weight:700;
-  font-size:1.1rem;
-  text-decoration:none;
-}
-
-/* WEATHER + TIME + NAME */
-.header-info {
-  margin-top:10px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  font-size:1rem;
-}
-
-#userName { font-weight:700; color:#ffdd00; }
-#weather { opacity:0.85; }
-#timeDisplay { opacity:0.85; }
-
-/* SAFETY CLOUD */
-.header-right {
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-}
-
-.safety-logo {
-  height:110px;
-  cursor:pointer;
-  border-radius:12px;
-}
-
-.safety-dropdown {
-  display:none;
-  position:absolute;
-  right:20px;
-  top:140px;
-  background:rgba(0,0,0,0.92);
-  padding:15px;
-  border-radius:12px;
-  width:220px;
-  box-shadow:0 0 20px rgba(0,0,0,0.6);
-}
-
-.safety-dropdown a {
-  display:block;
-  padding:8px 0;
-  color:#ffdd00;
-  text-decoration:none;
-  font-size:1.1rem;
-}
-
-.safety-dropdown a:hover { color:#00b86b; }
-
-/* BURGER MENU */
-#cloudMenu {
-  position:fixed;
-  top:0;
-  left:-100%; /* FULLY HIDDEN */
-  width:300px;
-  height:100%;
-  background:rgba(0,0,0,0.92);
-  padding:25px;
-  transition:0.35s;
-  z-index:999;
-  overflow-y:auto;
-}
-
-#cloudMenu.open {
-  left:0; /* SLIDES IN CLEAN */
-}
-
-.menu-cat {
-  color:#ffdd00;
-  font-size:1.4rem;
-  margin-top:25px;
-  margin-bottom:10px;
-}
-
-#cloudMenu a {
-  display:block;
-  padding:8px 0;
-  color:white;
-  text-decoration:none;
-  font-size:1.05rem;
-}
-
-#cloudMenu a:hover {
-  color:#00b86b;
-}
-
-.logout-btn-menu {
-  margin-top:40px;
-  background:#ff4444;
-  padding:12px 20px;
-  border-radius:10px;
-  text-align:center;
-  font-weight:700;
-  cursor:pointer;
-}
-
-/* GRID */
-.section-title {
-  font-size:1.8rem;
-  font-weight:700;
-  margin:30px 20px 10px 20px;
-}
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-  padding:20px;
-}
-
-.tile {
-  background:rgba(0,0,0,0.55);
-  border-radius:14px;
-  padding:20px;
-  text-decoration:none;
-  color:white;
-  transition:0.3s;
-}
-
-.tile:hover { transform:scale(1.05); }
-
-.tile img {
-  width:100%;
-  border-radius:10px;
-}
-
-/* BOTTOM BAR */
-.bottom-bar {
-  margin-top:40px;
-  padding:40px;
-  text-align:center;
-}
-
-.bottom-logo {
-  height:160px;
-  display:block;
-  margin:0 auto 10px auto;
-  cursor:pointer;
-  border-radius:16px;
-  box-shadow:0 0 25px rgba(0,0,0,0.7);
-  transition:0.3s;
-}
-
-.bottom-logo:hover { transform:scale(1.05); }
-
-.bottom-link {
-  display:block;
-  margin-top:10px;
-  color:#ffdd00;
-  font-weight:600;
-  text-decoration:none;
-  font-size:1.2rem;
-}
-
-.bottom-link:hover { text-decoration:underline; }
-</style>
 </head>
-
 <body>
 
 <div class="page-bg"></div>
 
-<!-- BURGER MENU -->
-<nav id="cloudMenu">
+<!-- ========================= -->
+<!-- CLOUD MENU (HIDDEN BY DEFAULT) -->
+<!-- ========================= -->
+<div id="cloudMenu" class="cloud-menu">
 
-  <a href="/pages/profile.html"
-     style="font-weight:700; color:#00b86b; font-size:1.2rem; margin-bottom:10px;">
-     My Profile
-  </a>
+  <div class="menu-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo">
+    <span class="menu-close" id="menuClose">&times;</span>
+  </div>
 
-  <h2 class="menu-cat">Safety Cloud</h2>
-  <a href="/pages/safety/index.html">Safety Overview</a>
-  <a href="/pages/safety/lost-found.html">Lost & Found</a>
-  <a href="/pages/safety/stolen.html">Stolen Items</a>
-  <a href="/pages/safety/markers.html">Marker System</a>
-  <a href="/pages/safety/live-feed.html">Live Feed</a>
-  <a href="/pages/safety/alerts.html">Alerts</a>
+  <div class="menu-content">
 
-  <h2 class="menu-cat">News Cloud</h2>
-  <a href="/pages/news/beltline-news.html">Beltline News</a>
-  <a href="/pages/news/weather.html">Weather</a>
-  <a href="/pages/news/updates.html">Updates</a>
+    <!-- PROFILE -->
+    <div class="menu-category safety">
+      <h3>My Profile</h3>
+      <ul>
+        <li><a href="/pages/profile.html">View Profile</a></li>
+        <li><a href="/pages/notifications.html">Notifications</a></li>
+      </ul>
+    </div>
 
-  <h2 class="menu-cat">Trail Tools</h2>
-  <a href="/pages/map.html">Trail Map</a>
-  <a href="/pages/map/zones.html">Zones</a>
-  <a href="/pages/map/etiquette.html">Etiquette</a>
+    <!-- SAFETY -->
+    <div class="menu-category safety">
+      <h3>Safety Cloud</h3>
+      <ul>
+        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
+        <li><a href="/pages/safety/lost-found.html">Lost & Found</a></li>
+        <li><a href="/pages/safety/stolen.html">Stolen Items</a></li>
+        <li><a href="/pages/safety/markers.html">Marker System</a></li>
+        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
+        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
+      </ul>
+    </div>
 
-  <h2 class="menu-cat">Community Cloud</h2>
-  <a href="/pages/trail-chat.html">Cloud Chat</a>
-  <a href="/public/pages/events/pages/events.html">Events</a>
-  <a href="/pages/games.html">Games</a>
+    <!-- NEWS -->
+    <div class="menu-category news">
+      <h3>News Cloud</h3>
+      <ul>
+        <li><a href="/pages/news/beltline-news.html">Beltline News</a></li>
+        <li><a href="/pages/news/weather.html">Weather</a></li>
+        <li><a href="/pages/news/updates.html">Updates</a></li>
+      </ul>
+    </div>
 
-  <h2 class="menu-cat">Sign Up</h2>
-  <a href="/pages/rider/signup.html">Become a Rider</a>
-  <a href="/pages/vendor/signup.html">Become a Vendor</a>
-  <a href="/pages/response/signup.html">Join Response Unit</a>
+    <!-- TRAIL -->
+    <div class="menu-category trail">
+      <h3>Trail Tools</h3>
+      <ul>
+        <li><a href="/pages/map.html">Trail Map</a></li>
+        <li><a href="/pages/map/zones.html">Zones</a></li>
+        <li><a href="/pages/map/etiquette.html">Etiquette</a></li>
+      </ul>
+    </div>
 
-  <a id="menuClose" style="margin-top:20px; color:#ff4444; font-weight:700;">Close Menu</a>
+    <!-- COMMUNITY -->
+    <div class="menu-category community">
+      <h3>Community Cloud</h3>
+      <ul>
+        <li><a href="/pages/trail-chat.html">Cloud Chat</a></li>
+        <li><a href="/public/pages/events/pages/events.html">Events</a></li>
+        <li><a href="/pages/connect.html">Cloud Connect</a></li>
+      </ul>
+    </div>
 
-  <div class="logout-btn-menu" onclick="logout()">Logout</div>
-  <a href="/index.html" style="margin-top:20px;">Exit</a>
-</nav>
+    <!-- SIGNUP -->
+    <div class="menu-category news">
+      <h3>Sign Up</h3>
+      <ul>
+        <li><a href="/pages/rider/signup.html">Become a Rider</a></li>
+        <li><a href="/pages/vendor/signup.html">Become a Vendor</a></li>
+        <li><a href="/pages/response/signup.html">Join Response Unit</a></li>
+      </ul>
+    </div>
 
+    <!-- LOGOUT -->
+    <div class="logout-btn-menu" onclick="logout()">Logout</div>
+
+  </div>
+</div>
+
+<!-- ========================= -->
+<!-- HEADER -->
+<!-- ========================= -->
 <header class="header">
 
   <!-- LEFT SIDE -->
@@ -269,13 +107,20 @@ body {
     <div class="header-info">
       <span id="userName">Loading...</span>
       <span id="weather">Loading weather…</span>
+      <span id="beltlineLocation">Detecting Beltline location…</span>
       <span id="timeDisplay"></span>
     </div>
   </div>
 
   <!-- RIGHT SIDE -->
-  <div class="header-right">
+  <div class="header-top-right">
+
     <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" id="safetyDropdownTrigger">
+
+    <!-- MESSAGE ICON -->
+    <a href="/pages/messages.html">
+      <img src="/assets/img/icons/message.png" style="height:60px; margin-top:10px;">
+    </a>
 
     <div id="safetyDropdown" class="safety-dropdown">
       <a href="/pages/safety/index.html">Enter Safety Cloud</a>
@@ -285,22 +130,14 @@ body {
       <a href="/pages/safety/live-feed.html">Live Feed</a>
       <a href="/pages/safety/alerts.html">Alerts</a>
     </div>
+
   </div>
 
 </header>
 
-<div id="beltlineLocation" style="margin:20px; font-size:1.2rem; font-weight:600; color:#ffdd00;">
-  Detecting Beltline location…
-</div>
-
-<div id="vendorLinks" style="display:none; margin:20px; opacity:0.85;">
-  You are a <strong>Network Vendor</strong>.
-</div>
-
-<div id="riderLinks" style="display:none; margin:20px; opacity:0.85;">
-  You are a <strong>Fast Roll Rider</strong>.
-</div>
-
+<!-- ========================= -->
+<!-- GRID -->
+<!-- ========================= -->
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
 <section class="grid">
@@ -323,50 +160,44 @@ body {
     <p>Workshops, rides, meetups, concerts, and more.</p>
   </a>
 
-  <a class="tile" href="/pages/games.html">
-    <img src="/assets/img/games/games.jpg">
-    <h3>Games</h3>
-    <p>Community games and challenges.</p>
+  <!-- CLOUD CONNECT (REPLACES GAMES) -->
+  <a class="tile" href="/pages/connect.html">
+    <img src="/assets/img/cloud/connect.jpg">
+    <h3>Cloud Connect</h3>
+    <p>Connect with riders, vendors, and Beltline community.</p>
   </a>
 
 </section>
 
-<div class="bottom-bar">
-
-  <img src="/network/public/img/network-logo.jpg" class="bottom-logo"
-       onclick="location.href='/network/public/pages/explore.html'">
-  <a href="/network/public/pages/explore.html" class="bottom-link">Explore</a>
-
-  <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" style="margin-top:40px;"
-       onclick="location.href='/fast-roll/index.html'">
-  <a href="/fast-roll/pages/order.html" class="bottom-link">Place Delivery</a>
-
+<!-- ========================= -->
+<!-- NOTIFICATIONS BAR -->
+<!-- ========================= -->
+<div id="notificationsBar" style="
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(10,42,67,0.85);
+  padding:15px;
+  border-top:3px solid var(--yellow);
+  color:var(--white);
+  font-size:1rem;
+  text-align:center;
+  z-index:999;
+">
+  Loading notifications…
 </div>
 
+<!-- ========================= -->
+<!-- JS -->
+<!-- ========================= -->
 <script type="module">
 import { Auth } from "/js/auth.js";
 
 const user = Auth.current();
 document.getElementById("userName").textContent = user.name || user.email;
 
-// ROLES
-const roles = (user.roles || "").split(",");
-if (roles.includes("vendor")) document.getElementById("vendorLinks").style.display = "block";
-if (roles.includes("rider")) document.getElementById("riderLinks").style.display = "block";
-
-// TIME
-function updateTime() {
-  const now = new Date();
-  document.getElementById("timeDisplay").textContent =
-    now.toLocaleTimeString("en-US", {
-      hour:"numeric", minute:"numeric", second:"numeric",
-      hour12:true, timeZone:"America/New_York"
-    });
-}
-setInterval(updateTime, 1000);
-updateTime();
-
-// WEATHER
+/* WEATHER */
 async function loadWeather() {
   try {
     const res = await fetch(
@@ -395,7 +226,7 @@ async function loadWeather() {
 }
 loadWeather();
 
-// BELTLINE LOCATION
+/* BELTLINE LOCATION */
 const beltlineZones = [
   { name:"Eastside Trail (Ponce City Market)", lat:33.7725, lon:-84.3652 },
   { name:"Westside Trail (Lee + White)", lat:33.7358, lon:-84.4173 },
@@ -445,25 +276,56 @@ function detectBeltlineLocation() {
     }
   });
 }
-
 detectBeltlineLocation();
 
-// MENU OPEN/CLOSE — FIXED
+/* TIME */
+function updateTime() {
+  const now = new Date();
+  document.getElementById("timeDisplay").textContent =
+    now.toLocaleTimeString("en-US", {
+      hour:"numeric", minute:"numeric", second:"numeric",
+      hour12:true, timeZone:"America/New_York"
+    });
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+/* MENU OPEN/CLOSE */
 document.getElementById("menuTrigger").onclick = () => {
-  document.getElementById("cloudMenu").classList.add("open");
+  document.getElementById("cloudMenu").style.display = "block";
 };
-
 document.getElementById("menuClose").onclick = () => {
-  document.getElementById("cloudMenu").classList.remove("open");
+  document.getElementById("cloudMenu").style.display = "none";
 };
 
-// SAFETY DROPDOWN
+/* SAFETY DROPDOWN */
 document.getElementById("safetyDropdownTrigger").onclick = () => {
   const menu = document.getElementById("safetyDropdown");
   menu.style.display = menu.style.display === "block" ? "none" : "block";
 };
 
-// LOGOUT
+/* NOTIFICATIONS */
+async function loadNotifications() {
+  try {
+    const res = await fetch(`/api/notifications?user=${user.id}`);
+    const data = await res.json();
+
+    if (!data.length) {
+      document.getElementById("notificationsBar").textContent =
+        "No new notifications.";
+      return;
+    }
+
+    document.getElementById("notificationsBar").textContent =
+      data.map(n => n.message).join(" • ");
+  } catch {
+    document.getElementById("notificationsBar").textContent =
+      "Notifications unavailable.";
+  }
+}
+loadNotifications();
+
+/* LOGOUT */
 window.logout = function () {
   Auth.logout();
 };
