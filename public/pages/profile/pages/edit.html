@@ -4,11 +4,26 @@
   <meta charset="UTF-8">
   <title>Edit Cloud Profile</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="/pages/profile/css/profile.css">
 </head>
 
 <body data-page="profile-edit">
+
+  <!-- Global Nav -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages/music.html">Cloud Radio</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/network/public/pages/index.html">Network</a>
+      <a href="/pages/safety/index.html">Safety CLOUD</a>
+      <a href="/pages/feed/index.html">Feed</a>
+      <a href="/pages/profile/index.html">Profile</a>
+    </div>
+  </nav>
 
   <!-- Permanent Cloud Chat Icon -->
   <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
@@ -38,19 +53,19 @@
 
     <label>Safety CLOUD Default Mode</label>
     <select id="setSafetyMode">
-      <option>nightrider</option>
-      <option>highrisk</option>
-      <option>vendor</option>
-      <option>fall</option>
-      <option>snatch</option>
+      <option value="nightrider">Night Rider</option>
+      <option value="highrisk">High-Risk Zone</option>
+      <option value="vendor">Vendor</option>
+      <option value="fall">Fall Protection</option>
+      <option value="snatch">Phone Snatch</option>
     </select>
 
     <label>Alert Routing</label>
     <select id="setAlertRouting">
-      <option>cloud</option>
-      <option>contacts</option>
-      <option>police</option>
-      <option>all</option>
+      <option value="cloud">Cloud Users</option>
+      <option value="contacts">Emergency Contacts</option>
+      <option value="police">Authorities</option>
+      <option value="all">All Three</option>
     </select>
 
     <button class="cloud-btn" type="submit">Save Settings</button>
