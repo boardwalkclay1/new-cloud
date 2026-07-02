@@ -18,12 +18,10 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: var(--white);
-
-  /* DESKTOP — cinematic */
   background: #000 url('/assets/img/cloud/cloud.jpg') center center / cover no-repeat fixed;
 }
 
-/* MOBILE — full image, no cropping, no white bars */
+/* MOBILE */
 @media (max-width: 768px) {
   body {
     background: #000 url('/assets/img/cloud/cloud.jpg') center center / contain no-repeat;
@@ -32,10 +30,7 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
   }
-
-  .page-bg {
-    display: none;
-  }
+  .page-bg { display: none; }
 }
 
 .page-bg {
@@ -49,23 +44,14 @@ body {
 }
 
 /* SCROLLBAR */
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(10, 42, 67, 0.7);
-}
-
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: rgba(10, 42, 67, 0.7); }
 ::-webkit-scrollbar-thumb {
   background: var(--yellow);
   border-radius: 10px;
   border: 2px solid var(--green);
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--green);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--green); }
 
 /* HEADER */
 .header {
@@ -117,9 +103,7 @@ body {
   text-decoration: none;
 }
 
-.safety-dropdown a:hover {
-  color: var(--green);
-}
+.safety-dropdown a:hover { color: var(--green); }
 
 /* USER INFO */
 .header-user {
@@ -139,12 +123,12 @@ body {
   color: var(--blue);
 }
 
-/* BURGER MENU — HIDDEN BY DEFAULT */
+/* BURGER MENU — HIDDEN UNTIL CLICK */
 .cloud-menu {
   position: fixed;
   inset: 0;
   background: rgba(10, 42, 67, 0.97);
-  display: none; /* HIDDEN UNTIL LOGO CLICK */
+  display: none;
   z-index: 999;
   overflow-y: auto;
   border-left: 4px solid var(--green);
@@ -167,11 +151,9 @@ body {
   color: var(--yellow);
 }
 
-.menu-content {
-  padding: 20px;
-}
+.menu-content { padding: 20px; }
 
-/* CATEGORY COLORS */
+/* CATEGORY BLOCKS */
 .menu-category {
   margin-bottom: 40px;
   padding: 20px;
@@ -179,50 +161,53 @@ body {
   border-left: 4px solid var(--white);
 }
 
+/* SAFETY CATEGORY */
 .menu-category.safety {
   background: rgba(46,139,87,0.35);
   border-left-color: var(--cat-safety);
 }
+.menu-category.safety h3 { color: var(--cat-safety); }
+.menu-category.safety a:hover { color: var(--cat-safety); }
 
+/* NEWS CATEGORY */
 .menu-category.news {
   background: rgba(255,213,79,0.25);
   border-left-color: var(--cat-news);
 }
+.menu-category.news h3 { color: var(--cat-news); }
+.menu-category.news a:hover { color: var(--cat-news); }
 
+/* TRAIL CATEGORY */
 .menu-category.trail {
   background: rgba(10,42,67,0.55);
   border-left-color: var(--cat-trail);
 }
+.menu-category.trail h3 { color: var(--cat-trail); }
+.menu-category.trail a:hover { color: var(--cat-trail); }
 
+/* COMMUNITY CATEGORY */
 .menu-category.community {
   background: rgba(184,50,50,0.35);
   border-left-color: var(--cat-community);
 }
+.menu-category.community h3 { color: var(--cat-community); }
+.menu-category.community a:hover { color: var(--cat-community); }
 
+/* CATEGORY TITLE */
 .menu-category h3 {
-  color: var(--yellow);
   font-size: 1.8rem;
   margin-bottom: 10px;
 }
 
-.menu-category ul {
-  list-style: none;
-  padding: 0;
-}
-
-.menu-category li {
-  margin: 8px 0;
-}
+/* CATEGORY LINKS */
+.menu-category ul { list-style: none; padding: 0; }
+.menu-category li { margin: 8px 0; }
 
 .menu-category a {
   color: var(--white);
   text-decoration: none;
   font-size: 1.1rem;
   transition: 0.2s;
-}
-
-.menu-category a:hover {
-  color: var(--yellow);
 }
 
 /* QUICK DRAWER */
@@ -237,14 +222,8 @@ body {
   box-shadow: -4px 0 12px rgba(0,0,0,0.4);
 }
 
-.drawer-section {
-  margin-bottom: 25px;
-}
-
-.drawer-section h4 {
-  color: var(--yellow);
-  margin-bottom: 8px;
-}
+.drawer-section { margin-bottom: 25px; }
+.drawer-section h4 { color: var(--yellow); margin-bottom: 8px; }
 
 /* TOGGLES */
 .toggle {
@@ -254,9 +233,7 @@ body {
   height: 26px;
 }
 
-.toggle input {
-  display: none;
-}
+.toggle input { display: none; }
 
 .slider {
   position: absolute;
@@ -280,13 +257,8 @@ body {
   transition: .3s;
 }
 
-input:checked + .slider {
-  background: var(--green);
-}
-
-input:checked + .slider:before {
-  transform: translateX(24px);
-}
+input:checked + .slider { background: var(--green); }
+input:checked + .slider:before { transform: translateX(24px); }
 
 /* TILE GRID */
 .grid {
