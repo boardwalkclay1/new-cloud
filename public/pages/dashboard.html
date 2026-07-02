@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
-<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/public/css/dashboard.css">
 <link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
 
 </head>
@@ -170,6 +170,21 @@
 </section>
 
 <!-- ========================= -->
+<!-- NETWORK + FAST ROLL BAR -->
+<!-- ========================= -->
+<div class="bottom-bar">
+
+  <img src="/network/public/img/network-logo.jpg" class="bottom-logo"
+       onclick="location.href='/network/public/pages/explore.html'">
+  <a href="/network/public/pages/explore.html" class="bottom-link">Explore Network</a>
+
+  <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" style="margin-top:40px;"
+       onclick="location.href='/fast-roll/index.html'">
+  <a href="/fast-roll/pages/order.html" class="bottom-link">Place Fast Roll Delivery</a>
+
+</div>
+
+<!-- ========================= -->
 <!-- NOTIFICATIONS BAR -->
 <!-- ========================= -->
 <div id="notificationsBar" style="
@@ -179,8 +194,8 @@
   right:0;
   background:rgba(10,42,67,0.85);
   padding:15px;
-  border-top:3px solid var(--yellow);
-  color:var(--white);
+  border-top:3px solid #ffd54f;
+  color:#ffffff;
   font-size:1rem;
   text-align:center;
   z-index:999;
