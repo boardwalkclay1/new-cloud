@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Badge Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/pages/profile/css/profile.css">
+</head>
+
+<body data-page="badge-vault">
+
+  <!-- Permanent Cloud Chat Icon -->
+  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
+    💬
+  </div>
+
+  <h1>Your Badge Vault</h1>
+
+  <div id="badgeVault" class="badge-vault-grid"></div>
+
+  <script type="module">
+    import { loadBadgeVault } from "./js/profile.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("user");
+
+    loadBadgeVault(userId);
+  </script>
+
+</body>
+</html>
