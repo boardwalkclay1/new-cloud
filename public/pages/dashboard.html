@@ -5,18 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beltline Cloud Dashboard</title>
 
-<!-- FAVICON -->
 <link rel="icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
 <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
 
-<!-- SOCIAL PREVIEW -->
 <meta property="og:title" content="Beltline Cloud Dashboard">
 <meta property="og:description" content="Your Beltline hub — Network, Fast Roll, chat, safety, events, radio, and navigation.">
 <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://beltlinecloud.com">
 
-<!-- TWITTER CARD -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Beltline Cloud Dashboard">
 <meta name="twitter:description" content="Your Beltline hub — Network, Fast Roll, chat, safety, events, radio, and navigation.">
@@ -25,24 +22,65 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap">
 
 <style>
-body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:white; }
-.page-bg { position:fixed; inset:0; background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat; filter:brightness(0.35); z-index:-1; }
+body {
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#001f3f;
+  color:white;
+}
+
+.page-bg {
+  position:fixed;
+  inset:0;
+  background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;
+  filter:brightness(0.35);
+  z-index:-1;
+}
 
 /* HEADER */
-.header { display:flex; justify-content:space-between; align-items:center; padding:20px; }
-.header-logo { height:120px; cursor:pointer; border-radius:10px; }
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+}
 
-/* SAFETY CLOUD TOP DROPDOWN */
-.header-top-right {
-  position:relative;
+.header-logo {
+  height:90px;
+  cursor:pointer;
+  border-radius:10px;
+}
+
+/* RIGHT SIDE INFO */
+.header-info {
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:flex-end;
+  gap:4px;
+  font-size:1rem;
+}
+
+#userName {
+  font-weight:600;
+  color:#ffdd00;
+}
+
+#timeDisplay {
+  opacity:0.85;
+}
+
+#weather {
+  opacity:0.85;
+}
+
+/* SAFETY CLOUD DROPDOWN */
+.header-top-right {
+  position:relative;
   margin-left:20px;
 }
 
 .safety-logo {
-  height:110px;
+  height:90px;
   cursor:pointer;
   border-radius:10px;
 }
@@ -50,7 +88,8 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 .safety-dropdown {
   display:none;
   position:absolute;
-  top:120px;
+  top:100px;
+  right:0;
   background:rgba(0,0,0,0.92);
   padding:15px;
   border-radius:12px;
@@ -70,38 +109,107 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
   color:#00b86b;
 }
 
-/* USER INFO */
-.header-user { display:flex; align-items:center; gap:20px; }
-.logout-btn { background:#00b86b; border:none; padding:10px 20px; border-radius:8px; color:white; cursor:pointer; }
-
 /* BURGER MENU */
-#cloudMenu { position:fixed; top:0; left:-320px; width:300px; height:100%; background:rgba(0,0,0,0.92); padding:25px; transition:0.35s; z-index:999; overflow-y:auto; }
+#cloudMenu {
+  position:fixed;
+  top:0;
+  left:-320px;
+  width:300px;
+  height:100%;
+  background:rgba(0,0,0,0.92);
+  padding:25px;
+  transition:0.35s;
+  z-index:999;
+  overflow-y:auto;
+}
+
 #cloudMenu.open { left:0; }
-#cloudMenu h2 { margin-top:25px; margin-bottom:10px; font-size:1.4rem; color:#ffdd00; }
-#cloudMenu a { display:block; padding:8px 0; color:white; text-decoration:none; font-size:1.05rem; }
+
+#cloudMenu h2 {
+  margin-top:25px;
+  margin-bottom:10px;
+  font-size:1.4rem;
+  color:#ffdd00;
+}
+
+#cloudMenu a {
+  display:block;
+  padding:8px 0;
+  color:white;
+  text-decoration:none;
+  font-size:1.05rem;
+}
+
 #cloudMenu a:hover { color:#00b86b; }
-#menuClose { margin-top:20px; display:block; color:#ff4444; font-weight:700; }
 
-/* WEATHER + LOCATION */
-#weather { margin:20px 40px; font-size:1.2rem; opacity:0.85; }
-#beltlineLocation { margin:20px 40px; font-size:1.2rem; font-weight:600; color:#ffdd00; }
-
-/* ROLES */
-.role-summary { margin:20px 40px; font-size:1rem; opacity:0.85; }
+.logout-btn-menu {
+  margin-top:40px;
+  background:#ff4444;
+  padding:12px 20px;
+  border-radius:10px;
+  text-align:center;
+  font-weight:700;
+  cursor:pointer;
+}
 
 /* GRID */
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; padding:40px; }
-.tile { background:rgba(0,0,0,0.55); border-radius:14px; padding:20px; text-decoration:none; color:white; transition:0.3s; }
-.tile:hover { transform:scale(1.05); }
-.tile img { width:100%; border-radius:10px; }
+.section-title {
+  font-size:1.8rem;
+  font-weight:700;
+  margin:30px 20px 10px 20px;
+}
 
-.section-title { font-size:1.8rem; font-weight:700; margin:40px 40px 10px 40px; }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.tile {
+  background:rgba(0,0,0,0.55);
+  border-radius:14px;
+  padding:20px;
+  text-decoration:none;
+  color:white;
+  transition:0.3s;
+}
+
+.tile:hover { transform:scale(1.05); }
+
+.tile img {
+  width:100%;
+  border-radius:10px;
+}
 
 /* BOTTOM BAR */
-.bottom-bar { margin-top:60px; padding:40px; text-align:center; }
-.bottom-logo { height:200px; display:block; margin:0 auto 10px auto; cursor:pointer; border-radius:16px; box-shadow:0 0 25px rgba(0,0,0,0.7); transition:0.3s; }
+.bottom-bar {
+  margin-top:40px;
+  padding:40px;
+  text-align:center;
+}
+
+.bottom-logo {
+  height:160px;
+  display:block;
+  margin:0 auto 10px auto;
+  cursor:pointer;
+  border-radius:16px;
+  box-shadow:0 0 25px rgba(0,0,0,0.7);
+  transition:0.3s;
+}
+
 .bottom-logo:hover { transform:scale(1.05); }
-.bottom-link { display:block; margin-top:10px; color:#ffdd00; font-weight:600; text-decoration:none; font-size:1.2rem; }
+
+.bottom-link {
+  display:block;
+  margin-top:10px;
+  color:#ffdd00;
+  font-weight:600;
+  text-decoration:none;
+  font-size:1.2rem;
+}
+
 .bottom-link:hover { text-decoration:underline; }
 </style>
 </head>
@@ -112,6 +220,7 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 
 <!-- BURGER MENU -->
 <nav id="cloudMenu">
+
   <h2>Safety Cloud</h2>
   <a href="/pages/safety.html">Safety Overview</a>
   <a href="/pages/safety/lost-found.html">Lost & Found</a>
@@ -135,14 +244,27 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
   <a href="/public/pages/events/pages/events.html">Events</a>
   <a href="/pages/games.html">Games</a>
 
-  <a id="menuClose">Close Menu</a>
-  <a href="/index.html">Exit</a>
+  <h2>Sign Up</h2>
+  <a href="/pages/rider/signup.html">Become a Rider</a>
+  <a href="/pages/vendor/signup.html">Become a Vendor</a>
+  <a href="/pages/response/signup.html">Join Response Unit</a>
+
+  <a id="menuClose" style="margin-top:20px; color:#ff4444; font-weight:700;">Close Menu</a>
+
+  <div class="logout-btn-menu" onclick="logout()">Logout</div>
+  <a href="/index.html" style="margin-top:20px;">Exit</a>
 </nav>
 
 <header class="header">
+
   <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
 
-  <!-- SAFETY CLOUD DROPDOWN -->
+  <div class="header-info">
+    <span id="userName">Loading...</span>
+    <span id="weather">Loading weather…</span>
+    <span id="timeDisplay"></span>
+  </div>
+
   <div class="header-top-right">
     <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" id="safetyDropdownTrigger">
 
@@ -156,29 +278,20 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
     </div>
   </div>
 
-  <div class="header-user">
-    <span id="userName">Loading...</span>
-    <span id="timeDisplay"></span>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
 </header>
 
-<!-- WEATHER -->
-<div id="weather">Loading weather…</div>
+<div id="beltlineLocation" style="margin:20px; font-size:1.2rem; font-weight:600; color:#ffdd00;">
+  Detecting Beltline location…
+</div>
 
-<!-- BELTLINE LOCATION -->
-<div id="beltlineLocation">Detecting Beltline location…</div>
-
-<!-- ROLE SECTIONS -->
-<div id="vendorLinks" style="display:none;" class="role-summary">
+<div id="vendorLinks" style="display:none; margin:20px; opacity:0.85;">
   You are a <strong>Network Vendor</strong>.
 </div>
 
-<div id="riderLinks" style="display:none;" class="role-summary">
+<div id="riderLinks" style="display:none; margin:20px; opacity:0.85;">
   You are a <strong>Fast Roll Rider</strong>.
 </div>
 
-<!-- CLOUD FEATURES -->
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
 <section class="grid">
@@ -188,8 +301,6 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
     <h3>Cloud Chat</h3>
     <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
   </a>
-
-  <!-- SAFETY CLOUD REMOVED FROM CARDS -->
 
   <a class="tile" href="/pages/map.html">
     <img src="/assets/img/map/map.jpg">
@@ -203,8 +314,6 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
     <p>Workshops, rides, meetups, concerts, and more.</p>
   </a>
 
-  <!-- CLOUD RADIO REMOVED -->
-
   <a class="tile" href="/pages/games.html">
     <img src="/assets/img/games/games.jpg">
     <h3>Games</h3>
@@ -213,7 +322,6 @@ body { margin:0; font-family:'Poppins',sans-serif; background:#001f3f; color:whi
 
 </section>
 
-<!-- BOTTOM LOGO BAR -->
 <div class="bottom-bar">
 
   <img src="/network/public/img/network-logo.jpg" class="bottom-logo"
@@ -249,7 +357,7 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// WEATHER (Fahrenheit)
+// WEATHER
 async function loadWeather() {
   try {
     const res = await fetch(
