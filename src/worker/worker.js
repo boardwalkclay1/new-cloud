@@ -175,6 +175,48 @@ export default {
 
     //
     // ============================================================
+    // DASHBOARD / CLOUD FALLBACK API (NOTIFICATIONS, USER)
+    // ============================================================
+    //
+
+    if (path.startsWith("/api/notifications")) {
+      return new Response(JSON.stringify({
+        ok: true,
+        notifications: []
+      }), {
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders()
+        }
+      });
+    }
+
+    if (path.startsWith("/api/user")) {
+      return new Response(JSON.stringify({
+        ok: true,
+        user: null
+      }), {
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders()
+        }
+      });
+    }
+
+    if (path.startsWith("/api/")) {
+      return new Response(JSON.stringify({
+        ok: false,
+        message: "API route not implemented yet"
+      }), {
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders()
+        }
+      });
+    }
+
+    //
+    // ============================================================
     // STATIC FILES (R2)
     // ============================================================
     //
@@ -645,7 +687,7 @@ async function login(request, db) {
   return json({ success: true, user });
 }
 
-async function me() {
+async function me(request, db) {
   return json({ ok: true });
 }
 
@@ -685,14 +727,11 @@ async function updateProfile(request, db) {
 // ============================================================
 //
 
-// NOTE: assumes tables like fast_clients, fast_riders, fast_orders already exist.
-
 async function clientHandler(request, db, url) {
   if (request.method === "POST") {
     const body = await request.json();
     const action = url.searchParams.get("action") || body.action;
 
-    // create / update client profile
     if (action === "signup") {
       const id = crypto.randomUUID();
       await db.prepare(
@@ -722,7 +761,6 @@ async function clientHandler(request, db, url) {
     }
 
     if (action === "tip") {
-      // tip posting can be wired to orders or payouts later
       return json({ success: true });
     }
   }
@@ -874,8 +912,8 @@ async function ordersHandler(request, db, url) {
 // ============================================================
 //
 
-async function pay() { return json({ ok: true }); }
-async function capture() { return json({ ok: true }); }
+async function pay(request, db) { return json({ ok: true }); }
+async function capture(request, db) { return json({ ok: true }); }
 
 //
 // ============================================================
@@ -883,9 +921,9 @@ async function capture() { return json({ ok: true }); }
 // ============================================================
 //
 
-async function staffHandler() { return json({ ok: true }); }
-async function workshopsHandler() { return json({ ok: true }); }
-async function paypalHandler() { return json({ ok: true }); }
+async function staffHandler(request, db) { return json({ ok: true }); }
+async function workshopsHandler(request, db) { return json({ ok: true }); }
+async function paypalHandler(request, db) { return json({ ok: true }); }
 
 //
 // ============================================================
@@ -934,34 +972,4 @@ async function hash(str) {
 
 async function verify(str, hashValue) {
   return (await hash(str)) === hashValue;
-}
-// ---------------------------------------------------------
-// FALLBACK ROUTE HANDLER (Fixes missing paths)
-// ---------------------------------------------------------
-if (url.pathname.startsWith("/api/notifications")) {
-  return new Response(JSON.stringify({
-    ok: true,
-    notifications: []
-  }), {
-    headers: { "Content-Type": "application/json" }
-  });
-}
-
-if (url.pathname.startsWith("/api/user")) {
-  return new Response(JSON.stringify({
-    ok: true,
-    user: null
-  }), {
-    headers: { "Content-Type": "application/json" }
-  });
-}
-
-// Generic fallback for ANY missing API route
-if (url.pathname.startsWith("/api/")) {
-  return new Response(JSON.stringify({
-    ok: false,
-    message: "API route not implemented yet"
-  }), {
-    headers: { "Content-Type": "application/json" }
-  });
 }
