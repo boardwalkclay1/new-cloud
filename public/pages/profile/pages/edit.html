@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Cloud Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/pages/profile/css/profile.css">
+</head>
+
+<body data-page="profile-edit">
+
+  <!-- Permanent Cloud Chat Icon -->
+  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
+    💬
+  </div>
+
+  <h1>Edit Profile</h1>
+
+  <form id="profileSettingsForm" class="settings-form">
+
+    <label>Name</label>
+    <input id="setName" type="text">
+
+    <label>Bio</label>
+    <textarea id="setBio"></textarea>
+
+    <label>Identity Tags</label>
+    <select id="setTags" multiple>
+      <option>Skater</option>
+      <option>Longboard Dancer</option>
+      <option>Vendor</option>
+      <option>Walker</option>
+      <option>Night Rider</option>
+      <option>Beltline Elder</option>
+      <option>Fast Roll</option>
+    </select>
+
+    <label>Safety CLOUD Default Mode</label>
+    <select id="setSafetyMode">
+      <option>nightrider</option>
+      <option>highrisk</option>
+      <option>vendor</option>
+      <option>fall</option>
+      <option>snatch</option>
+    </select>
+
+    <label>Alert Routing</label>
+    <select id="setAlertRouting">
+      <option>cloud</option>
+      <option>contacts</option>
+      <option>police</option>
+      <option>all</option>
+    </select>
+
+    <button class="cloud-btn" type="submit">Save Settings</button>
+
+  </form>
+
+  <script type="module">
+    import { updateProfileSettings } from "./js/profile.js";
+
+    const userId = localStorage.getItem("cloud_user_id");
+
+    document.getElementById("profileSettingsForm").onsubmit = async (e) => {
+      e.preventDefault();
+
+      const settings = {
+        name: document.getElementById("setName").value,
+        bio: document.getElementById("setBio").value,
+        tags: Array.from(document.getElementById("setTags").selectedOptions).map(o => o.value),
+        safety_mode: document.getElementById("setSafetyMode").value,
+        alert_routing: document.getElementById("setAlertRouting").value
+      };
+
+      await updateProfileSettings(userId, settings);
+      location.href = "/pages/profile/index.html";
+    };
+  </script>
+
+</body>
+</html>
