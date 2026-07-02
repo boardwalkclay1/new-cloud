@@ -34,11 +34,10 @@ body {
   padding:15px 20px;
 }
 
-/* MAIN LOGO */
+/* MAIN LOGO + INFO */
 .header-left {
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
 }
 
 .header-logo {
@@ -47,7 +46,16 @@ body {
   border-radius:12px;
 }
 
-/* WEATHER + TIME + NAME UNDER MAIN LOGO */
+/* PROFILE LINK ON MAIN PAGE */
+.profile-main-link {
+  margin-top:10px;
+  color:#00b86b;
+  font-weight:700;
+  font-size:1.1rem;
+  text-decoration:none;
+}
+
+/* WEATHER + TIME + NAME */
 .header-info {
   margin-top:10px;
   display:flex;
@@ -60,7 +68,7 @@ body {
 #weather { opacity:0.85; }
 #timeDisplay { opacity:0.85; }
 
-/* SAFETY CLOUD ON RIGHT SIDE */
+/* SAFETY CLOUD */
 .header-right {
   display:flex;
   flex-direction:column;
@@ -99,7 +107,7 @@ body {
 #cloudMenu {
   position:fixed;
   top:0;
-  left:-320px;
+  left:-100%; /* FULLY HIDDEN */
   width:300px;
   height:100%;
   background:rgba(0,0,0,0.92);
@@ -109,13 +117,15 @@ body {
   overflow-y:auto;
 }
 
-#cloudMenu.open { left:0; }
+#cloudMenu.open {
+  left:0; /* SLIDES IN CLEAN */
+}
 
-#cloudMenu h2 {
+.menu-cat {
+  color:#ffdd00;
+  font-size:1.4rem;
   margin-top:25px;
   margin-bottom:10px;
-  font-size:1.4rem;
-  color:#ffdd00;
 }
 
 #cloudMenu a {
@@ -126,7 +136,9 @@ body {
   font-size:1.05rem;
 }
 
-#cloudMenu a:hover { color:#00b86b; }
+#cloudMenu a:hover {
+  color:#00b86b;
+}
 
 .logout-btn-menu {
   margin-top:40px;
@@ -207,9 +219,12 @@ body {
 <!-- BURGER MENU -->
 <nav id="cloudMenu">
 
-  <a href="/pages/profile.html" style="font-weight:700; color:#00b86b; font-size:1.2rem;">My Profile</a>
+  <a href="/pages/profile.html"
+     style="font-weight:700; color:#00b86b; font-size:1.2rem; margin-bottom:10px;">
+     My Profile
+  </a>
 
-  <h2>Safety Cloud</h2>
+  <h2 class="menu-cat">Safety Cloud</h2>
   <a href="/pages/safety/index.html">Safety Overview</a>
   <a href="/pages/safety/lost-found.html">Lost & Found</a>
   <a href="/pages/safety/stolen.html">Stolen Items</a>
@@ -217,22 +232,22 @@ body {
   <a href="/pages/safety/live-feed.html">Live Feed</a>
   <a href="/pages/safety/alerts.html">Alerts</a>
 
-  <h2>News Cloud</h2>
+  <h2 class="menu-cat">News Cloud</h2>
   <a href="/pages/news/beltline-news.html">Beltline News</a>
   <a href="/pages/news/weather.html">Weather</a>
   <a href="/pages/news/updates.html">Updates</a>
 
-  <h2>Trail Tools</h2>
+  <h2 class="menu-cat">Trail Tools</h2>
   <a href="/pages/map.html">Trail Map</a>
   <a href="/pages/map/zones.html">Zones</a>
   <a href="/pages/map/etiquette.html">Etiquette</a>
 
-  <h2>Community Cloud</h2>
+  <h2 class="menu-cat">Community Cloud</h2>
   <a href="/pages/trail-chat.html">Cloud Chat</a>
   <a href="/public/pages/events/pages/events.html">Events</a>
   <a href="/pages/games.html">Games</a>
 
-  <h2>Sign Up</h2>
+  <h2 class="menu-cat">Sign Up</h2>
   <a href="/pages/rider/signup.html">Become a Rider</a>
   <a href="/pages/vendor/signup.html">Become a Vendor</a>
   <a href="/pages/response/signup.html">Join Response Unit</a>
@@ -245,9 +260,11 @@ body {
 
 <header class="header">
 
-  <!-- LEFT SIDE: LOGO + WEATHER + TIME + NAME -->
+  <!-- LEFT SIDE -->
   <div class="header-left">
     <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
+
+    <a href="/pages/profile.html" class="profile-main-link">My Profile</a>
 
     <div class="header-info">
       <span id="userName">Loading...</span>
@@ -256,7 +273,7 @@ body {
     </div>
   </div>
 
-  <!-- RIGHT SIDE: SAFETY CLOUD -->
+  <!-- RIGHT SIDE -->
   <div class="header-right">
     <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" id="safetyDropdownTrigger">
 
@@ -431,10 +448,11 @@ function detectBeltlineLocation() {
 
 detectBeltlineLocation();
 
-// MENU
+// MENU OPEN/CLOSE — FIXED
 document.getElementById("menuTrigger").onclick = () => {
   document.getElementById("cloudMenu").classList.add("open");
 };
+
 document.getElementById("menuClose").onclick = () => {
   document.getElementById("cloudMenu").classList.remove("open");
 };
