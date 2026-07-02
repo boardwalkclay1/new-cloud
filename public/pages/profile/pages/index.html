@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cloud Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/pages/profile/css/profile.css">
+</head>
+
+<body data-page="profile-dashboard">
+
+  <!-- Permanent Cloud Chat Icon -->
+  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
+    💬
+  </div>
+
+  <!-- Banner -->
+  <div id="profileBanner" class="profile-banner"></div>
+
+  <!-- Avatar -->
+  <img id="profileAvatar" class="profile-avatar">
+
+  <!-- Name -->
+  <h1 id="profileName" class="profile-name"></h1>
+
+  <!-- Identity Tags -->
+  <div id="profileTags" class="profile-tags"></div>
+
+  <!-- Safety CLOUD Status -->
+  <div class="status-section">
+    <h3>Safety CLOUD Status</h3>
+    <img id="safetyCloudStatusBadge" class="status-badge">
+  </div>
+
+  <!-- Badge Preview -->
+  <div class="section">
+    <h2>Your Badges</h2>
+    <div id="profileBadgePreview" class="badge-preview-row"></div>
+    <button class="cloud-btn" onclick="openBadgeVault(window.userId)">View All Badges</button>
+  </div>
+
+  <!-- Media Gallery -->
+  <div class="section">
+    <h2>Your Media</h2>
+    <div id="profileMedia" class="media-grid"></div>
+  </div>
+
+  <!-- Settings -->
+  <div class="section">
+    <button class="cloud-btn" onclick="location.href='/pages/profile/edit.html'">
+      Profile Settings
+    </button>
+  </div>
+
+  <script type="module">
+    import { loadUserProfile } from "./js/profile.js";
+    window.userId = localStorage.getItem("cloud_user_id");
+    loadUserProfile(window.userId);
+  </script>
+
+</body>
+</html>
