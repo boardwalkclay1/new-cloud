@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responder Channels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/pages/chat/css/chat.css">
+  <link rel="stylesheet" href="/pages/chat/css/voice.css">
+</head>
+
+<body data-page="ru-channels">
+
+  <h1>Responder Channels</h1>
+
+  <div id="channelList" class="channel-list"></div>
+
+  <script type="module">
+    import { loadChannels } from "./js/chat.js";
+    loadChannels();
+  </script>
+
+</body>
+</html>
