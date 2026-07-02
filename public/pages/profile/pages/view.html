@@ -4,11 +4,26 @@
   <meta charset="UTF-8">
   <title>Cloud Profile</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="/pages/profile/css/profile.css">
 </head>
 
 <body data-page="profile-view">
+
+  <!-- Global Nav -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages/music.html">Cloud Radio</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/network/public/pages/index.html">Network</a>
+      <a href="/pages/safety/index.html">Safety CLOUD</a>
+      <a href="/pages/feed/index.html">Feed</a>
+      <a href="/pages/profile/index.html">Profile</a>
+    </div>
+  </nav>
 
   <!-- Permanent Cloud Chat Icon -->
   <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
@@ -18,14 +33,14 @@
   <!-- Banner -->
   <div id="profileBanner" class="profile-banner"></div>
 
-  <!-- Avatar -->
-  <img id="profileAvatar" class="profile-avatar">
-
-  <!-- Name -->
-  <h1 id="profileName" class="profile-name"></h1>
-
-  <!-- Identity Tags -->
-  <div id="profileTags" class="profile-tags"></div>
+  <!-- Avatar + Name -->
+  <div class="profile-header">
+    <img id="profileAvatar" class="profile-avatar">
+    <div>
+      <h1 id="profileName" class="profile-name"></h1>
+      <div id="profileTags" class="profile-tags"></div>
+    </div>
+  </div>
 
   <!-- Badge Preview -->
   <div class="section">
