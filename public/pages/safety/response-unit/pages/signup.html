@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responder Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/pages/response-unit/css/response.css">
+</head>
+
+<body data-page="ru-signup">
+
+  <!-- Global Nav -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/pages/music.html">Cloud Radio</a>
+      <a href="/events/index.html">Events</a>
+      <a href="/network/public/pages/index.html">Network</a>
+      <a href="/pages/safety/index.html">Safety CLOUD</a>
+      <a href="/pages/feed/index.html">Feed</a>
+      <a href="/pages/profile/index.html">Profile</a>
+    </div>
+  </nav>
+
+  <!-- Permanent Cloud Chat Icon -->
+  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">💬</div>
+
+  <h1>Response Unit Signup</h1>
+
+  <form id="ruSignupForm" class="ru-form">
+
+    <label>Full Name</label>
+    <input id="ruName" type="text" required>
+
+    <label>ID Number</label>
+    <input id="ruIdNumber" type="text" required>
+
+    <label>Photo URL</label>
+    <input id="ruPhotoUrl" type="text" required>
+
+    <label>Contact Info</label>
+    <input id="ruContact" type="text" required>
+
+    <label>Preferred Role</label>
+    <select id="ruRole">
+      <option value="responder1">Responder I</option>
+      <option value="responder2">Responder II</option>
+      <option value="responder3">Responder III</option>
+      <option value="sentinel">Sentinel</option>
+      <option value="guardian">Guardian</option>
+    </select>
+
+    <button class="cloud-btn" type="submit">Submit Application</button>
+
+  </form>
+
+  <script type="module">
+    import { initResponseUnitSignup } from "/pages/profile/js/response-unit.js";
+    initResponseUnitSignup("ruSignupForm");
+  </script>
+
+</body>
+</html>
