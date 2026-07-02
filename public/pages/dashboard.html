@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Beltline Cloud Dashboard</title>
 
-  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/public/css/dashboard.css">
   <link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
 </head>
 <body>
@@ -26,7 +26,7 @@
     <div class="menu-category safety">
       <h3>My Profile</h3>
       <ul>
-        <li><a href="/pages/profile/pages/index.html">View Profile</a></li>
+        <li><a href="/pages/profile.html">View Profile</a></li>
         <li><a href="/pages/notifications.html">Notifications</a></li>
       </ul>
     </div>
@@ -91,7 +91,6 @@
 <!-- HEADER -->
 <header class="header">
 
-  <!-- LEFT -->
   <div class="header-left">
     <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
 
@@ -105,11 +104,9 @@
     </div>
   </div>
 
-  <!-- RIGHT -->
   <div class="header-top-right">
     <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" id="safetyDropdownTrigger">
 
-    <!-- MESSAGE ICON -->
     <a href="/pages/messages.html">
       <img src="/assets/img/icons/message.png" style="height:60px; margin-top:10px;">
     </a>
@@ -126,7 +123,7 @@
 
 </header>
 
-<!-- ROLES + TOGGLES -->
+<!-- ROLE SECTIONS -->
 <div id="vendorLinks" style="display:none; margin:20px; opacity:0.85;">
   You are a <strong>Network Vendor</strong>.
 </div>
@@ -214,7 +211,7 @@
   Loading notifications…
 </div>
 
-<!-- DASHBOARD JS (YOUR FILE) -->
+<!-- DASHBOARD JS -->
 <script type="module" src="/js/dashboard.js"></script>
 
 </body>
