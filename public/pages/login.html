@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — Beltline Cloud</title>
 
-  <!-- ✅ API base defined at the very top -->
-  <script>
-    const API = "https://api.beltlinecloud.com";
-  </script>
-
   <style>
     body {
       margin: 0;
@@ -77,6 +72,8 @@
   </div>
 
   <script>
+    const API = "https://api.beltlinecloud.com";
+
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -89,24 +86,18 @@
       try {
         const res = await fetch(API + "/api/network/login", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
         });
 
         const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
 
-        if (!res.ok) {
-          alert(data.error || "Login failed");
-          return;
-        }
+        localStorage.setItem("cloud_user_id", data.user.id);
 
-        localStorage.setItem("cloud_user", JSON.stringify(data.user));
         window.location.href = "/pages/dashboard.html";
-
       } catch (err) {
-        alert("Network error: " + err.message);
+        alert(err.message);
       }
     });
   </script>
