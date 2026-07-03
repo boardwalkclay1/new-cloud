@@ -1,90 +1,248 @@
-body {
-  margin: 0;
-  background: #0a0f1f;
-  color: white;
-  font-family: 'Inter', sans-serif;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beltline Cloud Dashboard</title>
 
-.nav {
-  width: 100%;
-  background: #0d1328;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 2px solid #d4af37;
-}
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
 
-.chat-list {
-  padding: 20px;
-}
+<body>
 
-.chat-card {
-  background: #1e2a4a;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #d4af37;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
+<div class="page-bg" style="background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;"></div>
 
-.thread-header {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-}
+<!-- CLOUD MENU -->
+<div id="cloudMenu" class="cloud-menu">
+  <div class="menu-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo" alt="Cloud Logo">
+    <span class="menu-close" id="menuClose">&times;</span>
+  </div>
 
-.back-btn {
-  background: none;
-  border: none;
-  color: #d4af37;
-  font-size: 24px;
-  cursor: pointer;
-}
+  <div class="menu-content">
 
-.message-box {
-  padding: 20px;
-  height: calc(100vh - 200px);
-  overflow-y: auto;
-}
+    <div class="menu-category">
+      <h3>My Profile</h3>
+      <ul>
+        <li><a href="/pages/profile.html">View Profile</a></li>
+        <li><a href="/pages/notifications.html">Notifications</a></li>
+      </ul>
+    </div>
 
-.msg {
-  margin-bottom: 12px;
-  max-width: 70%;
-  padding: 12px;
-  border-radius: 12px;
-}
+    <div class="menu-category">
+      <h3>Safety Cloud</h3>
+      <ul>
+        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
+        <li><a href="/pages/safety/lost-found.html">Lost & Found</a></li>
+        <li><a href="/pages/safety/stolen.html">Stolen Items</a></li>
+        <li><a href="/pages/safety/markers.html">Marker System</a></li>
+        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
+        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
+      </ul>
+    </div>
 
-.msg.me {
-  background: #d4af37;
-  color: #0a0f1f;
-  margin-left: auto;
-}
+    <div class="menu-category">
+      <h3>News Cloud</h3>
+      <ul>
+        <li><a href="/pages/news/beltline-news.html">Beltline News</a></li>
+        <li><a href="/pages/news/weather.html">Weather</a></li>
+        <li><a href="/pages/news/updates.html">Updates</a></li>
+      </ul>
+    </div>
 
-.msg.them {
-  background: #1e2a4a;
-  border: 1px solid #d4af37;
-}
+    <div class="menu-category">
+      <h3>Trail Tools</h3>
+      <ul>
+        <li><a href="/pages/map.html">Trail Map</a></li>
+        <li><a href="/pages/map/zones.html">Zones</a></li>
+        <li><a href="/pages/map/etiquette.html">Etiquette</a></li>
+      </ul>
+    </div>
 
-.message-input {
-  display: flex;
-  padding: 20px;
-  background: #0d1328;
-}
+    <div class="menu-category">
+      <h3>Community Cloud</h3>
+      <ul>
+        <li><a href="/pages/chat/pages/index.html">Cloud Chat</a></li>
+        <li><a href="/pages/events/pages/events.html">Events</a></li>
+        <li><a href="/pages/community.html">Community Things</a></li>
+      </ul>
+    </div>
 
-.message-input input {
-  flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background: #1e2a4a;
-  color: white;
-}
+    <div class="menu-category">
+      <h3>Sign Up</h3>
+      <ul>
+        <li><a href="/pages/rider/signup.html">Become a Rider</a></li>
+        <li><a href="/pages/vendor/signup.html">Become a Vendor</a></li>
+        <li><a href="/pages/response/signup.html">Join Response Unit</a></li>
+      </ul>
+    </div>
 
-.message-input button {
-  margin-left: 12px;
-  padding: 12px 20px;
-  background: #d4af37;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
+    <div class="logout-btn-menu" onclick="logout()">Logout</div>
+
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+
+  <div class="header-left">
+    <div class="header-name">Clayvonte</div>
+  </div>
+
+  <div class="header-info" style="font-family:Cinzel; color:#f7d354; text-shadow:0 0 8px #f7d354;">
+    <span id="weather" class="header-stat">Loading weather…</span>
+    <span id="beltlineLocation" class="header-stat">Detecting Beltline location…</span>
+    <span id="timeDisplay" class="header-stat"></span>
+  </div>
+
+  <div class="header-top-right">
+
+    <!-- ONLY LOGO — MENU TRIGGER -->
+    <img src="/assets/img/cloud/cloud-logo.jpg"
+         class="header-logo"
+         id="menuTrigger"
+         alt="Open Menu">
+
+    <a href="/pages/messages.html">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="cloud-talk-logo" alt="Messages">
+    </a>
+
+    <a href="/pages/safety/index.html">
+      <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" alt="Safety Cloud">
+    </a>
+
+  </div>
+
+</header>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-actions">
+
+  <div class="quick-row">
+    <button type="button" class="qa-btn" onclick="window.location.href='/pages/profile.html'">Profile</button>
+    <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
+  </div>
+
+  <div class="quick-row">
+
+    <!-- ALERT SYSTEM -->
+    <div class="qa-btn qa-dropdown" style="border-color:red;">
+      <div style="font-weight:bold;">Emergency Alert</div>
+
+      <!-- Bubble button -->
+      <button id="alertBubble" 
+              style="background:red; border:2px solid red; border-radius:20px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+        OPEN ALERT MENU
+      </button>
+
+      <!-- Dropdown description -->
+      <div id="alertDropdown" style="display:none; margin-top:10px; background:#300; padding:12px; border-radius:10px; border:2px solid red;">
+
+        <p style="color:white; font-family:Inter;">
+          This button will send an alert to the Cloud Response Unit.
+        </p>
+
+        <!-- Quick emergency options -->
+        <select id="quickAlertSelect" class="qa-select" style="border-color:red;">
+          <option value="">Select Emergency Type</option>
+          <option value="danger">Danger Nearby</option>
+          <option value="medical">Medical Emergency</option>
+          <option value="crime">Crime in Progress</option>
+          <option value="lost">Lost Person</option>
+          <option value="fire">Fire / Smoke</option>
+        </select>
+
+        <!-- Final alert button -->
+        <button id="finalAlertButton"
+                style="display:none; margin-top:10px; background:red; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+          ALERT
+        </button>
+
+        <!-- Auto alert option -->
+        <button onclick="window.location.href='/pages/safety/auto-alerts.html'"
+                style="margin-top:15px; background:#222; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+          AUTO ALERT SETTINGS
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<h2 class="section-title">Explore Beltline Cloud</h2>
+
+<section class="grid">
+
+  <a class="tile" href="/pages/chat/pages/index.html">
+    <img src="/assets/img/cloud/cloud-chat.jpg" alt="Cloud Chat">
+    <h3>Cloud Chat</h3>
+    <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
+  </a>
+
+  <a class="tile" href="/pages/map.html">
+    <img src="/assets/img/cloud/cloud-map.jpg" alt="Beltline Map">
+    <h3>Beltline Map</h3>
+    <p>Trail layout, zones, and navigation.</p>
+  </a>
+
+  <a class="tile" href="/pages/events/pages/events.html">
+    <img src="/assets/img/cloud/events-cloud.jpg" alt="Events">
+    <h3>Events</h3>
+    <p>Workshops, rides, meetups, concerts, and more.</p>
+  </a>
+
+  <a class="tile" href="/pages/community.html">
+    <img src="/assets/img/cloud/community-cloud.jpg" alt="Community Things">
+    <h3>Community Things</h3>
+    <p>Connect with riders, vendors, helpers, and Beltline locals.</p>
+  </a>
+
+</section>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+
+  <div class="bottom-section">
+    <img src="/network/public/img/network-logo.jpg" class="bottom-logo" alt="Network">
+    <div class="bottom-text">Explore Network</div>
+  </div>
+
+  <div class="bottom-section">
+    <img src="/assets/img/Fast-logo.png" class="bottom-logo" alt="Fast Roll">
+    <div class="bottom-text">Place Delivery</div>
+  </div>
+
+</div>
+
+<div id="notificationsBar" class="notifications-bar" hidden>
+  Loading notifications…
+</div>
+
+<script type="module" defer src="/js/dashboard.js"></script>
+<script type="module" defer src="/pages/safety/js/cloud.js"></script>
+
+<script>
+const menu = document.getElementById("cloudMenu");
+const trigger = document.getElementById("menuTrigger");
+const closeBtn = document.getElementById("menuClose");
+
+trigger.onclick = () => menu.classList.add("open");
+closeBtn.onclick = () => menu.classList.remove("open");
+
+/* ALERT SYSTEM */
+document.getElementById("alertBubble").onclick = () => {
+  document.getElementById("alertDropdown").style.display = "block";
+};
+
+document.getElementById("quickAlertSelect").onchange = (e) => {
+  const btn = document.getElementById("finalAlertButton");
+  btn.style.display = e.target.value ? "block" : "none";
+};
+</script>
+
+</body>
+</html>
