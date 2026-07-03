@@ -127,20 +127,46 @@
 
   <div class="quick-row">
 
+    <!-- ALERT SYSTEM -->
     <div class="qa-btn qa-dropdown" style="border-color:red;">
-      Alert Type
-      <select id="alertTypeSelect" class="qa-select" style="border-color:red;">
-        <option value="">Select Alert Type</option>
-        <option value="emergency">Emergency Alert</option>
-        <option value="danger">Danger Nearby</option>
-        <option value="medical">Medical Emergency</option>
-      </select>
-    </div>
+      <div style="font-weight:bold;">Emergency Alert</div>
 
-    <div class="qa-btn qa-dropdown" style="border-color:red;">
-      <button id="emergencyButton" class="qa-emergency" style="background:red; border-color:red;" disabled>
-        SEND ALERT
+      <!-- Bubble button -->
+      <button id="alertBubble" 
+              style="background:red; border:2px solid red; border-radius:20px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+        OPEN ALERT MENU
       </button>
+
+      <!-- Dropdown description -->
+      <div id="alertDropdown" style="display:none; margin-top:10px; background:#300; padding:12px; border-radius:10px; border:2px solid red;">
+
+        <p style="color:white; font-family:Inter;">
+          This button will send an alert to the Cloud Response Unit.
+        </p>
+
+        <!-- Quick emergency options -->
+        <select id="quickAlertSelect" class="qa-select" style="border-color:red;">
+          <option value="">Select Emergency Type</option>
+          <option value="danger">Danger Nearby</option>
+          <option value="medical">Medical Emergency</option>
+          <option value="crime">Crime in Progress</option>
+          <option value="lost">Lost Person</option>
+          <option value="fire">Fire / Smoke</option>
+        </select>
+
+        <!-- Final alert button -->
+        <button id="finalAlertButton"
+                style="display:none; margin-top:10px; background:red; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+          ALERT
+        </button>
+
+        <!-- Auto alert option -->
+        <button onclick="window.location.href='/pages/safety/auto-alerts.html'"
+                style="margin-top:15px; background:#222; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+          AUTO ALERT SETTINGS
+        </button>
+
+      </div>
     </div>
 
   </div>
@@ -207,9 +233,14 @@ const closeBtn = document.getElementById("menuClose");
 trigger.onclick = () => menu.classList.add("open");
 closeBtn.onclick = () => menu.classList.remove("open");
 
-document.getElementById("alertTypeSelect").onchange = (e) => {
-  const btn = document.getElementById("emergencyButton");
-  btn.disabled = !e.target.value;
+/* ALERT SYSTEM */
+document.getElementById("alertBubble").onclick = () => {
+  document.getElementById("alertDropdown").style.display = "block";
+};
+
+document.getElementById("quickAlertSelect").onchange = (e) => {
+  const btn = document.getElementById("finalAlertButton");
+  btn.style.display = e.target.value ? "block" : "none";
 };
 </script>
 
