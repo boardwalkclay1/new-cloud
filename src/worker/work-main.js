@@ -1,9 +1,7 @@
 // worker.js (utils + network + main)
-// response + safety are EXTERNAL and IMPORTED
 
-// ✅ API base defined at the top
 const API_BASE = "https://api.beltlinecloud.com";
-const FRONTEND_DOMAIN = "https://beltlinecloud.com"; // your actual site
+const FRONTEND_DOMAIN = "https://beltlinecloud.com";
 
 import { handleResponseRoutes } from "./work-response.js";
 import { handleSafetyRoutes } from "./work-safety.js";
@@ -12,9 +10,10 @@ import { handleSafetyRoutes } from "./work-safety.js";
 
 function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": FRONTEND_DOMAIN, // allow your frontend domain
+    "Access-Control-Allow-Origin": FRONTEND_DOMAIN,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-User-Email, X-User-Id"
+    "Access-Control-Allow-Headers": "Content-Type, X-User-Email, X-User-Id",
+    "Access-Control-Max-Age": "86400"
   };
 }
 
@@ -109,6 +108,39 @@ async function login(request, db) {
   });
 }
 
+async function me(request, db) {
+  const email = request.headers.get("X-User-Email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const user = await db.prepare(
+    "SELECT id, email, name, roles FROM cloud_users WHERE email = ?"
+  ).bind(email).first();
+
+  if (!user) return json({ error: "User not found" }, 404);
+
+  return json({
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      roles: user.roles || ""
+    }
+  });
+}
+
+async function updateProfile(request, db) {
+  const body = await request.json();
+  const { id, name, roles } = body;
+
+  if (!id) return json({ error: "Missing id" }, 400);
+
+  await db.prepare(
+    `UPDATE cloud_users SET name = ?, roles = ? WHERE id = ?`
+  ).bind(name || "", roles || "", id).run();
+
+  return json({ success: true });
+}
+
 /* ---------------- MAIN WORKER ---------------- */
 
 export default {
@@ -116,12 +148,17 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    /* ---------------- OPTIONS (CORS PRE-FLIGHT) ---------------- */
     if (request.method === "OPTIONS") {
-      return wrap(new Response(null, { headers: corsHeaders() }));
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders()
+      });
     }
 
+    /* ---------------- DB ---------------- */
     const db = env.DB_cloud;
-    if (!db) return wrap(json({ error: "DB_cloud binding missing" }, 500));
+    if (!db) return json({ error: "DB_cloud binding missing" }, 500);
 
     try {
       const responseResult = await handleResponseRoutes(path, request, db, url);
@@ -137,6 +174,7 @@ export default {
       return wrap(json({ error: "Worker crashed", detail: err.message }, 500));
     }
 
+    /* ---------------- STATIC FILES ---------------- */
     let key = path === "/" ? "index.html" : path.slice(1);
     const object = await env.R2.get(key);
 
@@ -166,7 +204,7 @@ export default {
 
 function wrap(res) {
   const headers = new Headers(res.headers);
-  headers.set("Access-Control-Allow-Origin", FRONTEND_DOMAIN); // your domain
+  headers.set("Access-Control-Allow-Origin", FRONTEND_DOMAIN);
   headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   headers.set("Access-Control-Allow-Headers", "Content-Type, X-User-Email, X-User-Id");
 
