@@ -1,8 +1,8 @@
 // work-main.js
-import { corsHeaders, json, getMimeType } from "work-utils.js";
-import { handleNetworkRoutes } from "work-network.js";
-import { handleResponseRoutes } from "work-response.js";
-import { handleSafetyRoutes } from "work-safety.js";
+import { corsHeaders, json, getMimeType } from "./work-utils.js";
+import { handleNetworkRoutes } from "./work-network.js";
+import { handleResponseRoutes } from "./work-response.js";
+import { handleSafetyRoutes } from "./work-safety.js";
 
 export default {
   async fetch(request, env) {
