@@ -7,14 +7,65 @@
 
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <style>
+    /* Profile button styling */
+    .profile-main-link {
+      background: #0a2a43;
+      padding: 10px 18px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      margin-left: 20px;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .profile-main-link:hover {
+      background: #0f3a5f;
+    }
+
+    /* Bottom bar logos */
+    .bottom-logo {
+      height: 70px;
+      width: auto;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .bottom-link {
+      display: block;
+      text-align: center;
+      margin-top: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #ffd54f;
+      text-decoration: none;
+    }
+
+    .bottom-bar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 25px 10px;
+      background: rgba(10,42,67,0.85);
+      border-top: 3px solid #ffd54f;
+      margin-top: 40px;
+    }
+
+    .bottom-section {
+      text-align: center;
+      flex: 1;
+    }
+  </style>
 </head>
+
 <body>
 
 <div class="page-bg"></div>
 
 <!-- CLOUD MENU -->
 <div id="cloudMenu" class="cloud-menu">
-
   <div class="menu-header">
     <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo">
     <span class="menu-close" id="menuClose">&times;</span>
@@ -184,13 +235,27 @@
 <!-- NETWORK + FAST ROLL -->
 <div class="bottom-bar">
 
-  <img src="/network/public/img/network-logo.jpg" class="bottom-logo"
-       onclick="location.href='/network/public/pages/explore.html'">
-  <a href="/network/public/pages/explore.html" class="bottom-link">Explore Network</a>
+  <!-- NETWORK -->
+  <div class="bottom-section">
+    <img src="/network/public/img/network-logo.jpg"
+         class="bottom-logo"
+         onclick="location.href='/network/public/pages/explore.html'">
 
-  <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" style="margin-top:40px;"
-       onclick="location.href='/fast-roll/index.html'">
-  <a href="/fast-roll/pages/order.html" class="bottom-link">Place Fast Roll Delivery</a>
+    <a href="/network/public/pages/explore.html" class="bottom-link">
+      Explore Network
+    </a>
+  </div>
+
+  <!-- FAST ROLL -->
+  <div class="bottom-section">
+    <img src="/fast-roll/img/Fast-logo.png"
+         class="bottom-logo"
+         onclick="location.href='/fast-roll/index.html'">
+
+    <a href="/fast-roll/pages/order.html" class="bottom-link">
+      Place Delivery
+    </a>
+  </div>
 
 </div>
 
