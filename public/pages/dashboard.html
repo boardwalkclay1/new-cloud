@@ -242,29 +242,5 @@
 <script type="module" defer src="/js/dashboard.js"></script>
 <script type="module" defer src="/pages/safety/js/cloud.js"></script>
 
-<script>
-const menu = document.getElementById("cloudMenu");
-const trigger = document.getElementById("menuTrigger");
-const closeBtn = document.getElementById("menuClose");
-
-trigger.onclick = () => menu.classList.add("open");
-closeBtn.onclick = () => menu.classList.remove("open");
-
-/* EMERGENCY ALERT */
-document.getElementById("alertBubble").onclick = () => {
-  document.getElementById("alertDropdown").style.display = "block";
-};
-
-document.getElementById("quickAlertSelect").onchange = (e) => {
-  const btn = document.getElementById("finalAlertButton");
-  btn.style.display = e.target.value ? "block" : "none";
-};
-
-/* AUTO ALERT */
-document.getElementById("autoAlertBubble").onclick = () => {
-  document.getElementById("autoAlertDropdown").style.display = "block";
-};
-</script>
-
 </body>
 </html>
