@@ -116,7 +116,8 @@ export async function handleNetworkRoutes(path, request, db, url) {
   return null;
 }
 
-// AUTH / PROFILE
+/* AUTH / PROFILE */
+
 async function signup(request, db) {
   const body = await request.json();
   const { email, password, name } = body;
@@ -129,11 +130,11 @@ async function signup(request, db) {
 
   const id = crypto.randomUUID();
   await db.prepare(
-    `INSERT INTO cloud_users (id, email, password, name)
-     VALUES (?, ?, ?, ?)`
-  ).bind(id, email, password, name).run();
+    `INSERT INTO cloud_users (id, email, password, name, roles)
+     VALUES (?, ?, ?, ?, ?)`
+  ).bind(id, email, password, name, "").run();
 
-  return json({ success: true, id });
+  return json({ success: true, user: { id, email, name, roles: "" } });
 }
 
 async function login(request, db) {
@@ -142,13 +143,20 @@ async function login(request, db) {
   if (!email || !password) return json({ error: "Missing fields" }, 400);
 
   const user = await db.prepare(
-    "SELECT id, email, name, password FROM cloud_users WHERE email = ?"
+    "SELECT id, email, name, password, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
 
   if (!user || user.password !== password)
     return json({ error: "Invalid credentials" }, 401);
 
-  return json({ id: user.id, email: user.email, name: user.name });
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    roles: user.roles || ""
+  };
+
+  return json({ user: safeUser });
 }
 
 async function me(request, db) {
@@ -156,26 +164,35 @@ async function me(request, db) {
   if (!email) return json({ error: "Missing email" }, 400);
 
   const user = await db.prepare(
-    "SELECT id, email, name FROM cloud_users WHERE email = ?"
+    "SELECT id, email, name, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
 
   if (!user) return json({ error: "User not found" }, 404);
-  return json(user);
+
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    roles: user.roles || ""
+  };
+
+  return json({ user: safeUser });
 }
 
 async function updateProfile(request, db) {
   const body = await request.json();
-  const { id, name } = body;
+  const { id, name, roles } = body;
   if (!id) return json({ error: "Missing id" }, 400);
 
   await db.prepare(
-    `UPDATE cloud_users SET name = ? WHERE id = ?`
-  ).bind(name || "", id).run();
+    `UPDATE cloud_users SET name = ?, roles = ? WHERE id = ?`
+  ).bind(name || "", roles || "", id).run();
 
   return json({ success: true });
 }
 
-// NETWORK HANDLERS (vendors/products/services/workshops)
+/* NETWORK HANDLERS (vendors/products/services/workshops) */
+
 async function listVendors(db) {
   const { results } = await db.prepare(
     "SELECT * FROM network_vendors"
@@ -402,7 +419,8 @@ async function explore(db) {
   });
 }
 
-// EVENTS
+/* EVENTS */
+
 async function listEvents(db) {
   const { results } = await db.prepare(
     "SELECT * FROM cloud_events ORDER BY date ASC"
@@ -474,7 +492,4 @@ async function deleteEvent(request, db) {
   return json({ success: true });
 }
 
-// FASTROLL / STAFF / CIVIC handlers would continue here similarly,
-// wired to fastroll_clients, fastroll_riders, fastroll_orders, fastroll_tips,
-// cloud_polls, cloud_poll_options, cloud_poll_votes,
-// cloud_petitions, cloud_petition_signatures, cloud_proposals, etc.
+// FASTROLL / STAFF / CIVIC handlers would continue here similarly.
