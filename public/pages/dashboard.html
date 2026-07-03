@@ -91,20 +91,20 @@
 
   <div class="header-left">
     <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
+    <div class="header-name">Clayvonte</div>
   </div>
 
   <div class="header-info">
-    <span id="userName">Loading...</span>
-    <span id="weather">Loading weather…</span>
-    <span id="beltlineLocation">Detecting Beltline location…</span>
-    <span id="timeDisplay"></span>
+    <span id="weather" class="header-stat">Loading weather…</span>
+    <span id="beltlineLocation" class="header-stat">Detecting Beltline location…</span>
+    <span id="timeDisplay" class="header-stat"></span>
   </div>
 
   <div class="header-top-right">
 
     <!-- CLOUD TALK ABOVE SAFETY CLOUD -->
     <a href="/pages/messages.html">
-      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" style="height:70px; margin-bottom:12px;">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="cloud-talk-logo">
     </a>
 
     <!-- SAFETY CLOUD (bigger + animated) -->
@@ -117,45 +117,45 @@
 </header>
 
 <!-- ROLE SECTIONS -->
-<div id="vendorLinks" style="display:none; margin:20px; opacity:0.85;">
+<div id="vendorLinks" class="role-banner" style="display:none;">
   You are a <strong>Network Vendor</strong>.
 </div>
 
-<div id="riderLinks" style="display:none; margin:20px; opacity:0.85;">
+<div id="riderLinks" class="role-banner" style="display:none;">
   You are a <strong>Fast Roll Rider</strong>.
 </div>
 
 <!-- QUICK ACTIONS -->
 <div class="quick-actions">
 
-  <!-- PROFILE -->
-  <a class="quick-action-btn" href="/pages/profile.html">Profile</a>
-
-  <!-- SETTINGS -->
-  <a class="quick-action-btn" href="/pages/settings.html">Settings</a>
-
-  <!-- SAFETY CLOUD MODE -->
-  <div class="quick-slot">
-    <label style="color:#ffd54f; font-family:'Cinzel', serif;">Safety Cloud Mode</label>
-    <select id="safetyModeSelect" class="quick-dropdown">
-      <option value="off">OFF</option>
-      <option value="motion">Motion Detection</option>
-      <option value="pattern">Pattern Detection</option>
-      <option value="full">Full Monitoring</option>
-    </select>
+  <!-- ROW 1 -->
+  <div class="quick-row">
+    <a class="quick-action-btn" href="/pages/profile.html">Profile</a>
+    <a class="quick-action-btn" href="/pages/settings.html">Settings</a>
   </div>
 
-  <!-- EMERGENCY ALERT -->
-  <div class="quick-slot">
-    <label style="color:#ffd54f; font-family:'Cinzel', serif;">Emergency Alert</label>
-    <div class="quick-dropdown">
-      <button id="emergencyButton" class="emergency-btn">
-        SEND EMERGENCY ALERT
-      </button>
-      <p style="font-size:0.8rem; opacity:0.8; margin-top:6px;">
-        Sends alert to Cloud Response, starts recording audio/video, and shares your location.
-      </p>
+  <!-- ROW 2 -->
+  <div class="quick-row">
+
+    <!-- SAFETY CLOUD MODE -->
+    <div class="quick-action-btn dropdown-btn">
+      Safety Cloud Mode
+      <select id="safetyModeSelect" class="quick-dropdown">
+        <option value="off">OFF</option>
+        <option value="motion">Motion Detection</option>
+        <option value="pattern">Pattern Detection</option>
+        <option value="full">Full Monitoring</option>
+      </select>
     </div>
+
+    <!-- EMERGENCY ALERT -->
+    <div class="quick-action-btn dropdown-btn">
+      Emergency Alert
+      <button id="emergencyButton" class="emergency-btn">
+        SEND ALERT
+      </button>
+    </div>
+
   </div>
 
 </div>
@@ -213,19 +213,7 @@
 </div>
 
 <!-- NOTIFICATIONS BAR -->
-<div id="notificationsBar" style="
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:rgba(10,42,67,0.85);
-  padding:15px;
-  border-top:3px solid #ffd54f;
-  color:#ffffff;
-  font-size:1rem;
-  text-align:center;
-  z-index:999;
-">
+<div id="notificationsBar" class="notifications-bar">
   Loading notifications…
 </div>
 
