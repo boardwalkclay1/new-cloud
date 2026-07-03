@@ -171,12 +171,17 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-/* MENU */
-document.getElementById("menuTrigger").onclick = () => {
-  document.getElementById("cloudMenu").style.display = "block";
+/* MENU — FIXED */
+const cloudMenu = document.getElementById("cloudMenu");
+const burger = document.getElementById("menuTrigger");
+const closeMenu = document.getElementById("menuClose");
+
+burger.onclick = () => {
+  cloudMenu.classList.add("open");
 };
-document.getElementById("menuClose").onclick = () => {
-  document.getElementById("cloudMenu").style.display = "none";
+
+closeMenu.onclick = () => {
+  cloudMenu.classList.remove("open");
 };
 
 /* NOTIFICATIONS */
