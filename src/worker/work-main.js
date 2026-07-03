@@ -74,10 +74,17 @@ async function signup(request, db) {
 
   const id = crypto.randomUUID();
 
+  // HASH PASSWORD
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const passwordHash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
   await db.prepare(
-    `INSERT INTO cloud_users (id, email, password, name, roles)
+    `INSERT INTO cloud_users (id, email, passwordHash, name, roles)
      VALUES (?, ?, ?, ?, ?)`
-  ).bind(id, email, password, name, "").run();
+  ).bind(id, email, passwordHash, name, "").run();
 
   return json({
     success: true,
@@ -104,11 +111,23 @@ async function login(request, db) {
   if (!email || !password)
     return json({ error: "Missing fields" }, 400);
 
+  // SELECT CORRECT COLUMN
   const user = await db.prepare(
-    "SELECT id, email, name, password, roles FROM cloud_users WHERE email = ?"
+    "SELECT id, email, name, passwordHash, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
 
-  if (!user || user.password !== password)
+  if (!user)
+    return json({ error: "Invalid credentials" }, 401);
+
+  // HASH INCOMING PASSWORD
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const incomingHash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
+  // COMPARE HASHES
+  if (incomingHash !== user.passwordHash)
     return json({ error: "Invalid credentials" }, 401);
 
   return json({
