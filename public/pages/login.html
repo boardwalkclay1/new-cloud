@@ -94,7 +94,7 @@
         if (!res.ok) throw new Error(data.error || "Login failed");
 
         // store user id for dashboard
-        localStorage.setItem("cloud_user", data.user.id);
+        localStorage.setItem("cloud_users", data.user.id);
 
         // if you want full profile later, you already have it in data.user
         // and Auth.js can also store it via its own logic
