@@ -34,7 +34,7 @@ document.getElementById("vendorToggle")?.addEventListener("change", async (e) =>
   const newRoles = new Set((user.roles || "").split(",").filter(Boolean));
   active ? newRoles.add("vendor") : newRoles.delete("vendor");
 
-  await fetch("/api/network/profile/update", {
+  await fetch("https://api.beltlinecloud.com/api/network/profile/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -45,7 +45,8 @@ document.getElementById("vendorToggle")?.addEventListener("change", async (e) =>
   });
 
   const updated = { ...user, roles: Array.from(newRoles).join(",") };
-  Auth.save(updated);
+  localStorage.setItem("cloud_user", JSON.stringify(updated));
+
   location.reload();
 });
 
@@ -55,7 +56,7 @@ document.getElementById("riderToggle")?.addEventListener("change", async (e) => 
   const newRoles = new Set((user.roles || "").split(",").filter(Boolean));
   active ? newRoles.add("rider") : newRoles.delete("rider");
 
-  await fetch("/api/network/profile/update", {
+  await fetch("https://api.beltlinecloud.com/api/network/profile/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -66,7 +67,8 @@ document.getElementById("riderToggle")?.addEventListener("change", async (e) => 
   });
 
   const updated = { ...user, roles: Array.from(newRoles).join(",") };
-  Auth.save(updated);
+  localStorage.setItem("cloud_user", JSON.stringify(updated));
+
   location.reload();
 });
 
@@ -186,7 +188,7 @@ document.getElementById("safetyDropdownTrigger").onclick = () => {
 /* NOTIFICATIONS */
 async function loadNotifications() {
   try {
-    const res = await fetch(`/api/notifications?user=${user.id}`, {
+    const res = await fetch(`https://api.beltlinecloud.com/api/notifications?user=${user.id}`, {
       headers: {
         "X-User-Email": user.email,
         "X-User-Id": user.id
