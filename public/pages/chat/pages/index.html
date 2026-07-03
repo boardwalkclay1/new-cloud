@@ -2,33 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cloud Chat</title>
+  <title>Cloud Chat — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="/pages/chat/css/chat.css">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body data-page="chat-index">
 
-  <!-- Global Nav -->
+  <!-- BACKGROUND -->
+  <div class="page-bg" style="background-image:url('/assets/img/chat/cloud-chat-bg.jpg');"></div>
+
+  <!-- NAV -->
   <nav class="nav">
     <div class="logo">
       <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
     </div>
+
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/pages/music.html">Cloud Radio</a>
       <a href="/events/index.html">Events</a>
       <a href="/network/public/pages/index.html">Network</a>
-      <a href="/pages/safety/index.html">Safety CLOUD</a>
+      <a href="/pages/safety/index.html">Safety Cloud</a>
       <a href="/pages/feed/index.html">Feed</a>
       <a href="/pages/profile/index.html">Profile</a>
     </div>
   </nav>
 
-  <h1>Messages</h1>
+  <!-- HERO -->
+  <header class="hero">
+    <h1>Cloud Chat</h1>
+    <p>Messages • Groups • Beltline Rooms • Voice • Photos • Cloud Keyboard</p>
+  </header>
 
-  <div id="chatList" class="chat-list"></div>
+  <!-- CHAT DASHBOARD -->
+  <section class="chat-dashboard">
 
+    <!-- USER CHATS -->
+    <div class="dash-card">
+      <h3>Your Chats</h3>
+      <p>One‑on‑one messages and active conversations.</p>
+      <a class="dash-btn" href="/pages/chat/dashboard.html">Open Chat Dashboard</a>
+    </div>
+
+    <!-- CREATE GROUP -->
+    <div class="dash-card">
+      <h3>Create Group Chat</h3>
+      <p>Start a private or public group with Cloud users.</p>
+      <a class="dash-btn" href="/pages/chat/create-group.html">Start Group</a>
+    </div>
+
+    <!-- JOIN REQUESTS -->
+    <div class="dash-card">
+      <h3>Join Requests</h3>
+      <p>Approve or send chat group invitations.</p>
+      <a class="dash-btn" href="/pages/chat/requests.html">Manage Requests</a>
+    </div>
+
+    <!-- BELTCHAT GLOBAL -->
+    <div class="dash-card">
+      <h3>BeltChat (Global)</h3>
+      <p>The Beltline’s main chatroom — everyone mixes here.</p>
+      <a class="dash-btn" href="/pages/chat/rooms/beltchat.html">Enter BeltChat</a>
+    </div>
+
+  </section>
+
+  <!-- BELTLINE CHATROOMS -->
+  <section class="section">
+    <h2>Beltline Chatrooms</h2>
+    <p>Real‑time rooms mapped to Beltline locations.</p>
+
+    <div class="room-grid">
+
+      <a class="room-card" href="/pages/chat/rooms/krog.html">
+        <span>Krog Street</span>
+      </a>
+
+      <a class="room-card" href="/pages/chat/rooms/ponce.html">
+        <span>Ponce City Market</span>
+      </a>
+
+      <a class="room-card" href="/pages/chat/rooms/eastside.html">
+        <span>Eastside Trail</span>
+      </a>
+
+      <a class="room-card" href="/pages/chat/rooms/westside.html">
+        <span>Westside Trail</span>
+      </a>
+
+      <a class="room-card" href="/pages/chat/rooms/southside.html">
+        <span>Southside Trail</span>
+      </a>
+
+      <a class="room-card" href="/pages/chat/rooms/westside-park.html">
+        <span>Westside Park</span>
+      </a>
+
+      <a class="room-card" href="/pages/chat/rooms/piedmont.html">
+        <span>Piedmont Park</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2026 Beltline Cloud Inc — Cloud Chat keeps the Beltline connected.
+  </footer>
+
+  <!-- JS -->
   <script type="module">
     import { loadChatList } from "/pages/chat/js/chat.js";
     const userId = localStorage.getItem("cloud_users");
