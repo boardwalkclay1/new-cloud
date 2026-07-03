@@ -20,11 +20,50 @@
   <meta name="twitter:description" content="Music. Movement. Safety. Community. Vendors. Fast Roll delivery. All in one place.">
   <meta name="twitter:image" content="/assets/img/cloud/cloud-preview.jpg">
 
-  <!-- EXTERNAL CSS -->
+  <!-- CSS -->
   <link rel="stylesheet" href="/css/index.css">
+
+  <style>
+    /* TIME + WEATHER BAR */
+    #cloudBar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 20px;
+      background: rgba(0,0,0,0.65);
+      color: #ffd700;
+      font-family: "Inter", sans-serif;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 9999;
+      backdrop-filter: blur(6px);
+    }
+    #cloudBar span {
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* EARTHCAM */
+    .earthcam-container {
+      max-width: 900px;
+      margin: 40px auto;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 0 25px rgba(0,0,0,0.45);
+    }
+  </style>
 </head>
 
 <body>
+
+  <!-- TIME + WEATHER BAR -->
+  <div id="cloudBar">
+    <span id="timeDisplay">Loading time...</span>
+    <span id="weatherDisplay">Loading weather...</span>
+  </div>
 
   <!-- BACKGROUND -->
   <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud-index.jpg');"></div>
@@ -53,7 +92,7 @@
     </div>
   </nav>
 
-  <!-- LOGO MENU (FULL SCREEN) -->
+  <!-- LOGO MENU -->
   <div id="logo-menu" class="logo-menu">
     <div class="logo-menu-header">
       <img src="/assets/img/cloud/cloud-logo.jpg">
@@ -82,7 +121,7 @@
     </div>
   </div>
 
-  <!-- BURGER PANEL (MOBILE) -->
+  <!-- BURGER PANEL -->
   <div id="burger-panel" class="burger-panel">
     <h3>Explore Beltline Cloud</h3>
     <p>This area is for visitors who haven’t signed up yet.</p>
@@ -105,6 +144,22 @@
     <h1>The Beltline’s First Digital Cloud</h1>
     <p>Music. Movement. Safety. Community. All in one place.</p>
   </header>
+
+  <!-- EARTHCAM -->
+  <section class="section">
+    <h2>Live Downtown Atlanta</h2>
+    <p>See the city in real time — powered by EarthCam.</p>
+
+    <div class="earthcam-container">
+      <iframe 
+        src="https://www.earthcam.com/usa/georgia/atlanta/?cam=atlanta" 
+        width="100%" 
+        height="500" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
 
   <!-- MUSIC STATION -->
   <section class="section">
@@ -130,90 +185,6 @@
     </div>
   </section>
 
-  <!-- CLOUD / NETWORK / FAST ROLL / SAFETY -->
-  <section class="section">
-    <h2>Powered by Beltline Innovation</h2>
-
-    <div class="logo-grid">
-      <div class="logo-card" onclick="toggleDropdown('cloud-panel')">
-        <img src="/assets/img/cloud/cloud-logo.jpg">
-        <span>Beltline Cloud</span>
-      </div>
-
-      <div class="logo-card" onclick="toggleDropdown('network-panel')">
-        <img src="/assets/img/network-logo.jpg">
-        <span>The Network</span>
-      </div>
-
-      <div class="logo-card" onclick="toggleDropdown('fastroll-panel')">
-        <img src="/assets/img/Fast-logo.png">
-        <span>Fast Roll Delivery</span>
-      </div>
-
-      <div class="logo-card" onclick="toggleDropdown('safety-panel')">
-        <img src="/assets/img/cloud/safety-cloud-logo.jpg">
-        <span>Safety Cloud</span>
-      </div>
-    </div>
-
-    <!-- CLOUD PANEL -->
-    <div id="cloud-panel" class="dropdown-panel">
-      <h3>Beltline Cloud</h3>
-      <p>The Cloud connects music, movement, safety, vendors, riders, and events into one living system.</p>
-      <ul>
-        <li>Cloud Radio + Listening Rooms</li>
-        <li>Cloud Chat + Walkie Channels</li>
-        <li>Vendor & Rider Applications</li>
-        <li>Internal Maps + Parking Zones</li>
-        <li>Event Hosting + Ticket Distribution</li>
-        <li>Product Selling + Service Listings</li>
-        <li>Cloud Services Phonebook</li>
-      </ul>
-      <a class="btn" href="/pages/signup.html">Join Beltline Cloud</a>
-    </div>
-
-    <!-- NETWORK PANEL -->
-    <div id="network-panel" class="dropdown-panel">
-      <h3>The Network</h3>
-      <p>The Network is the Beltline’s official digital ecosystem for local vendors.</p>
-      <ul>
-        <li>Vendor Profiles</li>
-        <li>Products & Services</li>
-        <li>Workshops & Classes</li>
-        <li>Vendor Map Locations</li>
-        <li>Cloud Delivery Integration</li>
-      </ul>
-      <a class="btn" href="/network/public/pages/index.html">Enter The Network</a>
-    </div>
-
-    <!-- FAST ROLL PANEL -->
-    <div id="fastroll-panel" class="dropdown-panel">
-      <h3>Fast Roll Delivery</h3>
-      <p>Fast Roll is the Beltline’s native delivery service — built by Beltline Cloud.</p>
-      <ul>
-        <li>Vendor Delivery Requests</li>
-        <li>Rider Online Mode</li>
-        <li>Live Delivery Availability</li>
-        <li>CloudSync Movement Tracking</li>
-      </ul>
-      <a class="btn" href="/fast-roll/pages/index.html">Request Delivery</a>
-    </div>
-
-    <!-- SAFETY CLOUD PANEL -->
-    <div id="safety-panel" class="dropdown-panel">
-      <h3>Safety Cloud</h3>
-      <p>Safety Cloud helps you know where to park, how to move with courtesy, and what’s happening around you.</p>
-      <ul>
-        <li>Parking Zones</li>
-        <li>Movement Etiquette</li>
-        <li>Blocking Flow Rules</li>
-        <li>Live Feed Page</li>
-        <li>Emergency Marker System</li>
-      </ul>
-      <a class="btn" href="/pages/index-safety.html">Open Index Safety Cloud</a>
-    </div>
-  </section>
-
   <!-- EVENTS -->
   <section class="section">
     <h2>Beltline Events</h2>
@@ -225,6 +196,52 @@
   <footer class="footer">
     © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
   </footer>
+
+  <script>
+    /* TIME */
+    function updateTime() {
+      const now = new Date();
+      document.getElementById("timeDisplay").textContent =
+        now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: true,
+          timeZone: "America/New_York"
+        });
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    /* WEATHER */
+    async function loadWeather() {
+      try {
+        const res = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true&temperature_unit=fahrenheit"
+        );
+        const data = await res.json();
+        const w = data.current_weather;
+
+        const temp = w.temperature;
+        const code = w.weathercode;
+
+        let emoji = "⛅";
+        if (code === 0) emoji = "☀️";
+        if ([1,2,3].includes(code)) emoji = "🌤️";
+        if ([45,48].includes(code)) emoji = "🌫️";
+        if ([51,53,55].includes(code)) emoji = "🌦️";
+        if ([61,63,65].includes(code)) emoji = "🌧️";
+        if ([71,73,75].includes(code)) emoji = "❄️";
+        if ([95,96,99].includes(code)) emoji = "⛈️";
+
+        document.getElementById("weatherDisplay").textContent =
+          `${emoji} ${temp}°F • Atlanta`;
+      } catch {
+        document.getElementById("weatherDisplay").textContent = "Weather unavailable";
+      }
+    }
+    loadWeather();
+  </script>
 
   <script src="/js/index.js"></script>
 
