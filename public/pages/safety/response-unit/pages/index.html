@@ -2,14 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Response Unit Dashboard</title>
+  <title>Response Unit Command Center</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/pages/safety/response-unit/css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/pages/safety/response-unit/css/response.css">
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body data-page="ru-dashboard">
 
-  <!-- Global Nav -->
+  <!-- NAV -->
   <nav class="nav">
     <div class="logo">
       <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
@@ -25,30 +30,39 @@
     </div>
   </nav>
 
-  <!-- Permanent Cloud Chat Icon -->
+  <!-- CLOUD CHAT ICON -->
   <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">💬</div>
 
-  <h1>Response Unit Command Center</h1>
+  <!-- HEADER -->
+  <header class="ru-header">
+    <h1>Response Unit Command Center</h1>
+    <p>Real‑time operations for Medical, Enforcement, and Community responders.</p>
+  </header>
 
-  <div class="section">
-    <button class="cloud-btn" onclick="location.href='/pages/response-unit/signup.html'">
+  <!-- MAIN ACTIONS -->
+  <section class="section">
+    <button class="ru-btn" onclick="location.href='/pages/response-unit/signup.html'">
       New Responder Signup
     </button>
 
-    <button class="cloud-btn" onclick="location.href='/pages/response-unit/roster.html'">
+    <button class="ru-btn" onclick="location.href='/pages/response-unit/roster.html'">
       View Full Roster
     </button>
 
-    <button class="cloud-btn" onclick="location.href='/pages/response-unit/incident-center.html'">
+    <button class="ru-btn" onclick="location.href='/pages/response-unit/incident-center.html'">
       Incident Center
     </button>
-  </div>
+  </section>
 
-  <div class="section">
+  <!-- LIVE ALERTS -->
+  <section class="section">
     <h2>Live Alerts</h2>
-    <div id="liveAlerts" class="alert-grid"></div>
-  </div>
+    <p style="color:#d4af37; margin-bottom:10px;">Active incidents requiring attention</p>
 
+    <div id="liveAlerts" class="incident-grid"></div>
+  </section>
+
+  <!-- JS -->
   <script type="module">
     import { getIncidentHistory } from "/pages/profile/js/response-unit.js";
 
@@ -56,11 +70,22 @@
       const alerts = await getIncidentHistory({ status: "open" });
       const container = document.getElementById("liveAlerts");
 
+      if (!alerts || alerts.length === 0) {
+        container.innerHTML = `
+          <div class="incident-card">
+            <h3>No Active Alerts</h3>
+            <p>All clear across the Beltline.</p>
+          </div>
+        `;
+        return;
+      }
+
       container.innerHTML = alerts.map(a => `
-        <div class="alert-card">
+        <div class="incident-card">
           <h3>${a.mode.toUpperCase()}</h3>
-          <p>Severity: ${a.severity}</p>
+          <p>Severity: <strong>${a.severity}</strong></p>
           <p>${new Date(a.timestamp).toLocaleString()}</p>
+
           <button onclick="location.href='/pages/response-unit/incident-center.html?id=${a.id}'">
             Open Incident
           </button>
