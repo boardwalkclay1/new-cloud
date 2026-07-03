@@ -1,6 +1,3 @@
-// work-response.js
-import { json } from "./work-utils.js";
-
 export async function handleResponseRoutes(path, request, db, url) {
   // GROUP CREATE
   if (path.startsWith("/api/response/group/create") && request.method === "POST") {
