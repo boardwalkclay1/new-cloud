@@ -6,10 +6,10 @@
 
   <title>Login — Beltline Cloud</title>
 
-  <!-- ⭐ FAVICON -->
+  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/logo/cloud-logo.png" />
 
-  <!-- ⭐ SOCIAL PREVIEW -->
+  <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Beltline Cloud — Login" />
   <meta property="og:description" content="Access your Beltline Cloud dashboard, responder tools, vendor systems, Fast Roll, and event hosting." />
   <meta property="og:image" content="https://beltlinecloud.com/assets/img/logo/cloud-logo.png" />
@@ -82,7 +82,9 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <script>
+  <script type="module">
+    import { Auth } from "/js/auth.js";
+
     const API = "https://api.beltlinecloud.com";
 
     document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -95,21 +97,8 @@
       }
 
       try {
-        const res = await fetch(API + "/api/network/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Login failed");
-
-        // ⭐ STORE FULL USER OBJECT (matches Auth.js)
-        localStorage.setItem("cloud_user", JSON.stringify(data.user));
-
-        // ⭐ ALSO store ID for dashboard compatibility
-        localStorage.setItem("cloud_user_id", data.user.id);
-
+        // use Auth so it sets cloud_user exactly how the dash expects
+        await Auth.login(email, password);
         window.location.href = "/pages/dashboard.html";
       } catch (err) {
         alert(err.message);
