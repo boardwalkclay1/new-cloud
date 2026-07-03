@@ -1,6 +1,6 @@
 const API = "https://api.beltlinecloud.com/api";
 
-const STORAGE_KEY = "beltline_user";
+const STORAGE_KEY = "cloud_user";
 
 /* ============================================================
    CORE USER — CLOUD / FAST ROLL / VENDORS / EVENTS
