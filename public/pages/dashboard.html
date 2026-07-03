@@ -99,7 +99,6 @@
 
   <div class="header-top-right">
 
-    <!-- ONLY LOGO — MENU TRIGGER -->
     <img src="/assets/img/cloud/cloud-logo.jpg"
          class="header-logo"
          id="menuTrigger"
@@ -127,24 +126,21 @@
 
   <div class="quick-row">
 
-    <!-- ALERT SYSTEM -->
+    <!-- EMERGENCY ALERT -->
     <div class="qa-btn qa-dropdown" style="border-color:red;">
       <div style="font-weight:bold;">Emergency Alert</div>
 
-      <!-- Bubble button -->
       <button id="alertBubble" 
               style="background:red; border:2px solid red; border-radius:20px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
         OPEN ALERT MENU
       </button>
 
-      <!-- Dropdown description -->
       <div id="alertDropdown" style="display:none; margin-top:10px; background:#300; padding:12px; border-radius:10px; border:2px solid red;">
 
         <p style="color:white; font-family:Inter;">
           This button will send an alert to the Cloud Response Unit.
         </p>
 
-        <!-- Quick emergency options -->
         <select id="quickAlertSelect" class="qa-select" style="border-color:red;">
           <option value="">Select Emergency Type</option>
           <option value="danger">Danger Nearby</option>
@@ -154,17 +150,41 @@
           <option value="fire">Fire / Smoke</option>
         </select>
 
-        <!-- Final alert button -->
         <button id="finalAlertButton"
                 style="display:none; margin-top:10px; background:red; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
           ALERT
         </button>
 
-        <!-- Auto alert option -->
-        <button onclick="window.location.href='/pages/safety/auto-alerts.html'"
-                style="margin-top:15px; background:#222; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
-          AUTO ALERT SETTINGS
-        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- AUTO ALERT SECTION -->
+  <div class="quick-row">
+
+    <div class="qa-btn qa-dropdown" style="border-color:red;">
+      <div style="font-weight:bold;">Auto Alerts</div>
+
+      <button id="autoAlertBubble" 
+              style="background:#222; border:2px solid red; border-radius:20px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
+        AUTO ALERT SETTINGS
+      </button>
+
+      <div id="autoAlertDropdown" style="display:none; margin-top:10px; background:#111; padding:12px; border-radius:10px; border:2px solid red;">
+
+        <p style="color:white; font-family:Inter;">
+          Auto alerts use Cloud.js logic to detect patterns and motion.
+        </p>
+
+        <select id="autoAlertSelect" class="qa-select" style="border-color:red;">
+          <option value="">Select Auto Alert Mode</option>
+          <option value="motion">Motion Detection</option>
+          <option value="pattern">Pattern Recognition</option>
+          <option value="full">Full Monitoring</option>
+          <option value="silent">Silent Background Mode</option>
+          <option value="off">Turn Off Auto Alerts</option>
+        </select>
 
       </div>
     </div>
@@ -233,7 +253,7 @@ const closeBtn = document.getElementById("menuClose");
 trigger.onclick = () => menu.classList.add("open");
 closeBtn.onclick = () => menu.classList.remove("open");
 
-/* ALERT SYSTEM */
+/* EMERGENCY ALERT */
 document.getElementById("alertBubble").onclick = () => {
   document.getElementById("alertDropdown").style.display = "block";
 };
@@ -241,6 +261,11 @@ document.getElementById("alertBubble").onclick = () => {
 document.getElementById("quickAlertSelect").onchange = (e) => {
   const btn = document.getElementById("finalAlertButton");
   btn.style.display = e.target.value ? "block" : "none";
+};
+
+/* AUTO ALERT */
+document.getElementById("autoAlertBubble").onclick = () => {
+  document.getElementById("autoAlertDropdown").style.display = "block";
 };
 </script>
 
