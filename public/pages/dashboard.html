@@ -10,125 +10,6 @@
 
   <!-- CLOUD FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* LOCK BACKGROUND */
-    .page-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      z-index: -1;
-    }
-
-    /* CENTERED HEADER INFO */
-    .header-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      font-family: 'Cinzel', serif;
-      color: #ffd54f;
-      font-size: 1.1rem;
-      line-height: 1.4;
-      width: 100%;
-    }
-
-    #userName {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 0 0 6px rgba(255,255,255,0.4);
-    }
-
-    #weather, #beltlineLocation, #timeDisplay {
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    /* SAFETY ICON ANIMATION */
-    .safety-logo {
-      height: 140px;
-      animation: pulse 2.2s infinite ease-in-out, floaty 5s infinite ease-in-out;
-      cursor: pointer;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes floaty {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-      100% { transform: translateY(0); }
-    }
-
-    /* QUICK ACTIONS */
-    .quick-actions {
-      margin-top: 40px;
-      padding: 20px;
-      background: rgba(10,42,67,0.85);
-      border-top: 3px solid #ffd54f;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      backdrop-filter: blur(6px);
-    }
-
-    .quick-action-btn {
-      background: #ffd54f;
-      color: #000;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: 700;
-      text-decoration: none;
-      font-family: 'Cinzel', serif;
-      transition: 0.2s;
-    }
-
-    .quick-action-btn:hover {
-      background: #ffef9b;
-    }
-
-    .quick-slot {
-      background: rgba(255,255,255,0.15);
-      border: 1px dashed #ffd54f;
-      padding: 12px 20px;
-      border-radius: 10px;
-      color: #ffd54f;
-      font-family: 'Cinzel', serif;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    /* BOTTOM LOGOS — bigger */
-    .bottom-logo {
-      height: 75px !important;
-      width: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .bottom-link {
-      margin-top: 10px;
-      font-size: 1.2rem;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      color: #ffd54f;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    /* REMOVE FLOATING RECTANGLE */
-    #safetyDropdown {
-      display: none !important;
-    }
-  </style>
 </head>
 
 <body>
@@ -262,7 +143,7 @@
   </a>
 
   <a class="tile" href="/pages/map.html">
-    <img src="/assets/img/cloud/cloud-map.jpg">
+    <img src="/assets/img/map/map.jpg">
     <h3>Beltline Map</h3>
     <p>Trail layout, zones, and navigation.</p>
   </a>
@@ -289,9 +170,7 @@
          class="bottom-logo"
          onclick="location.href='/network/public/pages/explore.html'">
 
-    <a href="/network/public/pages/explore.html" class="bottom-link">
-      Explore Network
-    </a>
+    <div class="bottom-text">Explore Network</div>
   </div>
 
   <div class="bottom-section">
@@ -299,9 +178,7 @@
          class="bottom-logo"
          onclick="location.href='/fast-roll/index.html'">
 
-    <a href="/fast-roll/pages/order.html" class="bottom-link">
-      Place Delivery
-    </a>
+    <div class="bottom-text">Place Delivery</div>
   </div>
 
 </div>
