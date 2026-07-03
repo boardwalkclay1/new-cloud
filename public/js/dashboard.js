@@ -12,7 +12,7 @@ document.getElementById("userName").textContent =
   user.name || user.email || "User";
 
 /* ROLES */
-const roles = (user.roles || "").split(",");
+const roles = (user.roles || "").split(",").filter(Boolean);
 
 /* Vendor */
 if (roles.includes("vendor")) {
@@ -31,22 +31,46 @@ if (roles.includes("rider")) {
 /* Toggle vendor */
 document.getElementById("vendorToggle")?.addEventListener("change", async (e) => {
   const active = e.target.checked;
-  const newRoles = new Set((user.roles || "").split(","));
+  const newRoles = new Set((user.roles || "").split(",").filter(Boolean));
   active ? newRoles.add("vendor") : newRoles.delete("vendor");
-  await Auth.updateProfile({ roles: Array.from(newRoles) });
+
+  await fetch("/api/network/profile/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-User-Email": user.email,
+      "X-User-Id": user.id
+    },
+    body: JSON.stringify({ id: user.id, roles: Array.from(newRoles).join(",") })
+  });
+
+  const updated = { ...user, roles: Array.from(newRoles).join(",") };
+  Auth.save(updated);
   location.reload();
 });
 
 /* Toggle rider */
 document.getElementById("riderToggle")?.addEventListener("change", async (e) => {
   const active = e.target.checked;
-  const newRoles = new Set((user.roles || "").split(","));
+  const newRoles = new Set((user.roles || "").split(",").filter(Boolean));
   active ? newRoles.add("rider") : newRoles.delete("rider");
-  await Auth.updateProfile({ roles: Array.from(newRoles) });
+
+  await fetch("/api/network/profile/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-User-Email": user.email,
+      "X-User-Id": user.id
+    },
+    body: JSON.stringify({ id: user.id, roles: Array.from(newRoles).join(",") })
+  });
+
+  const updated = { ...user, roles: Array.from(newRoles).join(",") };
+  Auth.save(updated);
   location.reload();
 });
 
-/* WEATHER */
+/* WEATHER (Atlanta) */
 async function loadWeather() {
   try {
     const res = await fetch(
@@ -77,22 +101,22 @@ loadWeather();
 
 /* BELTLINE LOCATION */
 const beltlineZones = [
-  { name:"Eastside Trail (Ponce City Market)", lat:33.7725, lon:-84.3652 },
-  { name:"Westside Trail (Lee + White)", lat:33.7358, lon:-84.4173 },
-  { name:"Northside Trail", lat:33.8082, lon:-84.4021 },
-  { name:"Southside Trail", lat:33.7089, lon:-84.3890 }
+  { name: "Eastside Trail (Ponce City Market)", lat: 33.7725, lon: -84.3652 },
+  { name: "Westside Trail (Lee + White)",       lat: 33.7358, lon: -84.4173 },
+  { name: "Northside Trail",                    lat: 33.8082, lon: -84.4021 },
+  { name: "Southside Trail",                    lat: 33.7089, lon: -84.3890 }
 ];
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
-  const dLat = (lat2-lat1)*Math.PI/180;
-  const dLon = (lon2-lon1)*Math.PI/180;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
   const a =
-    Math.sin(dLat/2)**2 +
-    Math.cos(lat1*Math.PI/180) *
-    Math.cos(lat2*Math.PI/180) *
-    Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 function detectBeltlineLocation() {
@@ -123,6 +147,9 @@ function detectBeltlineLocation() {
       document.getElementById("beltlineLocation").textContent =
         "You are not currently on the Beltline Trail.";
     }
+  }, () => {
+    document.getElementById("beltlineLocation").textContent =
+      "Location permission denied.";
   });
 }
 detectBeltlineLocation();
@@ -132,8 +159,11 @@ function updateTime() {
   const now = new Date();
   document.getElementById("timeDisplay").textContent =
     now.toLocaleTimeString("en-US", {
-      hour:"numeric", minute:"numeric", second:"numeric",
-      hour12:true, timeZone:"America/New_York"
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+      timeZone: "America/New_York"
     });
 }
 setInterval(updateTime, 1000);
@@ -156,7 +186,12 @@ document.getElementById("safetyDropdownTrigger").onclick = () => {
 /* NOTIFICATIONS */
 async function loadNotifications() {
   try {
-    const res = await fetch(`/api/notifications?user=${user.id}`);
+    const res = await fetch(`/api/notifications?user=${user.id}`, {
+      headers: {
+        "X-User-Email": user.email,
+        "X-User-Id": user.id
+      }
+    });
     const data = await res.json();
 
     if (!data.length) {
@@ -177,4 +212,5 @@ loadNotifications();
 /* LOGOUT */
 window.logout = function () {
   Auth.logout();
+  window.location.href = "/pages/login.html";
 };
