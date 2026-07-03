@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — Beltline Cloud</title>
 
+  <!-- ✅ API base defined at the very top -->
+  <script>
+    const API = "https://api.beltlinecloud.com";
+  </script>
+
   <style>
     body {
       margin: 0;
@@ -72,8 +77,6 @@
   </div>
 
   <script>
-    const API = "https://api.beltlinecloud.com";
-
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
