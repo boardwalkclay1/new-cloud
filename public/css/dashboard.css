@@ -48,7 +48,14 @@ body {
 
   .quick-actions {
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
+    padding: 25px 10px;
+  }
+
+  .quick-slot,
+  .quick-action-btn {
+    width: 90%;
+    max-width: 300px;
   }
 
   .grid {
@@ -58,16 +65,16 @@ body {
 
   .bottom-bar {
     flex-direction: column;
-    gap: 30px;
-    padding-bottom: 40px;
+    gap: 40px;
+    padding-bottom: 50px;
   }
 
   .bottom-logo {
-    height: 90px !important;
+    height: 100px !important;
   }
 
   .bottom-text {
-    font-size: 1.55rem;
+    font-size: 1.65rem;
   }
 }
 
@@ -157,6 +164,11 @@ body {
   font-weight: 700;
   text-decoration: none;
   font-family: 'Cinzel', serif;
+  transition: 0.2s;
+}
+
+.quick-action-btn:hover {
+  background: #ffef9b;
 }
 
 .quick-slot {
@@ -168,6 +180,35 @@ body {
   font-family: 'Cinzel', serif;
   text-align: center;
   cursor: pointer;
+  min-width: 180px;
+}
+
+/* DROPDOWNS */
+.quick-dropdown {
+  margin-top: 8px;
+  background: rgba(255,255,255,0.12);
+  border: 2px solid var(--yellow);
+  padding: 10px;
+  border-radius: 10px;
+  color: var(--yellow);
+  font-family: 'Cinzel', serif;
+  width: 180px;
+}
+
+.emergency-btn {
+  background: #b83232;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  width: 180px;
+  font-family: 'Cinzel', serif;
+}
+
+.emergency-btn:hover {
+  background: #e64545;
 }
 
 /* GRID */
