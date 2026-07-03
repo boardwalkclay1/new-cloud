@@ -8,129 +8,15 @@
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
   <link rel="stylesheet" href="/css/safety-cloud.css">
 
-  <!-- CLOUD FONT -->
+  <!-- CLOUD FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Social Preview -->
+  <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Safety Cloud Dashboard — Beltline Cloud">
   <meta property="og:description" content="Your Beltline safety dashboard with alerts, Safe‑Clod motion detection, markers, incident center, and emergency tools.">
-  <meta property="og:image" content="/public/music/img/safety-cloud.jpg">
+  <meta property="og:image" content="/music/img/safety-cloud.jpg">
   <meta property="og:type" content="website">
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-
-    .page-bg {
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.45);
-    }
-
-    .hero h1 {
-      font-family: 'Cinzel', serif;
-      color: #ffd54f;
-      text-shadow: 0 0 10px rgba(255,255,255,0.4);
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      padding: 30px;
-    }
-
-    .dash-card {
-      background: rgba(0,0,0,0.65);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 14px;
-      padding: 20px;
-      color: #fff;
-      backdrop-filter: blur(6px);
-    }
-
-    .dash-card h3 {
-      font-family: 'Cinzel', serif;
-      color: #ffd54f;
-      margin-bottom: 10px;
-    }
-
-    .dash-btn {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 10px 16px;
-      background: #ffd54f;
-      color: #000;
-      font-weight: 700;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .dash-btn:hover {
-      background: #ffea9b;
-    }
-
-    /* GLOBAL ALERT BUTTON */
-    .global-alert-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ff4444;
-      color: #fff;
-      padding: 14px 20px;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: 0 0 15px rgba(255,0,0,0.5);
-    }
-
-    /* REMOVE FLOATING RECTANGLE */
-    #safetyDropdown {
-      display: none !important;
-    }
-
-    /* SAFETY HELPER */
-    .safety-helper {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      cursor: pointer;
-      z-index: 999;
-    }
-
-    .helper-bubble {
-      background: rgba(0,0,0,0.75);
-      padding: 15px;
-      border-radius: 12px;
-      color: #fff;
-      width: 260px;
-      margin-bottom: 10px;
-      border: 1px solid rgba(255,255,255,0.25);
-      font-family: 'Inter', sans-serif;
-    }
-
-    .helper-bubble.hidden {
-      display: none;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      color: #ffd54f;
-      font-family: 'Cinzel', serif;
-    }
-  </style>
 </head>
 
 <body data-page="safety-home">
@@ -153,9 +39,9 @@
     </div>
   </nav>
 
-  <!-- GLOBAL ALERT BUTTON -->
-  <button id="globalAlertBtn" class="global-alert-btn">
-    ⚠️ Send Emergency Alert
+  <!-- EMERGENCY BUTTON (ROUTES TO RESPONSE UNIT) -->
+  <button id="globalAlertBtn" class="global-alert-btn" data-route="/pages/response/signup.html">
+    ⚠️ Emergency — Contact Response Unit
   </button>
 
   <!-- HERO -->
@@ -164,77 +50,69 @@
     <p>Your Beltline safety command center — alerts, motion safety, markers, incident center, and emergency tools.</p>
   </header>
 
-  <!-- DASHBOARD GRID -->
+  <!-- SAFETY CLOUD GRID -->
   <section class="dashboard-grid">
 
-    <!-- SAFE‑CLOD MODULE -->
+    <!-- SAFETY SYSTEMS -->
     <div class="dash-card">
       <h3>Safe‑Clod Motion Safety</h3>
       <p>Smart motion detection for kidnapping, falls, snatches, and dangerous movement.</p>
       <a class="dash-btn" href="/pages/safety/safe-cloud.html">Open Safe‑Clod</a>
     </div>
 
-    <!-- INCIDENT CENTER -->
     <div class="dash-card">
       <h3>Incident Center</h3>
       <p>Report incidents, track emergencies, and coordinate response unit activity.</p>
       <a class="dash-btn" href="/pages/safety/incident-center.html">Open Incident Center</a>
     </div>
 
-    <!-- LOST & FOUND -->
-    <div class="dash-card">
-      <h3>Lost & Found</h3>
-      <p>Report lost or found items and help the Beltline community recover belongings.</p>
-      <a class="dash-btn" href="/pages/safety/lost-found.html">Open Lost & Found</a>
-    </div>
-
-    <!-- REPORT LOST -->
-    <div class="dash-card">
-      <h3>Report Lost Item</h3>
-      <p>Submit a lost item report to notify the community.</p>
-      <a class="dash-btn" href="/pages/safety/report-lost.html">Report Lost</a>
-    </div>
-
-    <!-- REPORT FOUND -->
-    <div class="dash-card">
-      <h3>Report Found Item</h3>
-      <p>Found something? Help return it to its owner.</p>
-      <a class="dash-btn" href="/pages/safety/report-found.html">Report Found</a>
-    </div>
-
-    <!-- STOLEN ITEMS -->
-    <div class="dash-card">
-      <h3>Stolen Items</h3>
-      <p>Report stolen items and view community reports.</p>
-      <a class="dash-btn" href="/pages/safety/stolen.html">Open Stolen Reports</a>
-    </div>
-
-    <!-- REPORT STOLEN -->
-    <div class="dash-card">
-      <h3>Report Stolen Item</h3>
-      <p>Submit a stolen item report instantly.</p>
-      <a class="dash-btn" href="/pages/safety/report-stolen.html">Report Stolen</a>
-    </div>
-
-    <!-- COMMUNITY ALERTS -->
     <div class="dash-card">
       <h3>Community Alerts</h3>
       <p>Trail closures, hazards, lost pets, and emergency updates.</p>
       <a class="dash-btn" href="/pages/safety/alerts.html">View Alerts</a>
     </div>
 
-    <!-- LIVE FEED -->
     <div class="dash-card">
       <h3>Live Safety Feed</h3>
       <p>Real-time updates from the Beltline community.</p>
       <a class="dash-btn" href="/pages/safety/live-feed.html">Open Live Feed</a>
     </div>
 
-    <!-- WEATHER SAFETY -->
     <div class="dash-card">
       <h3>Weather Safety</h3>
       <p>Storm warnings, heat advisories, and Beltline weather hazards.</p>
       <a class="dash-btn" href="/pages/safety/alerts.html#weather">Weather Alerts</a>
+    </div>
+
+    <!-- LOST / FOUND / STOLEN -->
+    <div class="dash-card">
+      <h3>Lost & Found</h3>
+      <p>Report lost or found items and help the Beltline community recover belongings.</p>
+      <a class="dash-btn" href="/pages/safety/lost-found.html">Open Lost & Found</a>
+    </div>
+
+    <div class="dash-card">
+      <h3>Report Lost Item</h3>
+      <p>Submit a lost item report to notify the community.</p>
+      <a class="dash-btn" href="/pages/safety/report-lost.html">Report Lost</a>
+    </div>
+
+    <div class="dash-card">
+      <h3>Report Found Item</h3>
+      <p>Found something? Help return it to its owner.</p>
+      <a class="dash-btn" href="/pages/safety/report-found.html">Report Found</a>
+    </div>
+
+    <div class="dash-card">
+      <h3>Stolen Items</h3>
+      <p>Report stolen items and view community reports.</p>
+      <a class="dash-btn" href="/pages/safety/stolen.html">Open Stolen Reports</a>
+    </div>
+
+    <div class="dash-card">
+      <h3>Report Stolen Item</h3>
+      <p>Submit a stolen item report instantly.</p>
+      <a class="dash-btn" href="/pages/safety/report-stolen.html">Report Stolen</a>
     </div>
 
     <!-- MARKER SYSTEM -->
@@ -244,7 +122,6 @@
       <a class="dash-btn" href="/pages/safety/markers/index.html">Marker System</a>
     </div>
 
-    <!-- MARKER CATEGORIES -->
     <div class="dash-card">
       <h3>Marker Categories</h3>
       <p>Understand marker types, colors, and emergency meanings.</p>
@@ -258,7 +135,6 @@
       <a class="dash-btn" href="/pages/safety/emergency.html">Emergency Tools</a>
     </div>
 
-    <!-- SEND USER ALERT -->
     <div class="dash-card">
       <h3>Send User Alert</h3>
       <p>Send direct alerts to Cloud users in emergencies.</p>
