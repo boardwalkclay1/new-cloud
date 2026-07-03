@@ -89,11 +89,8 @@
 
   <div class="header-left">
     <img src="/assets/img/cloud/cloud-logo.jpg"
-         class="header-logo menu-trigger"
-         id="menuTrigger"
-         alt="Open Menu"
-         role="button"
-         tabindex="0">
+         class="header-logo"
+         alt="Cloud Logo">
     <div class="header-name">Clayvonte</div>
   </div>
 
@@ -104,10 +101,15 @@
   </div>
 
   <div class="header-top-right">
+    <img src="/assets/img/cloud/burger-menu.jpg"
+         class="burger-icon"
+         id="menuTrigger"
+         alt="Open Menu"
+         role="button"
+         tabindex="0">
     <a href="/pages/messages.html">
       <img src="/assets/img/cloud/cloud-talk-logo.jpg" class="cloud-talk-logo" alt="Messages">
     </a>
-
     <a href="/pages/safety/index.html">
       <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" alt="Safety Cloud">
     </a>
@@ -212,8 +214,11 @@ function logout() {
 }
 
 const menu = document.getElementById("cloudMenu");
-document.getElementById("menuTrigger").onclick = () => menu.classList.add("open");
-document.getElementById("menuClose").onclick = () => menu.classList.remove("open");
+const trigger = document.getElementById("menuTrigger");
+const closeBtn = document.getElementById("menuClose");
+
+trigger.onclick = () => menu.classList.add("open");
+closeBtn.onclick = () => menu.classList.remove("open");
 </script>
 
 </body>
