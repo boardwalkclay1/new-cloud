@@ -1,6 +1,3 @@
-// work-safety.js
-import { json } from "./work-utils.js";
-
 export async function handleSafetyRoutes(path, request, db, url) {
   // SAFETY ALERT CREATE
   if (path.startsWith("/api/safety/create") && request.method === "POST") {
