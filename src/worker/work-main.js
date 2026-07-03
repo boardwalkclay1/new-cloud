@@ -104,7 +104,6 @@ async function login(request, db) {
   if (!email || !password)
     return json({ error: "Missing fields" }, 400);
 
-  // ONLY SELECT FIELDS THAT EXIST IN DB
   const user = await db.prepare(
     "SELECT id, email, name, password, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
@@ -112,7 +111,6 @@ async function login(request, db) {
   if (!user || user.password !== password)
     return json({ error: "Invalid credentials" }, 401);
 
-  // RETURN FULL USER OBJECT EXPECTED BY FRONTEND
   return json({
     user: {
       id: user.id,
