@@ -1,3 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beltline Cloud Dashboard</title>
+
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- CLOUD FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="page-bg"></div>
+
+<!-- CLOUD MENU -->
+<div id="cloudMenu" class="cloud-menu">
+  <div class="menu-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo">
+    <span class="menu-close" id="menuClose">&times;</span>
+  </div>
+
+  <div class="menu-content">
+
+    <div class="menu-category safety">
+      <h3>My Profile</h3>
+      <ul>
+        <li><a href="/pages/profile.html">View Profile</a></li>
+        <li><a href="/pages/notifications.html">Notifications</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category safety">
+      <h3>Safety Cloud</h3>
+      <ul>
+        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
+        <li><a href="/pages/safety/lost-found.html">Lost & Found</a></li>
+        <li><a href="/pages/safety/stolen.html">Stolen Items</a></li>
+        <li><a href="/pages/safety/markers.html">Marker System</a></li>
+        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
+        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category news">
+      <h3>News Cloud</h3>
+      <ul>
+        <li><a href="/pages/news/beltline-news.html">Beltline News</a></li>
+        <li><a href="/pages/news/weather.html">Weather</a></li>
+        <li><a href="/pages/news/updates.html">Updates</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category trail">
+      <h3>Trail Tools</h3>
+      <ul>
+        <li><a href="/pages/map.html">Trail Map</a></li>
+        <li><a href="/pages/map/zones.html">Zones</a></li>
+        <li><a href="/pages/map/etiquette.html">Etiquette</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category community">
+      <h3>Community Cloud</h3>
+      <ul>
+        <li><a href="/pages/chat/pages/index.html">Cloud Chat</a></li>
+        <li><a href="/public/pages/events/pages/events.html">Events</a></li>
+        <li><a href="/pages/connect.html">Cloud Connect</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category news">
+      <h3>Sign Up</h3>
+      <ul>
+        <li><a href="/pages/rider/signup.html">Become a Rider</a></li>
+        <li><a href="/pages/vendor/signup.html">Become a Vendor</a></li>
+        <li><a href="/pages/response/signup.html">Join Response Unit</a></li>
+      </ul>
+    </div>
+
+    <div class="logout-btn-menu" onclick="logout()">Logout</div>
+
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+
+  <div class="header-left">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
+  </div>
+
+  <div class="header-info">
+    <span id="userName">Loading...</span>
+    <span id="weather">Loading weather…</span>
+    <span id="beltlineLocation">Detecting Beltline location…</span>
+    <span id="timeDisplay"></span>
+  </div>
+
+  <div class="header-top-right">
+
+    <!-- CLOUD TALK ABOVE SAFETY CLOUD -->
+    <a href="/pages/messages.html">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" style="height:70px; margin-bottom:12px;">
+    </a>
+
+    <!-- SAFETY CLOUD (bigger + animated) -->
+    <a href="/pages/safety/index.html">
+      <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo">
+    </a>
+
+  </div>
+
+</header>
+
+<!-- ROLE SECTIONS -->
+<div id="vendorLinks" style="display:none; margin:20px; opacity:0.85;">
+  You are a <strong>Network Vendor</strong>.
+</div>
+
+<div id="riderLinks" style="display:none; margin:20px; opacity:0.85;">
+  You are a <strong>Fast Roll Rider</strong>.
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-actions">
+
+  <!-- PROFILE -->
+  <a class="quick-action-btn" href="/pages/profile.html">Profile</a>
+
+  <!-- SETTINGS -->
+  <a class="quick-action-btn" href="/pages/settings.html">Settings</a>
+
+  <!-- SAFETY CLOUD MODE -->
+  <div class="quick-slot">
+    <label style="color:#ffd54f; font-family:'Cinzel', serif;">Safety Cloud Mode</label>
+    <select id="safetyModeSelect" class="quick-dropdown">
+      <option value="off">OFF</option>
+      <option value="motion">Motion Detection</option>
+      <option value="pattern">Pattern Detection</option>
+      <option value="full">Full Monitoring</option>
+    </select>
+  </div>
+
+  <!-- EMERGENCY ALERT -->
+  <div class="quick-slot">
+    <label style="color:#ffd54f; font-family:'Cinzel', serif;">Emergency Alert</label>
+    <div class="quick-dropdown">
+      <button id="emergencyButton" class="emergency-btn">
+        SEND EMERGENCY ALERT
+      </button>
+      <p style="font-size:0.8rem; opacity:0.8; margin-top:6px;">
+        Sends alert to Cloud Response, starts recording audio/video, and shares your location.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- GRID -->
+<h2 class="section-title">Explore Beltline Cloud</h2>
+
+<section class="grid">
+
+  <a class="tile" href="/pages/chat/pages/index.html">
+    <img src="/assets/img/cloud/cloud-chat.jpg">
+    <h3>Cloud Chat</h3>
+    <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
+  </a>
+
+  <a class="tile" href="/pages/map.html">
+    <img src="/assets/img/map/map.jpg">
+    <h3>Beltline Map</h3>
+    <p>Trail layout, zones, and navigation.</p>
+  </a>
+
+  <a class="tile" href="/public/pages/events/pages/events.html">
+    <img src="/assets/img/cloud/events-cloud.jpg">
+    <h3>Events</h3>
+    <p>Workshops, rides, meetups, concerts, and more.</p>
+  </a>
+
+  <a class="tile" href="/pages/connect.html">
+    <img src="/assets/img/cloud/connect.jpg">
+    <h3>Cloud Connect</h3>
+    <p>Connect with riders, vendors, and Beltline community.</p>
+  </a>
+
+</section>
+
 <!-- NETWORK + FAST ROLL -->
 <div class="bottom-bar">
 
@@ -18,3 +211,27 @@
   </div>
 
 </div>
+
+<!-- NOTIFICATIONS BAR -->
+<div id="notificationsBar" style="
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(10,42,67,0.85);
+  padding:15px;
+  border-top:3px solid #ffd54f;
+  color:#ffffff;
+  font-size:1rem;
+  text-align:center;
+  z-index:999;
+">
+  Loading notifications…
+</div>
+
+<!-- JS -->
+<script type="module" src="/js/dashboard.js"></script>
+<script type="module" src="/pages/safety/js/cloud.js"></script>
+
+</body>
+</html>
