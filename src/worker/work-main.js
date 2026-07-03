@@ -79,7 +79,22 @@ async function signup(request, db) {
      VALUES (?, ?, ?, ?, ?)`
   ).bind(id, email, password, name, "").run();
 
-  return json({ success: true, user: { id, email, name, roles: "" } });
+  return json({
+    success: true,
+    user: {
+      id,
+      email,
+      name,
+      roles: "",
+      bio: "",
+      photoUrl: "",
+      responderProfile: null,
+      vendorProfile: null,
+      fastrollClient: null,
+      fastrollRider: null,
+      eventHostProfile: null
+    }
+  });
 }
 
 async function login(request, db) {
@@ -89,7 +104,7 @@ async function login(request, db) {
   if (!email || !password)
     return json({ error: "Missing fields" }, 400);
 
-  // ⭐ ONLY THE FIELDS LOGIN ACTUALLY USES
+  // ONLY SELECT FIELDS THAT EXIST IN DB
   const user = await db.prepare(
     "SELECT id, email, name, password, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
@@ -97,12 +112,20 @@ async function login(request, db) {
   if (!user || user.password !== password)
     return json({ error: "Invalid credentials" }, 401);
 
+  // RETURN FULL USER OBJECT EXPECTED BY FRONTEND
   return json({
     user: {
       id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.roles || ""
+      roles: user.roles || "",
+      bio: "",
+      photoUrl: "",
+      responderProfile: null,
+      vendorProfile: null,
+      fastrollClient: null,
+      fastrollRider: null,
+      eventHostProfile: null
     }
   });
 }
@@ -122,7 +145,14 @@ async function me(request, db) {
       id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.roles || ""
+      roles: user.roles || "",
+      bio: "",
+      photoUrl: "",
+      responderProfile: null,
+      vendorProfile: null,
+      fastrollClient: null,
+      fastrollRider: null,
+      eventHostProfile: null
     }
   });
 }
