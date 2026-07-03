@@ -3,6 +3,7 @@
 
 // ✅ API base defined at the top
 const API_BASE = "https://api.beltlinecloud.com";
+const FRONTEND_DOMAIN = "https://beltlinecloud.com"; // your actual site
 
 import { handleResponseRoutes } from "./work-response.js";
 import { handleSafetyRoutes } from "./work-safety.js";
@@ -11,7 +12,7 @@ import { handleSafetyRoutes } from "./work-safety.js";
 
 function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": API_BASE,
+    "Access-Control-Allow-Origin": FRONTEND_DOMAIN, // allow your frontend domain
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, X-User-Email, X-User-Id"
   };
@@ -41,7 +42,6 @@ function getMimeType(path) {
 /* ---------------- NETWORK ROUTES ---------------- */
 
 async function handleNetworkRoutes(path, request, db, url) {
-  // AUTH
   if (path === "/api/network/signup" && request.method === "POST")
     return signup(request, db);
 
@@ -54,7 +54,6 @@ async function handleNetworkRoutes(path, request, db, url) {
   if (path === "/api/network/profile/update" && request.method === "POST")
     return updateProfile(request, db);
 
-  // … other routes unchanged …
   return null;
 }
 
@@ -167,7 +166,7 @@ export default {
 
 function wrap(res) {
   const headers = new Headers(res.headers);
-  headers.set("Access-Control-Allow-Origin", API_BASE);
+  headers.set("Access-Control-Allow-Origin", FRONTEND_DOMAIN); // your domain
   headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   headers.set("Access-Control-Allow-Headers", "Content-Type, X-User-Email, X-User-Id");
 
