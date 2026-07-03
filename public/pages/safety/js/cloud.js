@@ -1,98 +1,107 @@
-// SAFE CLOUD MODES
+/* public/pages/safety/js/cloud.js */
 
-const SAFE_CLOUD_MODES = {
-  kidnapping: {
-    label: "Kidnapping Mode",
-    thresholds: {
-      jerk: 20,
-      flipAngle: 140,
-      dragSpeed: 0.7,
-      sprintSpeed: 4.0,
-      kidnappingAccel: 30
-    },
-    severity: "critical",
-    autoRecord: true,
-    notifyContacts: true,
-    notifyPolice: true
-  },
+/* LOAD USER */
+const user = JSON.parse(localStorage.getItem("cloud_user"));
+if (!user) {
+  alert("User not logged in.");
+  window.location.href = "/pages/login.html";
+}
 
-  snatch: {
-    label: "Snatch Mode",
-    thresholds: {
-      jerk: 22,
-      flipAngle: 160,
-      sprintSpeed: 4.5
-    },
-    severity: "high",
-    autoRecord: true,
-    notifyContacts: true,
-    notifyPolice: false
-  },
+/* SAFETY CLOUD MODE */
+const safetyModeSelect = document.getElementById("safetyModeSelect");
 
-  fall: {
-    label: "Fall Detection",
-    thresholds: {
-      fallAccel: 24,
-      impactAccel: 30,
-      flipAngle: 100,
-      stillnessTime: 3.5,
-      jerk: 15
-    },
-    severity: "medium",
-    autoRecord: true,
-    notifyContacts: true,
-    notifyPolice: false
-  },
+safetyModeSelect.addEventListener("change", async () => {
+  const mode = safetyModeSelect.value;
 
-  night: {
-    label: "Night Mode",
-    thresholds: {
-      jerk: 18,
-      flipAngle: 130,
-      fallAccel: 22,
-      dragSpeed: 1.0
+  await fetch("https://api.beltlinecloud.com/api/safety/mode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-User-Email": user.email,
+      "X-User-Id": user.id
     },
-    severity: "medium",
-    autoRecord: false,
-    notifyContacts: true,
-    notifyPolice: false
-  },
+    body: JSON.stringify({
+      userId: user.id,
+      mode
+    })
+  });
 
-  solo: {
-    label: "Solo Mode",
-    thresholds: {
-      jerk: 16,
-      flipAngle: 150,
-      dragSpeed: 0.9
-    },
-    severity: "medium",
-    autoRecord: false,
-    notifyContacts: true,
-    notifyPolice: false
-  },
+  localStorage.setItem("safety_mode", mode);
+});
 
-  vendor: {
-    label: "Vendor Mode",
-    thresholds: {
-      jerk: 12,
-      dragSpeed: 1.1
-    },
-    severity: "low",
-    autoRecord: false,
-    notifyContacts: false,
-    notifyPolice: false
-  },
+/* EMERGENCY ALERT */
+const emergencyButton = document.getElementById("emergencyButton");
 
-  highrisk: {
-    label: "High‑Risk Mode",
-    thresholds: {
-      jerk: 10,
-      flipAngle: 120,
-      dragSpeed: 0.8
-    },
-    severity: "high",
-    autoRecord: true,
-    notifyContacts: true,
-    notifyPolice: true
+emergencyButton.addEventListener("click", async () => {
+  emergencyButton.disabled = true;
+  emergencyButton.textContent = "Alert Sent…";
+
+  /* GET LOCATION */
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const payload = {
+      userId: user.id,
+      email: user.email,
+      lat: pos.coords.latitude,
+      lon: pos.coords.longitude,
+      timestamp: Date.now()
+    };
+
+    /* SEND ALERT TO CLOUD RESPONSE */
+    await fetch("https://api.beltlinecloud.com/api/response/emergency", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-User-Email": user.email,
+        "X-User-Id": user.id
+      },
+      body: JSON.stringify(payload)
+    });
+
+    /* START AUDIO + VIDEO RECORDING */
+    startEmergencyRecording();
+
+  }, () => {
+    alert("Location permission denied.");
+  });
+});
+
+/* RECORDING FUNCTION */
+async function startEmergencyRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true
+    });
+
+    const recorder = new MediaRecorder(stream);
+    const chunks = [];
+
+    recorder.ondataavailable = e => chunks.push(e.data);
+
+    recorder.onstop = async () => {
+      const blob = new Blob(chunks, { type: "video/webm" });
+
+      const formData = new FormData();
+      formData.append("file", blob);
+      formData.append("userId", user.id);
+
+      await fetch("https://api.beltlinecloud.com/api/response/upload", {
+        method: "POST",
+        headers: {
+          "X-User-Email": user.email,
+          "X-User-Id": user.id
+        },
+        body: formData
+      });
+    };
+
+    recorder.start();
+
+    /* Auto-stop after 60 seconds */
+    setTimeout(() => recorder.stop(), 60000);
+
+  } catch (err) {
+    console.error(err);
+    alert("Recording failed.");
   }
-};
+}
