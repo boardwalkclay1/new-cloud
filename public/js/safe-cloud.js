@@ -1,12 +1,23 @@
-// /public/js/safety-cloud.js
+// /js/safe-cloud.js
 
 const API_BASE = "https://api.beltlinecloud.com/safety";
 
 /* ---------- CORE API HELPER ---------- */
 
 async function api(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, { ...options });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers: {
+      Accept: "application/json",
+      ...(options.headers || {})
+    },
+    ...options
+  });
+
+  if (!res.ok) {
+    console.error("Safety API error:", res.status, res.statusText);
+    throw new Error(`API error: ${res.status}`);
+  }
+
   const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) return res.json();
   return res.text();
@@ -15,136 +26,180 @@ async function api(path, options = {}) {
 /* ---------- LOST & FOUND ---------- */
 
 export async function loadLostFoundBoard() {
-  const items = await api("/lost-found");
-  const container = document.getElementById("lostFoundList");
-  if (!container) return;
+  try {
+    const items = await api("/lost-found");
+    const container = document.getElementById("lostFoundList");
+    if (!container) return;
 
-  container.innerHTML = "";
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "lf-item";
-    div.innerHTML = `
-      <strong>${item.status?.toUpperCase() || ""}</strong> • ${item.category || ""}<br>
-      ${item.description || ""}<br>
-      <small>${item.lost_place || ""} • ${item.lost_time || ""}</small>
-    `;
-    container.appendChild(div);
-  });
+    container.innerHTML = "";
+    items.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "lf-item";
+      div.innerHTML = `
+        <strong>${item.status?.toUpperCase() || ""}</strong> • ${item.category || ""}<br>
+        ${item.description || ""}<br>
+        <small>${item.lost_place || ""} • ${item.lost_time || ""}</small>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load Lost & Found:", err);
+  }
 }
 
 export async function submitLostFound(formEl) {
   const formData = new FormData(formEl);
-  await fetch(`${API_BASE}/lost-found`, {
-    method: "POST",
-    body: formData
-  });
+  try {
+    await fetch(`${API_BASE}/lost-found`, {
+      method: "POST",
+      body: formData
+    });
+  } catch (err) {
+    console.error("Failed to submit Lost & Found:", err);
+  }
 }
 
 /* ---------- STOLEN ---------- */
 
 export async function loadStolenBoard() {
-  const items = await api("/stolen");
-  const container = document.getElementById("stolenList");
-  if (!container) return;
+  try {
+    const items = await api("/stolen");
+    const container = document.getElementById("stolenList");
+    if (!container) return;
 
-  container.innerHTML = "";
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "stolen-item";
-    div.innerHTML = `
-      <strong>${item.title || ""}</strong><br>
-      ${item.description || ""}<br>
-      <small>${item.stolen_place || ""} • ${item.stolen_time || ""}</small>
-    `;
-    container.appendChild(div);
-  });
+    container.innerHTML = "";
+    items.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "stolen-item";
+      div.innerHTML = `
+        <strong>${item.title || ""}</strong><br>
+        ${item.description || ""}<br>
+        <small>${item.stolen_place || ""} • ${item.stolen_time || ""}</small>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load stolen board:", err);
+  }
 }
 
 export async function submitStolen(formEl) {
   const formData = new FormData(formEl);
-  await fetch(`${API_BASE}/stolen`, {
-    method: "POST",
-    body: formData
-  });
+  try {
+    await fetch(`${API_BASE}/stolen`, {
+      method: "POST",
+      body: formData
+    });
+  } catch (err) {
+    console.error("Failed to submit stolen item:", err);
+  }
 }
 
 /* ---------- ALERTS (USER + WEATHER) ---------- */
 
 export async function loadAlerts() {
-  const alerts = await api("/alerts?active=true");
-  const container = document.getElementById("alertList");
-  if (!container) return;
+  try {
+    const alerts = await api("/alerts?active=true");
+    const container = document.getElementById("alertList");
+    if (!container) return;
 
-  container.innerHTML = "";
-  alerts.forEach(a => {
-    const div = document.createElement("div");
-    div.className = "alert-item";
-    div.innerHTML = `
-      <strong>${a.type?.toUpperCase() || ""}</strong> • ${a.title || ""}<br>
-      ${a.message || ""}<br>
-      <small>${a.area_label || ""} • ${a.created_at || ""}</small>
-    `;
-    container.appendChild(div);
-  });
+    container.innerHTML = "";
+    alerts.forEach(a => {
+      const div = document.createElement("div");
+      div.className = "alert-item";
+      div.innerHTML = `
+        <strong>${a.type?.toUpperCase() || ""}</strong> • ${a.title || ""}<br>
+        ${a.message || ""}<br>
+        <small>${a.area_label || ""} • ${a.created_at || ""}</small>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load alerts:", err);
+  }
 }
 
 export async function submitUserAlert(formEl) {
   const formData = new FormData(formEl);
 
-  navigator.geolocation.getCurrentPosition(async pos => {
-    formData.append("lat", pos.coords.latitude);
-    formData.append("lon", pos.coords.longitude);
+  const sendAlert = async (lat, lon) => {
+    if (lat && lon) {
+      formData.append("lat", lat);
+      formData.append("lon", lon);
+    }
 
-    await fetch(`${API_BASE}/alerts`, {
-      method: "POST",
-      body: formData
-    });
-  });
+    try {
+      await fetch(`${API_BASE}/alerts`, {
+        method: "POST",
+        body: formData
+      });
+    } catch (err) {
+      console.error("Failed to submit user alert:", err);
+    }
+  };
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      pos => sendAlert(pos.coords.latitude, pos.coords.longitude),
+      () => sendAlert(null, null),
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  } else {
+    sendAlert(null, null);
+  }
 }
 
 /* ---------- WEATHER SAFETY ---------- */
 
 export async function loadWeatherSafety() {
-  const alerts = await api("/weather-alerts");
-  const container = document.getElementById("weatherAlertList");
-  if (!container) return;
+  try {
+    const alerts = await api("/weather-alerts");
+    const container = document.getElementById("weatherAlertList");
+    if (!container) return;
 
-  container.innerHTML = "";
-  alerts.forEach(a => {
-    const div = document.createElement("div");
-    div.className = "weather-alert-item";
-    div.innerHTML = `
-      <strong>${a.level?.toUpperCase() || ""}</strong> • ${a.title || ""}<br>
-      ${a.message || ""}<br>
-      <small>${a.area_label || ""}</small>
-    `;
-    container.appendChild(div);
-  });
+    container.innerHTML = "";
+    alerts.forEach(a => {
+      const div = document.createElement("div");
+      div.className = "weather-alert-item";
+      div.innerHTML = `
+        <strong>${a.level?.toUpperCase() || ""}</strong> • ${a.title || ""}<br>
+        ${a.message || ""}<br>
+        <small>${a.area_label || ""}</small>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load weather safety alerts:", err);
+  }
 }
 
 /* ---------- LIVE FEED ---------- */
 
 export async function loadLiveFeed() {
-  const feed = await api("/live-feed");
-  const container = document.getElementById("liveFeed");
-  if (!container) return;
+  try {
+    const feed = await api("/live-feed");
+    const container = document.getElementById("liveFeed");
+    if (!container) return;
 
-  container.innerHTML = "";
-  feed.forEach(e => {
-    const div = document.createElement("div");
-    div.className = "live-item";
-    div.innerHTML = `
-      <h3>${e.title || ""}</h3>
-      <iframe
-        src="${e.embed_url}"
-        title="${e.title || ""}"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
-      <small>${e.location || ""}</small>
-    `;
-    container.appendChild(div);
-  });
+    container.innerHTML = "";
+    feed.forEach(e => {
+      const div = document.createElement("div");
+      div.className = "live-item";
+      div.innerHTML = `
+        <h3>${e.title || ""}</h3>
+        <iframe
+          src="${e.embed_url}"
+          title="${e.title || ""}"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+        <small>${e.location || ""}</small>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load live feed:", err);
+  }
 }
 
 /* ---------- SAFE‑CLOD MOTION ENGINE ---------- */
@@ -154,6 +209,10 @@ let THRESHOLDS = {};
 let fallStage = null;
 let stillnessTimer = null;
 let countdownTimer = null;
+
+function routeToResponseUnit() {
+  window.location.href = "/pages/response/signup.html";
+}
 
 function setSafeClodMode(mode) {
   switch (mode) {
@@ -224,7 +283,7 @@ function getAlertTargets() {
   };
 }
 
-function startSafeClodMonitoring() {
+export function startSafeClodMonitoring() {
   if (SAFE_CLOD_ENABLED) return;
   SAFE_CLOD_ENABLED = true;
 
@@ -232,12 +291,13 @@ function startSafeClodMonitoring() {
   window.addEventListener("deviceorientation", handleSafeClodOrientation);
 }
 
-function stopSafeClodMonitoring() {
+export function stopSafeClodMonitoring() {
   SAFE_CLOD_ENABLED = false;
   window.removeEventListener("devicemotion", handleSafeClodMotion);
   window.removeEventListener("deviceorientation", handleSafeClodOrientation);
   clearInterval(countdownTimer);
   clearInterval(stillnessTimer);
+  fallStage = null;
 }
 
 function handleSafeClodMotion(event) {
@@ -249,14 +309,12 @@ function handleSafeClodMotion(event) {
   const z = acc.z || 0;
   const total = Math.abs(x) + Math.abs(y) + Math.abs(z);
 
-  // Kidnapping / snatch / jerk
   if (THRESHOLDS.kidnappingAccel && total > THRESHOLDS.kidnappingAccel) {
     triggerSafeClodScenario("kidnapping");
   } else if (THRESHOLDS.jerk && total > THRESHOLDS.jerk) {
     triggerSafeClodScenario("jerk");
   }
 
-  // Fall detection
   if (THRESHOLDS.fallAccel && total > THRESHOLDS.fallAccel) {
     fallStage = "falling";
   }
@@ -315,7 +373,8 @@ function triggerSafeClodScenario(type) {
     message,
     autoRecord,
     notifyContacts: targets.notifyContacts,
-    notifyPolice: targets.notifyPolice
+    notifyPolice: targets.notifyPolice,
+    onEscalate: routeToResponseUnit
   });
 }
 
@@ -358,34 +417,38 @@ async function finalizeSafeClodAlert(payload) {
       lon: pos.coords.longitude
     };
 
-    // Cloud users
-    await api("/motion-alert", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fullPayload)
-    });
-
-    // Emergency contacts
-    if (fullPayload.notifyContacts) {
-      await api("/motion-alert/contacts", {
+    try {
+      await api("/motion-alert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(fullPayload)
       });
-    }
 
-    // Authorities
-    if (fullPayload.notifyPolice) {
-      await api("/motion-alert/police", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fullPayload)
-      });
-    }
+      if (fullPayload.notifyContacts) {
+        await api("/motion-alert/contacts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(fullPayload)
+        });
+      }
 
-    // Auto recording
-    if (fullPayload.autoRecord) {
-      await startSafeClodRecording();
+      if (fullPayload.notifyPolice) {
+        await api("/motion-alert/police", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(fullPayload)
+        });
+      }
+
+      if (fullPayload.autoRecord) {
+        await startSafeClodRecording();
+      }
+
+      if (typeof fullPayload.onEscalate === "function") {
+        fullPayload.onEscalate();
+      }
+    } catch (err) {
+      console.error("Safe‑Clod finalize error:", err);
     }
   });
 }
@@ -443,5 +506,20 @@ document.addEventListener("DOMContentLoaded", () => {
         else stopSafeClodMonitoring();
       });
     }
+  }
+
+  const emergencyBtn = document.getElementById("globalAlertBtn");
+  if (emergencyBtn) {
+    emergencyBtn.addEventListener("click", () => {
+      routeToResponseUnit();
+    });
+  }
+
+  const helperLogo = document.getElementById("helperLogo");
+  const helperBubble = document.getElementById("helperBubble");
+  if (helperLogo && helperBubble) {
+    helperLogo.addEventListener("click", () => {
+      helperBubble.classList.toggle("hidden");
+    });
   }
 });
