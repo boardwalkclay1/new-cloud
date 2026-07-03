@@ -12,16 +12,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* LOCK BACKGROUND */
-    .page-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      z-index: -1;
+    /* SAFETY ICON ANIMATION */
+    .safety-logo {
+      height: 140px; /* bigger */
+      animation: pulse 2.2s infinite ease-in-out, floaty 5s infinite ease-in-out;
+      cursor: pointer;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes floaty {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
     }
 
     /* CENTERED HEADER INFO */
@@ -48,84 +55,6 @@
     #weather, #beltlineLocation, #timeDisplay {
       font-size: 1rem;
       opacity: 0.9;
-    }
-
-    /* PROFILE BUTTON */
-    .profile-main-link {
-      background: #0a2a43;
-      padding: 10px 18px;
-      border-radius: 8px;
-      color: #fff;
-      font-weight: 600;
-      margin-left: 20px;
-      text-decoration: none;
-      transition: 0.2s;
-      font-family: 'Cinzel', serif;
-    }
-    .profile-main-link:hover {
-      background: #0f3a5f;
-    }
-
-    /* SAFETY ICON ANIMATION */
-    .safety-logo {
-      height: 60px;
-      animation: pulse 2.2s infinite ease-in-out, floaty 5s infinite ease-in-out;
-      cursor: pointer;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes floaty {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-      100% { transform: translateY(0); }
-    }
-
-    /* REMOVE FLOATING RECTANGLE */
-    #safetyDropdown {
-      display: none !important;
-    }
-
-    /* QUICK ACTIONS SECTION */
-    .quick-actions {
-      margin-top: 40px; /* moved down half inch */
-      padding: 20px;
-      background: rgba(10,42,67,0.85);
-      border-top: 3px solid #ffd54f;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      backdrop-filter: blur(6px);
-    }
-
-    .quick-action-btn {
-      background: #ffd54f;
-      color: #000;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: 700;
-      text-decoration: none;
-      font-family: 'Cinzel', serif;
-      transition: 0.2s;
-    }
-
-    .quick-action-btn:hover {
-      background: #ffef9b;
-    }
-
-    .quick-slot {
-      background: rgba(255,255,255,0.15);
-      border: 1px dashed #ffd54f;
-      padding: 12px 20px;
-      border-radius: 10px;
-      color: #ffd54f;
-      font-family: 'Cinzel', serif;
-      text-align: center;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -207,7 +136,6 @@
 
   <div class="header-left">
     <img src="/assets/img/cloud/cloud-logo.jpg" class="header-logo" id="menuTrigger">
-
     <a href="/pages/profile.html" class="profile-main-link">My Profile</a>
   </div>
 
@@ -220,31 +148,67 @@
 
   <div class="header-top-right">
 
-    <!-- SAFETY ICON — animated + clickable -->
-    <a href="/pages/safety/index.html">
-      <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo">
+    <!-- CLOUD TALK ABOVE SAFETY CLOUD -->
+    <a href="/pages/messages.html">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" style="height:70px; margin-bottom:12px;">
     </a>
 
-    <!-- MESSAGING ICON -->
-    <a href="/pages/messages.html">
-      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" style="height:60px; margin-top:10px;">
+    <!-- SAFETY CLOUD (bigger + animated) -->
+    <a href="/pages/safety/index.html">
+      <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo">
     </a>
 
   </div>
 
 </header>
 
-<!-- QUICK ACTIONS (replaces Explore Beltline Cloud) -->
-<div class="quick-actions">
+<!-- ROLE SECTIONS -->
+<div id="vendorLinks" style="display:none; margin:20px; opacity:0.85;">
+  You are a <strong>Network Vendor</strong>.
+</div>
 
+<div id="riderLinks" style="display:none; margin:20px; opacity:0.85;">
+  You are a <strong>Fast Roll Rider</strong>.
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-actions">
   <a class="quick-action-btn" href="/pages/profile.html">Profile</a>
   <a class="quick-action-btn" href="/pages/settings.html">Settings</a>
-
-  <!-- User‑inserted quick actions (loaded from settings.js) -->
   <div class="quick-slot" id="quickSlot1">+ Add Action</div>
   <div class="quick-slot" id="quickSlot2">+ Add Action</div>
-
 </div>
+
+<!-- GRID -->
+<h2 class="section-title">Explore Beltline Cloud</h2>
+
+<section class="grid">
+
+  <a class="tile" href="/pages/chat/pages/index.html">
+    <img src="/assets/img/cloud/cloud-chat.jpg">
+    <h3>Cloud Chat</h3>
+    <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
+  </a>
+
+  <a class="tile" href="/pages/map.html">
+    <img src="/assets/img/map/map.jpg">
+    <h3>Beltline Map</h3>
+    <p>Trail layout, zones, and navigation.</p>
+  </a>
+
+  <a class="tile" href="/public/pages/events/pages/events.html">
+    <img src="/assets/img/cloud/events-cloud.jpg">
+    <h3>Events</h3>
+    <p>Workshops, rides, meetups, concerts, and more.</p>
+  </a>
+
+  <a class="tile" href="/pages/connect.html">
+    <img src="/assets/img/cloud/connect.jpg">
+    <h3>Cloud Connect</h3>
+    <p>Connect with riders, vendors, and Beltline community.</p>
+  </a>
+
+</section>
 
 <!-- NETWORK + FAST ROLL -->
 <div class="bottom-bar">
@@ -288,7 +252,7 @@
   Loading notifications…
 </div>
 
-<!-- DASHBOARD JS -->
+<!-- JS -->
 <script type="module" src="/js/dashboard.js"></script>
 <script type="module" src="/js/settings.js"></script>
 
