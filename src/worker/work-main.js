@@ -1,3 +1,11 @@
+// 🔥 Bind Worker to your custom domain
+export const routes = [
+  {
+    pattern: "https://api.beltlinecloud.com/*",
+    zone_name: "beltlinecloud.com"
+  }
+];
+
 // work-main.js
 import { corsHeaders, json, getMimeType } from "./work-utils.js";
 import { handleNetworkRoutes } from "./work-network.js";
