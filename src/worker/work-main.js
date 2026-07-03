@@ -89,8 +89,9 @@ async function login(request, db) {
   if (!email || !password)
     return json({ error: "Missing fields" }, 400);
 
+  // ⭐ ONLY THE FIELDS LOGIN ACTUALLY USES
   const user = await db.prepare(
-    "SELECT id, email, name, password, roles, bio, photo_url FROM cloud_users WHERE email = ?"
+    "SELECT id, email, name, password, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
 
   if (!user || user.password !== password)
@@ -101,9 +102,7 @@ async function login(request, db) {
       id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.roles || "",
-      bio: user.bio || "",
-      photo_url: user.photo_url || ""
+      roles: user.roles || ""
     }
   });
 }
@@ -148,7 +147,6 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    /* ---------------- OPTIONS (CORS PRE-FLIGHT) ---------------- */
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -156,7 +154,6 @@ export default {
       });
     }
 
-    /* ---------------- DB ---------------- */
     const db = env.DB_cloud;
     if (!db) return json({ error: "DB_cloud binding missing" }, 500);
 
@@ -174,7 +171,6 @@ export default {
       return wrap(json({ error: "Worker crashed", detail: err.message }, 500));
     }
 
-    /* ---------------- STATIC FILES ---------------- */
     let key = path === "/" ? "index.html" : path.slice(1);
     const object = await env.R2.get(key);
 
