@@ -1,4 +1,4 @@
-const API = "https://beltlinecloud.com/api";
+const API = "https://api.beltlinecloud.com/";
 
 const STORAGE_KEY = "beltline_user";
 
