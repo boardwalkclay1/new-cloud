@@ -30,8 +30,8 @@
   <div id="chatList" class="chat-list"></div>
 
   <script type="module">
-    import { loadChatList } from "./js/chat.js";
-    const userId = localStorage.getItem("cloud_user_id");
+    import { loadChatList } from "/pages/chat/js/chat.js";
+    const userId = localStorage.getItem("cloud_users");
     loadChatList(userId);
   </script>
 
