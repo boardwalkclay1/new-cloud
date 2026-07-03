@@ -23,61 +23,6 @@ body {
   background: #000 url('/assets/img/cloud/cloud.jpg') center center / cover no-repeat fixed;
 }
 
-/* MOBILE FIXES */
-@media (max-width: 768px) {
-
-  body {
-    overflow-x: hidden;
-  }
-
-  .header {
-    flex-direction: column;
-    text-align: center;
-    padding: 15px;
-  }
-
-  .header-left,
-  .header-top-right {
-    margin: 0;
-  }
-
-  .header-top-right {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .quick-actions {
-    flex-direction: column;
-    gap: 15px;
-    padding: 25px 10px;
-  }
-
-  .quick-slot,
-  .quick-action-btn {
-    width: 90%;
-    max-width: 300px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-    padding: 0 10px;
-  }
-
-  .bottom-bar {
-    flex-direction: column;
-    gap: 40px;
-    padding-bottom: 50px;
-  }
-
-  .bottom-logo {
-    height: 100px !important;
-  }
-
-  .bottom-text {
-    font-size: 1.65rem;
-  }
-}
-
 /* BACKGROUND */
 .page-bg {
   position: fixed;
@@ -104,6 +49,14 @@ body {
   cursor: pointer;
 }
 
+.header-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--yellow);
+  text-align: center;
+  margin-top: 8px;
+}
+
 /* CENTERED HEADER INFO */
 .header-info {
   display: flex;
@@ -115,15 +68,15 @@ body {
   font-family: 'Cinzel', serif;
 }
 
-#userName {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
+.header-stat {
+  font-size: 1.1rem;
+  margin: 4px 0;
 }
 
-#weather, #beltlineLocation, #timeDisplay {
-  font-size: 1rem;
-  opacity: 0.9;
+/* CLOUD TALK */
+.cloud-talk-logo {
+  height: 70px;
+  margin-bottom: 12px;
 }
 
 /* SAFETY CLOUD ANIMATION */
@@ -144,6 +97,14 @@ body {
   100% { transform: translateY(0); }
 }
 
+/* ROLE BANNERS */
+.role-banner {
+  margin: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  opacity: 0.85;
+}
+
 /* QUICK ACTIONS */
 .quick-actions {
   margin-top: 40px;
@@ -151,9 +112,14 @@ body {
   background: rgba(10,42,67,0.85);
   border-top: 3px solid var(--yellow);
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.quick-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .quick-action-btn {
@@ -164,23 +130,14 @@ body {
   font-weight: 700;
   text-decoration: none;
   font-family: 'Cinzel', serif;
-  transition: 0.2s;
-}
-
-.quick-action-btn:hover {
-  background: #ffef9b;
-}
-
-.quick-slot {
-  background: rgba(255,255,255,0.15);
-  border: 1px dashed var(--yellow);
-  padding: 12px 20px;
-  border-radius: 10px;
-  color: var(--yellow);
-  font-family: 'Cinzel', serif;
   text-align: center;
-  cursor: pointer;
-  min-width: 180px;
+  min-width: 150px;
+}
+
+.dropdown-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* DROPDOWNS */
@@ -205,6 +162,7 @@ body {
   cursor: pointer;
   width: 180px;
   font-family: 'Cinzel', serif;
+  margin-top: 8px;
 }
 
 .emergency-btn:hover {
@@ -268,4 +226,64 @@ body {
   font-weight: 700;
   color: var(--yellow);
   text-align: center;
+}
+
+/* NOTIFICATIONS BAR */
+.notifications-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10,42,67,0.85);
+  padding: 15px;
+  border-top: 3px solid var(--yellow);
+  color: #ffffff;
+  font-size: 1rem;
+  text-align: center;
+  z-index: 999;
+}
+
+/* MOBILE FIXES */
+@media (max-width: 768px) {
+
+  .header {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .header-top-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quick-actions {
+    padding: 25px 10px;
+  }
+
+  .quick-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .quick-action-btn,
+  .dropdown-btn {
+    width: 45%;
+    min-width: 140px;
+  }
+
+  .bottom-bar {
+    flex-direction: column;
+    gap: 40px;
+    padding-bottom: 50px;
+  }
+
+  .bottom-logo {
+    height: 100px !important;
+  }
+
+  .bottom-text {
+    font-size: 1.65rem;
+  }
 }
