@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Messages</title>
+
+  <link rel="stylesheet" href="/pages/messages/css/messages.css">
+  <link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="messages-bg"></div>
+
+<!-- CLOUD MENU -->
+<div id="cloudMenu" class="cloud-menu">
+  <div class="menu-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo" alt="Cloud Logo">
+    <span class="menu-close" id="menuClose">&times;</span>
+  </div>
+
+  <div class="menu-content">
+
+    <div class="menu-category">
+      <h3>My Profile</h3>
+      <ul>
+        <li><a href="/pages/profile.html">View Profile</a></li>
+        <li><a href="/pages/notifications.html">Notifications</a></li>
+        <li><a href="/pages/settings.html">Settings</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>Messages</h3>
+      <ul>
+        <li><a href="/pages/messages/messages.html">Inbox</a></li>
+        <li><a href="/pages/messages/messages.html?view=requests">Message Requests</a></li>
+        <li><a href="/pages/messages/messages.html?view=settings">Message Settings</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>Safety Cloud</h3>
+      <ul>
+        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
+        <li><a href="/pages/safety/lost-found.html">Lost & Found</a></li>
+        <li><a href="/pages/safety/stolen.html">Stolen Items</a></li>
+        <li><a href="/pages/safety/markers.html">Marker System</a></li>
+        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
+        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
+      </ul>
+    </div>
+
+    <div class="logout-btn-menu" onclick="logout()">Logout</div>
+
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="messages-header">
+
+  <div class="messages-header-left">
+    <img src="/assets/img/cloud/cloud-logo.jpg"
+         class="messages-header-logo"
+         id="menuTrigger"
+         alt="Open Menu">
+  </div>
+
+  <div class="messages-header-center">
+    <span class="messages-title">Cloud Messages</span>
+  </div>
+
+  <div class="messages-header-right">
+    <a href="/pages/messages/messages.html?view=compose">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="messages-compose-icon" alt="Compose">
+    </a>
+  </div>
+
+</header>
+
+<!-- MAIN MESSAGES VIEW -->
+<div id="messages-view" class="messages-view"></div>
+
+<!-- FOOTER NAV -->
+<div class="messages-footer">
+  <button onclick="switchMessagesView('inbox')" class="footer-btn">Inbox</button>
+  <button onclick="switchMessagesView('requests')" class="footer-btn">Requests</button>
+  <button onclick="switchMessagesView('compose')" class="footer-btn">Compose</button>
+  <button onclick="switchMessagesView('settings')" class="footer-btn">Settings</button>
+</div>
+
+<script type="module" src="/pages/messages/js/messages.js"></script>
+
+</body>
+</html>
