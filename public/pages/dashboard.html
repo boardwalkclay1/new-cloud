@@ -82,6 +82,11 @@
       text-align: center;
       flex: 1;
     }
+
+    /* REMOVE FLOATING RECTANGLE */
+    #safetyDropdown {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -174,20 +179,15 @@
   </div>
 
   <div class="header-top-right">
-    <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" id="safetyDropdownTrigger">
 
+    <!-- SAFETY ICON (kept) -->
+    <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo">
+
+    <!-- UPDATED MESSAGING ICON -->
     <a href="/pages/messages.html">
-      <img src="/assets/img/icons/message.png" style="height:60px; margin-top:10px;">
+      <img src="/assets/img/cloud/cloud-talk-logo.jpg" style="height:60px; margin-top:10px;">
     </a>
 
-    <div id="safetyDropdown" class="safety-dropdown">
-      <a href="/pages/safety/index.html">Enter Safety Cloud</a>
-      <a href="/pages/safety/lost-found.html">Lost & Found</a>
-      <a href="/pages/safety/stolen.html">Stolen Items</a>
-      <a href="/pages/safety/markers.html">Marker System</a>
-      <a href="/pages/safety/live-feed.html">Live Feed</a>
-      <a href="/pages/safety/alerts.html">Alerts</a>
-    </div>
   </div>
 
 </header>
