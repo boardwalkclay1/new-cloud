@@ -12,7 +12,7 @@
 
 <body>
 
-<div class="page-bg"></div>
+<div class="page-bg" style="background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;"></div>
 
 <!-- CLOUD MENU -->
 <div id="cloudMenu" class="cloud-menu">
@@ -66,7 +66,7 @@
       <ul>
         <li><a href="/pages/chat/pages/index.html">Cloud Chat</a></li>
         <li><a href="/pages/events/pages/events.html">Events</a></li>
-        <li><a href="/pages/community.html">Cloud Community</a></li>
+        <li><a href="/pages/community.html">Community Things</a></li>
       </ul>
     </div>
 
@@ -91,7 +91,7 @@
     <div class="header-name">Clayvonte</div>
   </div>
 
-  <div class="header-info">
+  <div class="header-info" style="font-family:Cinzel; color:#f7d354; text-shadow:0 0 8px #f7d354;">
     <span id="weather" class="header-stat">Loading weather…</span>
     <span id="beltlineLocation" class="header-stat">Detecting Beltline location…</span>
     <span id="timeDisplay" class="header-stat"></span>
@@ -127,19 +127,20 @@
 
   <div class="quick-row">
 
-    <div class="qa-btn qa-dropdown">
-      Safety Cloud Mode
-      <select id="safetyModeSelect" class="qa-select">
-        <option value="off">OFF</option>
-        <option value="motion">Motion Detection</option>
-        <option value="pattern">Pattern Detection</option>
-        <option value="full">Full Monitoring</option>
+    <div class="qa-btn qa-dropdown" style="border-color:red;">
+      Alert Type
+      <select id="alertTypeSelect" class="qa-select" style="border-color:red;">
+        <option value="">Select Alert Type</option>
+        <option value="emergency">Emergency Alert</option>
+        <option value="danger">Danger Nearby</option>
+        <option value="medical">Medical Emergency</option>
       </select>
     </div>
 
-    <div class="qa-btn qa-dropdown">
-      Emergency Alert
-      <button id="emergencyButton" class="qa-emergency">SEND ALERT</button>
+    <div class="qa-btn qa-dropdown" style="border-color:red;">
+      <button id="emergencyButton" class="qa-emergency" style="background:red; border-color:red;" disabled>
+        SEND ALERT
+      </button>
     </div>
 
   </div>
@@ -169,9 +170,9 @@
   </a>
 
   <a class="tile" href="/pages/community.html">
-    <img src="/assets/img/cloud/community-cloud.jpg" alt="Cloud Community">
-    <h3>Cloud Community</h3>
-    <p>Connect with riders, vendors, and the Beltline community.</p>
+    <img src="/assets/img/cloud/community-cloud.jpg" alt="Community Things">
+    <h3>Community Things</h3>
+    <p>Connect with riders, vendors, helpers, and Beltline locals.</p>
   </a>
 
 </section>
@@ -185,7 +186,7 @@
   </div>
 
   <div class="bottom-section">
-    <img src="/fast-roll/img/Fast-logo.jpg" class="bottom-logo" alt="Fast Roll">
+    <img src="/assets/img/Fast-logo.png" class="bottom-logo" alt="Fast Roll">
     <div class="bottom-text">Place Delivery</div>
   </div>
 
@@ -205,6 +206,11 @@ const closeBtn = document.getElementById("menuClose");
 
 trigger.onclick = () => menu.classList.add("open");
 closeBtn.onclick = () => menu.classList.remove("open");
+
+document.getElementById("alertTypeSelect").onchange = (e) => {
+  const btn = document.getElementById("emergencyButton");
+  btn.disabled = !e.target.value;
+};
 </script>
 
 </body>
