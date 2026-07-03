@@ -179,12 +179,6 @@ document.getElementById("menuClose").onclick = () => {
   document.getElementById("cloudMenu").style.display = "none";
 };
 
-/* SAFETY DROPDOWN */
-document.getElementById("safetyDropdownTrigger").onclick = () => {
-  const menu = document.getElementById("safetyDropdown");
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
-};
-
 /* NOTIFICATIONS */
 async function loadNotifications() {
   try {
