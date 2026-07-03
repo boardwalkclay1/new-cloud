@@ -87,23 +87,24 @@
 <!-- HEADER -->
 <header class="header">
 
+  <!-- MAIN LOGO LEFT -->
   <div class="header-left">
-    <div class="header-name">Clayvonte</div>
+    <img src="/assets/img/cloud/cloud-logo.jpg"
+         class="header-logo"
+         id="menuTrigger"
+         alt="Open Menu">
   </div>
 
-  <div class="header-info" style="font-family:Cinzel; color:#f7d354; text-shadow:0 0 8px #f7d354;">
+  <!-- CENTERED WEATHER + LOCATION -->
+  <div class="header-info"
+       style="font-family:Cinzel; color:#f7d354; text-shadow:0 0 8px #f7d354; text-align:center; flex:1;">
     <span id="weather" class="header-stat">Loading weather…</span>
     <span id="beltlineLocation" class="header-stat">Detecting Beltline location…</span>
     <span id="timeDisplay" class="header-stat"></span>
   </div>
 
+  <!-- CLOUD TALK MOVED UP -->
   <div class="header-top-right">
-
-    <img src="/assets/img/cloud/cloud-logo.jpg"
-         class="header-logo"
-         id="menuTrigger"
-         alt="Open Menu">
-
     <a href="/pages/messages.html">
       <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="cloud-talk-logo" alt="Messages">
     </a>
@@ -111,7 +112,6 @@
     <a href="/pages/safety/index.html">
       <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" alt="Safety Cloud">
     </a>
-
   </div>
 
 </header>
@@ -124,10 +124,11 @@
     <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
   </div>
 
-  <div class="quick-row">
+  <!-- ALERT + AUTO ALERT SIDE BY SIDE -->
+  <div class="quick-row" style="display:flex; gap:20px;">
 
     <!-- EMERGENCY ALERT -->
-    <div class="qa-btn qa-dropdown" style="border-color:red;">
+    <div class="qa-btn qa-dropdown" style="border-color:red; width:48%;">
       <div style="font-weight:bold;">Emergency Alert</div>
 
       <button id="alertBubble" 
@@ -158,12 +159,8 @@
       </div>
     </div>
 
-  </div>
-
-  <!-- AUTO ALERT SECTION -->
-  <div class="quick-row">
-
-    <div class="qa-btn qa-dropdown" style="border-color:red;">
+    <!-- AUTO ALERT -->
+    <div class="qa-btn qa-dropdown" style="border-color:red; width:48%;">
       <div style="font-weight:bold;">Auto Alerts</div>
 
       <button id="autoAlertBubble" 
