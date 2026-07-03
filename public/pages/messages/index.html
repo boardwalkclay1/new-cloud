@@ -61,21 +61,20 @@
 <!-- HEADER -->
 <header class="messages-header">
 
-  <div class="messages-header-left">
-    <img src="/assets/img/cloud/cloud-logo.jpg"
-         class="messages-header-logo"
-         id="menuTrigger"
-         alt="Open Menu">
-  </div>
+  <!-- LEFT SIDE (EMPTY NOW — NO GIANT LOGO) -->
+  <div class="messages-header-left"></div>
 
+  <!-- CENTER TITLE -->
   <div class="messages-header-center">
     <span class="messages-title">Cloud Messages</span>
   </div>
 
+  <!-- RIGHT SIDE — MENU TRIGGER INSIDE SECOND LOGO -->
   <div class="messages-header-right">
-    <a href="/pages/messages/messages.html?view=compose">
-      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="messages-compose-icon" alt="Compose">
-    </a>
+    <img src="/assets/img/cloud/cloud-talkk-logo.jpg"
+         class="messages-compose-icon"
+         id="menuTrigger"
+         alt="Menu">
   </div>
 
 </header>
@@ -92,6 +91,16 @@
 </div>
 
 <script type="module" src="/pages/messages/js/messages.js"></script>
+
+<script>
+  // MENU OPEN/CLOSE
+  const menu = document.getElementById("cloudMenu");
+  const trigger = document.getElementById("menuTrigger");
+  const closeBtn = document.getElementById("menuClose");
+
+  trigger.onclick = () => menu.classList.add("open");
+  closeBtn.onclick = () => menu.classList.remove("open");
+</script>
 
 </body>
 </html>
