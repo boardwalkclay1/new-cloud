@@ -52,7 +52,7 @@
   <!-- USER PANEL -->
   <section class="user-panel">
     <div class="user-info">
-      <img src="/assets/img/profile/default.jpg" class="user-avatar">
+      <img src="/assets/img/profile/default.jpg" class="user-avatar" id="userAvatar">
       <div>
         <h3 id="userName">Loading...</h3>
         <p id="userStatus">Connected to Beltline Cloud</p>
@@ -67,7 +67,7 @@
 
       <div class="info-box">
         <h4>Weather</h4>
-        <p id="cloudWeather">Loading...</p>
+        <p id="cloudWeather">Sunny • 89°F</p>
       </div>
     </div>
   </section>
@@ -151,12 +151,16 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // Weather (placeholder)
-    document.getElementById("cloudWeather").textContent = "Sunny • 89°F";
+    // Load unified cloud user
+    const raw = localStorage.getItem("beltline_user");
+    const user = raw ? JSON.parse(raw) : null;
 
-    // User info
-    const user = localStorage.getItem("cloud_users");
-    document.getElementById("userName").textContent = user ? user : "Cloud User";
+    document.getElementById("userName").textContent =
+      user?.name || "Cloud User";
+
+    if (user?.photoUrl) {
+      document.getElementById("userAvatar").src = user.photoUrl;
+    }
   </script>
 
 </body>
