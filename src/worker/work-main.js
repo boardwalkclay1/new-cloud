@@ -1,4 +1,7 @@
-// worker.js  (single file: utils + network + main)
+// worker.js  (utils + network + main, PLUS calls to response & safety)
+
+import { handleResponseRoutes } from "./work-response.js";
+import { handleSafetyRoutes } from "./work-safety.js";
 
 function corsHeaders() {
   return {
@@ -112,8 +115,6 @@ async function handleNetworkRoutes(path, request, db, url) {
 
   if (path.startsWith("/api/events/delete") && request.method === "POST")
     return deleteEvent(request, db);
-
-  // FASTROLL / STAFF / CIVIC handlers would plug in here
 
   return null;
 }
@@ -512,8 +513,18 @@ export default {
     }
 
     try {
+      // RESPONSE ROUTES (external file)
+      const responseResult = await handleResponseRoutes(path, request, db, url);
+      if (responseResult) return wrap(responseResult);
+
+      // SAFETY ROUTES (external file)
+      const safetyResult = await handleSafetyRoutes(path, request, db, url);
+      if (safetyResult) return wrap(safetyResult);
+
+      // NETWORK ROUTES (this file)
       const networkResult = await handleNetworkRoutes(path, request, db, url);
       if (networkResult) return wrap(networkResult);
+
     } catch (err) {
       return wrap(json({ error: "Worker crashed", detail: err.message }, 500));
     }
