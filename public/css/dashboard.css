@@ -1,4 +1,4 @@
-/* public/css/dashboard.css */
+/* GLOBAL RESET */
 * {
   box-sizing: border-box;
   max-width: 100%;
@@ -6,8 +6,11 @@
 
 html, body {
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
+/* COLORS */
 :root {
   --yellow: #ffd54f;
   --blue: #0a2a43;
@@ -15,15 +18,13 @@ html, body {
   --white: #ffffff;
 }
 
-/* GLOBAL */
+/* BACKGROUND */
 body {
-  margin: 0;
+  background: #000 url('/assets/img/cloud/cloud.jpg') center center / cover no-repeat fixed;
   font-family: Arial, sans-serif;
   color: var(--white);
-  background: #000 url('/assets/img/cloud/cloud.jpg') center center / cover no-repeat fixed;
 }
 
-/* BACKGROUND */
 .page-bg {
   position: fixed;
   inset: 0;
@@ -57,15 +58,14 @@ body {
   margin-top: 8px;
 }
 
-/* CENTERED HEADER INFO */
+/* HEADER INFO (weather/time/location) */
 .header-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  text-align: center;
-  color: var(--yellow);
   font-family: 'Cinzel', serif;
+  color: var(--yellow);
+  text-align: center;
 }
 
 .header-stat {
@@ -105,7 +105,7 @@ body {
   opacity: 0.85;
 }
 
-/* QUICK ACTIONS */
+/* QUICK ACTIONS — REAL BUTTONS */
 .quick-actions {
   margin-top: 40px;
   padding: 20px;
@@ -122,26 +122,32 @@ body {
   gap: 20px;
 }
 
-.quick-action-btn {
+/* BUTTONS */
+.qa-btn {
   background: var(--yellow);
   color: var(--blue);
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-weight: 700;
-  text-decoration: none;
+  padding: 14px 22px;
+  border-radius: 12px;
   font-family: 'Cinzel', serif;
-  text-align: center;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
   min-width: 150px;
+  text-align: center;
 }
 
-.dropdown-btn {
+.qa-btn:hover {
+  background: #ffef9b;
+}
+
+/* DROPDOWN BUTTONS */
+.qa-dropdown {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* DROPDOWNS */
-.quick-dropdown {
+.qa-select {
   margin-top: 8px;
   background: rgba(255,255,255,0.12);
   border: 2px solid var(--yellow);
@@ -149,23 +155,24 @@ body {
   border-radius: 10px;
   color: var(--yellow);
   font-family: 'Cinzel', serif;
-  width: 180px;
+  width: 160px;
 }
 
-.emergency-btn {
+/* EMERGENCY BUTTON */
+.qa-emergency {
+  margin-top: 8px;
   background: #b83232;
   color: #fff;
   padding: 12px 20px;
   border-radius: 10px;
+  font-family: 'Cinzel', serif;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  width: 180px;
-  font-family: 'Cinzel', serif;
-  margin-top: 8px;
+  width: 160px;
 }
 
-.emergency-btn:hover {
+.qa-emergency:hover {
   background: #e64545;
 }
 
@@ -213,15 +220,15 @@ body {
 }
 
 .bottom-logo {
-  height: 95px !important;
+  height: 110px;
   width: auto;
   display: block;
   margin: 0 auto;
 }
 
 .bottom-text {
-  margin-top: 12px;
-  font-size: 1.55rem;
+  margin-top: 10px;
+  font-size: 1.6rem;
   font-family: 'Cinzel', serif;
   font-weight: 700;
   color: var(--yellow);
@@ -262,13 +269,12 @@ body {
   }
 
   .quick-row {
-    flex-direction: row;
     flex-wrap: wrap;
     gap: 15px;
   }
 
-  .quick-action-btn,
-  .dropdown-btn {
+  .qa-btn,
+  .qa-dropdown {
     width: 45%;
     min-width: 140px;
   }
@@ -280,10 +286,10 @@ body {
   }
 
   .bottom-logo {
-    height: 100px !important;
+    height: 120px;
   }
 
   .bottom-text {
-    font-size: 1.65rem;
+    font-size: 1.7rem;
   }
 }
