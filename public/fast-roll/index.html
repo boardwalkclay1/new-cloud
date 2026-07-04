@@ -17,9 +17,36 @@
 
     <link rel="manifest" href="/fast-roll/manifest.webmanifest" />
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
+
+    <!-- REMOVE BLUR OVERLAY -->
+    <style>
+        /* Remove any blur or dim overlays */
+        .hero,
+        .section,
+        .welcome,
+        .dark {
+            backdrop-filter: none !important;
+            background: transparent !important;
+        }
+
+        /* Remove any pseudo-element overlays */
+        body::before,
+        body::after {
+            content: none !important;
+            backdrop-filter: none !important;
+            background: none !important;
+        }
+
+        /* Make sure background shows fully */
+        body {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+    </style>
 </head>
 
-<body style="background-image:url('/public/fast-roll/img/fast-index.jpg'); background-size:cover; background-position:center;">
+<body style="background-image:url('/public/fast-roll/img/fast-index.jpg');">
 
     <!-- NAV -->
     <nav class="nav">
