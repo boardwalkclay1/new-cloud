@@ -5,76 +5,180 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Fast Roll — Beltline Delivery</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/fast-roll/img/Fast-logo.png" />
-
-    <!-- Social preview -->
-    <meta property="og:title" content="The Fast Roll — Beltline Delivery" />
-    <meta property="og:description" content="Beltline-native delivery by skaters, longboarders, e-bikes & OneWheels in Atlanta." />
-    <meta property="og:image" content="/fast-roll/img/fast-index.jpg" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
 
-    <!-- BACKGROUND LOGIC -->
     <style>
         body {
-            background: url('/fast-roll/img/fast-index.jpg') center / cover no-repeat fixed;
+            margin: 0;
+            background: url('/fast-roll/img/fast-index.jpg') center/cover no-repeat fixed;
+            font-family: 'Inter', sans-serif;
+            color: #ffd94a;
         }
+
         .page-bg {
             position: fixed;
             inset: 0;
-            background: url('/fast-roll/img/fast-index.jpg') center / cover no-repeat;
+            background: url('/fast-roll/img/fast-index.jpg') center/cover no-repeat;
             z-index: -1;
+        }
+
+        /* GLOBAL BLOCK STYLE */
+        .block {
+            background: rgba(10, 20, 60, 0.78); /* deep dark blue */
+            padding: 28px;
+            border-radius: 18px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 217, 74, 0.25); /* gold tint */
+            margin-bottom: 40px;
+        }
+
+        h1, h2, h3 {
+            color: #ffd94a; /* gold */
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: #ffeaa0;
+            font-size: 1.05rem;
+            line-height: 1.55rem;
+        }
+
+        /* NAV */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 28px;
+            background: rgba(10, 20, 60, 0.85);
+            border-bottom: 1px solid rgba(255, 217, 74, 0.25);
+        }
+
+        .nav-links a {
+            color: #ffd94a;
+            margin-left: 22px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .logo-img {
+            height: 58px;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 80px 28px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 780px;
+            margin: auto;
+        }
+
+        .hero-buttons button {
+            margin: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+        }
+
+        .primary-btn {
+            background: #ffd94a;
+            color: #0a143c;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid #ffd94a;
+            color: #ffd94a;
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 40px 28px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .steps {
+            display: grid;
+            gap: 20px;
+        }
+
+        .step {
+            padding: 18px;
+            background: rgba(10, 20, 60, 0.65);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 217, 74, 0.2);
+        }
+
+        .rider-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .rider-card {
+            padding: 18px;
+            background: rgba(10, 20, 60, 0.65);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 217, 74, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #ffeaa0;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- BACKGROUND -->
-    <div class="page-bg"></div>
+<div class="page-bg"></div>
 
-    <!-- NAV -->
-    <nav class="nav">
-        <div class="logo">
-            <img src="/fast-roll/img/Fast-logo.png" alt="Fast Roll Logo" class="logo-img" />
+<nav class="nav">
+    <div class="logo">
+        <img src="/fast-roll/img/Fast-logo.png" class="logo-img" />
+    </div>
+
+    <div class="nav-links">
+        <a href="#how">How It Works</a>
+        <a href="#order">Order</a>
+        <a href="#riders">Riders</a>
+        <a href="/fast-roll/pages/rider/login.html">Login</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content block">
+        <h1>Beltline Delivery. Fast. Smooth. On Wheels.</h1>
+        <p>Skaters, longboarders, e‑bikes & OneWheels delivering small items right off the Atlanta Beltline.</p>
+
+        <div class="hero-buttons">
+            <button onclick="location.href='/fast-roll/pages/client/order.html'" class="primary-btn">Order Delivery</button>
+            <button onclick="location.href='/fast-roll/pages/rider/signup.html'" class="secondary-btn">Become a Rider</button>
         </div>
+    </div>
+</section>
 
-        <div class="nav-links">
-            <a href="#how">How It Works</a>
-            <a href="#order">Order</a>
-            <a href="#riders">Riders</a>
-            <a href="/fast-roll/pages/rider/login.html">Login</a>
-        </div>
-    </nav>
-
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Beltline Delivery. Fast. Smooth. On Wheels.</h1>
-            <p>Skaters, longboarders, e‑bikes & OneWheels delivering small items right off the Atlanta Beltline.</p>
-
-            <div class="hero-buttons">
-                <button onclick="location.href='/fast-roll/pages/client/order.html'" class="primary-btn">Order Delivery</button>
-                <button onclick="location.href='/fast-roll/pages/rider/signup.html'" class="secondary-btn">Become a Rider</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- WELCOME -->
-    <section class="welcome">
+<section class="section">
+    <div class="block">
         <h2>Welcome to The Fast Roll</h2>
         <p>
             A Beltline‑native delivery service built for speed, community, and smooth motion.
             You buy the item, we roll it to you — ice cream, flowers, snacks, and small groceries
             from spots right off the Atlanta Beltline.
         </p>
-    </section>
+    </div>
+</section>
 
-    <!-- HOW IT WORKS -->
-    <section id="how" class="section">
+<section id="how" class="section">
+    <div class="block">
         <h2>How It Works</h2>
         <p class="section-sub">Simple, safe, and built for small, low‑risk items while we grow the network.</p>
 
@@ -99,10 +203,11 @@
                 <p>Rider drops off, sends photo proof, and gets paid instantly.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- ORDER -->
-    <section id="order" class="section">
+<section id="order" class="section">
+    <div class="block">
         <h2>Ready to Roll?</h2>
         <p class="section-sub">Start a delivery request in under a minute.</p>
 
@@ -111,10 +216,11 @@
             <p>We currently support small, low‑risk items under $20 from shops directly off the Beltline.</p>
             <button onclick="location.href='/fast-roll/pages/client/order.html'" class="primary-btn">Start Order</button>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- RIDERS -->
-    <section id="riders" class="section">
+<section id="riders" class="section">
+    <div class="block">
         <h2>Riders Wanted</h2>
         <p class="section-sub">
             Longboarders, skaters, e‑bikes, OneWheels — earn fast payouts delivering small items along the Beltline.
@@ -131,13 +237,14 @@
         </div>
 
         <div style="margin-top:24px;">
-            <button onclick="location.href='/pages/rider/signup.html'" class="primary-btn">Join The Fast Roll</button>
+            <button onclick="location.href='/fast-roll/pages/rider/signup.html'" class="primary-btn">Join The Fast Roll</button>
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer>
-        <p>© 2026 The Fast Roll — Built for the Atlanta Beltline</p>
-    </footer>
+<footer>
+    <p>© 2026 The Fast Roll — Built for the Atlanta Beltline</p>
+</footer>
 
 </body>
 </html>
