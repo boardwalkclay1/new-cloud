@@ -1,143 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>The Network — Boardwalk Beltline</title>
+  <meta charset="UTF-8">
+  <title>The Network — Boardwalk Beltline</title>
 
-    <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
-    <link rel="stylesheet" href="/network/public/css/style.css">
+  <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
+  <link rel="stylesheet" href="/network/public/css/style.css">
 
-    <style>
-        .network-nodes {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-            padding: 25px;
-        }
-        .node {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 18px;
-            padding: 28px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.25s ease;
-            backdrop-filter: blur(6px);
-        }
-        .node:hover {
-            background: rgba(255,255,255,0.18);
-            transform: translateY(-4px);
-        }
-        .node-icon {
-            font-size: 2.8rem;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .node-label {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        @media (max-width: 600px) {
-            .network-nodes {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        .panel {
-            padding: 25px;
-        }
-    </style>
+  <style>
+    .network-nodes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+      padding: 25px;
+    }
+    .node {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 18px;
+      padding: 24px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.25s ease;
+      backdrop-filter: blur(6px);
+    }
+    .node:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-4px);
+    }
+    .node-icon {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .node-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    @media (max-width: 900px) {
+      .network-nodes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .network-nodes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .panel {
+      padding: 25px;
+    }
+    .scroll-feed {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scroll-behavior: smooth;
+    }
+    .feed-item {
+      min-width: 220px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .feed-item:hover {
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-2px);
+    }
+    .feed-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .feed-meta {
+      font-size: 0.82rem;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 
 <body>
 
 <header class="network-header">
-    <a href="/network/public/pages/signup.html" class="header-btn left-btn">Sign Up</a>
-    <a href="/network/public/pages/login.html" class="header-btn right-btn">Login</a>
+  <a href="/network/public/pages/signup.html" class="header-btn left-btn">Sign Up</a>
+  <a href="/network/public/pages/login.html" class="header-btn right-btn">Login</a>
 
-    <img src="/network/public/img/network-logo.jpg" class="network-logo">
-    <h1 class="network-title">The Network</h1>
-    <p class="network-subtitle">The Beltline’s official hub of creators, vendors, workshops, and services.</p>
+  <img src="/network/public/img/network-logo.jpg" class="network-logo">
+  <h1 class="network-title">The Network</h1>
+  <p class="network-subtitle">
+    Public Beltline hub of vendors, products, services, workshops, and apps — all powered by Cloud users.
+  </p>
 </header>
 
-<!-- ⭐ GRID OF SQUARES -->
 <section class="network-nodes">
 
-    <div class="node" onclick="location.href='/network/public/pages/about.html'">
-        <span class="node-icon">🌐</span>
-        <span class="node-label">About</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/products.html'">
+    <span class="node-icon">📦</span>
+    <span class="node-label">Products</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/vendors.html'">
-        <span class="node-icon">🛍️</span>
-        <span class="node-label">Vendors</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/services.html'">
+    <span class="node-icon">🧰</span>
+    <span class="node-label">Services</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/services.html'">
-        <span class="node-icon">🧰</span>
-        <span class="node-label">Services</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/workshops.html'">
+    <span class="node-icon">🎓</span>
+    <span class="node-label">Workshops</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/products.html'">
-        <span class="node-icon">📦</span>
-        <span class="node-label">Products</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/apps.html'">
+    <span class="node-icon">📱</span>
+    <span class="node-label">Apps</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/explore.html'">
-        <span class="node-icon">🧭</span>
-        <span class="node-label">Explore</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/vendors.html'">
+    <span class="node-icon">🛍️</span>
+    <span class="node-label">Vendors</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/map.html'">
-        <span class="node-icon">🗺️</span>
-        <span class="node-label">Map</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/explore.html'">
+    <span class="node-icon">🧭</span>
+    <span class="node-label">Explore</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/delivery.html'">
-        <span class="node-icon">🚚</span>
-        <span class="node-label">Fast Roll</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/map.html'">
+    <span class="node-icon">🗺️</span>
+    <span class="node-label">Map</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/profile.html'">
-        <span class="node-icon">👤</span>
-        <span class="node-label">My Profile</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/profile.html'">
+    <span class="node-icon">👤</span>
+    <span class="node-label">My Profile</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/public/pages/settings.html'">
-        <span class="node-icon">⚙️</span>
-        <span class="node-label">Settings</span>
-    </div>
+  <div class="node" onclick="location.href='/network/public/pages/settings.html'">
+    <span class="node-icon">⚙️</span>
+    <span class="node-label">Settings</span>
+  </div>
 
-    <div class="node" onclick="location.href='/network/staff/pages/signup.html'">
-        <span class="node-icon">📝</span>
-        <span class="node-label">Become a Vendor</span>
-    </div>
+  <div class="node" onclick="location.href='/network/staff/pages/signup.html'">
+    <span class="node-icon">📝</span>
+    <span class="node-label">Become a Vendor</span>
+  </div>
 
-</section>
-
-<!-- ⭐ FEEDS OUTSIDE THE GRID -->
-<section class="panel">
-    <h2>🔥 Trending Vendors</h2>
-    <div class="scroll-feed" id="vendors-feed"></div>
 </section>
 
 <section class="panel">
-    <h2>🛍️ Popular Products</h2>
-    <div class="scroll-feed" id="products-feed"></div>
+  <h2>🔥 Products Feed</h2>
+  <div class="scroll-feed" id="products-feed"></div>
 </section>
 
 <section class="panel">
-    <h2>🧰 Featured Services</h2>
-    <div class="scroll-feed" id="services-feed"></div>
+  <h2>🧰 Services Feed</h2>
+  <div class="scroll-feed" id="services-feed"></div>
 </section>
 
-<!-- ⭐ FIXED JS PATHS -->
+<section class="panel">
+  <h2>🎓 Workshops Feed</h2>
+  <div class="scroll-feed" id="workshops-feed"></div>
+</section>
+
+<section class="panel">
+  <h2>📱 Apps Feed</h2>
+  <div class="scroll-feed" id="apps-feed"></div>
+</section>
+
 <script src="/network/public/js/app.js"></script>
 <script src="/network/public/js/network-api.js"></script>
 
-<!-- ⭐ THIS IS WHAT MAKES THE FEEDS WORK -->
 <script>
-    Network.loadHomeFeeds();
+  // Expect Network API to return items with: id, title, vendorName, type, href
+  async function loadFeed(targetId, loaderFn) {
+    const container = document.getElementById(targetId);
+    const items = await loaderFn();
+
+    if (!items || !items.length) {
+      container.innerHTML = '<p class="feed-meta">No items yet.</p>';
+      return;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div class="feed-item" onclick="location.href='${item.href}'">
+        <div class="feed-title">${item.title}</div>
+        <div class="feed-meta">${item.vendorName || ''}</div>
+      </div>
+    `).join("");
+  }
+
+  // These should be implemented in /network/public/js/network-api.js
+  loadFeed('products-feed', Network.loadProductsFeed);
+  loadFeed('services-feed', Network.loadServicesFeed);
+  loadFeed('workshops-feed', Network.loadWorkshopsFeed);
+  loadFeed('apps-feed', Network.loadAppsFeed);
 </script>
 
 </body>
