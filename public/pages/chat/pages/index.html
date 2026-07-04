@@ -19,6 +19,31 @@
 
   <!-- FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- INLINE FIX FOR GIANT LOGO -->
+  <style>
+    nav .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    nav .logo img {
+      width: 55px !important;
+      height: 55px !important;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #f7d354;
+      flex-shrink: 0 !important;
+    }
+
+    /* Prevent global img rules from overriding */
+    nav img {
+      max-width: 55px !important;
+      max-height: 55px !important;
+    }
+  </style>
 </head>
 
 <body data-page="chat-dashboard">
