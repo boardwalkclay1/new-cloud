@@ -10,6 +10,93 @@
     <meta property="og:title" content="Staff Sign Up — The Network">
     <meta property="og:description" content="Create your vendor, service, or workshop account on The Network.">
     <meta property="og:image" content="/network/public/img/network-logo.jpg">
+
+    <style>
+        /* CINEMATIC INPUT STYLING */
+        .panel label {
+            font-family: Inter, sans-serif;
+            font-size: 16px;
+            color: gold;
+            margin-top: 15px;
+            display: block;
+            text-shadow: 0 0 6px rgba(255,255,255,0.3);
+        }
+
+        .panel input[type="text"],
+        .panel input[type="email"],
+        .panel input[type="password"],
+        .panel input[type="file"],
+        .panel select {
+            width: 100%;
+            padding: 12px 14px;
+            margin-top: 6px;
+            background: rgba(0,0,0,0.65);
+            border: 2px solid gold;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-family: Inter, sans-serif;
+            outline: none;
+            transition: 0.25s;
+        }
+
+        .panel input:focus,
+        .panel select:focus {
+            border-color: #00c3ff;
+            box-shadow: 0 0 12px rgba(0,200,255,0.7);
+        }
+
+        /* CHECKBOX */
+        .panel input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: gold;
+            cursor: pointer;
+        }
+
+        /* BUTTON */
+        .panel-link {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background: gold;
+            color: black;
+            font-family: Cinzel, serif;
+            font-size: 20px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            text-align: center;
+        }
+
+        .panel-link:hover {
+            background: #00c3ff;
+            color: black;
+            box-shadow: 0 0 18px rgba(0,200,255,0.9);
+        }
+
+        /* PANEL CONTAINER */
+        .panel {
+            background: rgba(0,0,0,0.55);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid gold;
+            box-shadow: 0 0 25px rgba(0,150,255,0.5);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+            .panel {
+                padding: 20px;
+            }
+            .panel-link {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -51,7 +138,7 @@
         <input id="su-paypal" type="email">
 
         <label>Active on The Network?</label>
-        <input id="su-active" type="checkbox" checked> <span>Show my profile</span>
+        <input id="su-active" type="checkbox" checked> <span style="color:white;">Show my profile</span>
 
         <label>Profile Photo</label>
         <input id="su-photo" type="file" accept="image/*">
