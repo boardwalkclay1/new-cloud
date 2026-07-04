@@ -6,7 +6,6 @@
 
     <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
 
-    <!-- STAFF-ONLY STYLESHEET -->
     <link rel="stylesheet" href="/network/staff/css/style.css">
 
     <meta property="og:title" content="Staff Login — The Network">
@@ -33,9 +32,67 @@
         <label>Password</label>
         <input id="li-password" class="staff-input" type="password" placeholder="••••••••">
 
-        <button class="staff-btn" onclick="Auth.handleLogin()">Login</button>
+        <button class="staff-btn" onclick="StaffLogin.handle()">Login</button>
     </section>
 
-    <script src="/js/auth.js"></script>
+    <script>
+    const StaffLogin = {
+
+        async handle() {
+            const email = document.getElementById("li-email").value.trim();
+            const password = document.getElementById("li-password").value.trim();
+
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            /* ---------------------------------------------------------
+               1. STAFF LOGIN (work-network.js → /api/staff/login)
+            --------------------------------------------------------- */
+            const res = await fetch("https://api.beltlinecloud.com/api/staff/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (!data.success) {
+                alert("Invalid staff login.");
+                return;
+            }
+
+            const staff = data.staff;
+
+            /* ---------------------------------------------------------
+               2. CHECK IF CLOUD USER IS A RIDER
+               (Only riders can access staff dashboard)
+            --------------------------------------------------------- */
+            const cloudRaw = localStorage.getItem("beltline_user");
+
+            if (!cloudRaw) {
+                alert("You must be logged into your Cloud account.");
+                window.location.href = "/pages/profile/login.html";
+                return;
+            }
+
+            const cloudUser = JSON.parse(cloudRaw);
+
+            // Cloud user must have rider role
+            if (!cloudUser.roles || !cloudUser.roles.includes("rider")) {
+                alert("Only official Riders can access the staff dashboard.");
+                return;
+            }
+
+            /* ---------------------------------------------------------
+               3. REDIRECT TO STAFF DASHBOARD
+            --------------------------------------------------------- */
+            window.location.href =
+                `/network/staff/dashboard.html?staffId=${encodeURIComponent(staff.id)}`;
+        }
+    };
+    </script>
+
 </body>
 </html>
