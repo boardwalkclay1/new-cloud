@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Your Cloud Profile — Beltline Cloud</title>
+  <title>Your Cloud Profile</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- CSS -->
@@ -18,37 +18,20 @@
 
 <body data-page="profile-dashboard">
 
-<div class="page-bg"></div>
+  <!-- Permanent Cloud Chat Icon -->
+  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
+    💬
+  </div>
 
-<!-- BURGER MENU -->
-<div id="burgerMenu">
-  <span class="menu-close" id="menuClose">&times;</span>
-
-  <h3>Cloud</h3>
-  <a href="/pages/chat/index.html">Cloud Chat</a>
-  <a href="/pages/feed/index.html">Cloud Feed</a>
-  <a href="/pages/safety/index.html">Safety Cloud</a>
-  <a href="/pages/map/beltline-map.html">Beltline Map</a>
-
-  <h3>Profile</h3>
-  <a href="/pages/profile/view.html">View Profile</a>
-  <a href="/pages/profile/edit.html">Edit Profile</a>
-  <a href="/pages/profile/badges.html">Badge Vault</a>
-
-  <h3>Account</h3>
-  <a href="/pages/settings.html">Settings</a>
-  <a href="/pages/notifications.html">Notifications</a>
-  <a href="/pages/login.html">Logout</a>
-</div>
-
-<!-- NAV -->
-<nav class="nav">
-  <img src="/assets/img/cloud/cloud-logo.jpg" id="burgerLogo" alt="Menu">
-  <img src="/assets/img/cloud/cloud-talkk-logo.jpg" id="messagesIcon" alt="Messages" onclick="location.href='/pages/messages/messages.html'">
-</nav>
-
-<!-- PROFILE SHELL -->
-<div class="profile-shell">
+  <!-- SIMPLE NAV (TOP RIGHT MESSAGE ICON) -->
+  <div class="profile-top-bar">
+    <div class="profile-top-right">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg"
+           class="profile-messages-icon"
+           alt="Messages"
+           onclick="location.href='/pages/messages/messages.html'">
+    </div>
+  </div>
 
   <!-- Banner -->
   <div id="profileBanner" class="profile-banner"></div>
@@ -56,29 +39,28 @@
   <!-- Avatar -->
   <img id="profileAvatar" class="profile-avatar" alt="Profile Avatar">
 
-  <!-- Header row -->
+  <!-- Name + Tags + Social + Rep -->
   <div class="profile-header-row">
-
-    <div class="profile-name-block">
+    <div class="profile-main-block">
+      <!-- Name -->
       <h1 id="profileName" class="profile-name"></h1>
 
       <!-- Identity Tags -->
       <div id="profileTags" class="profile-tags"></div>
 
-      <!-- Social Links -->
-      <div class="social-row">
-        <a id="socialInstagram" class="social-pill" target="_blank" rel="noopener">Instagram</a>
-        <a id="socialTikTok" class="social-pill" target="_blank" rel="noopener">TikTok</a>
-        <a id="socialFacebook" class="social-pill" target="_blank" rel="noopener">Facebook</a>
+      <!-- Social Links (only show if user adds link) -->
+      <div class="profile-social-row">
+        <a id="socialInstagram" class="profile-social-link" target="_blank" rel="noopener">Instagram</a>
+        <a id="socialTikTok" class="profile-social-link" target="_blank" rel="noopener">TikTok</a>
+        <a id="socialFacebook" class="profile-social-link" target="_blank" rel="noopener">Facebook</a>
       </div>
     </div>
 
     <!-- Rep Points -->
-    <div class="rep-points">
-      <span>Rep Points</span>
+    <div class="profile-rep-block">
+      <span class="rep-label">Rep Points</span>
       <span id="repValue" class="rep-value">0</span>
     </div>
-
   </div>
 
   <!-- Safety CLOUD Status -->
@@ -87,13 +69,10 @@
     <img id="safetyCloudStatusBadge" class="status-badge" alt="Safety Cloud Badge">
   </div>
 
-  <!-- Badge Preview (3 slots only) -->
+  <!-- Badges Preview (space only, JS will fill) -->
   <div class="section">
     <h2>Your Badges</h2>
-    <div id="profileBadgePreview" class="badge-preview-row">
-      <!-- JS will insert up to 3 badges -->
-    </div>
-
+    <div id="profileBadgePreview" class="badge-preview-row"></div>
     <button class="cloud-btn" onclick="location.href='/pages/profile/badges.html'">
       View All Badges
     </button>
@@ -103,9 +82,11 @@
   <div class="section">
     <h2>Your Photos</h2>
 
+    <!-- Grid that JS will fill with user photos -->
     <div id="photoGrid" class="media-grid"></div>
 
-    <div class="media-post-row">
+    <!-- Upload from profile -->
+    <div class="media-upload-row">
       <input type="file" id="photoUpload" accept="image/*">
       <button class="cloud-btn" id="photoPostBtn">Upload Photo</button>
     </div>
@@ -115,39 +96,28 @@
   <div class="section">
     <h2>Your Videos</h2>
 
+    <!-- Grid that JS will fill with user videos -->
     <div id="videoGrid" class="media-grid"></div>
 
-    <div class="media-post-row">
+    <!-- Upload from profile -->
+    <div class="media-upload-row">
       <input type="file" id="videoUpload" accept="video/*">
       <button class="cloud-btn" id="videoPostBtn">Upload Video</button>
     </div>
   </div>
 
-  <!-- Profile Settings -->
+  <!-- Settings / Edit Profile -->
   <div class="section">
     <button class="cloud-btn" onclick="location.href='/pages/profile/edit.html'">
       Edit Profile
     </button>
   </div>
 
-</div>
-
-<script>
-  /* BURGER MENU */
-  const burgerMenu = document.getElementById("burgerMenu");
-  const burgerLogo = document.getElementById("burgerLogo");
-  const menuClose = document.getElementById("menuClose");
-
-  burgerLogo.onclick = () => burgerMenu.classList.add("open");
-  menuClose.onclick = () => burgerMenu.classList.remove("open");
-</script>
-
-<script type="module">
-  import { loadUserProfile } from "/pages/profile/js/profile.js";
-
-  window.userId = localStorage.getItem("cloud_user_id");
-  loadUserProfile(window.userId);
-</script>
+  <script type="module">
+    import { loadUserProfile } from "/pages/profile/js/profile.js";
+    window.userId = localStorage.getItem("cloud_user_id");
+    loadUserProfile(window.userId);
+  </script>
 
 </body>
 </html>
