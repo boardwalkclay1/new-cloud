@@ -1,66 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Responder Signup</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/pages/response-unit/css/response.css">
+    <meta charset="UTF-8">
+    <title>Response Units — Join & Login</title>
+
+    <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
+    <link rel="stylesheet" href="/cloud/response/css/response-auth.css">
+
+    <meta property="og:title" content="Response Units — Join & Login">
+    <meta property="og:description" content="Join the Beltline Response Units or access your dashboard.">
+    <meta property="og:image" content="/network/public/img/network-logo.jpg">
 </head>
 
-<body data-page="ru-signup">
+<body>
 
-  <!-- Global Nav -->
-  <nav class="nav">
-    <div class="logo">
-      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
-    </div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/pages/music.html">Cloud Radio</a>
-      <a href="/events/index.html">Events</a>
-      <a href="/network/public/pages/index.html">Network</a>
-      <a href="/pages/safety/index.html">Safety CLOUD</a>
-      <a href="/pages/feed/index.html">Feed</a>
-      <a href="/pages/profile/index.html">Profile</a>
-    </div>
-  </nav>
+    <div class="response-bg"></div>
 
-  <!-- Permanent Cloud Chat Icon -->
-  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">💬</div>
+    <header class="response-header">
+        <img src="/network/public/img/network-logo.jpg" class="response-logo">
+        <h1 class="response-title">Response Units</h1>
+        <p class="response-subtitle">Join the Beltline Response Team or access your dashboard.</p>
+    </header>
 
-  <h1>Response Unit Signup</h1>
+    <section class="response-panel">
 
-  <form id="ruSignupForm" class="ru-form">
+        <div class="response-tabs">
+            <button class="tab-btn active" onclick="ResponseAuth.showTab('login')">Login</button>
+            <button class="tab-btn" onclick="ResponseAuth.showTab('signup')">Sign Up</button>
+        </div>
 
-    <label>Full Name</label>
-    <input id="ruName" type="text" required>
+        <!-- LOGIN -->
+        <div id="tab-login" class="tab-section active">
+            <h2>Member Login</h2>
 
-    <label>ID Number</label>
-    <input id="ruIdNumber" type="text" required>
+            <label>Email</label>
+            <input id="login-email" class="response-input" type="email" placeholder="you@example.com">
 
-    <label>Photo URL</label>
-    <input id="ruPhotoUrl" type="text" required>
+            <label>Password</label>
+            <input id="login-password" class="response-input" type="password" placeholder="••••••••">
 
-    <label>Contact Info</label>
-    <input id="ruContact" type="text" required>
+            <button class="response-btn" onclick="ResponseAuth.login()">Login</button>
+        </div>
 
-    <label>Preferred Role</label>
-    <select id="ruRole">
-      <option value="responder1">Responder I</option>
-      <option value="responder2">Responder II</option>
-      <option value="responder3">Responder III</option>
-      <option value="sentinel">Sentinel</option>
-      <option value="guardian">Guardian</option>
-    </select>
+        <!-- SIGNUP -->
+        <div id="tab-signup" class="tab-section">
+            <h2>Become a Response Unit</h2>
 
-    <button class="cloud-btn" type="submit">Submit Application</button>
+            <label>Full Name</label>
+            <input id="su-name" class="response-input" type="text" placeholder="Your Name">
 
-  </form>
+            <label>Email</label>
+            <input id="su-email" class="response-input" type="email" placeholder="you@example.com">
 
-  <script type="module">
-    import { initResponseUnitSignup } from "/pages/profile/js/response-unit.js";
-    initResponseUnitSignup("ruSignupForm");
-  </script>
+            <label>Password</label>
+            <input id="su-password" class="response-input" type="password" placeholder="Create a password">
+
+            <label>Phone</label>
+            <input id="su-phone" class="response-input" type="text" placeholder="(555) 555‑5555">
+
+            <button class="response-btn" onclick="ResponseAuth.signup()">Create Account</button>
+        </div>
+
+    </section>
+
+    <!-- IMPORTANT: REAL AUTH SYSTEM -->
+    <script src="/js/auth.js"></script>
+
+    <script>
+    const API = "https://api.beltlinecloud.com/api/response/member";
+
+    const ResponseAuth = {
+
+        /* ---------------------------------------------------------
+           TAB SWITCHING
+        --------------------------------------------------------- */
+        showTab(tab) {
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
+
+            document.querySelector(`.tab-btn[onclick*="${tab}"]`).classList.add("active");
+            document.getElementById(`tab-${tab}`).classList.add("active");
+        },
+
+        /* ---------------------------------------------------------
+           LOGIN — CALLS AUTH.JS VERIFICATION
+        --------------------------------------------------------- */
+        async login() {
+            const email = document.getElementById("login-email").value.trim();
+            const password = document.getElementById("login-password").value.trim();
+
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            const res = await fetch(API + "/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (!data.success) {
+                alert("Invalid login.");
+                return;
+            }
+
+            const member = data.member;
+
+            /* ---------------------------------------------------------
+               AUTH.JS — CLOUD VERIFICATION CHECK
+            --------------------------------------------------------- */
+            const verified = await Auth.verifyUser(member.email);
+            if (!verified) {
+                alert("Your account is pending verification. Check your email.");
+                return;
+            }
+
+            /* ---------------------------------------------------------
+               REDIRECT TO RESPONSE DASHBOARD
+            --------------------------------------------------------- */
+            window.location.href =
+                `/cloud/response/dashboard.html?memberId=${encodeURIComponent(member.id)}`;
+        },
+
+        /* ---------------------------------------------------------
+           SIGNUP — CALLS AUTH.JS FOR VERIFICATION EMAIL
+        --------------------------------------------------------- */
+        async signup() {
+            const name = document.getElementById("su-name").value.trim();
+            const email = document.getElementById("su-email").value.trim();
+            const password = document.getElementById("su-password").value.trim();
+            const phone = document.getElementById("su-phone").value.trim();
+
+            if (!name || !email || !password || !phone) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            const res = await fetch(API + "/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password, phone })
+            });
+
+            const data = await res.json();
+
+            if (!data.success) {
+                alert(data.error || "Signup failed.");
+                return;
+            }
+
+            /* ---------------------------------------------------------
+               AUTH.JS — SEND VERIFICATION EMAIL
+            --------------------------------------------------------- */
+            await Auth.sendVerification(email);
+
+            alert("Account created! Check your email to verify your membership.");
+        }
+    };
+    </script>
 
 </body>
 </html>
