@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cloud Chat Dashboard — Beltline Cloud</title>
+  <title>Cloud Chat — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
@@ -10,11 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* BACKGROUND */
+    /* BACKGROUND — DO NOT CHANGE */
     .page-bg {
       position: fixed;
       inset: 0;
-      background: url('/assets/img/cloud/cloud-chat.jpg') center/cover no-repeat;
+      background: url('/assets/img/chat/cloud-chat.jpg') center/cover no-repeat;
       z-index: -1;
     }
 
@@ -23,15 +23,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 18px;
+      padding: 14px 18px;
       background: rgba(0,0,0,0.75);
       border-bottom: 2px solid #f7d354;
     }
 
-    /* BURGER MENU LOGO */
+    /* BURGER MENU LOGO — BIGGER */
     #burgerLogo {
-      width: 42px;
-      height: 42px;
+      width: 58px;
+      height: 58px;
       object-fit: cover;
       cursor: pointer;
       flex-shrink: 0;
@@ -39,8 +39,8 @@
 
     /* MESSAGES ICON */
     #messagesIcon {
-      width: 42px;
-      height: 42px;
+      width: 48px;
+      height: 48px;
       object-fit: cover;
       cursor: pointer;
       flex-shrink: 0;
@@ -51,7 +51,7 @@
       position: fixed;
       top: 0;
       left: -100%;
-      width: 280px;
+      width: 300px;
       height: 100%;
       background: rgba(0,0,0,0.92);
       border-right: 2px solid #f7d354;
@@ -91,22 +91,16 @@
       color: #00b86b;
     }
 
-    /* DASHBOARD HEADER */
+    /* PAGE TITLE */
     .dashboard-header {
       text-align: center;
-      padding: 40px 20px 20px;
+      padding: 30px 20px 10px;
       color: #f7d354;
       text-shadow: 0 0 8px #f7d354;
       font-family: Cinzel;
     }
 
-    .dashboard-header p {
-      color: white;
-      font-family: Inter;
-      margin-top: 8px;
-    }
-
-    /* GRID */
+    /* MAIN GRID */
     .dashboard-grid {
       max-width: 900px;
       margin: auto;
@@ -131,6 +125,15 @@
       margin-bottom: 8px;
     }
 
+    .dash-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: #111;
+    }
+
     .dash-btn {
       display: inline-block;
       margin-top: 12px;
@@ -142,13 +145,60 @@
       text-decoration: none;
     }
 
-    /* FOOTER */
-    .footer {
-      text-align: center;
-      padding: 20px;
+    /* INBOX PREVIEW */
+    .inbox-preview-box {
+      background: rgba(0,0,0,0.65);
+      border: 2px solid #f7d354;
+      border-radius: 16px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 900px;
       color: white;
       font-family: Inter;
-      margin-top: 40px;
+    }
+
+    .inbox-preview-box h3 {
+      font-family: Cinzel;
+      color: #f7d354;
+      margin-bottom: 10px;
+    }
+
+    .inbox-item {
+      padding: 10px;
+      border-bottom: 1px solid #444;
+    }
+
+    /* CLOUD FRIENDS */
+    .friends-box {
+      background: rgba(0,0,0,0.65);
+      border: 2px solid #f7d354;
+      border-radius: 16px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 900px;
+      color: white;
+      font-family: Inter;
+    }
+
+    .friends-box h3 {
+      font-family: Cinzel;
+      color: #f7d354;
+      margin-bottom: 10px;
+    }
+
+    /* NOTIFICATIONS RECEIVER */
+    #notifReceiver {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(0,0,0,0.85);
+      border: 2px solid #f7d354;
+      border-radius: 14px;
+      padding: 12px;
+      color: white;
+      font-family: Inter;
+      width: 200px;
+      display: none;
     }
   </style>
 </head>
@@ -162,23 +212,16 @@
   <span class="menu-close" id="menuClose">&times;</span>
 
   <h3>Cloud Chat</h3>
-  <a href="/pages/chat/dashboard.html">DM Dashboard</a>
-  <a href="/pages/chat/create-group.html">Create Group</a>
-  <a href="/pages/chat/requests.html">Join Requests</a>
   <a href="/pages/chat/rooms/index.html">Chat Rooms</a>
-  <a href="/pages/chat/voice.html">Voice Messages</a>
-  <a href="/pages/chat/photos.html">Photo Sharing</a>
-  <a href="/pages/chat/keyboard.html">Cloud Keyboard</a>
+  <a href="/pages/chat/voice-call.html">Voice Call</a>
+  <a href="/pages/messages/messages.html">Inbox</a>
+  <a href="/pages/chat/friends.html">Cloud Friends</a>
+  <a href="/pages/messages/messages.html?view=settings">Message Settings</a>
 
   <h3>Profile</h3>
   <a href="/pages/profile/index.html">View Profile</a>
   <a href="/pages/settings.html">Settings</a>
   <a href="/pages/notifications.html">Notifications</a>
-
-  <h3>Safety Cloud</h3>
-  <a href="/pages/safety/index.html">Safety Overview</a>
-  <a href="/pages/safety/live-feed.html">Live Feed</a>
-  <a href="/pages/safety/alerts.html">Alerts</a>
 
   <h3>Logout</h3>
   <a onclick="logout()">Logout</a>
@@ -192,63 +235,55 @@
 
 <!-- HEADER -->
 <header class="dashboard-header">
-  <h1>Cloud Chat Dashboard</h1>
-  <p>Manage all your Cloud Chat tools, rooms, groups, and messages.</p>
+  <h1>Cloud Chat</h1>
 </header>
 
-<!-- MAIN GRID -->
+<!-- CHAT FEATURES GRID -->
 <section class="dashboard-grid">
 
+  <!-- CHAT ROOMS -->
   <div class="dash-card">
-    <h3>Direct Messages</h3>
-    <p>Your one‑on‑one conversations.</p>
-    <a class="dash-btn" href="/pages/chat/dashboard.html">Open DM Dashboard</a>
-  </div>
-
-  <div class="dash-card">
-    <h3>Group Chats</h3>
-    <p>Manage your groups or create new ones.</p>
-    <a class="dash-btn" href="/pages/chat/create-group.html">Create Group</a>
-  </div>
-
-  <div class="dash-card">
-    <h3>Join Requests</h3>
-    <p>Approve or send group chat invitations.</p>
-    <a class="dash-btn" href="/pages/chat/requests.html">Manage Requests</a>
-  </div>
-
-  <div class="dash-card">
+    <img src="/assets/img/chat/placeholder.jpg" alt="Chat Rooms">
     <h3>Chat Rooms</h3>
-    <p>All Beltline rooms in one place.</p>
+    <p>Preset Beltline Cloud chats, location‑based rooms, and global channels.</p>
     <a class="dash-btn" href="/pages/chat/rooms/index.html">Open Rooms</a>
   </div>
 
+  <!-- VOICE CALL -->
   <div class="dash-card">
-    <h3>Voice Messages</h3>
-    <p>Record and send voice messages.</p>
-    <a class="dash-btn" href="/pages/chat/voice.html">Voice Tools</a>
+    <img src="/assets/img/chat/placeholder.jpg" alt="Voice Call">
+    <h3>Voice Call</h3>
+    <p>Call Cloud friends instantly with Beltline Cloud Voice.</p>
+    <a class="dash-btn" href="/pages/chat/voice-call.html">Start Call</a>
   </div>
 
+  <!-- MESSAGE SETTINGS -->
   <div class="dash-card">
-    <h3>Photo Sharing</h3>
-    <p>Send photos directly in chats.</p>
-    <a class="dash-btn" href="/pages/chat/photos.html">Photo Tools</a>
-  </div>
-
-  <div class="dash-card">
-    <h3>Cloud Keyboard</h3>
-    <p>Custom emojis and cloud‑style typing.</p>
-    <a class="dash-btn" href="/pages/chat/keyboard.html">Open Keyboard</a>
+    <img src="/assets/img/chat/placeholder.jpg" alt="Message Settings">
+    <h3>Message Settings</h3>
+    <p>Control categories, filters, alerts, privacy, and auto‑sorting.</p>
+    <a class="dash-btn" href="/pages/messages/messages.html?view=settings">Open Settings</a>
   </div>
 
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-  © 2026 Beltline Cloud Inc — Cloud Chat keeps the Beltline connected.
-</footer>
+<!-- INBOX PREVIEW -->
+<div class="inbox-preview-box" id="inboxPreview">
+  <h3>Your Inbox</h3>
+  <div id="inboxList">Loading inbox…</div>
+</div>
+
+<!-- CLOUD FRIENDS -->
+<div class="friends-box" id="friendsBox">
+  <h3>Cloud Friends</h3>
+  <div id="friendsList">Loading friends…</div>
+</div>
+
+<!-- NOTIFICATIONS RECEIVER -->
+<div id="notifReceiver"></div>
 
 <script>
+  /* BURGER MENU */
   const menu = document.getElementById("burgerMenu");
   const burgerLogo = document.getElementById("burgerLogo");
   const menuClose = document.getElementById("menuClose");
@@ -256,10 +291,55 @@
   burgerLogo.onclick = () => menu.classList.add("open");
   menuClose.onclick = () => menu.classList.remove("open");
 
+  /* LOGOUT */
   function logout() {
     localStorage.removeItem("beltline_user");
     location.href = "/pages/login.html";
   }
+
+  /* INBOX + FRIENDS + NOTIFICATIONS — Worker Connected */
+  async function loadInbox() {
+    const res = await fetch(`/api/messages/inbox?id=${localStorage.getItem("beltline_user_id")}`);
+    const data = await res.json();
+    const box = document.getElementById("inboxList");
+
+    box.innerHTML = data.map(m => `
+      <div class="inbox-item">
+        <strong>${m.name}</strong><br>
+        ${m.preview}
+      </div>
+    `).join("");
+  }
+
+  async function loadFriends() {
+    const res = await fetch(`/api/chat/friends?id=${localStorage.getItem("beltline_user_id")}`);
+    const data = await res.json();
+    const box = document.getElementById("friendsList");
+
+    box.innerHTML = data.map(f => `
+      <div class="inbox-item">
+        <strong>${f.name}</strong>
+      </div>
+    `).join("");
+  }
+
+  /* Notifications Receiver */
+  async function pollNotifications() {
+    const res = await fetch(`/api/user/notifications?id=${localStorage.getItem("beltline_user_id")}`);
+    const data = await res.json();
+
+    if (data && data.length > 0) {
+      const notif = document.getElementById("notifReceiver");
+      notif.style.display = "block";
+      notif.textContent = data[0].message;
+
+      setTimeout(() => notif.style.display = "none", 5000);
+    }
+  }
+
+  loadInbox();
+  loadFriends();
+  setInterval(pollNotifications, 6000);
 </script>
 
 </body>
