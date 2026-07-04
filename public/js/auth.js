@@ -8,11 +8,11 @@ const PATH_VENDOR_DASH = "/public/network/staff/pages/vendor-dashboard.html";
 const PATH_RESPONSE_DASH = "/public/pages/safety/response-unit/pages/response-dash.html";
 const PATH_CLOUD_DASH = "/cloud/dashboard.html";
 
-// ---------------------------------------------------------
-// CLOUD USER SIGNUP
-// ---------------------------------------------------------
 const Auth = {
 
+    // ---------------------------------------------------------
+    // CLOUD USER SIGNUP
+    // ---------------------------------------------------------
     async signupCloud(body) {
         const res = await fetch(`${API}/api/users/signup`, {
             method: "POST",
@@ -26,7 +26,6 @@ const Auth = {
             return;
         }
 
-        // SEND VERIFICATION EMAIL
         await this.sendVerificationEmail(data.user.email, data.user.id);
 
         alert("Account created! Check your email to verify your account.");
@@ -59,6 +58,22 @@ const Auth = {
         localStorage.setItem("beltline_user", JSON.stringify(data.user));
 
         window.location.href = PATH_CLOUD_DASH;
+    },
+
+    // ---------------------------------------------------------
+    // BADGES
+    // ---------------------------------------------------------
+    async grantBadge(userId, badgeCode) {
+        await fetch(`${API}/api/badges/grant`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, badgeCode })
+        });
+    },
+
+    async listBadges(userId) {
+        const res = await fetch(`${API}/api/badges/list?userId=${userId}`);
+        return await res.json();
     },
 
     // ---------------------------------------------------------
@@ -133,7 +148,6 @@ const Auth = {
             return;
         }
 
-        // SEND VERIFICATION EMAIL
         await this.sendVerificationEmail(data.user.email, data.user.id);
 
         alert("Response Unit account created! Check your email to verify.");
@@ -168,13 +182,10 @@ const Auth = {
     },
 
     // ---------------------------------------------------------
-    // SEED BADGE (AFTER VERIFICATION)
+    // VENDOR PAYOUTS
     // ---------------------------------------------------------
-    async giveSeedBadge(userId) {
-        await fetch(`${API}/api/users/badge/seed`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId })
-        });
+    async listVendorPayouts(vendorId) {
+        const res = await fetch(`${API}/api/payouts/list?vendorId=${vendorId}`);
+        return await res.json();
     }
 };
