@@ -189,3 +189,8 @@ const Auth = {
         return await res.json();
     }
 };
+
+// ---------------------------------------------------------
+// GLOBAL EXPORT (NO MODULES, NO ERRORS)
+// ---------------------------------------------------------
+window.Auth = Auth;
