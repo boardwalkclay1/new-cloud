@@ -8,6 +8,47 @@
   <link rel="stylesheet" href="/pages/messages/css/messages.css">
   <link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- INLINE FIX FOR GIANT LOGO / ICON -->
+  <style>
+    /* Prevent ANY global img rules from stretching icons */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Fix the CloudTalk icon (menu trigger) */
+    .messages-compose-icon {
+      width: 45px !important;
+      height: 45px !important;
+      object-fit: cover;
+      flex-shrink: 0 !important;
+      border-radius: 50%;
+      border: 2px solid #f7d354;
+      cursor: pointer;
+    }
+
+    /* Ensure header right container doesn't stretch the icon */
+    .messages-header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      padding-right: 10px;
+    }
+
+    /* Ensure header left stays empty and doesn't stretch */
+    .messages-header-left {
+      width: 45px;
+      flex-shrink: 0;
+    }
+
+    /* Center title perfectly */
+    .messages-header-center {
+      flex: 1;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -61,7 +102,7 @@
 <!-- HEADER -->
 <header class="messages-header">
 
-  <!-- LEFT SIDE — REMOVED COMPLETELY -->
+  <!-- LEFT SIDE — EMPTY BUT FIXED WIDTH -->
   <div class="messages-header-left"></div>
 
   <!-- CENTER TITLE -->
@@ -69,7 +110,7 @@
     <span class="messages-title">Cloud Messages</span>
   </div>
 
-  <!-- RIGHT SIDE — MENU TRIGGER INSIDE CLOUDTALK LOGO -->
+  <!-- RIGHT SIDE — CLOUDTALK ICON AS MENU TRIGGER -->
   <div class="messages-header-right">
     <img src="/assets/img/cloud/cloud-talkk-logo.jpg"
          class="messages-compose-icon"
