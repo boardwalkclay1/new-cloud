@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Staff Login — The Network</title>
+    <title>Response Unit Login — The Network</title>
 
     <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
 
     <link rel="stylesheet" href="/network/staff/css/style.css">
 
-    <meta property="og:title" content="Staff Login — The Network">
-    <meta property="og:description" content="Access your staff dashboard.">
+    <meta property="og:title" content="Response Unit Login — The Network">
+    <meta property="og:description" content="Access your response dashboard.">
     <meta property="og:image" content="/network/public/img/network-logo.jpg">
 </head>
 
@@ -19,8 +19,8 @@
 
     <header class="staff-header">
         <img src="/network/public/img/network-logo.jpg" class="staff-logo">
-        <h1 class="staff-title">Staff Login</h1>
-        <p class="staff-subtitle">Access your dashboard and manage your presence.</p>
+        <h1 class="staff-title">Response Unit Login</h1>
+        <p class="staff-subtitle">Access your emergency response dashboard.</p>
     </header>
 
     <section class="staff-panel">
@@ -32,11 +32,11 @@
         <label>Password</label>
         <input id="li-password" class="staff-input" type="password" placeholder="••••••••">
 
-        <button class="staff-btn" onclick="StaffLogin.handle()">Login</button>
+        <button class="staff-btn" onclick="ResponseLogin.handle()">Login</button>
     </section>
 
     <script>
-    const StaffLogin = {
+    const ResponseLogin = {
 
         async handle() {
             const email = document.getElementById("li-email").value.trim();
@@ -48,9 +48,9 @@
             }
 
             /* ---------------------------------------------------------
-               1. STAFF LOGIN (work-network.js → /api/staff/login)
+               1. RESPONSE UNIT LOGIN (network-api.js → /api/response/login)
             --------------------------------------------------------- */
-            const res = await fetch("https://api.beltlinecloud.com/api/staff/login", {
+            const res = await fetch("https://api.beltlinecloud.com/api/response/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -59,15 +59,14 @@
             const data = await res.json();
 
             if (!data.success) {
-                alert("Invalid staff login.");
+                alert("Invalid Response Unit login.");
                 return;
             }
 
-            const staff = data.staff;
+            const responseMember = data.member;
 
             /* ---------------------------------------------------------
-               2. CHECK IF CLOUD USER IS A RIDER
-               (Only riders can access staff dashboard)
+               2. CHECK CLOUD USER SESSION
             --------------------------------------------------------- */
             const cloudRaw = localStorage.getItem("beltline_user");
 
@@ -79,17 +78,19 @@
 
             const cloudUser = JSON.parse(cloudRaw);
 
-            // Cloud user must have rider role
-            if (!cloudUser.roles || !cloudUser.roles.includes("rider")) {
-                alert("Only official Riders can access the staff dashboard.");
+            /* ---------------------------------------------------------
+               3. CHECK RESPONSE UNIT ROLE
+            --------------------------------------------------------- */
+            if (!cloudUser.roles || !cloudUser.roles.includes("response_unit")) {
+                alert("You are not registered as a Response Unit member.");
                 return;
             }
 
             /* ---------------------------------------------------------
-               3. REDIRECT TO STAFF DASHBOARD
+               4. REDIRECT TO RESPONSE UNIT DASHBOARD
             --------------------------------------------------------- */
             window.location.href =
-                `/network/staff/dashboard.html?staffId=${encodeURIComponent(staff.id)}`;
+                `/public/pages/safety/response-unit/pages/response-dash.html?memberId=${encodeURIComponent(responseMember.id)}`;
         }
     };
     </script>
