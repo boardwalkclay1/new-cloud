@@ -1,285 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vendor Dashboard — Beltline Cloud</title>
+  <meta charset="UTF-8">
+  <title>Vendor Dashboard — The Network</title>
+  <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body { margin:0; padding:0; font-family:"Inter",sans-serif; background:#050814; color:#fff; }
-    .layout { display:flex; min-height:100vh; }
-    .sidebar { width:240px; background:#05060b; border-right:1px solid #151827; padding:20px; box-sizing:border-box; }
-    .logo { font-size:20px; font-weight:800; color:#ffd700; margin-bottom:24px; }
-    .nav-link { font-size:14px; padding:8px 0; cursor:pointer; opacity:0.85; }
-    .nav-link:hover { opacity:1; }
-    .main { flex:1; padding:20px; box-sizing:border-box; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
-    .top-title { font-size:20px; font-weight:700; color:#ffd700; }
-    .user-pill { padding:8px 14px; border-radius:999px; background:#111726; font-size:13px; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
-    .card { background:#0a0f1f; border-radius:16px; padding:16px; border:1px solid #151827; }
-    .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-    .card-title { font-size:15px; font-weight:600; }
-    .card-sub { font-size:12px; opacity:0.7; }
-    .badge { font-size:11px; padding:4px 8px; border-radius:999px; background:#ffd700; color:#000; }
-    .card-body { font-size:13px; opacity:0.85; margin-bottom:12px; }
-    .card-actions { display:flex; flex-wrap:wrap; gap:8px; }
-    .btn { padding:8px 12px; border-radius:999px; border:none; cursor:pointer; font-size:13px; }
-    .btn-primary { background:#ffd700; color:#000; font-weight:600; }
-    .btn-ghost { background:#111726; color:#fff; border:1px solid #222b40; }
-    .field { margin-bottom:8px; }
-    .field label { font-size:12px; opacity:0.7; display:block; margin-bottom:4px; }
-    .field input, .field textarea { width:100%; padding:8px; border-radius:8px; border:1px solid #222b40; background:#050814; color:#fff; font-size:13px; }
-    .toggle-row { display:flex; align-items:center; gap:8px; font-size:13px; }
-    .toggle-row input { width:auto; }
-    .list { max-height:220px; overflow:auto; font-size:13px; }
-    .list-item { padding:6px 0; border-bottom:1px solid #151827; display:flex; justify-content:space-between; align-items:center; }
-    .pill { font-size:11px; padding:3px 8px; border-radius:999px; background:#111726; }
-    @media(max-width:800px){ .layout{flex-direction:column;} .sidebar{width:100%; border-right:none; border-bottom:1px solid #151827;} }
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('/network/public/img/network-back.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Inter, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    aside.sidebar {
+      width: 240px;
+      background: rgba(0,0,0,0.75);
+      border-right: 2px solid gold;
+      padding: 20px;
+      box-shadow: 0 0 25px rgba(0,150,255,0.5);
+    }
+
+    .logo {
+      font-family: Cinzel;
+      font-size: 24px;
+      color: gold;
+      text-shadow: 0 0 10px rgba(0,150,255,1);
+      margin-bottom: 25px;
+    }
+
+    .nav-link {
+      padding: 10px 0;
+      font-size: 15px;
+      cursor: pointer;
+      color: #d4e8ff;
+      transition: 0.25s;
+    }
+
+    .nav-link:hover {
+      color: gold;
+      text-shadow: 0 0 10px rgba(0,150,255,1);
+    }
+
+    /* MAIN */
+    main.main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.65);
+      border: 2px solid gold;
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(0,150,255,0.5);
+    }
+
+    .top-title {
+      font-family: Cinzel;
+      font-size: 22px;
+      color: gold;
+    }
+
+    .user-pill {
+      background: rgba(0,0,0,0.8);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid gold;
+      font-size: 14px;
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    /* CARD */
+    .card {
+      background: rgba(0,0,0,0.65);
+      border: 2px solid gold;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 0 20px rgba(0,150,255,0.5);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-family: Cinzel;
+      font-size: 20px;
+      color: gold;
+    }
+
+    .card-sub {
+      font-size: 13px;
+      opacity: 0.85;
+    }
+
+    .badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,150,255,0.2);
+      border: 1px solid #00c3ff;
+      font-size: 12px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 4px;
+      color: gold;
+      font-size: 14px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid gold;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: Cinzel;
+      transition: 0.25s;
+    }
+
+    .btn-primary {
+      background: gold;
+      color: black;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: #00c3ff;
+      color: black;
+      box-shadow: 0 0 15px rgba(0,200,255,1);
+    }
+
+    .btn-ghost {
+      background: rgba(0,0,0,0.8);
+      border: 1px solid gold;
+      color: gold;
+    }
+
+    .btn-ghost:hover {
+      background: gold;
+      color: black;
+    }
+
+    .list {
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,215,0,0.4);
+      background: rgba(0,0,0,0.5);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .list-item {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,150,255,0.2);
+      border: 1px solid #00c3ff;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      aside.sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid gold;
+      }
+      .shell {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="logo">Vendor Cloud</div>
-      <div class="nav-link" onclick="goDashboard()">Cloud Dashboard</div>
-      <div class="nav-link" onclick="goVendor()">Vendor Dashboard</div>
-      <div class="nav-link" onclick="goRider()">Rider Dashboard</div>
-      <div class="nav-link" onclick="goNetwork()">Explore Network</div>
-    </aside>
 
-    <main class="main">
-      <div class="topbar">
-        <div class="top-title">Vendor Dashboard</div>
-        <div class="user-pill" id="vendorName">Loading vendor...</div>
-      </div>
+<div class="shell">
 
-      <div class="grid">
-        <!-- Storefront -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Storefront</div>
-              <div class="card-sub">Your presence in the Network.</div>
-            </div>
-            <span class="badge" id="vendorActiveBadge">Inactive</span>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">Vendor Cloud</div>
+    <div class="nav-link" onclick="goDashboard()">Cloud Dashboard</div>
+    <div class="nav-link" onclick="goVendor()">Vendor Dashboard</div>
+    <div class="nav-link" onclick="goRider()">Rider Dashboard</div>
+    <div class="nav-link" onclick="goNetwork()">Explore Network</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="top-title">Vendor Dashboard</div>
+      <div class="user-pill" id="vendorName">Loading vendor...</div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid">
+
+      <!-- STOREFRONT -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Storefront</div>
+            <div class="card-sub">Your presence in the Network.</div>
           </div>
-          <div class="card-body">
-            <div class="field">
-              <label>Vendor Name</label>
-              <input id="vendorTitle" />
-            </div>
-            <div class="field">
-              <label>About</label>
-              <textarea id="vendorAbout"></textarea>
-            </div>
-            <div class="field">
-              <label>Location</label>
-              <input id="vendorLocation" />
-            </div>
-            <div class="toggle-row">
-              <input type="checkbox" id="vendorActiveToggle" />
-              <span>Active in Network</span>
-            </div>
+          <span class="badge" id="vendorActiveBadge">Inactive</span>
+        </div>
+
+        <div class="card-body">
+          <div class="field">
+            <label>Vendor Name</label>
+            <input id="vendorTitle">
           </div>
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="saveStorefront()">Save Storefront</button>
+
+          <div class="field">
+            <label>About</label>
+            <textarea id="vendorAbout"></textarea>
+          </div>
+
+          <div class="field">
+            <label>Location</label>
+            <input id="vendorLocation">
+          </div>
+
+          <div class="toggle-row">
+            <input type="checkbox" id="vendorActiveToggle">
+            <span>Active in Network</span>
           </div>
         </div>
 
-        <!-- Products -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Products</div>
-              <div class="card-sub">Items customers can buy.</div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="field">
-              <label>Product Name</label>
-              <input id="productName" />
-            </div>
-            <div class="field">
-              <label>Price</label>
-              <input id="productPrice" type="number" />
-            </div>
-            <div class="field">
-              <label>Description</label>
-              <textarea id="productDesc"></textarea>
-            </div>
-            <div class="toggle-row">
-              <input type="checkbox" id="productActiveToggle" checked />
-              <span>Active</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="addProduct()">Add Product</button>
-          </div>
-          <div class="list" id="productList"></div>
-        </div>
-
-        <!-- Services & Workshops -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Services & Workshops</div>
-              <div class="card-sub">Sessions customers can book.</div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="field">
-              <label>Title</label>
-              <input id="serviceTitle" />
-            </div>
-            <div class="field">
-              <label>Type</label>
-              <select id="serviceType">
-                <option value="service">Service</option>
-                <option value="workshop">Workshop</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Price</label>
-              <input id="servicePrice" type="number" />
-            </div>
-            <div class="field">
-              <label>Schedule (for workshops)</label>
-              <input id="serviceSchedule" placeholder="e.g. Saturdays 2–4 PM" />
-            </div>
-            <div class="toggle-row">
-              <input type="checkbox" id="serviceActiveToggle" checked />
-              <span>Active</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="addService()">Add Service/Workshop</button>
-          </div>
-          <div class="list" id="serviceList"></div>
-        </div>
-
-        <!-- Fast Roll -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Fast Roll Delivery</div>
-              <div class="card-sub">Deliver products via riders.</div>
-            </div>
-            <span class="badge" id="fastRollBadge">Off</span>
-          </div>
-          <div class="card-body">
-            <div class="toggle-row">
-              <input type="checkbox" id="fastRollToggle" />
-              <span>Fast Roll Active (show on map)</span>
-            </div>
-            <p style="font-size:13px; opacity:0.8; margin-top:8px;">
-              When Fast Roll is active and riders are online, customers will see delivery available
-              before purchase. After an order, click the button below to request a rider.
-            </p>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="requestFastRoll()">Request Fast Roll Delivery</button>
-          </div>
-        </div>
-
-        <!-- Orders -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Orders</div>
-              <div class="card-sub">Recent purchases and deliveries.</div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="list" id="orderList">
-              <!-- placeholder -->
-              <div class="list-item">
-                <span>Example Order #1</span>
-                <span class="pill">Pending</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-ghost" onclick="refreshOrders()">Refresh Orders</button>
-          </div>
+        <div class="card-actions">
+          <button class="btn btn-primary" onclick="saveStorefront()">Save Storefront</button>
         </div>
       </div>
-    </main>
-  </div>
 
-  <script>
-    const API = "https://api.beltlinecloud.com";
+      <!-- PRODUCTS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Products</div>
+            <div class="card-sub">Items customers can buy.</div>
+          </div>
+        </div>
 
-    function goDashboard(){ window.location.href="/dashboard.html"; }
-    function goVendor(){ window.location.href="/vendor-dashboard.html"; }
-    function goRider(){ window.location.href="/rider-dashboard.html"; }
-    function goNetwork(){ window.location.href="/home.html"; }
+        <div class="card-body">
+          <div class="field">
+            <label>Product Name</label>
+            <input id="productName">
+          </div>
 
-    function loadVendor() {
-      const raw = localStorage.getItem("cloud_user");
-      if (!raw) { document.getElementById("vendorName").textContent = "Not logged in"; return; }
-      const user = JSON.parse(raw);
-      document.getElementById("vendorName").textContent = user.name || user.email || "Vendor";
+          <div class="field">
+            <label>Price</label>
+            <input id="productPrice" type="number">
+          </div>
+
+          <div class="field">
+            <label>Description</label>
+            <textarea id="productDesc"></textarea>
+          </div>
+
+          <div class="toggle-row">
+            <input type="checkbox" id="productActiveToggle" checked>
+            <span>Active</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-primary" onclick="addProduct()">Add Product</button>
+        </div>
+
+        <div class="list" id="productList"></div>
+      </div>
+
+      <!-- SERVICES & WORKSHOPS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Services & Workshops</div>
+            <div class="card-sub">Sessions customers can book.</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="field">
+            <label>Title</label>
+            <input id="serviceTitle">
+          </div>
+
+          <div class="field">
+            <label>Type</label>
+            <select id="serviceType">
+              <option value="service">Service</option>
+              <option value="workshop">Workshop</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Price</label>
+            <input id="servicePrice" type="number">
+          </div>
+
+          <div class="field">
+            <label>Schedule (for workshops)</label>
+            <input id="serviceSchedule" placeholder="e.g. Saturdays 2–4 PM">
+          </div>
+
+          <div class="toggle-row">
+            <input type="checkbox" id="serviceActiveToggle" checked>
+            <span>Active</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-primary" onclick="addService()">Add Service/Workshop</button>
+        </div>
+
+        <div class="list" id="serviceList"></div>
+      </div>
+
+      <!-- FAST ROLL -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Fast Roll Delivery</div>
+            <div class="card-sub">Deliver products via riders.</div>
+          </div>
+          <span class="badge" id="fastRollBadge">Off</span>
+        </div>
+
+        <div class="card-body">
+          <div class="toggle-row">
+            <input type="checkbox" id="fastRollToggle">
+            <span>Fast Roll Active (show on map)</span>
+          </div>
+
+          <p style="font-size:13px; opacity:0.8; margin-top:8px;">
+            When Fast Roll is active and riders are online, customers will see delivery available.
+          </p>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-primary" onclick="requestFastRoll()">Request Fast Roll Delivery</button>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Orders</div>
+            <div class="card-sub">Recent purchases and deliveries.</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="list" id="orderList"></div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-ghost" onclick="refreshOrders()">Refresh Orders</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="/network/staff/js/staff.js"></script>
+
+<script>
+  const API = "https://api.beltlinecloud.com";
+
+  function goDashboard(){ window.location.href="/dashboard.html"; }
+  function goVendor(){ window.location.href="/vendor-dashboard.html"; }
+  function goRider(){ window.location.href="/rider-dashboard.html"; }
+  function goNetwork(){ window.location.href="/home.html"; }
+
+  document.addEventListener("DOMContentLoaded", loadVendor);
+
+  function loadVendor() {
+    const raw = localStorage.getItem("cloud_user");
+    if (!raw) {
+      document.getElementById("vendorName").textContent = "Not logged in";
+      return;
     }
+    const user = JSON.parse(raw);
+    document.getElementById("vendorName").textContent = user.name || user.email || "Vendor";
+  }
+</script>
 
-    async function saveStorefront() {
-      const title = document.getElementById("vendorTitle").value.trim();
-      const about = document.getElementById("vendorAbout").value.trim();
-      const location = document.getElementById("vendorLocation").value.trim();
-      const active = document.getElementById("vendorActiveToggle").checked ? 1 : 0;
-
-      // placeholder: send to Worker later
-      document.getElementById("vendorActiveBadge").textContent = active ? "Active" : "Inactive";
-      alert("Storefront saved (wire to Worker later).");
-    }
-
-    function addProduct() {
-      const name = document.getElementById("productName").value.trim();
-      const price = document.getElementById("productPrice").value.trim();
-      const desc = document.getElementById("productDesc").value.trim();
-      const active = document.getElementById("productActiveToggle").checked;
-
-      if (!name || !price) { alert("Product needs name and price."); return; }
-
-      const list = document.getElementById("productList");
-      const div = document.createElement("div");
-      div.className = "list-item";
-      div.innerHTML = `<span>${name} — $${price}</span><span class="pill">${active ? "Active" : "Inactive"}</span>`;
-      list.appendChild(div);
-
-      alert("Product added (wire to Worker later).");
-    }
-
-    function addService() {
-      const title = document.getElementById("serviceTitle").value.trim();
-      const type = document.getElementById("serviceType").value;
-      const price = document.getElementById("servicePrice").value.trim();
-      const schedule = document.getElementById("serviceSchedule").value.trim();
-      const active = document.getElementById("serviceActiveToggle").checked;
-
-      if (!title || !price) { alert("Service/workshop needs title and price."); return; }
-
-      const list = document.getElementById("serviceList");
-      const div = document.createElement("div");
-      div.className = "list-item";
-      div.innerHTML = `<span>${title} (${type}) — $${price}</span><span class="pill">${active ? "Active" : "Inactive"}</span>`;
-      list.appendChild(div);
-
-      alert("Service/workshop added (wire to Worker later).");
-    }
-
-    function requestFastRoll() {
-      const active = document.getElementById("fastRollToggle").checked;
-      if (!active) { alert("Turn Fast Roll Active on first."); return; }
-      document.getElementById("fastRollBadge").textContent = "On";
-      alert("Fast Roll request sent (wire to Worker + rider system later).");
-    }
-
-    function refreshOrders() {
-      alert("Refresh orders (wire to Worker later).");
-    }
-
-    document.addEventListener("DOMContentLoaded", loadVendor);
-  </script>
 </body>
 </html>
