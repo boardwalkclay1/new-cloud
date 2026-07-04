@@ -1,0 +1,57 @@
+{
+  "name": "Beltline Cloud",
+  "short_name": "Cloud",
+  "description": "The first native cloud to the Beltline — Cloud Chat, Safety Cloud, Beltline Map, Feed, Workshops, and Boardwalk Beltline lifestyle.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0a0f1f",
+  "background_color": "#0a0f1f",
+
+  "icons": [
+    {
+      "src": "/assets/img/cloud/cloud-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/cloud/cloud-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/cloud/cloud-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+
+  "categories": [
+    "social",
+    "navigation",
+    "communication",
+    "lifestyle",
+    "safety"
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Cloud Chat",
+      "short_name": "Chat",
+      "description": "Open Cloud Chat Dashboard",
+      "url": "/pages/chat/index.html",
+      "icons": [{ "src": "/assets/img/cloud/cloud-chat.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Safety Cloud",
+      "short_name": "Safety",
+      "description": "Open Safety Cloud Dashboard",
+      "url": "/pages/safety/index.html",
+      "icons": [{ "src": "/assets/img/cloud/safety-cloud-logo.jpg", "sizes": "96x96" }]
+    },
+   
+    }
+  ]
+}
