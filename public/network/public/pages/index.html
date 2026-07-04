@@ -175,29 +175,11 @@
 <script src="/network/public/js/network-api.js"></script>
 
 <script>
-  // Expect Network API to return items with: id, title, vendorName, type, href
-  async function loadFeed(targetId, loaderFn) {
-    const container = document.getElementById(targetId);
-    const items = await loaderFn();
-
-    if (!items || !items.length) {
-      container.innerHTML = '<p class="feed-meta">No items yet.</p>';
-      return;
-    }
-
-    container.innerHTML = items.map(item => `
-      <div class="feed-item" onclick="location.href='${item.href}'">
-        <div class="feed-title">${item.title}</div>
-        <div class="feed-meta">${item.vendorName || ''}</div>
-      </div>
-    `).join("");
-  }
-
-  // These should be implemented in /network/public/js/network-api.js
-  loadFeed('products-feed', Network.loadProductsFeed);
-  loadFeed('services-feed', Network.loadServicesFeed);
-  loadFeed('workshops-feed', Network.loadWorkshopsFeed);
-  loadFeed('apps-feed', Network.loadAppsFeed);
+  // DIRECT CALLS — Network API already builds the feed HTML
+  Network.loadProductsFeed();
+  Network.loadServicesFeed();
+  Network.loadWorkshopsFeed();
+  Network.loadAppsFeed();
 </script>
 
 </body>
