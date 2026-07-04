@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* BACKGROUND — DO NOT CHANGE */
+    /* BACKGROUND */
     .page-bg {
       position: fixed;
       inset: 0;
@@ -18,32 +18,36 @@
       z-index: -1;
     }
 
-    /* HEADER */
+    /* NAV */
     nav.nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px;
-      background: rgba(0,0,0,0.75);
+      padding: 16px 22px;
+      background: rgba(0,0,0,0.78);
       border-bottom: 2px solid #f7d354;
     }
 
-    /* BURGER MENU LOGO — BIGGER */
+    /* LEFT LOGO — FIXED, NOT CUT OFF */
     #burgerLogo {
-      width: 58px;
-      height: 58px;
-      object-fit: cover;
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
       cursor: pointer;
-      flex-shrink: 0;
     }
 
-    /* MESSAGES ICON */
+    /* RIGHT LOGO — SHIFTED LEFT, MOBILE SAFE */
     #messagesIcon {
-      width: 48px;
-      height: 48px;
-      object-fit: cover;
+      width: 68px;
+      height: 68px;
+      object-fit: contain;
       cursor: pointer;
-      flex-shrink: 0;
+      margin-right: 12px; /* pulls it left */
+    }
+
+    @media (max-width: 600px) {
+      #burgerLogo { width: 64px; height: 64px; }
+      #messagesIcon { width: 54px; height: 54px; margin-right: 6px; }
     }
 
     /* BURGER MENU PANEL */
@@ -60,10 +64,7 @@
       z-index: 9999;
       overflow-y: auto;
     }
-
-    #burgerMenu.open {
-      left: 0;
-    }
+    #burgerMenu.open { left: 0; }
 
     #burgerMenu .menu-close {
       font-size: 32px;
@@ -87,11 +88,9 @@
       font-size: 1rem;
     }
 
-    #burgerMenu a:hover {
-      color: #00b86b;
-    }
+    #burgerMenu a:hover { color: #00b86b; }
 
-    /* PAGE TITLE */
+    /* HEADER */
     .dashboard-header {
       text-align: center;
       padding: 30px 20px 10px;
@@ -186,7 +185,7 @@
       margin-bottom: 10px;
     }
 
-    /* NOTIFICATIONS RECEIVER */
+    /* NOTIFICATIONS RECEIVER — TOGGLE ON/OFF */
     #notifReceiver {
       position: fixed;
       bottom: 15px;
@@ -197,8 +196,22 @@
       padding: 12px;
       color: white;
       font-family: Inter;
-      width: 200px;
+      width: 240px;
       display: none;
+      z-index: 99999;
+    }
+
+    #notifReceiverToggle {
+      position: fixed;
+      bottom: 15px;
+      right: 270px;
+      background: #f7d354;
+      color: black;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-family: Cinzel;
+      cursor: pointer;
+      z-index: 99999;
     }
   </style>
 </head>
@@ -241,7 +254,6 @@
 <!-- CHAT FEATURES GRID -->
 <section class="dashboard-grid">
 
-  <!-- CHAT ROOMS -->
   <div class="dash-card">
     <img src="/assets/img/cloud/chatrooms.jpg" alt="Chat Rooms">
     <h3>Chat Rooms</h3>
@@ -249,7 +261,6 @@
     <a class="dash-btn" href="/pages/chat/rooms/index.html">Open Rooms</a>
   </div>
 
-  <!-- VOICE CALL -->
   <div class="dash-card">
     <img src="/assets/img/cloud/cloud-call.jpg" alt="Voice Call">
     <h3>Voice Call</h3>
@@ -257,7 +268,6 @@
     <a class="dash-btn" href="/pages/chat/voice-call.html">Start Call</a>
   </div>
 
-  <!-- MESSAGE SETTINGS -->
   <div class="dash-card">
     <img src="/assets/img/cloud/cloud-settings.jpg" alt="Message Settings">
     <h3>Message Settings</h3>
@@ -279,7 +289,8 @@
   <div id="friendsList">Loading friends…</div>
 </div>
 
-<!-- NOTIFICATIONS RECEIVER -->
+<!-- NOTIFICATIONS -->
+<div id="notifReceiverToggle">Notifications</div>
 <div id="notifReceiver"></div>
 
 <script>
@@ -297,7 +308,7 @@
     location.href = "/pages/login.html";
   }
 
-  /* INBOX + FRIENDS + NOTIFICATIONS — Worker Connected */
+  /* INBOX */
   async function loadInbox() {
     const res = await fetch(`/api/messages/inbox?id=${localStorage.getItem("beltline_user_id")}`);
     const data = await res.json();
@@ -311,6 +322,7 @@
     `).join("");
   }
 
+  /* FRIENDS */
   async function loadFriends() {
     const res = await fetch(`/api/chat/friends?id=${localStorage.getItem("beltline_user_id")}`);
     const data = await res.json();
@@ -323,17 +335,21 @@
     `).join("");
   }
 
-  /* Notifications Receiver */
+  /* NOTIFICATIONS */
+  const notifBox = document.getElementById("notifReceiver");
+  const notifToggle = document.getElementById("notifReceiverToggle");
+
+  notifToggle.onclick = () => {
+    notifBox.style.display = notifBox.style.display === "block" ? "none" : "block";
+  };
+
   async function pollNotifications() {
     const res = await fetch(`/api/user/notifications?id=${localStorage.getItem("beltline_user_id")}`);
     const data = await res.json();
 
     if (data && data.length > 0) {
-      const notif = document.getElementById("notifReceiver");
-      notif.style.display = "block";
-      notif.textContent = data[0].message;
-
-      setTimeout(() => notif.style.display = "none", 5000);
+      notifBox.style.display = "block";
+      notifBox.textContent = data[0].message;
     }
   }
 
