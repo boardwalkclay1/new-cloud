@@ -1,6 +1,8 @@
 import { Auth } from "/js/auth.js";
 
-/* USER */
+/* ---------------------------------------------------------
+   CLOUD USER
+--------------------------------------------------------- */
 const user = Auth.current();
 
 if (!user) {
@@ -8,7 +10,60 @@ if (!user) {
   throw new Error("User not logged in");
 }
 
-/* WEATHER (Atlanta only) */
+document.getElementById("cloudName").textContent = user.name || "Cloud User";
+document.getElementById("cloudEmail").textContent = user.email;
+
+/* ---------------------------------------------------------
+   BADGES
+--------------------------------------------------------- */
+async function loadBadges() {
+  try {
+    const res = await Auth.listBadges(user.id);
+
+    const container = document.getElementById("badgeList");
+    container.innerHTML = "";
+
+    if (!res.success || !res.badges || res.badges.length === 0) {
+      container.innerHTML = "<p>No badges yet.</p>";
+      return;
+    }
+
+    res.badges.forEach(b => {
+      const item = document.createElement("div");
+      item.className = "badge-item";
+      item.innerHTML = `
+        <span class="badge-icon">${b.icon || "🏅"}</span>
+        <span class="badge-name">${b.name}</span>
+      `;
+      container.appendChild(item);
+    });
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("badgeList").innerHTML = "<p>Error loading badges.</p>";
+  }
+}
+loadBadges();
+
+/* ---------------------------------------------------------
+   VERIFICATION STATUS
+--------------------------------------------------------- */
+function loadVerificationStatus() {
+  const el = document.getElementById("verifyStatus");
+
+  if (user.verified) {
+    el.textContent = "Verified ✔";
+    el.style.color = "#4caf50";
+  } else {
+    el.textContent = "Not Verified";
+    el.style.color = "#ff5252";
+  }
+}
+loadVerificationStatus();
+
+/* ---------------------------------------------------------
+   WEATHER (Atlanta)
+--------------------------------------------------------- */
 async function loadWeather() {
   try {
     const res = await fetch(
@@ -37,63 +92,9 @@ async function loadWeather() {
 }
 loadWeather();
 
-/* BELTLINE LOCATION (GPS → closest zone) */
-const beltlineZones = [
-  { name: "Eastside Trail (Ponce City Market)", lat: 33.7725, lon: -84.3652 },
-  { name: "Westside Trail (Lee + White)",       lat: 33.7358, lon: -84.4173 },
-  { name: "Northside Trail",                    lat: 33.8082, lon: -84.4021 },
-  { name: "Southside Trail",                    lat: 33.7089, lon: -84.3890 }
-];
-
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-function detectBeltlineLocation() {
-  const el = document.getElementById("beltlineLocation");
-
-  if (!navigator.geolocation) {
-    el.textContent = "Location unavailable.";
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      const { latitude, longitude } = pos.coords;
-
-      let closest = null;
-      let closestDist = Infinity;
-
-      beltlineZones.forEach(zone => {
-        const dist = getDistance(latitude, longitude, zone.lat, zone.lon);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closest = zone;
-        }
-      });
-
-      if (closestDist < 0.5) {
-        el.textContent = `You are currently on: ${closest.name}`;
-      } else {
-        el.textContent = "You are not currently on the Beltline Trail.";
-      }
-    },
-    () => {
-      el.textContent = "Location permission denied.";
-    }
-  );
-}
-detectBeltlineLocation();
-
-/* TIME */
+/* ---------------------------------------------------------
+   TIME
+--------------------------------------------------------- */
 function updateTime() {
   const now = new Date();
   document.getElementById("timeDisplay").textContent =
@@ -108,7 +109,9 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-/* MENU */
+/* ---------------------------------------------------------
+   MENU
+--------------------------------------------------------- */
 const cloudMenu = document.getElementById("cloudMenu");
 const menuTrigger = document.getElementById("menuTrigger");
 const menuClose = document.getElementById("menuClose");
@@ -116,22 +119,9 @@ const menuClose = document.getElementById("menuClose");
 menuTrigger.onclick = () => cloudMenu.classList.add("open");
 menuClose.onclick = () => cloudMenu.classList.remove("open");
 
-/* EMERGENCY ALERT */
-document.getElementById("alertBubble").onclick = () => {
-  document.getElementById("alertDropdown").style.display = "block";
-};
-
-document.getElementById("quickAlertSelect").onchange = e => {
-  const btn = document.getElementById("finalAlertButton");
-  btn.style.display = e.target.value ? "block" : "none";
-};
-
-/* AUTO ALERT */
-document.getElementById("autoAlertBubble").onclick = () => {
-  document.getElementById("autoAlertDropdown").style.display = "block";
-};
-
-/* LOGOUT */
+/* ---------------------------------------------------------
+   LOGOUT
+--------------------------------------------------------- */
 window.logout = function () {
   Auth.logout();
   window.location.href = "/pages/login.html";
