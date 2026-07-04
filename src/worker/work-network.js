@@ -23,7 +23,7 @@ export async function handleNetwork(path, request, db, url) {
     return getAll(db, "network_vendors");
 
   if (path === "/api/network/vendor" && request.method === "GET")
-    return getVendorFull(request, db);
+    return getVendorFull(db, url);
 
 
   /* -----------------------------
@@ -64,7 +64,7 @@ export async function handleNetwork(path, request, db, url) {
   ----------------------------- */
 
   if (path === "/api/network/app" && request.method === "GET")
-    return getVendorApp(request, db);
+    return getVendorApp(db, url);
 
   if (path === "/api/network/app/save" && request.method === "POST")
     return saveVendorApp(request, db);
@@ -78,7 +78,7 @@ export async function handleNetwork(path, request, db, url) {
     return staffLogin(request, db);
 
   if (path === "/api/staff/me" && request.method === "GET")
-    return staffMe(request, db);
+    return staffMe(db, url);
 
   if (path === "/api/staff/profile/update" && request.method === "POST")
     return staffUpdateProfile(request, db);
@@ -87,10 +87,10 @@ export async function handleNetwork(path, request, db, url) {
     return staffPublishProfile(request, db);
 
   if (path === "/api/staff/orders" && request.method === "GET")
-    return staffOrders(request, db);
+    return staffOrders(db, url);
 
   if (path === "/api/staff/payouts" && request.method === "GET")
-    return staffPayouts(request, db);
+    return staffPayouts(db, url);
 
 
   /* -----------------------------
@@ -154,8 +154,8 @@ async function deleteItem(request, db, table) {
    VENDOR FULL PAGE
 --------------------------------------------------------- */
 
-async function getVendorFull(request, db) {
-  const id = new URL(request.url).searchParams.get("id");
+async function getVendorFull(db, url) {
+  const id = url.searchParams.get("id");
   if (!id) return json({ error: "Missing id" }, 400);
 
   const vendor = await db.prepare(
@@ -194,8 +194,8 @@ async function getVendorFull(request, db) {
    VENDOR APP
 --------------------------------------------------------- */
 
-async function getVendorApp(request, db) {
-  const vendor = new URL(request.url).searchParams.get("vendor");
+async function getVendorApp(db, url) {
+  const vendor = url.searchParams.get("vendor");
   if (!vendor) return json({ error: "Missing vendor" }, 400);
 
   const app = await db.prepare(
@@ -245,8 +245,8 @@ async function staffLogin(request, db) {
   return json({ success: true, staff });
 }
 
-async function staffMe(request, db) {
-  const email = new URL(request.url).searchParams.get("email");
+async function staffMe(db, url) {
+  const email = url.searchParams.get("email");
 
   const staff = await db.prepare(
     "SELECT * FROM network_vendors WHERE email = ?"
@@ -279,8 +279,8 @@ async function staffPublishProfile(request, db) {
   return json({ success: true });
 }
 
-async function staffOrders(request, db) {
-  const email = new URL(request.url).searchParams.get("email");
+async function staffOrders(db, url) {
+  const email = url.searchParams.get("email");
 
   const rows = await db.prepare(
     "SELECT * FROM network_orders WHERE vendorId = ?"
@@ -289,8 +289,8 @@ async function staffOrders(request, db) {
   return json(rows.results || []);
 }
 
-async function staffPayouts(request, db) {
-  const email = new URL(request.url).searchParams.get("email");
+async function staffPayouts(db, url) {
+  const email = url.searchParams.get("email");
 
   const rows = await db.prepare(
     "SELECT * FROM network_payouts WHERE vendorId = ?"
