@@ -2,22 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Response Squad Dashboard</title>
+    <title>Response Unit Dashboard</title>
 
-    <link rel="stylesheet" href="/cloud/response/css/dashboard.css">
     <link rel="icon" href="/network/public/img/network-logo.jpg">
+    <link rel="stylesheet" href="/pages/safety/response-unit/css/response.css">
+
+    <meta property="og:title" content="Response Unit Dashboard">
+    <meta property="og:description" content="Operational readiness for Beltline Response Units.">
+    <meta property="og:image" content="/network/public/img/network-logo.jpg">
 </head>
 
 <body>
 
-    <div class="rs-header">
-        <img src="/network/public/img/network-logo.jpg" class="rs-logo">
-        <h1 class="rs-title">Response Squad Dashboard</h1>
-        <p class="rs-subtitle">Operational readiness. Real-time response.</p>
-    </div>
+    <header class="ru-header">
+        <img src="/network/public/img/network-logo.jpg" class="ru-logo">
+        <h1 class="ru-title">Response Unit Dashboard</h1>
+        <p class="ru-subtitle">Operational readiness. Real-time response.</p>
+    </header>
 
-    <nav class="rs-nav">
-        <a href="dashboard.html" class="active">Home</a>
+    <nav class="ru-nav">
+        <a href="response-dash.html" class="active">Home</a>
         <a href="missions.html">Missions</a>
         <a href="incidents.html">Incidents</a>
         <a href="units.html">Units</a>
@@ -28,46 +32,47 @@
         <a href="profile.html">Profile</a>
     </nav>
 
-    <section class="rs-content">
+    <section class="ru-content">
         <h2>Welcome, Response Unit</h2>
         <p>Your operational tools are ready.</p>
 
-        <div class="rs-grid">
-            <div class="rs-card" onclick="go('missions.html')">
+        <div class="ru-grid">
+            <div class="ru-card" onclick="go('missions.html')">
                 <h3>Active Missions</h3>
-                <p>View assignments, deployment status, and mission briefs.</p>
+                <p>View assignments and deployment status.</p>
             </div>
 
-            <div class="rs-card" onclick="go('incidents.html')">
+            <div class="ru-card" onclick="go('incidents.html')">
                 <h3>Incident Reports</h3>
-                <p>Submit, review, and track Beltline incidents.</p>
+                <p>Submit and track Beltline incidents.</p>
             </div>
 
-            <div class="rs-card" onclick="go('units.html')">
+            <div class="ru-card" onclick="go('units.html')">
                 <h3>Unit Status</h3>
-                <p>Check squad readiness, availability, and roles.</p>
+                <p>Check squad readiness and availability.</p>
             </div>
 
-            <div class="rs-card" onclick="go('gear.html')">
+            <div class="ru-card" onclick="go('gear.html')">
                 <h3>Gear & Loadout</h3>
-                <p>Manage equipment, tools, and certifications.</p>
+                <p>Manage equipment and certifications.</p>
             </div>
 
-            <div class="rs-card" onclick="go('training.html')">
+            <div class="ru-card" onclick="go('training.html')">
                 <h3>Training</h3>
-                <p>Complete modules, earn badges, and stay certified.</p>
+                <p>Complete modules and earn badges.</p>
             </div>
 
-            <div class="rs-card" onclick="go('map.html')">
+            <div class="ru-card" onclick="go('map.html')">
                 <h3>Response Map</h3>
-                <p>Live map of Beltline activity and squad deployment.</p>
+                <p>Live Beltline activity and deployment.</p>
             </div>
         </div>
     </section>
 
     <script src="/js/auth.js"></script>
+    <script src="/pages/safety/response-unit/js/response.js"></script>
     <script>
-        Auth.requireResponseMember(); // FULL VERIFICATION
+        Response.verify();
         function go(page){ window.location.href = page; }
     </script>
 
