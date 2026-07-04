@@ -1,6 +1,6 @@
-// public/js/network.js
+// public/js/network-api.js
 
-const API = "https://api.beltlinecloud.com/api/network";   // FIXED: correct API path
+const API = "https://api.beltlinecloud.com/api/network";
 
 const Network = {
 
@@ -12,20 +12,21 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     API WRAPPER — FIXED FOR PUBLIC FEEDS
+     API WRAPPER — PUBLIC + PRIVATE ROUTES
   --------------------------------------------------------- */
   async api(path, options = {}) {
     try {
-      const headers = {
-        "Content-Type": "application/json"
-      };
+      const headers = { "Content-Type": "application/json" };
 
-      // Only attach Authorization for private routes
-      if (!path.includes("/products") &&
-          !path.includes("/services") &&
-          !path.includes("/workshops") &&
-          !path.includes("/apps") &&
-          !path.includes("/vendors")) {
+      // PUBLIC ROUTES (no auth)
+      const isPublic =
+        path.startsWith("/products") ||
+        path.startsWith("/services") ||
+        path.startsWith("/workshops") ||
+        path.startsWith("/apps") ||
+        path.startsWith("/vendors");
+
+      if (!isPublic) {
         headers["Authorization"] = this.token();
       }
 
@@ -165,15 +166,20 @@ const Network = {
     return JSON.parse(raw);
   },
 
+  /* ---------------------------------------------------------
+     PURCHASE PRODUCT
+  --------------------------------------------------------- */
   async purchase(productId) {
     const user = await this.requireCloudUser();
     if (!user) return;
 
-    const res = await this.api("/pay", {
+    const res = await this.api("/checkout/create", {
       method: "POST",
       body: JSON.stringify({
-        productId,
-        cloudUserId: user.id
+        vendorId: user.id,
+        itemType: "product",
+        itemId: productId,
+        quantity: 1
       })
     });
 
@@ -182,18 +188,23 @@ const Network = {
       return;
     }
 
-    window.location.href = `/fast-roll/?orderId=${encodeURIComponent(res.orderId)}`;
+    window.location.href = res.redirectUrl;
   },
 
+  /* ---------------------------------------------------------
+     BOOK WORKSHOP
+  --------------------------------------------------------- */
   async bookWorkshop(workshopId) {
     const user = await this.requireCloudUser();
     if (!user) return;
 
-    const res = await this.api("/workshop/book", {
+    const res = await this.api("/checkout/create", {
       method: "POST",
       body: JSON.stringify({
-        workshopId,
-        cloudUserId: user.id
+        vendorId: user.id,
+        itemType: "workshop",
+        itemId: workshopId,
+        quantity: 1
       })
     });
 
@@ -202,7 +213,7 @@ const Network = {
       return;
     }
 
-    alert("Workshop booked!");
+    window.location.href = res.redirectUrl;
   }
 };
 
