@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rider Dashboard — The Fast Roll</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="/fast-roll/img/Fast-logo.jpg">
 
-    <!-- Social Preview -->
     <meta property="og:title" content="Rider Dashboard — The Fast Roll">
     <meta property="og:description" content="Your jobs, tools, and profile — all in one place.">
     <meta property="og:image" content="/fast-roll/img/rider.jpg">
@@ -87,68 +85,13 @@
         </button>
     </div>
 
-    <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/login.html'">
+    <button class="secondary-btn" onclick="logoutRider()">
         Log Out
     </button>
 </div>
 
 <script src="/fast-roll/js/fastroll.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-    const rider = FastRiderAuth.current();
-    if (!rider) {
-        window.location.href = "/fast-roll/pages/rider/login.html";
-        return;
-    }
-
-    // PROFILE SUMMARY
-    document.getElementById("riderProfileSummary").innerHTML = `
-        <strong>${rider.name}</strong><br>
-        Vehicle: ${rider.vehicle}<br>
-        Phone: ${rider.phone}<br>
-        PayPal: ${rider.paypal || "Not set"}
-    `;
-
-    // STATUS
-    document.getElementById("riderStatus").innerHTML = `
-        Status: <strong>${rider.status || "offline"}</strong>
-    `;
-
-    // JOB LIST
-    const jobs = await fastRiderLoadJobs();
-    const jobList = document.getElementById("jobList");
-
-    if (!jobs.length) {
-        jobList.innerHTML = `<p style="opacity:0.7;">No jobs available right now.</p>`;
-    } else {
-        jobList.innerHTML = jobs.map(job => `
-            <div class="rider-card">
-                <h3>${job.id}</h3>
-                <p><strong>Pickup:</strong> ${job.pickup}</p>
-                <p><strong>Dropoff:</strong> ${job.dropoff}</p>
-                <p><strong>Payout:</strong> $${job.price || job.payout || 0}</p>
-                <button class="primary-btn" onclick="fastRiderAcceptJob('${job.id}')">
-                    Accept Job
-                </button>
-            </div>
-        `).join("");
-    }
-
-    // ACTIVE DELIVERY
-    const active = jobs.find(j => j.status === "assigned");
-    if (active) {
-        document.getElementById("activeDelivery").innerHTML = `
-            <strong>Delivery Active</strong><br>
-            Pickup: ${active.pickup}<br>
-            Dropoff: ${active.dropoff}<br>
-            <button class="primary-btn" onclick="fastRiderCompleteJob('${active.id}')">
-                Mark Complete
-            </button>
-        `;
-    }
-});
-</script>
+<script src="/fast-roll/js/rider-dash.js"></script>
 
 </body>
 </html>
