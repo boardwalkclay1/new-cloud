@@ -1,6 +1,6 @@
 // public/js/network.js
 
-const API = "https://beltlinecloud.com/api/network";   // FIXED: correct API path
+const API = "https://api.beltlinecloud.com/api/network";   // FIXED: correct API path
 
 const Network = {
 
