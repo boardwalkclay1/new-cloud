@@ -10,7 +10,7 @@ import { handleSafetyRoutes } from "./work-safety.js";
 
 function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": FRONTEND_DOMAIN,
+    "Access-Control-Allow-Origin": "beltlinecloud.com",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, X-User-Email, X-User-Id",
     "Access-Control-Max-Age": "86400"
