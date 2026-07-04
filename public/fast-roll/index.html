@@ -15,43 +15,18 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="manifest" href="/fast-roll/manifest.webmanifest" />
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
-
-    <!-- REMOVE BLUR OVERLAY -->
-    <style>
-        /* Remove any blur or dim overlays */
-        .hero,
-        .section,
-        .welcome,
-        .dark {
-            backdrop-filter: none !important;
-            background: transparent !important;
-        }
-
-        /* Remove any pseudo-element overlays */
-        body::before,
-        body::after {
-            content: none !important;
-            backdrop-filter: none !important;
-            background: none !important;
-        }
-
-        /* Make sure background shows fully */
-        body {
-            background-size: cover !important;
-            background-position: center !important;
-            background-repeat: no-repeat !important;
-        }
-    </style>
 </head>
 
-<body style="background-image:url('/public/fast-roll/img/fast-index.jpg');">
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="page-bg"></div>
 
     <!-- NAV -->
     <nav class="nav">
         <div class="logo">
-            <img src="/fast-roll/img/Fast-logo.png" alt="The Fast Roll Logo" class="logo-img" />
+            <img src="/fast-roll/img/Fast-logo.png" alt="Fast Roll Logo" class="logo-img" />
         </div>
 
         <div class="nav-links">
@@ -63,7 +38,7 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero hero-up">
+    <section class="hero">
         <div class="hero-content">
             <h1>Beltline Delivery. Fast. Smooth. On Wheels.</h1>
             <p>Skaters, longboarders, e‑bikes & OneWheels delivering small items right off the Atlanta Beltline.</p>
@@ -79,7 +54,7 @@
     <section class="welcome">
         <h2>Welcome to The Fast Roll</h2>
         <p>
-            A Beltline‑native delivery service built for speed, community, and smooth motion.  
+            A Beltline‑native delivery service built for speed, community, and smooth motion.
             You buy the item, we roll it to you — ice cream, flowers, snacks, and small groceries
             from spots right off the Atlanta Beltline.
         </p>
@@ -126,7 +101,7 @@
     </section>
 
     <!-- RIDERS -->
-    <section id="riders" class="section dark">
+    <section id="riders" class="section">
         <h2>Riders Wanted</h2>
         <p class="section-sub">
             Longboarders, skaters, e‑bikes, OneWheels — earn fast payouts delivering small items along the Beltline.
@@ -151,6 +126,5 @@
         <p>© 2026 The Fast Roll — Built for the Atlanta Beltline</p>
     </footer>
 
-    <script src="/fast-roll/js/app.js"></script>
 </body>
 </html>
