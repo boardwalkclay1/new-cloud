@@ -2,74 +2,175 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>The Network</title>
+  <title>The Network — Explore Beltline Vendors</title>
 
   <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
   <link rel="stylesheet" href="/network/public/css/style.css">
 
   <style>
-    .network-nodes {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 22px;
-      padding: 25px;
-    }
-    .node {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 18px;
-      padding: 24px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.25s ease;
-      backdrop-filter: blur(6px);
-    }
-    .node:hover {
-      background: rgba(255,255,255,0.18);
-      transform: translateY(-4px);
-    }
-    .node-icon {
-      font-size: 2.4rem;
-      display: block;
-      margin-bottom: 6px;
-    }
-    .node-label {
-      font-size: 1.1rem;
-      font-weight: 600;
+    body {
+      background: radial-gradient(circle at top, #101522 0%, #05060a 55%, #020308 100%);
       color: #fff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    @media (max-width: 900px) {
-      .network-nodes {
-        grid-template-columns: repeat(2, 1fr);
-      }
+
+    /* NAV */
+    .network-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(5,6,10,0.92);
     }
-    @media (max-width: 600px) {
-      .network-nodes {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
-    .panel {
-      padding: 25px;
+    .nav-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.25);
     }
+    .nav-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .nav-sub {
+      font-size: 0.78rem;
+      opacity: 0.75;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-pill {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .nav-pill:hover {
+      background: rgba(255,255,255,0.16);
+    }
+    .nav-link {
+      font-size: 0.86rem;
+      opacity: 0.85;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+    .nav-link:hover {
+      background: rgba(255,255,255,0.12);
+      opacity: 1;
+    }
+
+    /* HERO */
+    .network-hero {
+      padding: 40px 32px 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .hero-sub {
+      font-size: 0.98rem;
+      opacity: 0.82;
+      max-width: 640px;
+    }
+    .hero-tags {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .hero-tag {
+      font-size: 0.78rem;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* SECTION SHELL */
+    .network-section {
+      padding: 26px 32px 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .section-sub {
+      font-size: 0.82rem;
+      opacity: 0.78;
+    }
+
+    /* SCROLL FEEDS */
     .scroll-feed {
       display: flex;
       gap: 16px;
       overflow-x: auto;
-      padding: 10px 0;
+      padding: 10px 0 4px;
       scroll-behavior: smooth;
     }
-    .feed-item {
-      min-width: 220px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 12px;
-      border: 1px solid rgba(255,255,255,0.12);
-      cursor: pointer;
-      transition: 0.2s ease;
+    .scroll-feed::-webkit-scrollbar {
+      height: 6px;
     }
-    .feed-item:hover {
-      background: rgba(255,255,255,0.16);
-      transform: translateY(-2px);
+    .scroll-feed::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.04);
+    }
+    .scroll-feed::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.22);
+      border-radius: 999px;
+    }
+    .feed-card {
+      min-width: 230px;
+      max-width: 260px;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border-radius: 16px;
+      padding: 12px 12px 11px;
+      border: 1px solid rgba(255,255,255,0.16);
+      cursor: pointer;
+      transition: 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feed-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.55);
+      border-color: rgba(255,255,255,0.28);
+    }
+    .feed-pill {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      display: inline-block;
+      margin-bottom: 6px;
+      opacity: 0.9;
     }
     .feed-title {
       font-size: 0.98rem;
@@ -78,108 +179,309 @@
       color: #fff;
     }
     .feed-meta {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      opacity: 0.82;
+      margin-bottom: 4px;
+    }
+    .feed-price {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #00e0ff;
+    }
+
+    /* VENDOR STRIP */
+    .vendor-strip {
+      margin-top: 18px;
+    }
+    .vendor-strip-title {
+      font-size: 0.9rem;
       opacity: 0.8;
+      margin-bottom: 6px;
+    }
+    .vendor-feed {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-behavior: smooth;
+    }
+    .vendor-card {
+      min-width: 190px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 14px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .vendor-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.26);
+    }
+    .vendor-name {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .vendor-tags {
+      font-size: 0.78rem;
+      opacity: 0.8;
+    }
+
+    /* DROPDOWN EXPLAINERS */
+    .network-explain {
+      padding: 30px 32px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .explain-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .explain-item {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.04);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .explain-header {
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .explain-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .explain-toggle {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .explain-body {
+      padding: 10px 12px 12px;
+      font-size: 0.84rem;
+      opacity: 0.86;
+      display: none;
+    }
+    .explain-item.open .explain-body {
+      display: block;
+    }
+
+    @media (max-width: 800px) {
+      .network-hero,
+      .network-section,
+      .network-explain {
+        padding: 22px 18px;
+      }
+      .network-nav {
+        padding: 10px 16px;
+      }
+      .hero-title {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<header class="network-header">
-  <a href="/network/public/pages/signup.html" class="header-btn left-btn">Sign Up</a>
-  <a href="/network/public/pages/login.html" class="header-btn right-btn">Login</a>
+<!-- NAV -->
+<nav class="network-nav">
+  <div class="nav-left">
+    <img src="/network/public/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
+    <div>
+      <div class="nav-title">The Network</div>
+      <div class="nav-sub">Beltline vendors • Cloud-powered profiles • Fast Roll riders</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="nav-link" onclick="document.getElementById('section-products').scrollIntoView({behavior:'smooth'})">Products</span>
+    <span class="nav-link" onclick="document.getElementById('section-services').scrollIntoView({behavior:'smooth'})">Services</span>
+    <span class="nav-link" onclick="document.getElementById('section-workshops').scrollIntoView({behavior:'smooth'})">Workshops</span>
+    <span class="nav-link" onclick="document.getElementById('section-apps').scrollIntoView({behavior:'smooth'})">Apps</span>
+    <button class="nav-pill" onclick="location.href='/network/staff/pages/signup.html'">Become a Vendor</button>
+    <button class="nav-pill" onclick="location.href='/cloud/dashboard.html'">Cloud Dashboard</button>
+  </div>
+</nav>
 
-  <img src="/network/public/img/network-logo.jpg" class="network-logo">
-  <h1 class="network-title">The Network</h1>
-  <p class="network-subtitle">
-    Public Beltline hub of vendors, products, services, workshops, and apps — all powered by Cloud users.
+<!-- HERO / EXPLORE -->
+<section class="network-hero">
+  <h1 class="hero-title">Explore The Network</h1>
+  <p class="hero-sub">
+    A live Beltline marketplace of products, services, workshops, and apps — all curated by Cloud users and powered by Fast Roll riders.
   </p>
-</header>
-
-<section class="network-nodes">
-
-  <div class="node" onclick="location.href='/network/public/pages/products.html'">
-    <span class="node-icon">📦</span>
-    <span class="node-label">Products</span>
+  <div class="hero-tags">
+    <span class="hero-tag">📦 Products</span>
+    <span class="hero-tag">🧰 Services</span>
+    <span class="hero-tag">🎓 Workshops</span>
+    <span class="hero-tag">📱 Apps</span>
+    <span class="hero-tag">🛍️ Vendor Profiles</span>
   </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/services.html'">
-    <span class="node-icon">🧰</span>
-    <span class="node-label">Services</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/workshops.html'">
-    <span class="node-icon">🎓</span>
-    <span class="node-label">Workshops</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/apps.html'">
-    <span class="node-icon">📱</span>
-    <span class="node-label">Apps</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/vendors.html'">
-    <span class="node-icon">🛍️</span>
-    <span class="node-label">Vendors</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/explore.html'">
-    <span class="node-icon">🧭</span>
-    <span class="node-label">Explore</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/map.html'">
-    <span class="node-icon">🗺️</span>
-    <span class="node-label">Map</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/profile.html'">
-    <span class="node-icon">👤</span>
-    <span class="node-label">My Profile</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/public/pages/settings.html'">
-    <span class="node-icon">⚙️</span>
-    <span class="node-label">Settings</span>
-  </div>
-
-  <div class="node" onclick="location.href='/network/staff/pages/signup.html'">
-    <span class="node-icon">📝</span>
-    <span class="node-label">Become a Vendor</span>
-  </div>
-
 </section>
 
-<section class="panel">
-  <h2>🔥 Products Feed</h2>
+<!-- PRODUCTS -->
+<section class="network-section" id="section-products">
+  <div class="section-header">
+    <div>
+      <div class="section-title">📦 Products</div>
+      <div class="section-sub">Physical and digital items from Beltline vendors.</div>
+    </div>
+  </div>
   <div class="scroll-feed" id="products-feed"></div>
+
+  <div class="vendor-strip">
+    <div class="vendor-strip-title">Featured Vendors</div>
+    <div class="vendor-feed" id="vendors-feed-products"></div>
+  </div>
 </section>
 
-<section class="panel">
-  <h2>🧰 Services Feed</h2>
+<!-- SERVICES -->
+<section class="network-section" id="section-services">
+  <div class="section-header">
+    <div>
+      <div class="section-title">🧰 Services</div>
+      <div class="section-sub">On-demand help, repairs, creative work, and more.</div>
+    </div>
+  </div>
   <div class="scroll-feed" id="services-feed"></div>
+
+  <div class="vendor-strip">
+    <div class="vendor-strip-title">Service Vendors</div>
+    <div class="vendor-feed" id="vendors-feed-services"></div>
+  </div>
 </section>
 
-<section class="panel">
-  <h2>🎓 Workshops Feed</h2>
+<!-- WORKSHOPS -->
+<section class="network-section" id="section-workshops">
+  <div class="section-header">
+    <div>
+      <div class="section-title">🎓 Workshops</div>
+      <div class="section-sub">Group sessions, classes, and Beltline experiences.</div>
+    </div>
+  </div>
   <div class="scroll-feed" id="workshops-feed"></div>
+
+  <div class="vendor-strip">
+    <div class="vendor-strip-title">Workshop Hosts</div>
+    <div class="vendor-feed" id="vendors-feed-workshops"></div>
+  </div>
 </section>
 
-<section class="panel">
-  <h2>📱 Apps Feed</h2>
+<!-- APPS -->
+<section class="network-section" id="section-apps">
+  <div class="section-header">
+    <div>
+      <div class="section-title">📱 Apps</div>
+      <div class="section-sub">Digital tools and platforms built by vendors.</div>
+    </div>
+  </div>
   <div class="scroll-feed" id="apps-feed"></div>
+
+  <div class="vendor-strip">
+    <div class="vendor-strip-title">App Creators</div>
+    <div class="vendor-feed" id="vendors-feed-apps"></div>
+  </div>
+</section>
+
+<!-- EXPLAINERS -->
+<section class="network-explain">
+  <h2 class="explain-title">About The Network</h2>
+
+  <div class="explain-item">
+    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+      <span class="explain-label">What is The Network?</span>
+      <span class="explain-toggle">Details ▾</span>
+    </div>
+    <div class="explain-body">
+      The Network is a public Beltline hub that connects Cloud users, local vendors, Fast Roll riders, and safety response units.
+      Vendors publish products, services, workshops, and apps. Riders deliver. Cloud users manage everything from a single dashboard.
+    </div>
+  </div>
+
+  <div class="explain-item">
+    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+      <span class="explain-label">How do vendors get listed?</span>
+      <span class="explain-toggle">Details ▾</span>
+    </div>
+    <div class="explain-body">
+      Vendors sign up through the vendor portal, complete their profile, and publish their offerings. Once live, their products,
+      services, workshops, and apps appear in these feeds and can be explored, booked, or purchased by Cloud users and visitors.
+    </div>
+  </div>
+
+  <div class="explain-item">
+    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+      <span class="explain-label">How does checkout and payout work?</span>
+      <span class="explain-toggle">Details ▾</span>
+    </div>
+    <div class="explain-body">
+      When a buyer checks out, a secure order is created and routed through the Network. Vendors see orders and payouts in their
+      staff dashboard. Riders can be assigned to deliveries, and payouts are tracked through the network_payouts system.
+    </div>
+  </div>
+
+  <div class="explain-item">
+    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+      <span class="explain-label">How does this connect to Cloud and Fast Roll?</span>
+      <span class="explain-toggle">Details ▾</span>
+    </div>
+    <div class="explain-body">
+      Cloud users own the core identity and dashboards. Vendors are Cloud users with vendor roles. Fast Roll riders are Cloud users
+      with rider roles. The Network is the public-facing layer that showcases what vendors publish and what riders deliver.
+    </div>
+  </div>
 </section>
 
 <script src="/network/public/js/app.js"></script>
 <script src="/network/public/js/network-api.js"></script>
 
 <script>
-  // DIRECT CALLS — Network API already builds the feed HTML
+  // FEEDS
   Network.loadProductsFeed();
   Network.loadServicesFeed();
   Network.loadWorkshopsFeed();
   Network.loadAppsFeed();
+
+  // OPTIONAL: vendor profile feeds (you can wire these in network-api.js)
+  if (Network.loadVendorStrips) {
+    Network.loadVendorStrips({
+      productsTarget: "vendors-feed-products",
+      servicesTarget: "vendors-feed-services",
+      workshopsTarget: "vendors-feed-workshops",
+      appsTarget: "vendors-feed-apps"
+    });
+  }
+
+  // AUTO SCROLL
+  function autoScrollFeed(id, speed = 0.4) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let scrollPos = 0;
+    setInterval(() => {
+      if (el.scrollWidth <= el.clientWidth) return;
+      scrollPos += speed;
+      if (scrollPos >= el.scrollWidth) scrollPos = 0;
+      el.scrollLeft = scrollPos;
+    }, 40);
+  }
+
+  autoScrollFeed("products-feed");
+  autoScrollFeed("services-feed");
+  autoScrollFeed("workshops-feed");
+  autoScrollFeed("apps-feed");
+  autoScrollFeed("vendors-feed-products", 0.3);
+  autoScrollFeed("vendors-feed-services", 0.3);
+  autoScrollFeed("vendors-feed-workshops", 0.3);
+  autoScrollFeed("vendors-feed-apps", 0.3);
+
+  // DROPDOWN EXPLAINERS
+  function toggleExplain(item) {
+    item.classList.toggle("open");
+  }
 </script>
 
 </body>
