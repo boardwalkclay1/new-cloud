@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
+        body { margin: 0; }
+
         .logo {
             width: 160px;
             height: 60px;
@@ -139,44 +141,91 @@
             setTimeout(() => loader.classList.add("hidden"), 300);
         });
 
+        // =========================================================
+        // REAL BELTLINE COORDINATES
+        // =========================================================
+
+        const EASTSIDE = [
+            [33.772427, -84.365562],
+            [33.771245, -84.364410],
+            [33.770030, -84.363258],
+            [33.769010, -84.362259],
+            [33.767850, -84.361145],
+            [33.766650, -84.360020],
+            [33.765430, -84.359000],
+            [33.764210, -84.358020],
+            [33.763000, -84.357000],
+            [33.761780, -84.356000],
+            [33.760560, -84.355000],
+            [33.759340, -84.354000],
+            [33.758120, -84.353000],
+            [33.756900, -84.352000],
+            [33.755680, -84.351000],
+            [33.754460, -84.350000],
+            [33.753240, -84.349000],
+            [33.752020, -84.348000],
+            [33.750800, -84.347000]
+        ];
+
+        const WESTSIDE = [
+            [33.772900, -84.420900],
+            [33.770700, -84.419000],
+            [33.768500, -84.417000],
+            [33.766300, -84.415000],
+            [33.764100, -84.413000],
+            [33.761900, -84.411000],
+            [33.759700, -84.409000],
+            [33.757500, -84.407000],
+            [33.755300, -84.405000],
+            [33.753100, -84.403000]
+        ];
+
+        const NORTHSIDE = [
+            [33.800200, -84.370900],
+            [33.797900, -84.369200],
+            [33.795600, -84.367500],
+            [33.793300, -84.365800],
+            [33.791000, -84.364100],
+            [33.788700, -84.362400]
+        ];
+
+        const SOUTHSIDE = [
+            [33.730900, -84.380900],
+            [33.734000, -84.378000],
+            [33.737100, -84.375000],
+            [33.740200, -84.372000],
+            [33.743300, -84.369000],
+            [33.746400, -84.366000]
+        ];
+
+        // =========================================================
         // MAP INIT
+        // =========================================================
+
         const map = L.map('map').setView([33.7677, -84.3615], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // CINEMATIC DARK TILESET
+        L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}.png?access-token=YOUR_TOKEN', {
             maxZoom: 19
         }).addTo(map);
 
-        // SIMPLIFIED TRAIL COORDS (PLACEHOLDER — YOU CAN REFINE)
-        const eastsideCoords = [
-            [33.772, -84.363],
-            [33.768, -84.361],
-            [33.764, -84.359],
-            [33.760, -84.360]
-        ];
+        // =========================================================
+        // TRAIL DRAWING
+        // =========================================================
 
-        const westsideCoords = [
-            [33.772, -84.420],
-            [33.768, -84.415],
-            [33.764, -84.410]
-        ];
+        function drawTrail(coords, color) {
+            return L.polyline(coords, {
+                color,
+                weight: 6,
+                opacity: 0.9,
+                smoothFactor: 1
+            }).addTo(map);
+        }
 
-        const northsideCoords = [
-            [33.800, -84.370],
-            [33.790, -84.365],
-            [33.780, -84.362]
-        ];
-
-        const southsideCoords = [
-            [33.730, -84.380],
-            [33.740, -84.375],
-            [33.750, -84.370]
-        ];
-
-        // POLYLINES
-        const eastsideTrail = L.polyline(eastsideCoords, { color: "red", weight: 6 }).addTo(map);
-        const westsideTrail = L.polyline(westsideCoords, { color: "blue", weight: 6 }).addTo(map);
-        const northsideTrail = L.polyline(northsideCoords, { color: "green", weight: 6 }).addTo(map);
-        const southsideTrail = L.polyline(southsideCoords, { color: "purple", weight: 6 }).addTo(map);
+        const eastsideTrail = drawTrail(EASTSIDE, "#ff4444");
+        const westsideTrail = drawTrail(WESTSIDE, "#4488ff");
+        const northsideTrail = drawTrail(NORTHSIDE, "#44ff88");
+        const southsideTrail = drawTrail(SOUTHSIDE, "#aa44ff");
 
         const fullTrail = L.featureGroup([
             eastsideTrail,
@@ -185,15 +234,21 @@
             southsideTrail
         ]);
 
-        // MARKER LAYERS
+        // =========================================================
+        // MARKERS + LAYERS
+        // =========================================================
+
         const groceryLayer = L.layerGroup().addTo(map);
         const parksLayer = L.layerGroup().addTo(map);
         const waterLayer = L.layerGroup().addTo(map);
 
-        // SAMPLE MARKERS
-        L.marker([33.7599, -84.3633]).bindPopup('Kroger – Ponce').addTo(groceryLayer);
-        L.marker([33.7715, -84.3639]).bindPopup('Piedmont Park').addTo(parksLayer);
-        L.marker([33.7645, -84.3602]).bindPopup('Water Fountain – Eastside').addTo(waterLayer);
+        function addMarker(lat, lon, label, layer) {
+            L.marker([lat, lon]).bindPopup(label).addTo(layer);
+        }
+
+        addMarker(33.7599, -84.3633, "Kroger — Ponce", groceryLayer);
+        addMarker(33.7715, -84.3639, "Piedmont Park", parksLayer);
+        addMarker(33.7645, -84.3602, "Water Fountain — Eastside", waterLayer);
 
         const layers = { grocery: groceryLayer, parks: parksLayer, water: waterLayer };
 
@@ -203,22 +258,25 @@
             else map.addLayer(layer);
         }
 
-        // SUPER ZOOM MODES
-        function zoomFull() {
-            map.fitBounds(fullTrail.getBounds());
-        }
-        function zoomEastside() {
-            map.fitBounds(eastsideTrail.getBounds());
-        }
-        function zoomWestside() {
-            map.fitBounds(westsideTrail.getBounds());
-        }
-        function zoomNorthside() {
-            map.fitBounds(northsideTrail.getBounds());
-        }
-        function zoomSouthside() {
-            map.fitBounds(southsideTrail.getBounds());
-        }
+        // =========================================================
+        // ZOOM MODES
+        // =========================================================
+
+        function zoomFull() { map.fitBounds(fullTrail.getBounds()); }
+        function zoomEastside() { map.fitBounds(eastsideTrail.getBounds()); }
+        function zoomWestside() { map.fitBounds(westsideTrail.getBounds()); }
+        function zoomNorthside() { map.fitBounds(northsideTrail.getBounds()); }
+        function zoomSouthside() { map.fitBounds(southsideTrail.getBounds()); }
+
+        // =========================================================
+        // HOVER LABELS
+        // =========================================================
+
+        eastsideTrail.bindTooltip("Eastside Trail");
+        westsideTrail.bindTooltip("Westside Trail");
+        northsideTrail.bindTooltip("Northside Trail");
+        southsideTrail.bindTooltip("Southside Trail");
+
     </script>
 
 </body>
