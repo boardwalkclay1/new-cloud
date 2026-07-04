@@ -1,11 +1,12 @@
 // worker.js
 
-import { handleNetwork } from "./network-api.js";
+import { handleNetwork } from "./work-network.js";     // ← CORRECT
 import { handleResponseRoutes } from "./work-response.js";
 import { handleSafetyRoutes } from "./work-safety.js";
 
 const FRONTEND_DOMAIN = "https://beltlinecloud.com";
 
+/* CORS */
 function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": FRONTEND_DOMAIN,
@@ -44,7 +45,10 @@ export default {
       return wrap(new Response(JSON.stringify({ error: "DB missing" }), { status: 500 }));
 
     try {
-      // LOGIN → DASHBOARD
+
+      /* ---------------------------------------------------------
+         CLOUD USER LOGIN → REDIRECT
+      --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
 
@@ -56,10 +60,13 @@ export default {
           return wrap(new Response(JSON.stringify({ error: "Invalid credentials" }), { status: 401 }));
 
         const user = results[0];
+
         return redirect(`${FRONTEND_DOMAIN}/cloud/dashboard.html?userId=${user.id}`);
       }
 
-      // RESPONSE MEMBER VERIFY → RESPONSE DASHBOARD
+      /* ---------------------------------------------------------
+         RESPONSE MEMBER VERIFY → REDIRECT
+      --------------------------------------------------------- */
       if (path === "/api/response/member/verify" && request.method === "POST") {
         const body = await request.json();
 
@@ -74,12 +81,21 @@ export default {
         return redirect(`${FRONTEND_DOMAIN}/cloud/response/rejected.html`);
       }
 
+      /* ---------------------------------------------------------
+         RESPONSE ROUTES
+      --------------------------------------------------------- */
       const r1 = await handleResponseRoutes(path, request, db, url);
       if (r1) return wrap(r1);
 
+      /* ---------------------------------------------------------
+         SAFETY ROUTES
+      --------------------------------------------------------- */
       const r2 = await handleSafetyRoutes(path, request, db, url);
       if (r2) return wrap(r2);
 
+      /* ---------------------------------------------------------
+         NETWORK ROUTES (THIS IS work-network.js)
+      --------------------------------------------------------- */
       const r3 = await handleNetwork(path, request, db, url);
       if (r3) return wrap(r3);
 
@@ -90,6 +106,9 @@ export default {
       }), { status: 500 }));
     }
 
+    /* ---------------------------------------------------------
+       STATIC FILES (R2)
+    --------------------------------------------------------- */
     let key = path === "/" ? "index.html" : path.slice(1);
     const object = await env.R2.get(key);
 
