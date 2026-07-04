@@ -1,19 +1,36 @@
 // public/js/network.js
 
-const API = "https://api.beltlinecloud.com";
+const API = "https://beltlinecloud.com/api/network";   // FIXED: correct API path
 
 const Network = {
+
+  /* ---------------------------------------------------------
+     TOKEN
+  --------------------------------------------------------- */
   token() {
     return localStorage.getItem("networkToken") || "";
   },
 
+  /* ---------------------------------------------------------
+     API WRAPPER — FIXED FOR PUBLIC FEEDS
+  --------------------------------------------------------- */
   async api(path, options = {}) {
     try {
+      const headers = {
+        "Content-Type": "application/json"
+      };
+
+      // Only attach Authorization for private routes
+      if (!path.includes("/products") &&
+          !path.includes("/services") &&
+          !path.includes("/workshops") &&
+          !path.includes("/apps") &&
+          !path.includes("/vendors")) {
+        headers["Authorization"] = this.token();
+      }
+
       const res = await fetch(API + path, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": this.token()
-        },
+        headers,
         ...options
       });
 
@@ -31,7 +48,7 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     HOME PAGE — NEW FULL NETWORK FEEDS
+     HOME PAGE — LOAD ALL FEEDS
   --------------------------------------------------------- */
   async loadHomeFeeds() {
     this.loadProductsFeed();
@@ -41,13 +58,13 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     PRODUCTS
+     PRODUCTS FEED
   --------------------------------------------------------- */
   async loadProductsFeed() {
     const feed = document.getElementById("products-feed");
     if (!feed) return;
 
-    const products = await this.api("/api/network/products");
+    const products = await this.api("/products");
     const list = Array.isArray(products) ? products : [];
 
     feed.innerHTML = list.map(p => `
@@ -59,13 +76,13 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     SERVICES
+     SERVICES FEED
   --------------------------------------------------------- */
   async loadServicesFeed() {
     const feed = document.getElementById("services-feed");
     if (!feed) return;
 
-    const services = await this.api("/api/network/services");
+    const services = await this.api("/services");
     const list = Array.isArray(services) ? services : [];
 
     feed.innerHTML = list.map(s => `
@@ -77,13 +94,13 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     WORKSHOPS
+     WORKSHOPS FEED
   --------------------------------------------------------- */
   async loadWorkshopsFeed() {
     const feed = document.getElementById("workshops-feed");
     if (!feed) return;
 
-    const workshops = await this.api("/api/network/workshops");
+    const workshops = await this.api("/workshops");
     const list = Array.isArray(workshops) ? workshops : [];
 
     feed.innerHTML = list.map(w => `
@@ -95,13 +112,13 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     APPS
+     APPS FEED
   --------------------------------------------------------- */
   async loadAppsFeed() {
     const feed = document.getElementById("apps-feed");
     if (!feed) return;
 
-    const apps = await this.api("/api/network/apps");
+    const apps = await this.api("/apps");
     const list = Array.isArray(apps) ? apps : [];
 
     feed.innerHTML = list.map(a => `
@@ -136,7 +153,7 @@ const Network = {
   },
 
   /* ---------------------------------------------------------
-     CLOUD USER CONNECTION (Payments + Usage)
+     CLOUD USER CONNECTION
   --------------------------------------------------------- */
   async requireCloudUser() {
     const raw = localStorage.getItem("beltline_user");
@@ -152,7 +169,7 @@ const Network = {
     const user = await this.requireCloudUser();
     if (!user) return;
 
-    const res = await this.api("/api/network/pay", {
+    const res = await this.api("/pay", {
       method: "POST",
       body: JSON.stringify({
         productId,
@@ -172,7 +189,7 @@ const Network = {
     const user = await this.requireCloudUser();
     if (!user) return;
 
-    const res = await this.api("/api/network/workshop/book", {
+    const res = await this.api("/workshop/book", {
       method: "POST",
       body: JSON.stringify({
         workshopId,
