@@ -16,12 +16,25 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
+
+    <!-- BACKGROUND LOGIC -->
+    <style>
+        body {
+            background: url('/fast-roll/img/fast-index.jpg') center / cover no-repeat fixed;
+        }
+        .page-bg {
+            position: fixed;
+            inset: 0;
+            background: url('/fast-roll/img/fast-index.jpg') center / cover no-repeat;
+            z-index: -1;
+        }
+    </style>
 </head>
 
 <body>
 
     <!-- BACKGROUND -->
-    <div class="page-bg" style="background-image:url('/fast-roll/img/fast-index.jpg');"></div>
+    <div class="page-bg"></div>
 
     <!-- NAV -->
     <nav class="nav">
