@@ -10,13 +10,14 @@ body {
   overflow-x: hidden;
 }
 
+/* BACKGROUND — NOW FULLY VISIBLE */
 .page-bg {
   position: fixed;
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.35);
   z-index: -1;
+  /* removed brightness filter */
 }
 
 /* =========================================================
@@ -25,13 +26,14 @@ body {
 
 .nav {
   width: 100%;
-  background: #0d1328;
+  background: rgba(13,19,40,0.92);
   padding: 14px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid #d4af37;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
 }
 
 .logo img {
@@ -102,11 +104,12 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #1e2a4a;
+  background: rgba(30,42,74,0.92);
   padding: 20px;
   border-radius: 14px;
   border: 2px solid #d4af37;
   box-shadow: 0 0 18px rgba(212,175,55,0.25);
+  backdrop-filter: blur(6px);
 }
 
 .user-avatar {
@@ -122,13 +125,14 @@ body {
 }
 
 .info-box {
-  background: #1e2a4a;
+  background: rgba(30,42,74,0.92);
   padding: 20px;
   border-radius: 14px;
   border: 2px solid #d4af37;
   min-width: 160px;
   text-align: center;
   box-shadow: 0 0 18px rgba(212,175,55,0.25);
+  backdrop-filter: blur(6px);
 }
 
 .info-box h4 {
@@ -156,12 +160,13 @@ body {
 }
 
 .dash-card {
-  background: #1e2a4a;
+  background: rgba(30,42,74,0.92);
   padding: 22px;
   border-radius: 14px;
   border: 2px solid #d4af37;
   box-shadow: 0 0 18px rgba(212,175,55,0.25);
   transition: 0.25s;
+  backdrop-filter: blur(6px);
 }
 
 .dash-card:hover {
@@ -223,7 +228,7 @@ body {
 }
 
 .room-card {
-  background: #1e2a4a;
+  background: rgba(30,42,74,0.92);
   padding: 20px;
   border-radius: 14px;
   border: 2px solid #d4af37;
@@ -234,6 +239,7 @@ body {
   text-decoration: none;
   box-shadow: 0 0 18px rgba(212,175,55,0.25);
   transition: 0.25s;
+  backdrop-filter: blur(6px);
 }
 
 .room-card:hover {
@@ -251,7 +257,8 @@ body {
   padding: 40px;
   opacity: 0.85;
   color: #d4af37;
-  background: #0d1328;
+  background: rgba(13,19,40,0.92);
   border-top: 2px solid #d4af37;
   margin-top: 40px;
+  backdrop-filter: blur(6px);
 }
