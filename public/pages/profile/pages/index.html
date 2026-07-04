@@ -2,62 +2,441 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Your Cloud Profile</title>
+  <title>Your Cloud Profile — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="/pages/profile/css/profile.css">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0a0f1f;
+      color: #fff;
+    }
+
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      background: url('/assets/img/profile/profile-bg.jpg') center/cover no-repeat;
+      z-index: -1;
+      opacity: 0.35;
+    }
+
+    /* NAV */
+    nav.nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(0,0,0,0.85);
+      border-bottom: 2px solid #d4af37;
+    }
+
+    #burgerLogo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    #messagesIcon {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    /* BURGER MENU */
+    #burgerMenu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 280px;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      border-right: 2px solid #d4af37;
+      padding: 24px;
+      transition: 0.35s ease;
+      z-index: 9999;
+      overflow-y: auto;
+    }
+    #burgerMenu.open { left: 0; }
+
+    #burgerMenu .menu-close {
+      font-size: 30px;
+      color: #d4af37;
+      cursor: pointer;
+      float: right;
+    }
+
+    #burgerMenu h3 {
+      font-family: 'Cinzel', serif;
+      color: #d4af37;
+      margin-top: 26px;
+      margin-bottom: 10px;
+    }
+
+    #burgerMenu a {
+      display: block;
+      padding: 8px 0;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    #burgerMenu a:hover { color: #00b86b; }
+
+    /* PROFILE LAYOUT */
+    .profile-shell {
+      max-width: 960px;
+      margin: 30px auto 40px;
+      padding: 0 18px 40px;
+    }
+
+    .profile-banner {
+      width: 100%;
+      height: 180px;
+      border-radius: 18px;
+      background: #111;
+      background-size: cover;
+      background-position: center;
+      border: 2px solid #d4af37;
+      position: relative;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #d4af37;
+      object-fit: cover;
+      position: relative;
+      top: -60px;
+      left: 24px;
+      background: #000;
+    }
+
+    .profile-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: -40px;
+      margin-bottom: 10px;
+    }
+
+    .profile-name-block {
+      margin-left: 160px;
+    }
+
+    .profile-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .profile-tags {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .profile-tag-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #d4af37;
+      font-size: 0.8rem;
+    }
+
+    .rep-points {
+      text-align: right;
+      font-family: 'Cinzel', serif;
+    }
+
+    .rep-points span {
+      display: block;
+    }
+
+    .rep-value {
+      font-size: 1.4rem;
+      color: #d4af37;
+    }
+
+    /* SOCIAL LINKS */
+    .social-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .social-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #d4af37;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .social-pill:hover { background: rgba(212,175,55,0.18); }
+
+    /* SECTIONS */
+    .section {
+      margin-top: 26px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 16px;
+      border: 1px solid #d4af37;
+      padding: 16px;
+    }
+
+    .section h2 {
+      font-family: 'Cinzel', serif;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    /* SAFETY CLOUD */
+    .status-section {
+      margin-top: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 16px;
+      border: 1px solid #d4af37;
+      padding: 16px;
+    }
+
+    .status-section h3 {
+      font-family: 'Cinzel', serif;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .status-badge {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+
+    /* BADGES PREVIEW */
+    .badge-preview-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge-slot {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      border: 1px solid #d4af37;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .badge-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .cloud-btn {
+      margin-top: 12px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: none;
+      background: #d4af37;
+      color: #000;
+      font-family: 'Cinzel', serif;
+      cursor: pointer;
+    }
+
+    .cloud-btn:hover { background: #f7d354; }
+
+    /* MEDIA GRID + POSTING */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .media-item {
+      background: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+
+    .media-item img,
+    .media-item video {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-post-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .media-post-row input[type="file"] {
+      color: #fff;
+      font-size: 0.85rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .profile-avatar {
+        left: 18px;
+      }
+      .profile-name-block {
+        margin-left: 150px;
+      }
+      .profile-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .rep-points {
+        text-align: left;
+        margin-top: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body data-page="profile-dashboard">
 
-  <!-- Permanent Cloud Chat Icon -->
-  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
-    💬
-  </div>
+<div class="page-bg"></div>
+
+<!-- BURGER MENU -->
+<div id="burgerMenu">
+  <span class="menu-close" id="menuClose">&times;</span>
+
+  <h3>Cloud</h3>
+  <a href="/pages/chat/index.html">Cloud Chat</a>
+  <a href="/pages/feed/index.html">Cloud Feed</a>
+  <a href="/pages/safety/index.html">Safety Cloud</a>
+  <a href="/pages/map/beltline-map.html">Beltline Map</a>
+
+  <h3>Profile</h3>
+  <a href="/pages/profile/view.html">View Profile</a>
+  <a href="/pages/profile/edit.html">Edit Profile</a>
+  <a href="/pages/profile/badges.html">Badge Vault</a>
+
+  <h3>Account</h3>
+  <a href="/pages/settings.html">Settings</a>
+  <a href="/pages/notifications.html">Notifications</a>
+  <a href="/pages/login.html">Logout</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <img src="/assets/img/cloud/cloud-logo.jpg" id="burgerLogo" alt="Menu">
+  <img src="/assets/img/cloud/cloud-talkk-logo.jpg" id="messagesIcon" alt="Messages" onclick="location.href='/pages/messages/messages.html'">
+</nav>
+
+<!-- PROFILE SHELL -->
+<div class="profile-shell">
 
   <!-- Banner -->
   <div id="profileBanner" class="profile-banner"></div>
 
   <!-- Avatar -->
-  <img id="profileAvatar" class="profile-avatar">
+  <img id="profileAvatar" class="profile-avatar" alt="Profile Avatar">
 
-  <!-- Name -->
-  <h1 id="profileName" class="profile-name"></h1>
+  <!-- Header row: name + rep -->
+  <div class="profile-header-row">
+    <div class="profile-name-block">
+      <h1 id="profileName" class="profile-name"></h1>
+      <div id="profileTags" class="profile-tags"></div>
 
-  <!-- Identity Tags -->
-  <div id="profileTags" class="profile-tags"></div>
+      <!-- Social links -->
+      <div class="social-row">
+        <a id="socialInstagram" class="social-pill" target="_blank" rel="noopener">Instagram</a>
+        <a id="socialTikTok" class="social-pill" target="_blank" rel="noopener">TikTok</a>
+        <a id="socialFacebook" class="social-pill" target="_blank" rel="noopener">Facebook</a>
+      </div>
+    </div>
+
+    <div class="rep-points">
+      <span>Rep Points</span>
+      <span id="repValue" class="rep-value">0</span>
+    </div>
+  </div>
 
   <!-- Safety CLOUD Status -->
   <div class="status-section">
     <h3>Safety CLOUD Status</h3>
-    <img id="safetyCloudStatusBadge" class="status-badge">
+    <img id="safetyCloudStatusBadge" class="status-badge" alt="Safety Cloud Badge">
   </div>
 
-  <!-- Badge Preview -->
+  <!-- Badges Preview -->
   <div class="section">
     <h2>Your Badges</h2>
-    <div id="profileBadgePreview" class="badge-preview-row"></div>
-    <button class="cloud-btn" onclick="openBadgeVault(window.userId)">View All Badges</button>
+    <div id="profileBadgePreview" class="badge-preview-row">
+      <div class="badge-slot"></div>
+      <div class="badge-slot"></div>
+      <div class="badge-slot"></div>
+    </div>
+    <button class="cloud-btn" onclick="location.href='/pages/profile/badges.html'">
+      View All Badges
+    </button>
   </div>
 
-  <!-- Media Gallery -->
+  <!-- Media Gallery + Posting -->
   <div class="section">
     <h2>Your Media</h2>
     <div id="profileMedia" class="media-grid"></div>
+
+    <div class="media-post-row">
+      <input type="file" id="mediaUpload" accept="image/*,video/*">
+      <button class="cloud-btn" id="mediaPostBtn">Post to Cloud</button>
+    </div>
   </div>
 
-  <!-- Settings -->
+  <!-- Settings / Profile Controls -->
   <div class="section">
     <button class="cloud-btn" onclick="location.href='/pages/profile/edit.html'">
       Profile Settings
     </button>
   </div>
 
-  <script type="module">
-    import { loadUserProfile } from "/pages/profile/js/profile.js";
-    window.userId = localStorage.getItem("cloud_user_id");
-    loadUserProfile(window.userId);
-  </script>
+</div>
+
+<script>
+  // Burger menu
+  const burgerMenu = document.getElementById("burgerMenu");
+  const burgerLogo = document.getElementById("burgerLogo");
+  const menuClose = document.getElementById("menuClose");
+
+  burgerLogo.onclick = () => burgerMenu.classList.add("open");
+  menuClose.onclick = () => burgerMenu.classList.remove("open");
+</script>
+
+<script type="module">
+  import { loadUserProfile } from "/pages/profile/js/profile.js";
+
+  window.userId = localStorage.getItem("cloud_user_id");
+  loadUserProfile(window.userId);
+</script>
 
 </body>
 </html>
