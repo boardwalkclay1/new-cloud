@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Response Squad Dashboard</title>
 
+    <link rel="stylesheet" href="/cloud/response/css/dashboard.css">
+    <link rel="icon" href="/network/public/img/network-logo.jpg">
+</head>
+
+<body>
+
+    <div class="rs-header">
+        <img src="/network/public/img/network-logo.jpg" class="rs-logo">
+        <h1 class="rs-title">Response Squad Dashboard</h1>
+        <p class="rs-subtitle">Operational readiness. Real-time response.</p>
+    </div>
+
+    <nav class="rs-nav">
+        <a href="dashboard.html" class="active">Home</a>
+        <a href="missions.html">Missions</a>
+        <a href="incidents.html">Incidents</a>
+        <a href="units.html">Units</a>
+        <a href="gear.html">Gear</a>
+        <a href="training.html">Training</a>
+        <a href="map.html">Map</a>
+        <a href="notifications.html">Notifications</a>
+        <a href="profile.html">Profile</a>
+    </nav>
+
+    <section class="rs-content">
+        <h2>Welcome, Response Unit</h2>
+        <p>Your operational tools are ready.</p>
+
+        <div class="rs-grid">
+            <div class="rs-card" onclick="go('missions.html')">
+                <h3>Active Missions</h3>
+                <p>View assignments, deployment status, and mission briefs.</p>
+            </div>
+
+            <div class="rs-card" onclick="go('incidents.html')">
+                <h3>Incident Reports</h3>
+                <p>Submit, review, and track Beltline incidents.</p>
+            </div>
+
+            <div class="rs-card" onclick="go('units.html')">
+                <h3>Unit Status</h3>
+                <p>Check squad readiness, availability, and roles.</p>
+            </div>
+
+            <div class="rs-card" onclick="go('gear.html')">
+                <h3>Gear & Loadout</h3>
+                <p>Manage equipment, tools, and certifications.</p>
+            </div>
+
+            <div class="rs-card" onclick="go('training.html')">
+                <h3>Training</h3>
+                <p>Complete modules, earn badges, and stay certified.</p>
+            </div>
+
+            <div class="rs-card" onclick="go('map.html')">
+                <h3>Response Map</h3>
+                <p>Live map of Beltline activity and squad deployment.</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        Auth.requireResponseMember(); // FULL VERIFICATION
+        function go(page){ window.location.href = page; }
+    </script>
+
+</body>
+</html>
