@@ -9,9 +9,12 @@
 
     <style>
         body {
+            margin: 0;
             background: url('/fast-roll/img/fast-longboard.jpg') center/cover no-repeat fixed;
-            background-color: #05060a;
+            font-family: 'Inter', sans-serif;
+            color: #ffd94a;
         }
+
         body::before {
             content: "";
             position: fixed;
@@ -22,6 +25,99 @@
                 rgba(0,0,0,0.75)
             );
             z-index: -1;
+        }
+
+        /* NAV */
+        .nav {
+            background: rgba(10, 20, 60, 0.85);
+            border-bottom: 1px solid rgba(255, 217, 74, 0.25);
+            padding: 18px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ffd94a;
+            margin-left: 22px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .logo-img {
+            height: 58px;
+        }
+
+        /* FORM WRAPPER */
+        .form-wrapper {
+            max-width: 420px;
+            margin: 140px auto;
+            background: rgba(10, 20, 60, 0.78);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 217, 74, 0.25);
+            backdrop-filter: blur(6px);
+            text-align: center;
+        }
+
+        .form-wrapper h1 {
+            margin-bottom: 10px;
+            color: #ffd94a;
+            font-weight: 700;
+        }
+
+        .form-wrapper p {
+            color: #ffeaa0;
+            margin-bottom: 24px;
+        }
+
+        /* FORM GROUP */
+        .form-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ffd94a;
+            font-weight: 600;
+        }
+
+        /* BUBBLE INPUTS */
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            background: rgba(255, 217, 74, 0.12);
+            color: #ffeaa0;
+            font-size: 1rem;
+            outline: none;
+            border: 1px solid rgba(255, 217, 74, 0.25);
+        }
+
+        .form-group input:focus {
+            border-color: #ffd94a;
+            background: rgba(255, 217, 74, 0.18);
+        }
+
+        /* BUTTON */
+        .primary-btn {
+            width: 100%;
+            padding: 14px;
+            background: #ffd94a;
+            color: #0a143c;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .primary-btn:hover {
+            background: #ffdf6b;
         }
     </style>
 </head>
@@ -39,7 +135,7 @@
     </div>
 </nav>
 
-<div class="form-wrapper" style="margin-top:140px;">
+<div class="form-wrapper">
     <h1>Rider Login</h1>
     <p>Access your dashboard and start taking jobs.</p>
 
