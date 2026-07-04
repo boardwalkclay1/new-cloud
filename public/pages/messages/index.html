@@ -9,44 +9,104 @@
   <link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- INLINE FIX FOR GIANT LOGO / ICON -->
   <style>
-    /* Prevent ANY global img rules from stretching icons */
-    img {
-      max-width: 100%;
-      height: auto;
-    }
+    /* Prevent global img stretching */
+    img { max-width: 100%; height: auto; }
 
-    /* Fix the CloudTalk icon (menu trigger) */
-    .messages-compose-icon {
-      width: 45px !important;
-      height: 45px !important;
-      object-fit: cover;
-      flex-shrink: 0 !important;
-      border-radius: 50%;
-      border: 2px solid #f7d354;
-      cursor: pointer;
-    }
-
-    /* Ensure header right container doesn't stretch the icon */
-    .messages-header-right {
+    /* HEADER FIX */
+    .messages-header {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      flex-shrink: 0;
-      padding-right: 10px;
+      padding: 10px;
+      background: rgba(0,0,0,0.7);
+      border-bottom: 2px solid #f7d354;
     }
 
-    /* Ensure header left stays empty and doesn't stretch */
     .messages-header-left {
       width: 45px;
       flex-shrink: 0;
     }
 
-    /* Center title perfectly */
     .messages-header-center {
       flex: 1;
       text-align: center;
+    }
+
+    .messages-title {
+      font-family: Cinzel;
+      font-size: 26px;
+      color: #f7d354;
+      text-shadow: 0 0 8px #f7d354;
+    }
+
+    /* CLOUDTALK ICON = BURGER MENU TRIGGER */
+    #menuTrigger {
+      width: 45px !important;
+      height: 45px !important;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #f7d354;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .messages-header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 60px;
+      flex-shrink: 0;
+    }
+
+    /* BURGER MENU */
+    #cloudMenu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 300px;
+      height: 100%;
+      background: rgba(0,0,0,0.92);
+      padding: 25px;
+      transition: 0.35s ease;
+      z-index: 9999;
+      overflow-y: auto;
+      border-right: 2px solid #f7d354;
+    }
+
+    #cloudMenu.open {
+      left: 0;
+    }
+
+    .menu-header img {
+      width: 70px;
+      border-radius: 50%;
+      border: 2px solid #f7d354;
+    }
+
+    .menu-close {
+      font-size: 32px;
+      color: #f7d354;
+      cursor: pointer;
+      float: right;
+    }
+
+    .menu-category h3 {
+      color: #f7d354;
+      font-family: Cinzel;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+
+    .menu-category a {
+      display: block;
+      padding: 8px 0;
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .menu-category a:hover {
+      color: #00b86b;
     }
   </style>
 </head>
@@ -55,10 +115,10 @@
 
 <div class="messages-bg"></div>
 
-<!-- CLOUD MENU -->
-<div id="cloudMenu" class="cloud-menu">
+<!-- BURGER MENU -->
+<div id="cloudMenu">
   <div class="menu-header">
-    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo" alt="Cloud Logo">
+    <img src="/assets/img/cloud/cloud-logo.jpg" alt="Cloud Logo">
     <span class="menu-close" id="menuClose">&times;</span>
   </div>
 
@@ -66,32 +126,26 @@
 
     <div class="menu-category">
       <h3>My Profile</h3>
-      <ul>
-        <li><a href="/pages/profile.html">View Profile</a></li>
-        <li><a href="/pages/notifications.html">Notifications</a></li>
-        <li><a href="/pages/settings.html">Settings</a></li>
-      </ul>
+      <a href="/pages/profile.html">View Profile</a>
+      <a href="/pages/notifications.html">Notifications</a>
+      <a href="/pages/settings.html">Settings</a>
     </div>
 
     <div class="menu-category">
       <h3>Messages</h3>
-      <ul>
-        <li><a href="/pages/messages/messages.html">Inbox</a></li>
-        <li><a href="/pages/messages/messages.html?view=requests">Message Requests</a></li>
-        <li><a href="/pages/messages/messages.html?view=settings">Message Settings</a></li>
-      </ul>
+      <a href="/pages/messages/messages.html">Inbox</a>
+      <a href="/pages/messages/messages.html?view=requests">Message Requests</a>
+      <a href="/pages/messages/messages.html?view=settings">Message Settings</a>
     </div>
 
     <div class="menu-category">
       <h3>Safety Cloud</h3>
-      <ul>
-        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
-        <li><a href="/pages/safety/lost-found.html">Lost & Found</a></li>
-        <li><a href="/pages/safety/stolen.html">Stolen Items</a></li>
-        <li><a href="/pages/safety/markers.html">Marker System</a></li>
-        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
-        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
-      </ul>
+      <a href="/pages/safety/index.html">Safety Overview</a>
+      <a href="/pages/safety/lost-found.html">Lost & Found</a>
+      <a href="/pages/safety/stolen.html">Stolen Items</a>
+      <a href="/pages/safety/markers.html">Marker System</a>
+      <a href="/pages/safety/live-feed.html">Live Feed</a>
+      <a href="/pages/safety/alerts.html">Alerts</a>
     </div>
 
     <div class="logout-btn-menu" onclick="logout()">Logout</div>
@@ -102,25 +156,19 @@
 <!-- HEADER -->
 <header class="messages-header">
 
-  <!-- LEFT SIDE — EMPTY BUT FIXED WIDTH -->
   <div class="messages-header-left"></div>
 
-  <!-- CENTER TITLE -->
   <div class="messages-header-center">
     <span class="messages-title">Cloud Messages</span>
   </div>
 
-  <!-- RIGHT SIDE — CLOUDTALK ICON AS MENU TRIGGER -->
   <div class="messages-header-right">
-    <img src="/assets/img/cloud/cloud-talkk-logo.jpg"
-         class="messages-compose-icon"
-         id="menuTrigger"
-         alt="Menu">
+    <img src="/assets/img/cloud/cloud-talkk-logo.jpg" id="menuTrigger" alt="Menu">
   </div>
 
 </header>
 
-<!-- MAIN MESSAGES VIEW -->
+<!-- MAIN VIEW -->
 <div id="messages-view" class="messages-view"></div>
 
 <!-- FOOTER NAV -->
@@ -134,7 +182,7 @@
 <script type="module" src="/pages/messages/js/messages.js"></script>
 
 <script>
-  // MENU OPEN/CLOSE
+  // BURGER MENU LOGIC
   const menu = document.getElementById("cloudMenu");
   const trigger = document.getElementById("menuTrigger");
   const closeBtn = document.getElementById("menuClose");
