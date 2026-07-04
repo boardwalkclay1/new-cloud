@@ -10,9 +10,9 @@ import { handleSafetyRoutes } from "./work-safety.js";
 
 function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": "beltlinecloud.com",
+    "Access-Control-Allow-Origin": FRONTEND_DOMAIN,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-User-Email, X-User-Id",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-User-Email, X-User-Id",
     "Access-Control-Max-Age": "86400"
   };
 }
@@ -111,7 +111,6 @@ async function login(request, db) {
   if (!email || !password)
     return json({ error: "Missing fields" }, 400);
 
-  // SELECT CORRECT COLUMN
   const user = await db.prepare(
     "SELECT id, email, name, passwordHash, roles FROM cloud_users WHERE email = ?"
   ).bind(email).first();
@@ -119,14 +118,12 @@ async function login(request, db) {
   if (!user)
     return json({ error: "Invalid credentials" }, 401);
 
-  // HASH INCOMING PASSWORD
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const incomingHash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
-  // COMPARE HASHES
   if (incomingHash !== user.passwordHash)
     return json({ error: "Invalid credentials" }, 401);
 
@@ -194,6 +191,7 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    /* OPTIONS — REQUIRED FOR CORS */
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -218,6 +216,7 @@ export default {
       return wrap(json({ error: "Worker crashed", detail: err.message }, 500));
     }
 
+    /* STATIC FILES */
     let key = path === "/" ? "index.html" : path.slice(1);
     const object = await env.R2.get(key);
 
@@ -245,11 +244,15 @@ export default {
   }
 };
 
+/* ---------------- WRAP CORS ---------------- */
+
 function wrap(res) {
   const headers = new Headers(res.headers);
+
   headers.set("Access-Control-Allow-Origin", FRONTEND_DOMAIN);
   headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  headers.set("Access-Control-Allow-Headers", "Content-Type, X-User-Email, X-User-Id");
+  headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-User-Email, X-User-Id");
+  headers.set("Access-Control-Max-Age", "86400");
 
   return new Response(res.body, {
     status: res.status,
