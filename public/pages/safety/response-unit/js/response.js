@@ -1,20 +1,11 @@
 // =========================================================
 // BELTLINE CLOUD — RESPONSE UNIT ENGINE (MASTER JS)
 // =========================================================
-// This file controls:
-// - Responder signup + verification
-// - Response Unit roster loading
-// - Incident creation + assignment
-// - First Response Chat creation
-// - Reputation points per incident (5 per responder)
-// - Incident history tracking
-// - Integration with Worker APIs
-// =========================================================
 
-const RU_API      = "https://api.beltlinecloud.com/response-unit";
-const INCIDENT_API = "https://api.beltlinecloud.com/incidents";
-const CHAT_API     = "https://api.beltlinecloud.com/chat";
-const PROFILE_API  = "https://api.beltlinecloud.com/profile";
+const RESPONSE_API  = "/api/response";        // groups, members, ranks, activity
+const SAFETY_API    = "/api/safety";          // alerts (cloud_safety_alerts)
+const CHAT_API      = "/api/chat";            // incident channels
+const PROFILE_API   = "/api/profile";         // badges, status
 
 // =========================================================
 // API WRAPPER
@@ -33,100 +24,92 @@ async function cloudAPI(path, options = {}) {
 }
 
 // =========================================================
-// RESPONDER SIGNUP FLOW
+// RESPONSE MEMBER SIGNUP (FROM CLOUD USER)
 // =========================================================
-// Called from Response Unit signup form
-// Required: name, idNumber, photoUrl, contact, preferredRole
+// payload = { userId, groupId, preferredRole }
 // =========================================================
-export async function signupResponder(payload) {
-  // payload = { name, idNumber, photoUrl, contact, preferredRole }
-  return cloudAPI(`${RU_API}/signup`, {
+export async function signupResponseMember(payload) {
+  return cloudAPI(`${RESPONSE_API}/members/signup`, {
     method: "POST",
     body: JSON.stringify(payload)
   });
 }
 
 // =========================================================
-// RESPONDER VERIFICATION (ADMIN)
+// VERIFY RESPONSE MEMBER (ADMIN)
 // =========================================================
-// You approve responders from Cloud Admin Dash
-// =========================================================
-export async function verifyResponder(responderId, approved) {
-  return cloudAPI(`${RU_API}/verify`, {
+export async function verifyResponseMember(memberId, approved) {
+  return cloudAPI(`${RESPONSE_API}/members/verify`, {
     method: "POST",
     body: JSON.stringify({
-      responderId,
+      memberId,
       approved
     })
   });
 }
 
 // =========================================================
-// LOAD RESPONSE UNIT ROSTER (ADMIN VIEW)
+// LOAD RESPONSE UNIT ROSTER (BY GROUP)
 // =========================================================
-export async function loadResponseUnitRoster() {
-  return cloudAPI(`${RU_API}/roster`);
+export async function loadResponseUnitRoster(groupId) {
+  return cloudAPI(`${RESPONSE_API}/groups/${groupId}/members`);
 }
 
 // =========================================================
-// PROMOTE / DEMOTE RESPONDER (ADMIN)
+// SET RESPONSE MEMBER RANK (ADMIN)
 // =========================================================
-export async function setResponderRank(responderId, rank) {
-  // rank: "responder1", "responder2", "responder3", "sentinel", "guardian", "commander", "chief"
-  return cloudAPI(`${RU_API}/rank`, {
+export async function setResponseMemberRank(memberId, rank) {
+  return cloudAPI(`${RESPONSE_API}/members/rank`, {
     method: "POST",
     body: JSON.stringify({
-      responderId,
+      memberId,
       rank
     })
   });
 }
 
 // =========================================================
-// CREATE INCIDENT (FROM SAFETY CLOUD ALERT)
+// CREATE INCIDENT FROM SAFETY ALERT
 // =========================================================
-// Called when any Safety CLOUD alert fires
-// incidentPayload = {
+// alertPayload = {
 //   userId,
-//   mode,          // "fall", "snatch", "highrisk", "vendor", etc.
-//   location,      // { lat, lng }
-//   severity,      // "low", "medium", "high"
-//   mediaUrl,      // optional
+//   mode,       // "fall", "snatch", "highrisk", "vendor", etc.
+//   location,   // { lat, lng } or string
+//   severity,   // "low", "medium", "high"
+//   mediaUrl,   // optional
 //   timestamp
 // }
 // =========================================================
-export async function createIncident(incidentPayload) {
-  const incident = await cloudAPI(`${INCIDENT_API}/create`, {
+export async function createIncidentFromAlert(alertPayload) {
+  const alert = await cloudAPI(`${SAFETY_API}/alerts/create`, {
     method: "POST",
-    body: JSON.stringify(incidentPayload)
+    body: JSON.stringify(alertPayload)
   });
 
-  // Auto-assign responders (Worker decides who)
-  const assigned = await cloudAPI(`${RU_API}/assign`, {
+  const assigned = await cloudAPI(`${RESPONSE_API}/assign`, {
     method: "POST",
     body: JSON.stringify({
-      incidentId: incident.id
+      alertId: alert.id
     })
   });
 
-  // Create First Response Chat
-  await createFirstResponseChat(incident, assigned);
+  await createIncidentChannel(alert, assigned);
 
-  return { incident, assigned };
+  return { alert, assigned };
 }
 
 // =========================================================
-// CREATE FIRST RESPONSE CHAT (PER INCIDENT)
+// CREATE INCIDENT CHANNEL (CHAT)
 // =========================================================
-async function createFirstResponseChat(incident, assignedResponders) {
-  const responderIds = assignedResponders.map(r => r.id);
+async function createIncidentChannel(alert, assignedMembers) {
+  const memberIds = assignedMembers.map(m => m.id);
 
   return cloudAPI(`${CHAT_API}/incident-channel`, {
     method: "POST",
     body: JSON.stringify({
-      incidentId: incident.id,
-      userId: incident.userId,
-      responderIds
+      alertId: alert.id,
+      userId: alert.userId,
+      memberIds
     })
   });
 }
@@ -134,91 +117,80 @@ async function createFirstResponseChat(incident, assignedResponders) {
 // =========================================================
 // CLOSE INCIDENT + AWARD REPUTATION POINTS
 // =========================================================
-// When incident is resolved, called from admin or Guardian/Commander
-// Everyone involved gets +5 reputation points
-// =========================================================
-export async function closeIncident(incidentId) {
-  // Mark incident closed
-  const incident = await cloudAPI(`${INCIDENT_API}/close`, {
+export async function closeIncident(alertId) {
+  const alert = await cloudAPI(`${SAFETY_API}/alerts/close`, {
     method: "POST",
-    body: JSON.stringify({ incidentId })
+    body: JSON.stringify({ alertId })
   });
 
-  // Get responders involved
-  const responders = await cloudAPI(`${RU_API}/incident-responders`, {
+  const members = await cloudAPI(`${RESPONSE_API}/incident/members`, {
     method: "POST",
-    body: JSON.stringify({ incidentId })
+    body: JSON.stringify({ alertId })
   });
 
-  // Award reputation points
-  await awardReputationPoints(incidentId, responders);
+  await awardReputationPoints(alertId, members);
 
-  return { incident, responders };
+  return { alert, members };
 }
 
 // =========================================================
-// AWARD REPUTATION POINTS (5 PER RESPONDER)
+// AWARD REPUTATION POINTS (5 PER MEMBER)
 // =========================================================
-async function awardReputationPoints(incidentId, responders) {
-  const updates = responders.map(r => ({
-    responderId: r.id,
+async function awardReputationPoints(alertId, members) {
+  const updates = members.map(m => ({
+    memberId: m.id,
     points: 5,
-    incidentId
+    alertId
   }));
 
-  return cloudAPI(`${RU_API}/reputation/award`, {
+  return cloudAPI(`${RESPONSE_API}/reputation/award`, {
     method: "POST",
     body: JSON.stringify({ updates })
   });
 }
 
 // =========================================================
-// GET INCIDENT HISTORY (ADMIN / RESPONDER VIEW)
+// INCIDENT / ALERT HISTORY
 // =========================================================
-export async function getIncidentHistory(filters = {}) {
-  // filters can include: responderId, userId, mode, severity, dateRange
-  return cloudAPI(`${INCIDENT_API}/history`, {
+export async function getAlertHistory(filters = {}) {
+  return cloudAPI(`${SAFETY_API}/alerts/history`, {
     method: "POST",
     body: JSON.stringify(filters)
   });
 }
 
 // =========================================================
-// GET RESPONDER PROFILE + REPUTATION SUMMARY
+// RESPONSE MEMBER PROFILE + REPUTATION
 // =========================================================
-export async function getResponderProfile(responderId) {
-  const profile = await cloudAPI(`${RU_API}/responder/${responderId}`);
-  const reputation = await cloudAPI(`${RU_API}/reputation/${responderId}`);
+export async function getResponseMemberProfile(memberId) {
+  const profile = await cloudAPI(`${RESPONSE_API}/members/${memberId}`);
+  const reputation = await cloudAPI(`${RESPONSE_API}/reputation/${memberId}`);
 
   return { profile, reputation };
 }
 
 // =========================================================
-// WALKIE-TALKIE STYLE COMMUNICATION (RESPONSE CHANNEL)
+// RESPONSE CHANNEL VOICE NOTE
 // =========================================================
-// Simple push-to-talk style: send short voice note to response channel
-// =========================================================
-export async function sendResponseVoiceNote(channelId, responderId, audioUrl) {
+export async function sendResponseVoiceNote(channelId, memberId, audioUrl) {
   return cloudAPI(`${CHAT_API}/response-voice`, {
     method: "POST",
     body: JSON.stringify({
       channelId,
-      responderId,
+      memberId,
       audioUrl
     })
   });
 }
 
 // =========================================================
-// LINK RESPONSE UNIT TO PROFILE (BADGE + STATUS)
+// SYNC RESPONSE BADGE TO CLOUD USER PROFILE
 // =========================================================
-// Called when responder is verified or rank changes
-// =========================================================
-export async function syncResponderProfileBadge(responderId, badgeFile) {
+export async function syncResponseBadge(userId, badgeFile) {
   return cloudAPI(`${PROFILE_API}/badge/assign`, {
     method: "POST",
     body: JSON.stringify({
-      userId: responderId,
+      userId,
       badgeFile,
       category: "response-unit"
     })
@@ -226,55 +198,50 @@ export async function syncResponderProfileBadge(responderId, badgeFile) {
 }
 
 // =========================================================
-// UI HELPERS (FOR RESPONSE UNIT PAGES)
+// UI HELPERS
 // =========================================================
-export async function initResponseUnitSignup(formId) {
+export async function initResponseMemberSignup(formId, groupId) {
   const form = document.getElementById(formId);
   form.onsubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
-      name: form.querySelector("#ruName").value,
-      idNumber: form.querySelector("#ruIdNumber").value,
-      photoUrl: form.querySelector("#ruPhotoUrl").value,
-      contact: form.querySelector("#ruContact").value,
+      userId: form.querySelector("#ruUserId").value,
+      groupId,
       preferredRole: form.querySelector("#ruRole").value
     };
 
-    await signupResponder(payload);
-    alert("Response Unit signup submitted. Pending verification.");
+    await signupResponseMember(payload);
+    alert("Response membership submitted. Pending verification.");
   };
 }
 
-export async function renderResponseUnitRoster(containerId) {
+export async function renderResponseUnitRoster(containerId, groupId) {
   const container = document.getElementById(containerId);
-  const roster = await loadResponseUnitRoster();
+  const roster = await loadResponseUnitRoster(groupId);
 
   container.innerHTML = "";
 
-  roster.forEach(r => {
+  roster.forEach(m => {
     const div = document.createElement("div");
     div.className = "ru-card";
     div.innerHTML = `
-      <img src="${r.photoUrl}" class="ru-photo">
-      <h3>${r.name}</h3>
-      <p>Rank: ${r.rank}</p>
-      <p>Status: ${r.status}</p>
-      <button onclick="window.promote('${r.id}')">Promote</button>
-      <button onclick="window.demote('${r.id}')">Demote</button>
+      <h3>${m.name}</h3>
+      <p>Rank: ${m.rank}</p>
+      <p>Status: ${m.status}</p>
+      <button onclick="window.promoteMember('${m.id}')">Promote</button>
+      <button onclick="window.demoteMember('${m.id}')">Demote</button>
     `;
     container.appendChild(div);
   });
 
-  // Expose promote/demote for admin
-  window.promote = async (id) => {
-    // You can wire a rank selector in UI; here we just example promote to next
-    await setResponderRank(id, "guardian");
+  window.promoteMember = async (id) => {
+    await setResponseMemberRank(id, "guardian");
     location.reload();
   };
 
-  window.demote = async (id) => {
-    await setResponderRank(id, "responder1");
+  window.demoteMember = async (id) => {
+    await setResponseMemberRank(id, "responder1");
     location.reload();
   };
 }
