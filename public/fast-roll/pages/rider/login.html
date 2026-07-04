@@ -27,7 +27,6 @@
             z-index: -1;
         }
 
-        /* NAV */
         .nav {
             background: rgba(10, 20, 60, 0.85);
             border-bottom: 1px solid rgba(255, 217, 74, 0.25);
@@ -48,7 +47,6 @@
             height: 58px;
         }
 
-        /* FORM WRAPPER */
         .form-wrapper {
             max-width: 420px;
             margin: 140px auto;
@@ -71,7 +69,6 @@
             margin-bottom: 24px;
         }
 
-        /* FORM GROUP */
         .form-group {
             margin-bottom: 22px;
             text-align: left;
@@ -84,7 +81,6 @@
             font-weight: 600;
         }
 
-        /* BUBBLE INPUTS */
         .form-group input {
             width: 100%;
             padding: 14px;
@@ -102,7 +98,6 @@
             background: rgba(255, 217, 74, 0.18);
         }
 
-        /* BUTTON */
         .primary-btn {
             width: 100%;
             padding: 14px;
@@ -154,6 +149,47 @@
     </form>
 </div>
 
-<script src="/fast-roll/js/fastroll.js"></script>
+<script>
+document.getElementById("riderLoginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+    }
+
+    // Rider login API
+    const res = await fetch("https://api.beltlinecloud.com/api/rider/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+        alert("Invalid rider login.");
+        return;
+    }
+
+    const cloudUser = data.cloudUser;
+
+    // Must be a rider
+    if (!cloudUser.roles || !cloudUser.roles.includes("rider")) {
+        alert("You are not registered as a Rider.");
+        return;
+    }
+
+    // Save cloud user session
+    localStorage.setItem("beltline_user", JSON.stringify(cloudUser));
+
+    // Redirect to rider dashboard
+    window.location.href = "/public/fast-roll/pages/rider/rider-dashboard.html";
+});
+</script>
+
 </body>
 </html>
