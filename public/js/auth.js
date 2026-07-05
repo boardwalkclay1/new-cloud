@@ -1,4 +1,4 @@
-// auth.js — FULL AUTHENTICATION ENGINE
+// auth.js — FULL AUTHENTICATION ENGINE (UPGRADED FLOW)
 
 const API = "https://api.beltlinecloud.com";
 
@@ -9,6 +9,48 @@ const PATH_RESPONSE_DASH = "/public/pages/safety/response-unit/pages/response-da
 const PATH_CLOUD_DASH = "/cloud/dashboard.html";
 
 const Auth = {
+
+    // ---------------------------------------------------------
+    // SAVE + LOAD CLOUD USER
+    // ---------------------------------------------------------
+    saveUser(user) {
+        localStorage.setItem("beltline_user", JSON.stringify(user));
+    },
+
+    getUser() {
+        const raw = localStorage.getItem("beltline_user");
+        return raw ? JSON.parse(raw) : null;
+    },
+
+    // ---------------------------------------------------------
+    // UNIVERSAL ROLE REDIRECTOR
+    // ---------------------------------------------------------
+    redirectByRole(user) {
+        if (!user || !user.roles) {
+            window.location.href = PATH_CLOUD_DASH;
+            return;
+        }
+
+        const roles = user.roles;
+
+        // Priority: Response → Vendor → Rider → Cloud
+        if (roles.includes("response_unit")) {
+            window.location.href = PATH_RESPONSE_DASH;
+            return;
+        }
+
+        if (roles.includes("vendor")) {
+            window.location.href = PATH_VENDOR_DASH;
+            return;
+        }
+
+        if (roles.includes("rider")) {
+            window.location.href = PATH_RIDER_DASH;
+            return;
+        }
+
+        window.location.href = PATH_CLOUD_DASH;
+    },
 
     // ---------------------------------------------------------
     // CLOUD USER SIGNUP
@@ -55,25 +97,10 @@ const Auth = {
             return;
         }
 
-        localStorage.setItem("beltline_user", JSON.stringify(data.user));
+        this.saveUser(data.user);
 
-        window.location.href = PATH_CLOUD_DASH;
-    },
-
-    // ---------------------------------------------------------
-    // BADGES
-    // ---------------------------------------------------------
-    async grantBadge(userId, badgeCode) {
-        await fetch(`${API}/api/badges/grant`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId, badgeCode })
-        });
-    },
-
-    async listBadges(userId) {
-        const res = await fetch(`${API}/api/badges/list?userId=${userId}`);
-        return await res.json();
+        // Auto redirect based on roles
+        this.redirectByRole(data.user);
     },
 
     // ---------------------------------------------------------
@@ -99,9 +126,9 @@ const Auth = {
             return;
         }
 
-        localStorage.setItem("beltline_user", JSON.stringify(cloudUser));
+        this.saveUser(cloudUser);
 
-        window.location.href = PATH_RIDER_DASH;
+        this.redirectByRole(cloudUser);
     },
 
     // ---------------------------------------------------------
@@ -127,9 +154,9 @@ const Auth = {
             return;
         }
 
-        localStorage.setItem("beltline_user", JSON.stringify(cloudUser));
+        this.saveUser(cloudUser);
 
-        window.location.href = PATH_VENDOR_DASH;
+        this.redirectByRole(cloudUser);
     },
 
     // ---------------------------------------------------------
@@ -176,9 +203,9 @@ const Auth = {
             return;
         }
 
-        localStorage.setItem("beltline_user", JSON.stringify(cloudUser));
+        this.saveUser(cloudUser);
 
-        window.location.href = PATH_RESPONSE_DASH;
+        this.redirectByRole(cloudUser);
     },
 
     // ---------------------------------------------------------
@@ -190,7 +217,5 @@ const Auth = {
     }
 };
 
-// ---------------------------------------------------------
-// GLOBAL EXPORT (NO MODULES, NO ERRORS)
-// ---------------------------------------------------------
+// EXPORT
 window.Auth = Auth;
