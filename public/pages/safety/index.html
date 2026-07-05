@@ -5,16 +5,11 @@
   <title>Safety Cloud Dashboard — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-
-  <!-- CINEMATIC SAFETY CLOUD CSS -->
   <link rel="stylesheet" href="/css/safety-cloud.css">
 
-  <!-- CLOUD FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Safety Cloud Dashboard — Beltline Cloud">
   <meta property="og:description" content="Your Beltline safety dashboard with alerts, Safe‑Clod motion detection, markers, incident center, and emergency tools.">
   <meta property="og:image" content="/music/img/safety-cloud.jpg">
@@ -41,6 +36,13 @@
     </div>
   </nav>
 
+  <!-- RESPONSE UNIT — FEATURED -->
+  <section class="response-highlight">
+    <h2>⚡ Join the Beltline Response Unit</h2>
+    <p>Become part of the elite Beltline safety team.</p>
+    <a class="response-btn" href="/pages/response/signup.html">Join Response Unit</a>
+  </section>
+
   <!-- EMERGENCY BUTTON -->
   <button id="globalAlertBtn" class="global-alert-btn" data-route="/pages/response/signup.html">
     ⚠️ Emergency — Contact Response Unit
@@ -55,66 +57,39 @@
   <!-- SAFETY CLOUD GRID -->
   <section class="dashboard-grid">
 
-    <!-- SAFETY SYSTEMS -->
+    <!-- MOTION SAFETY -->
     <div class="dash-card">
       <h3>Safe‑Clod Motion Safety</h3>
       <p>Smart motion detection for kidnapping, falls, snatches, and dangerous movement.</p>
       <a class="dash-btn" href="/pages/safety/safe-cloud.html">Open Safe‑Clod</a>
     </div>
 
+    <!-- INCIDENT CENTER -->
     <div class="dash-card">
       <h3>Incident Center</h3>
       <p>Report incidents, track emergencies, and coordinate response unit activity.</p>
       <a class="dash-btn" href="/pages/safety/incident-center.html">Open Incident Center</a>
     </div>
 
+    <!-- COMMUNITY ALERTS -->
     <div class="dash-card">
       <h3>Community Alerts</h3>
       <p>Trail closures, hazards, lost pets, and emergency updates.</p>
       <a class="dash-btn" href="/pages/safety/alerts.html">View Alerts</a>
     </div>
 
-    <div class="dash-card">
-      <h3>Live Safety Feed</h3>
-      <p>Real-time updates from the Beltline community.</p>
-      <a class="dash-btn" href="/pages/safety/live-feed.html">Open Live Feed</a>
-    </div>
-
+    <!-- WEATHER -->
     <div class="dash-card">
       <h3>Weather Safety</h3>
       <p>Storm warnings, heat advisories, and Beltline weather hazards.</p>
       <a class="dash-btn" href="/pages/safety/alerts.html#weather">Weather Alerts</a>
     </div>
 
-    <!-- LOST / FOUND / STOLEN -->
+    <!-- LIVE FEED -->
     <div class="dash-card">
-      <h3>Lost & Found</h3>
-      <p>Report lost or found items and help the Beltline community recover belongings.</p>
-      <a class="dash-btn" href="/pages/safety/lost-found.html">Open Lost & Found</a>
-    </div>
-
-    <div class="dash-card">
-      <h3>Report Lost Item</h3>
-      <p>Submit a lost item report to notify the community.</p>
-      <a class="dash-btn" href="/pages/safety/report-lost.html">Report Lost</a>
-    </div>
-
-    <div class="dash-card">
-      <h3>Report Found Item</h3>
-      <p>Found something? Help return it to its owner.</p>
-      <a class="dash-btn" href="/pages/safety/report-found.html">Report Found</a>
-    </div>
-
-    <div class="dash-card">
-      <h3>Stolen Items</h3>
-      <p>Report stolen items and view community reports.</p>
-      <a class="dash-btn" href="/pages/safety/stolen.html">Open Stolen Reports</a>
-    </div>
-
-    <div class="dash-card">
-      <h3>Report Stolen Item</h3>
-      <p>Submit a stolen item report instantly.</p>
-      <a class="dash-btn" href="/pages/safety/report-stolen.html">Report Stolen</a>
+      <h3>Live Safety Feed</h3>
+      <p>Real-time updates from the Beltline community.</p>
+      <a class="dash-btn" href="/pages/safety/live-feed.html">Open Live Feed</a>
     </div>
 
     <!-- MARKER SYSTEM -->
@@ -143,11 +118,23 @@
       <a class="dash-btn" href="/pages/safety/send-user-alert.html">Send Alert</a>
     </div>
 
-    <!-- RESPONSE UNIT -->
-    <div class="dash-card">
-      <h3>Response Unit</h3>
-      <p>Join the Beltline Response Unit and help protect the community.</p>
-      <a class="dash-btn" href="/pages/response/signup.html">Join Response Unit</a>
+    <!-- LOST / FOUND / STOLEN — DROPDOWN CATEGORY -->
+    <div class="dash-card dropdown">
+      <h3 onclick="toggleLostFound()" class="dropdown-title">Lost • Found • Stolen ▼</h3>
+
+      <div id="lostFoundMenu" class="dropdown-content hidden">
+
+        <a class="dropdown-link" href="/pages/safety/lost-found.html">Lost & Found Center</a>
+
+        <a class="dropdown-link" href="/pages/safety/report-lost.html">Report Lost Item</a>
+
+        <a class="dropdown-link" href="/pages/safety/report-found.html">Report Found Item</a>
+
+        <a class="dropdown-link" href="/pages/safety/stolen.html">Stolen Reports</a>
+
+        <a class="dropdown-link" href="/pages/safety/report-stolen.html">Report Stolen Item</a>
+
+      </div>
     </div>
 
   </section>
@@ -163,6 +150,13 @@
   <footer class="footer">
     © 2026 Beltline Cloud Inc — Safety Cloud protects the Beltline community.
   </footer>
+
+  <script>
+    function toggleLostFound() {
+      const menu = document.getElementById("lostFoundMenu");
+      menu.classList.toggle("hidden");
+    }
+  </script>
 
   <script type="module" src="/js/safe-cloud.js"></script>
 </body>
