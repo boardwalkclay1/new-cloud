@@ -8,11 +8,29 @@
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+    }
+
+    .header-info span {
+      display: block;
+      margin: 4px 0;
+      font-family: Cinzel;
+      font-size: 1rem;
+      color: #f7d354;
+      text-shadow: 0 0 8px #f7d354;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="page-bg" style="background:url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;"></div>
+<div class="page-bg"></div>
 
 <!-- CLOUD MENU -->
 <div id="cloudMenu" class="cloud-menu">
@@ -94,11 +112,10 @@
          alt="Open Menu">
   </div>
 
-  <div class="header-info"
-       style="font-family:Cinzel; color:#f7d354; text-shadow:0 0 8px #f7d354; text-align:center; flex:1;">
-    <span id="weather" class="header-stat">Loading weather…</span>
-    <span id="beltlineLocation" class="header-stat">Detecting Beltline location…</span>
-    <span id="timeDisplay" class="header-stat"></span>
+  <div class="header-info">
+    <span id="weather">Loading weather…</span>
+    <span id="beltlineLocation">Atlanta Beltline</span>
+    <span id="timeDisplay"></span>
   </div>
 
   <div class="header-top-right">
@@ -279,6 +296,50 @@
     localStorage.removeItem("beltline_user");
     window.location.href = "/pages/login.html";
   }
+
+  // TIME
+  function updateTime() {
+    const now = new Date();
+    document.getElementById("timeDisplay").textContent =
+      now.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+        timeZone: "America/New_York"
+      });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+
+  // WEATHER
+  async function loadWeather() {
+    try {
+      const res = await fetch(
+        "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true&temperature_unit=fahrenheit"
+      );
+      const data = await res.json();
+      const w = data.current_weather;
+
+      const temp = w.temperature;
+      const code = w.weathercode;
+
+      let emoji = "⛅";
+      if (code === 0) emoji = "☀️";
+      if ([1,2,3].includes(code)) emoji = "🌤️";
+      if ([45,48].includes(code)) emoji = "🌫️";
+      if ([51,53,55].includes(code)) emoji = "🌦️";
+      if ([61,63,65].includes(code)) emoji = "🌧️";
+      if ([71,73,75].includes(code)) emoji = "❄️";
+      if ([95,96,99].includes(code)) emoji = "⛈️";
+
+      document.getElementById("weather").textContent =
+        `${emoji} ${temp}°F • Atlanta`;
+    } catch {
+      document.getElementById("weather").textContent = "Weather unavailable";
+    }
+  }
+  loadWeather();
 </script>
 
 <script type="module" defer src="/js/dashboard.js"></script>
