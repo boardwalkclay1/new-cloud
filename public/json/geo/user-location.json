@@ -1,0 +1,17 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "user-123",
+        "role": "client",
+        "status": "active"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-84.373, 33.773]
+      }
+    }
+  ]
+}
