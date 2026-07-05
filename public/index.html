@@ -60,12 +60,12 @@
       border-bottom: 1px solid rgba(255,255,255,0.15);
     }
 
-    /* FIXED LOGO — NO SQUARE */
+    /* FIXED LOGO — NO SQUARE, NO CUT */
     .logo img {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 14px;
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 0;
       border: none;
       box-shadow: none;
     }
@@ -103,10 +103,9 @@
       margin-bottom: 40px;
     }
     .logo-strip img {
-      width: 130px;
-      height: 130px;
-      object-fit: cover;
-      border-radius: 14px;
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
       border: none;
       box-shadow: none;
       cursor: pointer;
@@ -114,7 +113,7 @@
     }
     .logo-strip img:hover {
       transform: translateY(-4px);
-      opacity: 0.9;
+      filter: drop-shadow(0 0 12px #ffd700);
     }
 
     /* VIDEO SECTION — FULL WIDTH */
@@ -129,6 +128,48 @@
       height: 620px;
       display: block;
       border: none;
+    }
+
+    /* DROPDOWNS — GLOWING */
+    .dropdowns {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+    }
+    .dropdown {
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding: 14px 0;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+    .dropdown:hover {
+      filter: drop-shadow(0 0 10px #ffd700);
+    }
+    .dropdown h3 {
+      font-size: 1.3rem;
+      font-family: 'Cinzel', serif;
+      margin: 0;
+      color: #ffd700;
+    }
+    .dropdown-content {
+      display: none;
+      padding: 12px 0;
+      opacity: 0.9;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    .dropdown.open .dropdown-content {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* FEEDS */
@@ -219,6 +260,47 @@
       src="https://www.youtube.com/embed/egVaFAi74cI?modestbranding=1&playsinline=1&rel=0&showinfo=0"
       allowfullscreen>
     </iframe>
+  </section>
+
+  <!-- EXPLANATIONS BELOW VIDEO -->
+  <section class="dropdowns">
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>Fast Roll Delivery</h3>
+      <div class="dropdown-content">
+        Fast Roll is the Beltline’s native delivery service — riders on longboards, scooters, e‑bikes, and OneWheels delivering your purchases fast.  
+        <br><br>
+        <strong>You must be a Cloud User to order deliveries.</strong>
+      </div>
+    </div>
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>The Network</h3>
+      <div class="dropdown-content">
+        The Network is the Beltline’s marketplace — vendors, products, services, workshops, and apps built by Cloud users.  
+        <br><br>
+        <strong>You must be a Cloud User to purchase from vendors.</strong>
+      </div>
+    </div>
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>Response Unit</h3>
+      <div class="dropdown-content">
+        The Response Unit is a safety-first team connected through the Cloud — built for Beltline riders, runners, skaters, and community members.  
+        <br><br>
+        <strong>You must be a Cloud User to access Response Unit tools.</strong>
+      </div>
+    </div>
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>The Beltline</h3>
+      <div class="dropdown-content">
+        The Beltline is one of the most historic and important places in Atlanta — a living loop of movement, culture, art, and community.  
+        <br><br>
+        Being part of the Beltline Cloud means being part of something epic, alive, and evolving every day.
+      </div>
+    </div>
+
   </section>
 
   <!-- FEEDS -->
