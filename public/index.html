@@ -10,7 +10,7 @@
   <!-- SOCIAL -->
   <meta property="og:title" content="Beltline Cloud Inc">
   <meta property="og:description" content="The Beltline’s first digital cloud — movement, safety, vendors, Fast Roll delivery, and community in one place.">
-  <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
+  <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
   <meta property="og:url" content="https://beltlinecloud.com">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -77,10 +77,43 @@
       font-size: 0.95rem;
     }
 
+    /* WELCOME SECTION */
+    .welcome-cloud {
+      max-width: 900px;
+      margin: 140px auto 40px;
+      padding: 30px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      animation: glowPulse 4s infinite ease-in-out;
+    }
+
+    .welcome-cloud h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.4rem;
+      margin-bottom: 14px;
+      color: #ffd700;
+      text-shadow: 0 0 12px #ffd700;
+    }
+
+    .welcome-cloud p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      opacity: 0.92;
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 20px rgba(255,215,0,0.25); }
+      50% { box-shadow: 0 0 40px rgba(255,215,0,0.45); }
+      100% { box-shadow: 0 0 20px rgba(255,215,0,0.25); }
+    }
+
     /* HERO */
     .hero {
       text-align: center;
-      padding: 120px 20px 40px;
+      padding: 60px 20px 40px;
     }
     .hero h1 {
       font-size: 2.8rem;
@@ -242,6 +275,22 @@
     </div>
   </nav>
 
+  <!-- WELCOME SECTION -->
+  <section class="welcome-cloud">
+    <h1>Welcome to the Beltline Cloud</h1>
+    <p>
+      The Beltline Cloud is Atlanta’s first community‑powered digital ecosystem — built for the people who move, create, ride, run, skate, and live along the Beltline every single day.  
+      <br><br>
+      This Cloud exists to support the community: connecting riders, vendors, creators, safety teams, and neighbors into one living digital network.  
+      <br><br>
+      Inside your Cloud Dashboard, you’ll find a 24/7 live Atlanta feed, real‑time updates, community alerts, and tools designed to keep you informed and connected.  
+      <br><br>
+      The Beltline is one of the most historic and important places in the world — a living loop of culture, movement, art, and energy.  
+      <br><br>
+      The Beltline Cloud is here to honor that energy, amplify it, and give everyone a way to be part of something bigger.
+    </p>
+  </section>
+
   <!-- HERO -->
   <header class="hero">
     <h1>Beltline Cloud</h1>
@@ -250,8 +299,8 @@
 
   <!-- LOGO STRIP -->
   <div class="logo-strip">
-    <img src="/network/public/img/network-logo.jpg" onclick="location.href='/network/public/pages/explore.html'">
-    <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/pages/index.html'">
+    <img src="/network/public/img/network-logo.jpg" onclick="location.href='/network/public/pages/index.html'">
+    <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/index.html'">
   </div>
 
   <!-- VIDEO -->
