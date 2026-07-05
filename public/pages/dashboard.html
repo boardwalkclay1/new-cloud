@@ -136,13 +136,12 @@
            style="height:220px; width:220px; object-fit:contain;">
     </a>
 
-    <!-- RESPONSE UNIT -->
-    <a href="/pages/safety/response-unit/pages/index.html">
-      <img src="/assets/img/cloud/cloud-response-logo.jpg"
-           class="response-logo"
-           alt="Response Unit"
-           style="height:220px; width:220px; object-fit:contain;">
-    </a>
+    <!-- RESPONSE UNIT (NOW CONTROLS ALL DROPDOWNS) -->
+    <img src="/assets/img/cloud/cloud-response-logo.jpg"
+         class="response-logo"
+         alt="Response Unit"
+         id="cloudResponseTrigger"
+         style="height:220px; width:220px; object-fit:contain; cursor:pointer;">
 
   </div>
 
@@ -156,7 +155,10 @@
     <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
   </div>
 
-<!-- CLOUD RESPONSE MODAL -->
+  <!-- REMOVED: Cloud Response button under Profile/Settings -->
+</div>
+
+<!-- CLOUD RESPONSE MODAL (ONLY SOURCE OF OPTIONS NOW) -->
 <div id="cloudResponseModal"
      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; padding:40px;">
 
@@ -292,8 +294,8 @@
     document.getElementById("cloudMenu").classList.remove("open");
   };
 
-  // CLOUD RESPONSE MODAL
-  document.getElementById("cloudResponseBtn").onclick = () => {
+  // RESPONSE ICON NOW OPENS THE MODAL
+  document.getElementById("cloudResponseTrigger").onclick = () => {
     document.getElementById("cloudResponseModal").style.display = "block";
   };
 
