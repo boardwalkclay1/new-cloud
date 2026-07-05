@@ -10,7 +10,7 @@
   <!-- SOCIAL -->
   <meta property="og:title" content="Beltline Cloud Inc">
   <meta property="og:description" content="The Beltline’s first digital cloud — movement, safety, vendors, Fast Roll delivery, and community in one place.">
-  <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
+  <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
   <meta property="og:url" content="https://beltlinecloud.com">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -39,14 +39,14 @@
       letter-spacing: 0.5px;
     }
 
-    /* BACKGROUND */
+    /* BACKGROUND — CLEAN, NO CLOUDY OVERLAY */
     .page-bg {
       position: fixed;
       inset: 0;
       background-image: url('/assets/img/cloud/cloud-index.jpg');
       background-size: cover;
       background-position: center;
-      opacity: 0.35;
+      opacity: 0.55;
       z-index: -1;
     }
 
@@ -60,6 +60,14 @@
       backdrop-filter: blur(10px);
       background: rgba(0,0,0,0.55);
       border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .logo img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.25);
     }
 
     .nav-links a {
@@ -76,13 +84,15 @@
       color: #fff;
     }
     .hero h1 {
-      font-size: 2.6rem;
+      font-size: 2.8rem;
       font-family: 'Cinzel', serif;
       margin-bottom: 10px;
     }
     .hero p {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       opacity: 0.85;
+      max-width: 700px;
+      margin: 0 auto;
     }
 
     /* LOGO STRIP */
@@ -94,8 +104,8 @@
       margin-bottom: 40px;
     }
     .logo-strip img {
-      width: 120px;
-      height: 120px;
+      width: 130px;
+      height: 130px;
       object-fit: cover;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.25);
@@ -108,14 +118,42 @@
       opacity: 0.9;
     }
 
-    /* VIDEO SECTION */
-    .video-section {
+    /* INSIDE THE CLOUD SECTION */
+    .inside-cloud {
       max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      color: #fff;
+    }
+    .inside-cloud h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #ffd700;
+    }
+    .inside-cloud p {
+      opacity: 0.88;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* VIDEO SECTION — FULL WIDTH, NO BLACK BARS */
+    .video-section {
+      max-width: 1100px;
       margin: 40px auto;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.25);
       box-shadow: 0 0 25px rgba(0,0,0,0.45);
+    }
+    .video-section iframe {
+      width: 100%;
+      height: 620px;
+      display: block;
     }
 
     /* FEEDS */
@@ -177,7 +215,7 @@
   <!-- NAV -->
   <nav class="nav">
     <div class="logo" onclick="toggleLogoMenu()">
-      <img src="/assets/img/cloud/cloud-logo.jpg" width="50">
+      <img src="/assets/img/cloud/cloud-logo.jpg">
     </div>
 
     <div class="nav-links">
@@ -194,7 +232,7 @@
   <!-- HERO -->
   <header class="hero">
     <h1>Beltline Cloud</h1>
-    <p>The Beltline’s first digital cloud — movement, safety, vendors, riders, and community.</p>
+    <p>The Beltline’s first digital cloud — movement, safety, vendors, riders, news, and community.</p>
   </header>
 
   <!-- LOGO STRIP -->
@@ -203,11 +241,27 @@
     <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/pages/index.html'">
   </div>
 
+  <!-- INSIDE THE CLOUD -->
+  <section class="inside-cloud">
+    <h2>Inside the Beltline Cloud</h2>
+    <p>
+      The Beltline Cloud is the first digital ecosystem built entirely for the Atlanta Beltline — a place unlike anywhere else in the world.
+      Inside the Cloud, you’ll find:
+      <br><br>
+      <strong>• Fast Roll Delivery</strong> — Beltline-native riders delivering your purchases on wheels.<br>
+      <strong>• The Network</strong> — Vendors, products, services, workshops, and apps built by Cloud users.<br>
+      <strong>• Response Unit</strong> — A safety-first team connected through the Cloud.<br>
+      <strong>• Live Atlanta News Feed</strong> — A 24/7 stream inside your dashboard so you always know what’s happening in the city.<br><br>
+      This is the only app of its kind — a real-time digital layer over the Beltline, built by the people who move through it every day.
+      We’re lucky to be part of something this historic, this epic, and this alive.
+    </p>
+  </section>
+
   <!-- VIDEO -->
   <section class="video-section">
-    <iframe width="100%" height="500"
-      src="https://www.youtube.com/embed/egVaFAi74cI?si=3NWPeunLuQTxJs6P"
-      title="YouTube video player"
+    <iframe
+      src="https://www.youtube.com/embed/egVaFAi74cI?si=3NWPeunLuQTxJs6P&modestbranding=1&playsinline=1&rel=0&showinfo=0"
+      title="Beltline Cloud Video"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen>
