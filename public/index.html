@@ -10,7 +10,7 @@
   <!-- SOCIAL -->
   <meta property="og:title" content="Beltline Cloud Inc">
   <meta property="og:description" content="The Beltline’s first digital cloud — movement, safety, vendors, Fast Roll delivery, and community in one place.">
-  <meta property="og:image" content="/assets/img/cloud/cloud-logo.jpg">
+  <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
   <meta property="og:url" content="https://beltlinecloud.com">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -19,6 +19,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* BACKGROUND — FULL, LOCKED, MOBILE SAFE */
+    body {
+      margin: 0;
+      background-image: url('/assets/img/cloud/cloud-index.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+    }
+
     /* TIME + WEATHER BAR */
     #cloudBar {
       position: fixed;
@@ -34,21 +45,9 @@
       align-items: center;
       z-index: 9999;
       backdrop-filter: blur(6px);
-      letter-spacing: 0.5px;
     }
 
-    /* BACKGROUND — CLEAN, NO OVERLAY */
-    body {
-      margin: 0;
-      background-image: url('/assets/img/cloud/cloud-index.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      font-family: 'Inter', sans-serif;
-      color: #fff;
-    }
-
-    /* NAV */
+    /* NAV — ONLY LOGIN + JOIN */
     .nav {
       margin-top: 50px;
       padding: 20px 30px;
@@ -57,32 +56,59 @@
       align-items: center;
       backdrop-filter: blur(10px);
       background: rgba(0,0,0,0.55);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
     }
 
-    /* FIXED LOGO — NO SQUARE, NO CUT */
+    /* LOGO — NOT CUT, NOT CROPPED */
     .logo img {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       object-fit: contain;
-      border-radius: 0;
       border: none;
       box-shadow: none;
+      cursor: pointer;
     }
 
     .nav-links a {
       margin-left: 18px;
       color: #ffd700;
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
-    /* WELCOME SECTION */
+    /* LOGO MENU */
+    #logoMenu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      padding: 40px;
+      z-index: 99999;
+    }
+    #logoMenu a {
+      display: block;
+      margin: 14px 0;
+      font-size: 1.3rem;
+      color: #ffd700;
+      text-decoration: none;
+    }
+    #closeMenu {
+      font-size: 2rem;
+      color: #ffd700;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    /* BLOCKED TEXT SECTION */
     .welcome-cloud {
       max-width: 900px;
       margin: 140px auto 40px;
       padding: 30px;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.65);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.18);
       backdrop-filter: blur(10px);
@@ -92,7 +118,7 @@
 
     .welcome-cloud h1 {
       font-family: 'Cinzel', serif;
-      font-size: 2.4rem;
+      font-size: 2.6rem;
       margin-bottom: 14px;
       color: #ffd700;
       text-shadow: 0 0 12px #ffd700;
@@ -114,17 +140,10 @@
     .hero {
       text-align: center;
       padding: 60px 20px 40px;
-    }
-    .hero h1 {
-      font-size: 2.8rem;
-      font-family: 'Cinzel', serif;
-      margin-bottom: 10px;
-    }
-    .hero p {
-      font-size: 1.15rem;
-      opacity: 0.85;
-      max-width: 700px;
+      background: rgba(0,0,0,0.55);
+      max-width: 900px;
       margin: 0 auto;
+      border-radius: 20px;
     }
 
     /* LOGO STRIP */
@@ -139,8 +158,6 @@
       width: 140px;
       height: 140px;
       object-fit: contain;
-      border: none;
-      box-shadow: none;
       cursor: pointer;
       transition: 0.25s ease;
     }
@@ -149,12 +166,14 @@
       filter: drop-shadow(0 0 12px #ffd700);
     }
 
-    /* VIDEO SECTION — FULL WIDTH */
+    /* VIDEO SECTION */
     .video-section {
       max-width: 1100px;
       margin: 40px auto;
       border-radius: 14px;
       overflow: hidden;
+      background: rgba(0,0,0,0.55);
+      padding: 20px;
     }
     .video-section iframe {
       width: 100%;
@@ -163,15 +182,29 @@
       border: none;
     }
 
-    /* DROPDOWNS — GLOWING */
+    /* RADAR LINK */
+    .radar-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .radar-link a {
+      color: #ffd700;
+      font-size: 1.2rem;
+      text-decoration: none;
+      background: rgba(0,0,0,0.55);
+      padding: 10px 20px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    /* DROPDOWNS */
     .dropdowns {
       max-width: 900px;
       margin: 40px auto;
       padding: 20px;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.65);
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,0.18);
-      backdrop-filter: blur(10px);
     }
     .dropdown {
       border-bottom: 1px solid rgba(255,255,255,0.15);
@@ -210,6 +243,8 @@
       max-width: 1100px;
       margin: 60px auto;
       padding: 0 20px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 20px;
     }
     .feed-title {
       font-size: 1.6rem;
@@ -239,6 +274,21 @@
       transform: translateY(-3px);
     }
 
+    /* NEWS FEED AT BOTTOM */
+    .news-bottom {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.65);
+      border-radius: 20px;
+    }
+    .news-bottom iframe {
+      width: 100%;
+      height: 420px;
+      border-radius: 12px;
+      border: none;
+    }
+
     /* FOOTER */
     .footer {
       text-align: center;
@@ -260,32 +310,38 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <div class="logo">
+    <div class="logo" onclick="openMenu()">
       <img src="/assets/img/cloud/cloud-logo.jpg">
     </div>
 
     <div class="nav-links">
-      <a href="/pages/about.html">About</a>
-      <a href="/events/index.html">Events</a>
-      <a href="/pages/index-safety.html">Safety Cloud</a>
-      <a href="/network/public/pages/explore.html">The Network</a>
-      <a href="/fast-roll/pages/index.html">Fast Roll</a>
       <a href="/pages/login.html">Login</a>
       <a href="/pages/signup.html">Join Cloud</a>
     </div>
   </nav>
 
+  <!-- LOGO MENU -->
+  <div id="logoMenu">
+    <div id="closeMenu" onclick="closeMenu()">× Close</div>
+    <a href="/pages/about.html">About</a>
+    <a href="/events/index.html">Events</a>
+    <a href="/pages/index-safety.html">Safety Cloud</a>
+    <a href="/network/public/pages/explore.html">The Network</a>
+    <a href="/fast-roll/pages/index.html">Fast Roll</a>
+    <a href="/pages/contact.html">Contact</a>
+  </div>
+
   <!-- WELCOME SECTION -->
   <section class="welcome-cloud">
     <h1>Welcome to the Beltline Cloud</h1>
     <p>
-      The Beltline Cloud is Atlanta’s first community‑powered digital ecosystem — built for the people who move, create, ride, run, skate, and live along the Beltline every single day.  
+      The Beltline Cloud is Atlanta’s first community‑powered digital ecosystem — built for the people who move, create, ride, run, skate, and live along the Beltline every single day.
       <br><br>
-      This Cloud exists to support the community: connecting riders, vendors, creators, safety teams, and neighbors into one living digital network.  
+      This Cloud exists to support the community: connecting riders, vendors, creators, safety teams, and neighbors into one living digital network.
       <br><br>
-      Inside your Cloud Dashboard, you’ll find a 24/7 live Atlanta feed, real‑time updates, community alerts, and tools designed to keep you informed and connected.  
+      Inside your Cloud Dashboard, you’ll find a 24/7 live Atlanta feed, real‑time updates, community alerts, and tools designed to keep you informed and connected.
       <br><br>
-      The Beltline is one of the most historic and important places in the world — a living loop of culture, movement, art, and energy.  
+      The Beltline is one of the most historic and important places in the world — a living loop of culture, movement, art, and energy.
       <br><br>
       The Beltline Cloud is here to honor that energy, amplify it, and give everyone a way to be part of something bigger.
     </p>
@@ -300,7 +356,7 @@
   <!-- LOGO STRIP -->
   <div class="logo-strip">
     <img src="/network/public/img/network-logo.jpg" onclick="location.href='/network/public/pages/explore.html'">
-    <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/index.html'">
+    <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/pages/index.html'">
   </div>
 
   <!-- VIDEO -->
@@ -309,6 +365,10 @@
       src="https://www.youtube.com/embed/egVaFAi74cI?modestbranding=1&playsinline=1&rel=0&showinfo=0"
       allowfullscreen>
     </iframe>
+
+    <div class="radar-link">
+      <a href="https://www.weather.gov/forecastmaps" target="_blank">Live Atlanta Radar</a>
+    </div>
   </section>
 
   <!-- EXPLANATIONS BELOW VIDEO -->
@@ -367,81 +427,23 @@
     <div class="scroll-feed" id="apps-feed"></div>
   </section>
 
+  <!-- NEWS FEED AT BOTTOM -->
+  <section class="news-bottom">
+    <iframe src="https://www.youtube.com/embed/live_stream?channel=UCq7_GcO_J8p7sQK2k0sHc2A" allowfullscreen></iframe>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
   </footer>
 
-  <script src="/network/public/js/network-api.js"></script>
-
   <script>
-    /* TIME */
-    function updateTime() {
-      const now = new Date();
-      document.getElementById("timeDisplay").textContent =
-        now.toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: true,
-          timeZone: "America/New_York"
-        });
+    function openMenu() {
+      document.getElementById("logoMenu").style.display = "flex";
     }
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    /* WEATHER */
-    async function loadWeather() {
-      try {
-        const res = await fetch(
-          "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true&temperature_unit=fahrenheit"
-        );
-        const data = await res.json();
-        const w = data.current_weather;
-
-        const temp = w.temperature;
-        const code = w.weathercode;
-
-        let emoji = "⛅";
-        if (code === 0) emoji = "☀️";
-        if ([1,2,3].includes(code)) emoji = "🌤️";
-        if ([45,48].includes(code)) emoji = "🌫️";
-        if ([51,53,55].includes(code)) emoji = "🌦️";
-        if ([61,63,65].includes(code)) emoji = "🌧️";
-        if ([71,73,75].includes(code)) emoji = "❄️";
-        if ([95,96,99].includes(code)) emoji = "⛈️";
-
-        document.getElementById("weatherDisplay").textContent =
-          `${emoji} ${temp}°F • Atlanta`;
-      } catch {
-        document.getElementById("weatherDisplay").textContent = "Weather unavailable";
-      }
+    function closeMenu() {
+      document.getElementById("logoMenu").style.display = "none";
     }
-    loadWeather();
-
-    /* LOAD FEEDS */
-    Network.loadProductsFeed();
-    Network.loadServicesFeed();
-    Network.loadWorkshopsFeed();
-    Network.loadAppsFeed();
-
-    /* AUTO SCROLL */
-    function autoScrollFeed(id, speed = 0.4) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      let scrollPos = 0;
-      setInterval(() => {
-        if (el.scrollWidth <= el.clientWidth) return;
-        scrollPos += speed;
-        if (scrollPos >= el.scrollWidth) scrollPos = 0;
-        el.scrollLeft = scrollPos;
-      }, 40);
-    }
-
-    autoScrollFeed("products-feed");
-    autoScrollFeed("services-feed");
-    autoScrollFeed("workshops-feed");
-    autoScrollFeed("apps-feed");
   </script>
 
 </body>
