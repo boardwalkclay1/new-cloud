@@ -306,56 +306,104 @@
 
 <body>
 
-  <!-- TIME + WEATHER -->
-  <div id="cloudBar">
-    <span id="timeDisplay">Loading time...</span>
-    <span id="weatherDisplay">Loading weather...</span>
+ <!-- TIME + WEATHER -->
+<div id="cloudBar">
+  <span id="timeDisplay">Loading time...</span>
+  <span id="weatherDisplay">Loading weather...</span>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo" onclick="openMenu()">
+    <img src="/assets/img/cloud/cloud-logo.jpg" alt="Cloud Logo">
   </div>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="logo" onclick="openMenu()">
-      <img src="/assets/img/cloud/cloud-logo.jpg">
-    </div>
+  <div class="nav-links">
+    <a href="/pages/login.html">Login</a>
+    <a href="/pages/signup.html">Join Cloud</a>
+  </div>
+</nav>
 
-    <div class="nav-links">
-      <a href="/pages/login.html">Login</a>
-      <a href="/pages/signup.html">Join Cloud</a>
-    </div>
-  </nav>
+<!-- LOGO MENU -->
+<div id="logoMenu">
+  <div id="closeMenu" onclick="closeMenu()">× Close</div>
 
-  <!-- LOGO MENU -->
-  <div id="logoMenu">
-    <div id="closeMenu" onclick="closeMenu()">× Close</div>
-    <a href="/pages/about.html">About</a>
-    <a href="/events/index.html">Events</a>
-    <a href="/pages/index-safety.html">Safety Cloud</a>
-    <a href="/network/public/pages/explore.html">The Network</a>
-    <a href="/fast-roll/pages/index.html">Fast Roll</a>
-    <a href="/pages/contact.html">Contact</a>
+  <a href="/pages/about.html">About</a>
+  <a href="/events/index.html">Events</a>
+  <a href="/pages/index-safety.html">Safety Cloud</a>
+  <a href="/network/public/pages/explore.html">The Network</a>
+  <a href="/fast-roll/pages/index.html">Fast Roll</a>
+  <a href="/pages/contact.html">Contact</a>
+</div>
+
+<!-- WELCOME SECTION -->
+<section class="welcome-cloud">
+  <h1>Welcome to the Beltline Cloud</h1>
+  <p>
+    The Beltline Cloud is Atlanta’s first community‑powered digital ecosystem — built for the people who move, create, ride, run, skate, and live along the Beltline every single day.
+    <br><br>
+    This Cloud exists to support the community: connecting riders, vendors, creators, safety teams, and neighbors into one living digital network.
+    <br><br>
+    Inside your Cloud Dashboard, you’ll find a 24/7 live Atlanta feed, real‑time updates, community alerts, and tools designed to keep you informed and connected.
+    <br><br>
+    The Beltline is one of the most historic and important places in the world — a living loop of culture, movement, art, and energy.
+    <br><br>
+    The Beltline Cloud is here to honor that energy, amplify it, and give everyone a way to be part of something bigger.
+  </p>
+</section>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-logo-wrap">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="hero-cloud-logo" alt="Cloud Logo">
   </div>
 
-  <!-- WELCOME SECTION -->
-  <section class="welcome-cloud">
-    <h1>Welcome to the Beltline Cloud</h1>
-    <p>
-      The Beltline Cloud is Atlanta’s first community‑powered digital ecosystem — built for the people who move, create, ride, run, skate, and live along the Beltline every single day.
-      <br><br>
-      This Cloud exists to support the community: connecting riders, vendors, creators, safety teams, and neighbors into one living digital network.
-      <br><br>
-      Inside your Cloud Dashboard, you’ll find a 24/7 live Atlanta feed, real‑time updates, community alerts, and tools designed to keep you informed and connected.
-      <br><br>
-      The Beltline is one of the most historic and important places in the world — a living loop of culture, movement, art, and energy.
-      <br><br>
-      The Beltline Cloud is here to honor that energy, amplify it, and give everyone a way to be part of something bigger.
-    </p>
-  </section>
+  <p class="hero-sub">
+    The Beltline’s first digital cloud — movement, safety, vendors, riders, and community.
+  </p>
+</header>
 
-  <!-- HERO -->
-  <header class="hero">
-    <h1>Beltline Cloud</h1>
-    <p>The Beltline’s first digital cloud — movement, safety, vendors, riders, and community.</p>
-  </header>
+<script>
+// ---------------------------------------------------------
+// LIVE TIME (ATLANTA)
+// ---------------------------------------------------------
+function updateTime() {
+  const now = new Date();
+  const options = {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+    timeZone: "America/New_York"
+  };
+  document.getElementById("timeDisplay").textContent =
+    now.toLocaleTimeString("en-US", options);
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// ---------------------------------------------------------
+// LIVE WEATHER (ATLANTA — Open-Meteo API)
+// ---------------------------------------------------------
+async function loadWeather() {
+  try {
+    const res = await fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true"
+    );
+    const data = await res.json();
+
+    const temp = data.current_weather.temperature;
+    const wind = data.current_weather.windspeed;
+
+    document.getElementById("weatherDisplay").textContent =
+      `Atlanta • ${temp}°F • Wind ${wind} mph`;
+  } catch (err) {
+    document.getElementById("weatherDisplay").textContent =
+      "Weather unavailable";
+  }
+}
+loadWeather();
+</script>
 
   <!-- LOGO STRIP -->
   <div class="logo-strip">
