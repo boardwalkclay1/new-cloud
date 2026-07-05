@@ -19,7 +19,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* BACKGROUND */
     body {
       margin: 0;
       background-image: url('/assets/img/cloud/cloud-index.jpg');
@@ -30,7 +29,6 @@
       color: #fff;
     }
 
-    /* TIME + WEATHER BAR */
     #cloudBar {
       position: fixed;
       top: 0;
@@ -47,7 +45,6 @@
       backdrop-filter: blur(6px);
     }
 
-    /* NAV */
     .nav {
       margin-top: 50px;
       padding: 20px 30px;
@@ -73,7 +70,6 @@
       font-family: 'Cinzel', serif;
     }
 
-    /* LOGO MENU */
     #logoMenu {
       position: fixed;
       top: 0;
@@ -105,7 +101,6 @@
       font-family: 'Cinzel', serif;
     }
 
-    /* WELCOME SECTION */
     .welcome-cloud {
       max-width: 900px;
       margin: 140px auto 40px;
@@ -139,7 +134,6 @@
       100% { box-shadow: 0 0 20px rgba(255,215,0,0.25); }
     }
 
-    /* HERO */
     .hero {
       text-align: center;
       padding: 60px 20px 40px;
@@ -171,7 +165,6 @@
       font-family: 'Cinzel', serif;
     }
 
-    /* LOGO STRIP — ANIMATED */
     .logo-strip {
       display: flex;
       justify-content: center;
@@ -212,7 +205,6 @@
       100% { box-shadow: 0 0 10px rgba(255,215,0,0.25); }
     }
 
-    /* VIDEO SECTION */
     .video-section {
       max-width: 1100px;
       margin: 40px auto;
@@ -245,7 +237,6 @@
       font-family: 'Cinzel', serif;
     }
 
-    /* DROPDOWNS */
     .dropdowns {
       max-width: 900px;
       margin: 40px auto;
@@ -292,7 +283,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* FEEDS */
     .feed-section {
       max-width: 1100px;
       margin: 60px auto;
@@ -333,7 +323,6 @@
       transform: translateY(-3px);
     }
 
-    /* FOOTER */
     .footer {
       text-align: center;
       padding: 40px;
@@ -347,13 +336,11 @@
 
 <body>
 
-<!-- TIME + WEATHER -->
 <div id="cloudBar">
   <span id="timeDisplay">Loading time...</span>
   <span id="weatherDisplay">Loading weather...</span>
 </div>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="logo" onclick="openMenu()">
     <img src="/assets/img/cloud/cloud-logo.jpg" alt="Cloud Logo">
@@ -365,7 +352,6 @@
   </div>
 </nav>
 
-<!-- LOGO MENU -->
 <div id="logoMenu">
   <div id="closeMenu" onclick="closeMenu()">× Close</div>
 
@@ -377,7 +363,6 @@
   <a href="/pages/contact.html">Contact</a>
 </div>
 
-<!-- WELCOME SECTION -->
 <section class="welcome-cloud">
   <h1>Welcome to the Beltline Cloud</h1>
   <p>
@@ -387,13 +372,12 @@
     <br><br>
     Inside your Cloud Dashboard, you’ll find a 24/7 live Atlanta feed, real‑time updates, community alerts, and tools designed to keep you informed and connected.
     <br><br>
-    The Beltline is one of the most historic and important places in the world — a living loop of movement, culture, art, and energy.
+    The Beltline is one of the most historic and important places in Atlanta — a living loop of movement, culture, art, and energy.
     <br><br>
     The Beltline Cloud is here to honor that energy, amplify it, and give everyone a way to be part of something bigger.
   </p>
 </section>
 
-<!-- HERO -->
 <header class="hero">
   <div class="hero-logo-wrap">
     <img src="/assets/img/cloud/cloud-logo.jpg" class="hero-cloud-logo" alt="Cloud Logo">
@@ -405,9 +389,6 @@
 </header>
 
 <script>
-// ---------------------------------------------------------
-// LIVE TIME (ATLANTA)
-// ---------------------------------------------------------
 function updateTime() {
   const now = new Date();
   const options = {
@@ -423,9 +404,6 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// ---------------------------------------------------------
-// LIVE WEATHER (ATLANTA — Open-Meteo API)
-// ---------------------------------------------------------
 async function loadWeather() {
   try {
     const res = await fetch(
@@ -446,7 +424,6 @@ async function loadWeather() {
 loadWeather();
 </script>
 
-<!-- LOGO STRIP -->
 <div class="logo-strip">
   <div class="logo-box" onclick="location.href='/network/public/pages/explore.html'">
     <img src="/network/public/img/network-logo.jpg" alt="Network Logo">
@@ -457,7 +434,14 @@ loadWeather();
   </div>
 </div>
 
-<!-- VIDEO -->
+<!-- VENDOR FEED (BEFORE VIDEO) -->
+<section class="feed-section">
+  <div class="feed-title">Vendors</div>
+  <div class="scroll-feed" id="vendors-feed">
+    <!-- Vendor cards will be injected here by JS -->
+  </div>
+</section>
+
 <section class="video-section">
   <iframe
     src="https://www.youtube.com/embed/egVaFAi74cI?modestbranding=1&playsinline=1&rel=0&showinfo=0"
@@ -469,9 +453,7 @@ loadWeather();
   </div>
 </section>
 
-<!-- EXPLANATIONS BELOW VIDEO -->
 <section class="dropdowns">
-
   <div class="dropdown" onclick="this.classList.toggle('open')">
     <h3>Fast Roll Delivery</h3>
     <div class="dropdown-content">
@@ -507,8 +489,34 @@ loadWeather();
       Being part of the Beltline Cloud means being part of something epic, alive, and evolving every day.
     </div>
   </div>
-
 </section>
 
-<!-- FEEDS -->
 <section class="feed-section">
+  <div class="feed-title">Products</div>
+  <div class="scroll-feed" id="products-feed"></div>
+
+  <div class="feed-title">Services</div>
+  <div class="scroll-feed" id="services-feed"></div>
+
+  <div class="feed-title">Workshops</div>
+  <div class="scroll-feed" id="workshops-feed"></div>
+
+  <div class="feed-title">Apps</div>
+  <div class="scroll-feed" id="apps-feed"></div>
+</section>
+
+<footer class="footer">
+  © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
+</footer>
+
+<script>
+function openMenu() {
+  document.getElementById("logoMenu").style.display = "flex";
+}
+function closeMenu() {
+  document.getElementById("logoMenu").style.display = "none";
+}
+</script>
+
+</body>
+</html>
