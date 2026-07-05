@@ -13,17 +13,17 @@
     {
       "src": "/assets/img/cloud/cloud-logo.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
       "src": "/assets/img/cloud/cloud-logo.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
       "src": "/assets/img/cloud/cloud-logo.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "maskable"
     }
   ],
@@ -42,16 +42,26 @@
       "short_name": "Chat",
       "description": "Open Cloud Chat Dashboard",
       "url": "/pages/chat/index.html",
-      "icons": [{ "src": "/assets/img/cloud/cloud-chat.jpg", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/assets/img/cloud/cloud-chat.jpg",
+          "sizes": "96x96",
+          "type": "image/jpeg"
+        }
+      ]
     },
     {
       "name": "Safety Cloud",
       "short_name": "Safety",
       "description": "Open Safety Cloud Dashboard",
       "url": "/pages/safety/index.html",
-      "icons": [{ "src": "/assets/img/cloud/safety-cloud-logo.jpg", "sizes": "96x96" }]
-    },
-   
+      "icons": [
+        {
+          "src": "/assets/img/cloud/safety-cloud-logo.jpg",
+          "sizes": "96x96",
+          "type": "image/jpeg"
+        }
+      ]
     }
   ]
 }
