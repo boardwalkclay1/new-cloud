@@ -18,8 +18,6 @@
   <!-- CLOUD FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/css/index.css">
-
   <style>
     /* TIME + WEATHER BAR */
     #cloudBar {
@@ -39,15 +37,15 @@
       letter-spacing: 0.5px;
     }
 
-    /* BACKGROUND — CLEAN, NO CLOUDY OVERLAY */
-    .page-bg {
-      position: fixed;
-      inset: 0;
+    /* BACKGROUND — CLEAN, NO OVERLAY */
+    body {
+      margin: 0;
       background-image: url('/assets/img/cloud/cloud-index.jpg');
       background-size: cover;
       background-position: center;
-      opacity: 0.55;
-      z-index: -1;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
     }
 
     /* NAV */
@@ -63,10 +61,10 @@
     }
 
     .logo img {
-      width: 60px;
-      height: 60px;
+      width: 70px;
+      height: 70px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.25);
     }
 
@@ -81,7 +79,6 @@
     .hero {
       text-align: center;
       padding: 120px 20px 40px;
-      color: #fff;
     }
     .hero h1 {
       font-size: 2.8rem;
@@ -118,8 +115,8 @@
       opacity: 0.9;
     }
 
-    /* INSIDE THE CLOUD SECTION */
-    .inside-cloud {
+    /* NEWS FEED SECTION */
+    .news-section {
       max-width: 900px;
       margin: 40px auto;
       padding: 20px;
@@ -127,21 +124,21 @@
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,0.18);
       backdrop-filter: blur(10px);
-      color: #fff;
     }
-    .inside-cloud h2 {
+    .news-section h2 {
       font-family: 'Cinzel', serif;
       font-size: 1.8rem;
       margin-bottom: 10px;
       color: #ffd700;
     }
-    .inside-cloud p {
-      opacity: 0.88;
-      line-height: 1.6;
-      font-size: 1rem;
+    .news-section iframe {
+      width: 100%;
+      height: 420px;
+      border-radius: 12px;
+      border: none;
     }
 
-    /* VIDEO SECTION — FULL WIDTH, NO BLACK BARS */
+    /* VIDEO SECTION — FULL WIDTH */
     .video-section {
       max-width: 1100px;
       margin: 40px auto;
@@ -153,6 +150,37 @@
     .video-section iframe {
       width: 100%;
       height: 620px;
+      display: block;
+    }
+
+    /* DROPDOWNS */
+    .dropdowns {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.55);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+    }
+    .dropdown {
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding: 12px 0;
+      cursor: pointer;
+    }
+    .dropdown h3 {
+      font-size: 1.2rem;
+      font-family: 'Cinzel', serif;
+      margin: 0;
+      color: #ffd700;
+    }
+    .dropdown-content {
+      display: none;
+      padding: 10px 0;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    .dropdown.open .dropdown-content {
       display: block;
     }
 
@@ -209,12 +237,9 @@
     <span id="weatherDisplay">Loading weather...</span>
   </div>
 
-  <!-- BACKGROUND -->
-  <div class="page-bg"></div>
-
   <!-- NAV -->
   <nav class="nav">
-    <div class="logo" onclick="toggleLogoMenu()">
+    <div class="logo">
       <img src="/assets/img/cloud/cloud-logo.jpg">
     </div>
 
@@ -241,31 +266,57 @@
     <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/pages/index.html'">
   </div>
 
-  <!-- INSIDE THE CLOUD -->
-  <section class="inside-cloud">
-    <h2>Inside the Beltline Cloud</h2>
-    <p>
-      The Beltline Cloud is the first digital ecosystem built entirely for the Atlanta Beltline — a place unlike anywhere else in the world.
-      Inside the Cloud, you’ll find:
-      <br><br>
-      <strong>• Fast Roll Delivery</strong> — Beltline-native riders delivering your purchases on wheels.<br>
-      <strong>• The Network</strong> — Vendors, products, services, workshops, and apps built by Cloud users.<br>
-      <strong>• Response Unit</strong> — A safety-first team connected through the Cloud.<br>
-      <strong>• Live Atlanta News Feed</strong> — A 24/7 stream inside your dashboard so you always know what’s happening in the city.<br><br>
-      This is the only app of its kind — a real-time digital layer over the Beltline, built by the people who move through it every day.
-      We’re lucky to be part of something this historic, this epic, and this alive.
-    </p>
+  <!-- NEWS FEED -->
+  <section class="news-section">
+    <h2>Atlanta News — Live 24/7</h2>
+    <iframe src="https://www.youtube.com/embed/live_stream?channel=UCq7_GcO_J8p7sQK2k0sHc2A" allowfullscreen></iframe>
   </section>
 
   <!-- VIDEO -->
   <section class="video-section">
     <iframe
-      src="https://www.youtube.com/embed/egVaFAi74cI?si=3NWPeunLuQTxJs6P&modestbranding=1&playsinline=1&rel=0&showinfo=0"
-      title="Beltline Cloud Video"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      src="https://www.youtube.com/embed/egVaFAi74cI?modestbranding=1&playsinline=1&rel=0&showinfo=0"
       allowfullscreen>
     </iframe>
+  </section>
+
+  <!-- DROPDOWNS -->
+  <section class="dropdowns">
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>Fast Roll Delivery</h3>
+      <div class="dropdown-content">
+        Fast Roll is the Beltline’s native delivery service — riders on longboards, scooters, e‑bikes, and OneWheels delivering your purchases fast.  
+        <br><br>
+        <strong>You must be a Cloud User to order deliveries.</strong>
+      </div>
+    </div>
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>The Network</h3>
+      <div class="dropdown-content">
+        The Network is the Beltline’s marketplace — vendors, products, services, workshops, and apps built by Cloud users.  
+        <br><br>
+        <strong>You must be a Cloud User to purchase from vendors.</strong>
+      </div>
+    </div>
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>Response Unit</h3>
+      <div class="dropdown-content">
+        The Response Unit is a safety-first team connected through the Cloud — built for Beltline riders, runners, skaters, and community members.  
+        <br><br>
+        <strong>You must be a Cloud User to access Response Unit tools.</strong>
+      </div>
+    </div>
+
+    <div class="dropdown" onclick="this.classList.toggle('open')">
+      <h3>The Beltline</h3>
+      <div class="dropdown-content">
+        The Beltline is one of the most historic and important places in Atlanta — a living loop of movement, culture, art, and community.  
+        <br><br>
+        Being part of the Beltline Cloud means being part of something epic, alive, and evolving every day.
+      </div>
+    </div>
   </section>
 
   <!-- FEEDS -->
