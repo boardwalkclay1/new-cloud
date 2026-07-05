@@ -118,14 +118,25 @@
     <span id="timeDisplay"></span>
   </div>
 
-  <div class="header-top-right">
+  <!-- STACKED TOP-RIGHT ICONS -->
+  <div class="header-top-right" style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
+
+    <!-- MESSAGES -->
     <a href="/pages/messages/index.html">
-      <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="cloud-talk-logo" alt="Messages">
+      <img src="/assets/img/cloud/cloud-talkk-logo.jpg"
+           class="cloud-talk-logo"
+           alt="Messages"
+           style="height:55px; width:55px; object-fit:contain;">
     </a>
 
-    <a href="/pages/safety/index.html">
-      <img src="/assets/img/cloud/safety-cloud-logo.jpg" class="safety-logo" alt="Safety Cloud">
+    <!-- RESPONSE UNIT -->
+    <a href="/pages/safety/response-unit/pages/index.html">
+      <img src="/assets/img/cloud/cloud-response-logo.jpg"
+           class="response-logo"
+           alt="Response Unit"
+           style="height:55px; width:55px; object-fit:contain;">
     </a>
+
   </div>
 
 </header>
@@ -143,7 +154,7 @@
     <button id="cloudResponseBtn"
             class="qa-btn"
             style="background:#111; border:2px solid #f7d354; display:flex; align-items:center; gap:12px; padding:14px;">
-      <img src="/assets/img/cloud/cloud-response-logo.jpg"
+      <img src="/public/assets/img/cloud/cloud-response-logo.jpg"
            style="height:40px; width:40px; border-radius:50%;"
            alt="Cloud Response">
       <span style="font-weight:bold; color:#f7d354;">Cloud Response System</span>
@@ -209,6 +220,25 @@
 
   </div>
 
+</div>
+
+<!-- SAFETY CLOUD CENTERED ABOVE CARDS -->
+<div style="
+  text-align:center;
+  margin:60px auto 20px;
+  padding:20px;
+  max-width:300px;
+  background:rgba(0,0,0,0.55);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.18);
+  backdrop-filter:blur(10px);
+">
+  <img src="/assets/img/cloud/safety-cloud-logo.jpg"
+       alt="Safety Cloud"
+       style="height:90px; width:90px; object-fit:contain; margin-bottom:10px;">
+  <h3 style="font-family:Cinzel; color:#f7d354; margin:0; font-size:1.4rem;">
+    Safety Cloud
+  </h3>
 </div>
 
 <h2 class="section-title">Explore Beltline Cloud</h2>
