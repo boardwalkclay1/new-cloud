@@ -9,7 +9,7 @@
 
   <!-- SOCIAL -->
   <meta property="og:title" content="Beltline Cloud Inc">
-  <meta property="og:description" content="The Beltline’s first digital cloud — music, movement, safety, vendors, Fast Roll delivery, and community in one place.">
+  <meta property="og:description" content="The Beltline’s first digital cloud — movement, safety, vendors, Fast Roll delivery, and community in one place.">
   <meta property="og:image" content="/assets/img/cloud/cloud-preview.jpg">
   <meta property="og:url" content="https://beltlinecloud.com">
 
@@ -39,18 +39,126 @@
       letter-spacing: 0.5px;
     }
 
-    #cloudBar span {
-      font-size: 1rem;
+    /* BACKGROUND */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('/assets/img/cloud/cloud-index.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      z-index: -1;
     }
 
-    /* EARTHCAM VIDEO */
-    .earthcam-container {
+    /* NAV */
+    .nav {
+      margin-top: 50px;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .nav-links a {
+      margin-left: 18px;
+      color: #ffd700;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 120px 20px 40px;
+      color: #fff;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      font-family: 'Cinzel', serif;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+
+    /* LOGO STRIP */
+    .logo-strip {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+    .logo-strip img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 0 20px rgba(0,0,0,0.45);
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+    .logo-strip img:hover {
+      transform: translateY(-4px);
+      opacity: 0.9;
+    }
+
+    /* VIDEO SECTION */
+    .video-section {
       max-width: 900px;
       margin: 40px auto;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.25);
       box-shadow: 0 0 25px rgba(0,0,0,0.45);
+    }
+
+    /* FEEDS */
+    .feed-section {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+    .feed-title {
+      font-size: 1.6rem;
+      font-family: 'Cinzel', serif;
+      margin-bottom: 10px;
+      color: #ffd700;
+    }
+    .scroll-feed {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scroll-behavior: smooth;
+    }
+    .feed-card {
+      min-width: 240px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px;
+      padding: 14px;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+    .feed-card:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-3px);
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 40px;
+      color: #fff;
+      opacity: 0.8;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -64,118 +172,69 @@
   </div>
 
   <!-- BACKGROUND -->
-  <div class="page-bg" style="background-image:url('/assets/img/cloud/cloud-index.jpg');"></div>
+  <div class="page-bg"></div>
 
   <!-- NAV -->
   <nav class="nav">
     <div class="logo" onclick="toggleLogoMenu()">
-      <img src="/assets/img/cloud/cloud-logo.jpg">
+      <img src="/assets/img/cloud/cloud-logo.jpg" width="50">
     </div>
 
     <div class="nav-links">
       <a href="/pages/about.html">About</a>
-      <a href="/pages/music.html">Music Station</a>
       <a href="/events/index.html">Events</a>
-      <a href="/pages/contact.html">Contact</a>
-      <a href="/pages/index-safety.html">Index Safety Cloud</a>
-
-      <span class="auth-links">
-        <a href="/pages/login.html">Login</a>
-        <a href="/pages/signup.html">Join Cloud</a>
-      </span>
-    </div>
-
-    <div class="burger" onclick="toggleBurger()">
-      <span></span><span></span><span></span>
+      <a href="/pages/index-safety.html">Safety Cloud</a>
+      <a href="/network/public/pages/explore.html">The Network</a>
+      <a href="/fast-roll/pages/index.html">Fast Roll</a>
+      <a href="/pages/login.html">Login</a>
+      <a href="/pages/signup.html">Join Cloud</a>
     </div>
   </nav>
 
-  <!-- LOGO MENU -->
-  <div id="logo-menu" class="logo-menu">
-    <div class="logo-menu-header">
-      <img src="/assets/img/cloud/cloud-logo.jpg">
-      <span class="close-logo-menu" onclick="toggleLogoMenu()">×</span>
-    </div>
-
-    <div class="logo-menu-content">
-      <h2>Welcome to Beltline Cloud</h2>
-      <p>Your digital ecosystem for music, movement, safety, vendors, riders, and events.</p>
-
-      <a href="/cloud/dashboard.html">Cloud Dashboard</a>
-      <a href="/pages/index-safety.html">Index Safety Cloud</a>
-      <a href="/pages/music.html">Cloud Radio Station</a>
-      <a href="/pages/chat/cloud-chat.html">Cloud Chat</a>
-      <a href="/network/public/pages/index.html">The Network (Public)</a>
-      <a href="/fast-roll/pages/index.html">Fast Roll Delivery</a>
-      <a href="/events/index.html">Events</a>
-      <a href="/pages/products.html">Products</a>
-      <a href="/pages/services.html">Services</a>
-      <a href="/pages/contact.html">Contact</a>
-
-      <p class="menu-note">
-        Full access requires a Cloud User Account.
-      </p>
-    </div>
-  </div>
-
   <!-- HERO -->
   <header class="hero">
-    <h1>The Beltline’s First Digital Cloud</h1>
-    <p>Music. Movement. Safety. Community. All in one place.</p>
+    <h1>Beltline Cloud</h1>
+    <p>The Beltline’s first digital cloud — movement, safety, vendors, riders, and community.</p>
   </header>
 
-  <!-- EARTHCAM VIDEO -->
-  <section class="section">
-    <h2>Live Downtown Atlanta</h2>
-    <p>See the city in real time — powered by EarthCam.</p>
+  <!-- LOGO STRIP -->
+  <div class="logo-strip">
+    <img src="/network/public/img/network-logo.jpg" onclick="location.href='/network/public/pages/explore.html'">
+    <img src="/fast-roll/img/Fast-logo.png" onclick="location.href='/fast-roll/pages/index.html'">
+  </div>
 
-    <div class="earthcam-container">
-      <iframe 
-        src="https://www.earthcam.com/usa/georgia/atlanta/?cam=atlanta&embed=1&stream=1"
-        width="100%"
-        height="500"
-        frameborder="0"
-        allow="autoplay"
-        allowfullscreen>
-      </iframe>
-    </div>
+  <!-- VIDEO -->
+  <section class="video-section">
+    <iframe width="100%" height="500"
+      src="https://www.youtube.com/embed/egVaFAi74cI?si=3NWPeunLuQTxJs6P"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
   </section>
 
-  <!-- MUSIC -->
-  <section class="section">
-    <h2>Beltline Cloud Music Station</h2>
-    <p>The Beltline’s first always‑on music station — curated for riders, runners, skaters, and creators.</p>
+  <!-- FEEDS -->
+  <section class="feed-section">
+    <div class="feed-title">Products</div>
+    <div class="scroll-feed" id="products-feed"></div>
 
-    <div class="feature-grid">
-      <div class="feature-box">
-        <h3>🎧 Live Cloud Station</h3>
-        <p>Stream the official Beltline soundtrack — updated daily.</p>
-        <a class="btn" href="/pages/music.html">Listen Now</a>
-      </div>
+    <div class="feed-title">Services</div>
+    <div class="scroll-feed" id="services-feed"></div>
 
-      <div class="feature-box">
-        <h3>🎶 Listening Rooms</h3>
-        <p>Choose your vibe: Lo‑Fi, House, Hip‑Hop, R&B, Afrobeat, Jazz, Ambient.</p>
-      </div>
+    <div class="feed-title">Workshops</div>
+    <div class="scroll-feed" id="workshops-feed"></div>
 
-      <div class="feature-box">
-        <h3>🌩 CloudSync Mode</h3>
-        <p>Everyone listens to the same track at the same time — anywhere on the Beltline.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- EVENTS -->
-  <section class="section">
-    <h2>Beltline Events</h2>
-    <p>Workshops, rides, meetups, classes, concerts, and community gatherings.</p>
-    <a class="btn" href="/events/index.html">View Events</a>
+    <div class="feed-title">Apps</div>
+    <div class="scroll-feed" id="apps-feed"></div>
   </section>
 
   <!-- FOOTER -->
   <footer class="footer">
     © 2026 Beltline Cloud Inc — Built for the Beltline, by the Beltline
   </footer>
+
+  <script src="/network/public/js/network-api.js"></script>
 
   <script>
     /* TIME */
@@ -221,9 +280,31 @@
       }
     }
     loadWeather();
-  </script>
 
-  <script src="/js/index.js"></script>
+    /* LOAD FEEDS */
+    Network.loadProductsFeed();
+    Network.loadServicesFeed();
+    Network.loadWorkshopsFeed();
+    Network.loadAppsFeed();
+
+    /* AUTO SCROLL */
+    function autoScrollFeed(id, speed = 0.4) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let scrollPos = 0;
+      setInterval(() => {
+        if (el.scrollWidth <= el.clientWidth) return;
+        scrollPos += speed;
+        if (scrollPos >= el.scrollWidth) scrollPos = 0;
+        el.scrollLeft = scrollPos;
+      }, 40);
+    }
+
+    autoScrollFeed("products-feed");
+    autoScrollFeed("services-feed");
+    autoScrollFeed("workshops-feed");
+    autoScrollFeed("apps-feed");
+  </script>
 
 </body>
 </html>
