@@ -11,21 +11,29 @@
     <!-- Social Preview -->
     <meta property="og:title" content="Start a Beltline Delivery — The Fast Roll" />
     <meta property="og:description" content="Order a Beltline delivery from skaters, longboarders, e‑bikes, scooters & OneWheels." />
-    <meta property="og:image" content="/img/fast-index.jpg" />
+    <meta property="og:image" content="/fast-roll/img/fast-index.jpg" />
     <meta property="og:type" content="website" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Start a Beltline Delivery — The Fast Roll" />
     <meta name="twitter:description" content="Fast Beltline-native delivery by riders on wheels." />
-    <meta name="twitter:image" content="/img/fast-index.jpg" />
+    <meta name="twitter:image" content="/fast-roll/img/fast-index.jpg" />
 
     <link rel="stylesheet" href="/fast-roll/css/style.css" />
 
     <style>
-        /* SCOOTER BACKGROUND */
+        :root {
+            --fast-orange: #ff7a1a;
+            --fast-yellow: #ffcc00;
+            --fast-dark: #05060a;
+            --fast-white: #ffffff;
+        }
+
+        /* BACKGROUND */
         body {
-            position: relative;
-            background: #ffffff;
+            background: #05060a;
+            color: var(--fast-dark);
+            overflow-x: hidden;
         }
 
         body::before {
@@ -36,19 +44,152 @@
             background-size: 78%;
             background-repeat: no-repeat;
             background-position: center 8%;
-            opacity: 0.14;
+            opacity: 0.18;
             z-index: -1;
-            pointer-events: none;
+        }
+
+        /* NAV */
+        .nav {
+            width: 100%;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5,6,10,0.75);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: Cinzel, serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--fast-yellow);
+            text-shadow: 0 0 12px rgba(255,204,0,0.4);
+        }
+
+        .nav-links a {
+            color: var(--fast-white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: 0.25s;
+        }
+
+        .nav-links a:hover {
+            background: var(--fast-orange);
+            color: #000;
         }
 
         /* FORM WRAPPER */
         .form-wrapper {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(6px);
-            padding: 32px;
-            border-radius: 12px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 18px;
             max-width: 520px;
-            margin: 80px auto;
+            margin: 140px auto 80px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-wrapper h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            color: var(--fast-dark);
+            font-weight: 900;
+        }
+
+        .form-wrapper p {
+            opacity: 0.85;
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        /* FORM GROUP */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--fast-dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.25);
+            background: rgba(255,255,255,0.6);
+            color: #000;
+            font-size: 1rem;
+            transition: 0.25s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--fast-orange);
+            box-shadow: 0 0 12px rgba(255,122,26,0.45);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-note {
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-bottom: 20px;
+        }
+
+        /* BUTTON */
+        .primary-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, var(--fast-orange), var(--fast-yellow));
+            color: #000;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+            transition: 0.25s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 30px rgba(255,204,0,0.45);
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+            .form-wrapper {
+                margin: 120px 20px 60px;
+                padding: 30px;
+            }
+
+            .form-wrapper h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
