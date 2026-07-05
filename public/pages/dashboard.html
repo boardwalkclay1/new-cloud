@@ -136,7 +136,7 @@
            style="height:220px; width:220px; object-fit:contain;">
     </a>
 
-    <!-- RESPONSE UNIT (NOW CONTROLS ALL DROPDOWNS) -->
+    <!-- RESPONSE UNIT -->
     <img src="/assets/img/cloud/cloud-response-logo.jpg"
          class="response-logo"
          alt="Response Unit"
@@ -155,10 +155,9 @@
     <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
   </div>
 
-  <!-- REMOVED: Cloud Response button under Profile/Settings -->
 </div>
 
-<!-- CLOUD RESPONSE MODAL (ONLY SOURCE OF OPTIONS NOW) -->
+<!-- CLOUD RESPONSE MODAL -->
 <div id="cloudResponseModal"
      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; padding:40px;">
 
@@ -217,24 +216,17 @@
 
 </div>
 
-<!-- SAFETY CLOUD CENTERED ABOVE CARDS -->
-<div style="
-  text-align:center;
-  margin:60px auto 20px;
-  padding:20px;
-  max-width:300px;
-  background:rgba(0,0,0,0.55);
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,0.18);
-  backdrop-filter:blur(10px);
-">
-  <img src="/assets/img/cloud/safety-cloud-logo.jpg"
-       alt="Safety Cloud"
-       style="height:90px; width:90px; object-fit:contain; margin-bottom:10px;">
-  <h3 style="font-family:Cinzel; color:#f7d354; margin:0; font-size:1.4rem;">
-    Safety Cloud
-  </h3>
-</div>
+<!-- SAFETY CLOUD — BIGGER + NO BACKGROUND + CLICKABLE -->
+<a href="/pages/safety/index.html" style="text-decoration:none;">
+  <div style="text-align:center; margin:60px auto 20px;">
+    <img src="/assets/img/cloud/safety-cloud-logo.jpg"
+         alt="Safety Cloud"
+         style="height:160px; width:160px; object-fit:contain; margin-bottom:10px;">
+    <h3 style="font-family:Cinzel; color:#f7d354; margin:0; font-size:1.8rem;">
+      Safety Cloud
+    </h3>
+  </div>
+</a>
 
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
@@ -294,7 +286,7 @@
     document.getElementById("cloudMenu").classList.remove("open");
   };
 
-  // RESPONSE ICON NOW OPENS THE MODAL
+  // RESPONSE ICON OPENS MODAL
   document.getElementById("cloudResponseTrigger").onclick = () => {
     document.getElementById("cloudResponseModal").style.display = "block";
   };
