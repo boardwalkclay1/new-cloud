@@ -39,7 +39,7 @@
         <li><a href="/pages/safety/report-stolen.html">Stolen Items</a></li>
         <li><a href="/pages/safety/markers/index.html">Marker System</a></li>
         <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
-        <li><a href="public/pages/safety/alerts.html">Alerts</a></li>
+        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
       </ul>
     </div>
 
@@ -87,7 +87,6 @@
 <!-- HEADER -->
 <header class="header">
 
-  <!-- MAIN LOGO LEFT -->
   <div class="header-left">
     <img src="/assets/img/cloud/cloud-logo.jpg"
          class="header-logo"
@@ -95,7 +94,6 @@
          alt="Open Menu">
   </div>
 
-  <!-- CENTERED WEATHER + LOCATION -->
   <div class="header-info"
        style="font-family:Cinzel; color:#f7d354; text-shadow:0 0 8px #f7d354; text-align:center; flex:1;">
     <span id="weather" class="header-stat">Loading weather…</span>
@@ -103,7 +101,6 @@
     <span id="timeDisplay" class="header-stat"></span>
   </div>
 
-  <!-- CLOUD TALK MOVED UP -->
   <div class="header-top-right">
     <a href="/pages/messages/index.html">
       <img src="/assets/img/cloud/cloud-talkk-logo.jpg" class="cloud-talk-logo" alt="Messages">
@@ -124,67 +121,74 @@
     <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
   </div>
 
-  <!-- ALERT + AUTO ALERT SIDE BY SIDE -->
-  <div class="quick-row" style="display:flex; gap:20px;">
+  <!-- CLOUD RESPONSE BUTTON -->
+  <div class="quick-row" style="margin-top:20px;">
+    <button id="cloudResponseBtn"
+            class="qa-btn"
+            style="background:#111; border:2px solid #f7d354; display:flex; align-items:center; gap:12px; padding:14px;">
+      <img src="/public/assets/img/cloud/cloud-response-logo.jpg"
+           style="height:40px; width:40px; border-radius:50%;"
+           alt="Cloud Response">
+      <span style="font-weight:bold; color:#f7d354;">Cloud Response System</span>
+    </button>
+  </div>
 
-    <!-- EMERGENCY ALERT -->
-    <div class="qa-btn qa-dropdown" style="border-color:red; width:48%;">
-      <div style="font-weight:bold;">Emergency Alert</div>
+</div>
 
-      <button id="alertBubble" 
-              style="background:red; border:2px solid red; border-radius:20px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
-        OPEN ALERT MENU
+<!-- CLOUD RESPONSE MODAL -->
+<div id="cloudResponseModal"
+     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; padding:40px;">
+
+  <div style="max-width:600px; margin:auto; background:#111; border:2px solid #f7d354; border-radius:16px; padding:30px;">
+
+    <h2 style="font-family:Cinzel; color:#f7d354; text-align:center;">Cloud Response System</h2>
+
+    <p style="color:white; text-align:center; margin-bottom:20px;">
+      Choose manual or automatic alert mode.
+    </p>
+
+    <!-- MANUAL ALERT -->
+    <div style="margin-bottom:30px;">
+      <h3 style="color:#f7d354;">Manual Alert</h3>
+      <select id="manualAlertSelect"
+              style="width:100%; padding:12px; border-radius:10px; border:2px solid #f7d354; background:#222; color:white;">
+        <option value="">Select Emergency Type</option>
+        <option value="danger">Danger Nearby</option>
+        <option value="medical">Medical Emergency</option>
+        <option value="crime">Crime in Progress</option>
+        <option value="lost">Lost Person</option>
+        <option value="fire">Fire / Smoke</option>
+      </select>
+
+      <button id="manualAlertConfirm"
+              style="margin-top:10px; width:100%; padding:12px; background:#f00; border:none; border-radius:10px; color:white; font-weight:bold;">
+        SEND MANUAL ALERT
       </button>
-
-      <div id="alertDropdown" style="display:none; margin-top:10px; background:#300; padding:12px; border-radius:10px; border:2px solid red;">
-
-        <p style="color:white; font-family:Inter;">
-          This button will send an alert to the Cloud Response Unit.
-        </p>
-
-        <select id="quickAlertSelect" class="qa-select" style="border-color:red;">
-          <option value="">Select Emergency Type</option>
-          <option value="danger">Danger Nearby</option>
-          <option value="medical">Medical Emergency</option>
-          <option value="crime">Crime in Progress</option>
-          <option value="lost">Lost Person</option>
-          <option value="fire">Fire / Smoke</option>
-        </select>
-
-        <button id="finalAlertButton"
-                style="display:none; margin-top:10px; background:red; border:2px solid red; border-radius:12px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
-          ALERT
-        </button>
-
-      </div>
     </div>
 
     <!-- AUTO ALERT -->
-    <div class="qa-btn qa-dropdown" style="border-color:red; width:48%;">
-      <div style="font-weight:bold;">Auto Alerts</div>
+    <div>
+      <h3 style="color:#f7d354;">Auto Alert Mode</h3>
+      <select id="autoAlertSelect"
+              style="width:100%; padding:12px; border-radius:10px; border:2px solid #f7d354; background:#222; color:white;">
+        <option value="">Select Auto Alert Mode</option>
+        <option value="motion">Motion Detection</option>
+        <option value="pattern">Pattern Recognition</option>
+        <option value="full">Full Monitoring</option>
+        <option value="silent">Silent Background Mode</option>
+        <option value="off">Turn Off Auto Alerts</option>
+      </select>
 
-      <button id="autoAlertBubble" 
-              style="background:#222; border:2px solid red; border-radius:20px; padding:10px; color:white; font-weight:bold; cursor:pointer;">
-        AUTO ALERT SETTINGS
+      <button id="autoAlertConfirm"
+              style="margin-top:10px; width:100%; padding:12px; background:#f7d354; border:none; border-radius:10px; color:black; font-weight:bold;">
+        APPLY AUTO ALERT MODE
       </button>
-
-      <div id="autoAlertDropdown" style="display:none; margin-top:10px; background:#111; padding:12px; border-radius:10px; border:2px solid red;">
-
-        <p style="color:white; font-family:Inter;">
-          Auto alerts use Cloud.js logic to detect patterns and motion.
-        </p>
-
-        <select id="autoAlertSelect" class="qa-select" style="border-color:red;">
-          <option value="">Select Auto Alert Mode</option>
-          <option value="motion">Motion Detection</option>
-          <option value="pattern">Pattern Recognition</option>
-          <option value="full">Full Monitoring</option>
-          <option value="silent">Silent Background Mode</option>
-          <option value="off">Turn Off Auto Alerts</option>
-        </select>
-
-      </div>
     </div>
+
+    <button onclick="closeCloudResponseModal()"
+            style="margin-top:20px; width:100%; padding:12px; background:#333; border:none; border-radius:10px; color:white;">
+      CLOSE
+    </button>
 
   </div>
 
@@ -214,7 +218,7 @@
 
   <a class="tile" href="/pages/community.html">
     <img src="/assets/img/cloud/community-cloud.jpg" alt="Cumulus Cloud">
-    <h3>Cumulus  Cloud</h3>
+    <h3>Cumulus Cloud</h3>
     <p>Connect and interact with your cloud community.</p>
   </a>
 
@@ -223,13 +227,13 @@
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
 
-  <div class="bottom-section">
+  <div class="bottom-section" onclick="window.location.href='/network/index.html'">
     <img src="/network/public/img/network-logo.jpg" class="bottom-logo" alt="Network">
     <div class="bottom-text">Explore Network</div>
   </div>
 
-  <div class="bottom-section">
-    <img src="/assets/img/Fast-logo.png" class="bottom-logo" alt="Fast Roll">
+  <div class="bottom-section" onclick="window.location.href='/fast-roll/index.html'">
+    <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" alt="Fast Roll">
     <div class="bottom-text">Place Delivery</div>
   </div>
 
@@ -238,6 +242,44 @@
 <div id="notificationsBar" class="notifications-bar" hidden>
   Loading notifications…
 </div>
+
+<script>
+  // MENU
+  document.getElementById("menuTrigger").onclick = () => {
+    document.getElementById("cloudMenu").classList.add("open");
+  };
+  document.getElementById("menuClose").onclick = () => {
+    document.getElementById("cloudMenu").classList.remove("open");
+  };
+
+  // CLOUD RESPONSE MODAL
+  document.getElementById("cloudResponseBtn").onclick = () => {
+    document.getElementById("cloudResponseModal").style.display = "block";
+  };
+
+  function closeCloudResponseModal() {
+    document.getElementById("cloudResponseModal").style.display = "none";
+  }
+
+  // MANUAL ALERT CONFIRM
+  document.getElementById("manualAlertConfirm").onclick = () => {
+    const type = document.getElementById("manualAlertSelect").value;
+    if (!type) return alert("Select an alert type.");
+    alert("Manual alert sent: " + type.toUpperCase());
+  };
+
+  // AUTO ALERT CONFIRM
+  document.getElementById("autoAlertConfirm").onclick = () => {
+    const mode = document.getElementById("autoAlertSelect").value;
+    if (!mode) return alert("Select an auto alert mode.");
+    alert("Auto alert mode applied: " + mode.toUpperCase());
+  };
+
+  function logout() {
+    localStorage.removeItem("beltline_user");
+    window.location.href = "/pages/login.html";
+  }
+</script>
 
 <script type="module" defer src="/js/dashboard.js"></script>
 <script type="module" defer src="/pages/safety/js/cloud.js"></script>
