@@ -82,11 +82,11 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <script type="module">
-    import { Auth } from "/js/auth.js";
+  <!-- LOAD AUTH.JS AS A NORMAL SCRIPT -->
+  <script src="/js/auth.js"></script>
 
-    const API = "https://api.beltlinecloud.com";
-
+  <!-- LOGIN LOGIC -->
+  <script>
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -97,11 +97,10 @@
       }
 
       try {
-        // use Auth so it sets cloud_user exactly how the dash expects
-        await Auth.login(email, password);
-        window.location.href = "/pages/dashboard.html";
+        // Cloud login using your Auth engine
+        await Auth.loginCloud(email, password);
       } catch (err) {
-        alert(err.message);
+        alert(err.message || "Login failed.");
       }
     });
   </script>
