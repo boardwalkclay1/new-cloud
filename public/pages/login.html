@@ -6,10 +6,8 @@
 
   <title>Login — Beltline Cloud</title>
 
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/logo/cloud-logo.png" />
 
-  <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Beltline Cloud — Login" />
   <meta property="og:description" content="Access your Beltline Cloud dashboard, responder tools, vendor systems, Fast Roll, and event hosting." />
   <meta property="og:image" content="https://beltlinecloud.com/assets/img/logo/cloud-logo.png" />
@@ -82,10 +80,9 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <!-- LOAD AUTH.JS AS A NORMAL SCRIPT -->
+  <!-- AUTH ENGINE -->
   <script src="/js/auth.js"></script>
 
-  <!-- LOGIN LOGIC -->
   <script>
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
@@ -97,7 +94,6 @@
       }
 
       try {
-        // Cloud login using your Auth engine
         await Auth.loginCloud(email, password);
       } catch (err) {
         alert(err.message || "Login failed.");
