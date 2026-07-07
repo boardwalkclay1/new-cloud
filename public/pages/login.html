@@ -3,16 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Login — Beltline Cloud</title>
 
   <link rel="icon" type="image/png" href="/assets/img/logo/cloud-logo.png" />
-
-  <meta property="og:title" content="Beltline Cloud — Login" />
-  <meta property="og:description" content="Access your Beltline Cloud dashboard, responder tools, vendor systems, Fast Roll, and event hosting." />
-  <meta property="og:image" content="https://beltlinecloud.com/assets/img/logo/cloud-logo.png" />
-  <meta property="og:url" content="https://beltlinecloud.com/pages/login.html" />
-  <meta name="twitter:card" content="summary_large_image" />
 
   <style>
     body {
@@ -80,8 +73,7 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <!-- use the original auth.js you know works -->
-  <script src="/js/auth.js"></script>
+  <script src="/js/auth-cloud-standalone.js"></script>
 
   <script>
     document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -94,10 +86,10 @@
       }
 
       try {
-        const user = await Auth.loginCloud(email, password);
+        const user = await AuthStandalone.login(email, password);
 
         if (user) {
-          window.location.href = "https://beltlinecloud.com/pages/dashboard.html";
+          window.location.href = "/pages/dashboard.html";
         }
 
       } catch (err) {
