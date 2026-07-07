@@ -1,12 +1,10 @@
+// auth.js — BELTLINE CLOUD AUTH ENGINE (CLEAN VERSION)
+
 const API = "https://api.beltlinecloud.com";
 
-// CLOUD PATHS (ABSOLUTE FOR REDIRECT)
+// ABSOLUTE CLOUD PATHS (NO /cloud/ ANYWHERE)
 const PATH_CLOUD_DASH = "https://beltlinecloud.com/pages/dashboard.html";
 const PATH_CLOUD_LOGIN = "https://beltlinecloud.com/pages/login.html";
-
-// CLOUD PATHS (RELATIVE FOR BOOT CHECK)
-const REL_DASH = "/pages/dashboard.html";
-const REL_LOGIN = "/pages/login.html";
 
 const Auth = {
 
@@ -61,16 +59,16 @@ const Auth = {
 
     boot() {
         const user = this.getUser();
-        const path = window.location.pathname;
+        const currentURL = window.location.href;
 
         // Logged in → block login page
-        if (path === REL_LOGIN && user) {
+        if (currentURL === PATH_CLOUD_LOGIN && user) {
             window.location.href = PATH_CLOUD_DASH;
             return;
         }
 
         // Not logged in → block dashboard
-        if (path === REL_DASH && !user) {
+        if (currentURL === PATH_CLOUD_DASH && !user) {
             window.location.href = PATH_CLOUD_LOGIN;
             return;
         }
