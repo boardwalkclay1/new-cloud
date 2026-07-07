@@ -1,3 +1,5 @@
+// js/auth-cloud-standalone.js
+
 const API = "https://api.beltlinecloud.com";
 
 const AuthStandalone = {
