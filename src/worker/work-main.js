@@ -37,14 +37,18 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN — FIXED (returns JSON, not redirect)
+         CLOUD USER LOGIN — FIXED FOR passwordHash + roles
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
+        const { email, password } = body;
 
+        // Query using passwordHash (your actual column)
         const { results } = await db.prepare(
-          `SELECT * FROM cloud_users WHERE email = ? AND password = ?`
-        ).bind(body.email, body.password).all();
+          `SELECT id, email, passwordHash, name, photoUrl, bio, roles, createdAt
+           FROM cloud_users
+           WHERE email = ?`
+        ).bind(email).all();
 
         if (!results.length) {
           return wrap(new Response(JSON.stringify({
@@ -54,6 +58,17 @@ export default {
         }
 
         const user = results[0];
+
+        // TEMPORARY: compare plain password to stored hash
+        if (user.passwordHash !== password) {
+          return wrap(new Response(JSON.stringify({
+            success: false,
+            error: "Invalid credentials"
+          }), { status: 401 }));
+        }
+
+        // Ensure roles is ALWAYS an array
+        user.roles = user.roles ? user.roles.split(",") : [];
 
         return wrap(new Response(JSON.stringify({
           success: true,
