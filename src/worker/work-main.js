@@ -137,22 +137,8 @@ export default {
       }
 
       /* ---------------------------------------------------------
-         RESPONSE ROUTES
+         ROUTE HANDLING REMOVED AS REQUESTED
       --------------------------------------------------------- */
-      const r1 = await handleResponseRoutes(path, request, db, url);
-      if (r1) return wrap(r1);
-
-      /* ---------------------------------------------------------
-         SAFETY ROUTES
-      --------------------------------------------------------- */
-      const r2 = await handleSafetyRoutes(path, request, db, url);
-      if (r2) return wrap(r2);
-
-      /* ---------------------------------------------------------
-         NETWORK ROUTES
-      --------------------------------------------------------- */
-      const r3 = await handleNetwork(path, request, db, url);
-      if (r3) return wrap(r3);
 
     } catch (err) {
       return wrap(new Response(JSON.stringify({
