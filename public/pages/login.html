@@ -8,10 +8,12 @@
 
   <link rel="icon" type="image/png" href="/assets/img/logo/cloud-logo.png" />
 
+  <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Beltline Cloud — Login" />
   <meta property="og:description" content="Access your Beltline Cloud dashboard, responder tools, vendor systems, Fast Roll, and event hosting." />
   <meta property="og:image" content="https://beltlinecloud.com/assets/img/logo/cloud-logo.png" />
-  <meta property="og:url" content="https://beltlinecloud.com/pages/login" />
+
+  <meta property="og:url" content="https://beltlinecloud.com/pages/login.html" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <style>
@@ -54,7 +56,6 @@
       border-radius: 12px;
       font-size: 18px;
       font-weight: 700;
-      cursor: pointer;
     }
     p {
       text-align: center;
@@ -80,7 +81,6 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <!-- AUTH ENGINE -->
   <script src="/js/auth.js"></script>
 
   <script>
@@ -94,11 +94,10 @@
       }
 
       try {
-        const user = await Auth.loginCloud(email, password);
+        const verified = await Auth.loginCloud(email, password);
 
-        // ONLY REDIRECT HERE — NOT IN auth.js
-        if (user) {
-          window.location.href = "/pages/dashboard";
+        if (verified) {
+          window.location.href = "https://beltlinecloud.com/pages/dashboard";
         }
 
       } catch (err) {
