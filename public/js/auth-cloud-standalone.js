@@ -4,7 +4,7 @@ const API = "https://api.beltlinecloud.com";
 
 const AuthStandalone = {
   async login(email, password) {
-    const res = await fetch(`${API}/api/users/login-standalone`, {
+    const res = await fetch(`${API}/api/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
