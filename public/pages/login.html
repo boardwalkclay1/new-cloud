@@ -80,7 +80,8 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <script src="/js/auth-cloud-standalone.js"></script>
+  <!-- use the original auth.js you know works -->
+  <script src="/js/auth.js"></script>
 
   <script>
     document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -93,7 +94,7 @@
       }
 
       try {
-        const user = await AuthStandalone.login(email, password);
+        const user = await Auth.loginCloud(email, password);
 
         if (user) {
           window.location.href = "https://beltlinecloud.com/pages/dashboard.html";
