@@ -11,10 +11,10 @@ body {
   color: var(--white);
 }
 
+/* REMOVED BACKGROUND IMAGE */
 .page-bg {
   position: fixed;
   inset: 0;
-  background: url('/assets/img/cloud/bg.jpg') center/cover no-repeat;
   opacity: 0.25;
   z-index: -1;
 }
