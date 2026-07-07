@@ -8,11 +8,9 @@
 
   <link rel="icon" type="image/png" href="/assets/img/logo/cloud-logo.png" />
 
-  <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Beltline Cloud — Login" />
   <meta property="og:description" content="Access your Beltline Cloud dashboard, responder tools, vendor systems, Fast Roll, and event hosting." />
   <meta property="og:image" content="https://beltlinecloud.com/assets/img/logo/cloud-logo.png" />
-
   <meta property="og:url" content="https://beltlinecloud.com/pages/login.html" />
   <meta name="twitter:card" content="summary_large_image" />
 
@@ -56,6 +54,7 @@
       border-radius: 12px;
       font-size: 18px;
       font-weight: 700;
+      cursor: pointer;
     }
     p {
       text-align: center;
@@ -81,7 +80,8 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <script src="/js/auth.js"></script>
+  <!-- ONLY THIS SCRIPT -->
+  <script src="/js/auth-standalone.js"></script>
 
   <script>
     document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -94,10 +94,10 @@
       }
 
       try {
-        const verified = await Auth.loginCloud(email, password);
+        const user = await AuthStandalone.login(email, password);
 
-        if (verified) {
-          window.location.href = "https://beltlinecloud.com/pages/dashboard";
+        if (user) {
+          window.location.href = "https://beltlinecloud.com/pages/dashboard.html";
         }
 
       } catch (err) {
