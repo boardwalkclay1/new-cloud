@@ -1,8 +1,11 @@
-// worker.js — FINAL FIXED VERSION
+// worker.js — FULL FIXED VERSION (ALL IMPORTS KEPT)
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
 import { handleSafetyRoutes } from "./work-safety.js";
+import { getMimeType } from "./mime.js";   // ← YOU HAD THIS BEFORE, KEEPING IT
+import { handleVendorRoutes } from "./work-vendor.js"; // ← KEEPING YOUR VENDOR ROUTES
+import { handleRiderRoutes } from "./work-rider.js";   // ← KEEPING YOUR RIDER ROUTES
 
 const FRONTEND_DOMAIN = "https://beltlinecloud.com";
 
@@ -37,15 +40,15 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN — FINAL WORKING VERSION
+         CLOUD USER LOGIN — FIXED + CONNECTED TO REAL TABLE
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
         const { email, password } = body;
 
-        // Query using your REAL schema
+        // YOUR REAL TABLE: cloud_users
         const { results } = await db.prepare(
-          `SELECT id, email, passwordHash, name, photoUrl, bio, roles, createdAt
+          `SELECT id, email, password, name, photoUrl, bio, createdAt
            FROM cloud_users
            WHERE email = ?`
         ).bind(email).all();
@@ -59,20 +62,25 @@ export default {
 
         const user = results[0];
 
-        // TEMPORARY: raw password comparison (matches your DB)
-        if (user.passwordHash !== password) {
+        // RAW PASSWORD CHECK (matches your DB)
+        if (user.password !== password) {
           return wrap(new Response(JSON.stringify({
             success: false,
             error: "Invalid credentials"
           }), { status: 401 }));
         }
 
-        // Ensure roles is ALWAYS an array
-        user.roles = user.roles ? user.roles.split(",") : [];
-
+        // RETURN ONLY WHAT CLOUD NEEDS
         return wrap(new Response(JSON.stringify({
           success: true,
-          user
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            photoUrl: user.photoUrl,
+            bio: user.bio,
+            createdAt: user.createdAt
+          }
         }), { status: 200 }));
       }
 
@@ -109,6 +117,18 @@ export default {
       --------------------------------------------------------- */
       const r3 = await handleNetwork(path, request, db, url);
       if (r3) return wrap(r3);
+
+      /* ---------------------------------------------------------
+         VENDOR ROUTES (KEPT)
+      --------------------------------------------------------- */
+      const r4 = await handleVendorRoutes(path, request, db, url);
+      if (r4) return wrap(r4);
+
+      /* ---------------------------------------------------------
+         RIDER ROUTES (KEPT)
+      --------------------------------------------------------- */
+      const r5 = await handleRiderRoutes(path, request, db, url);
+      if (r5) return wrap(r5);
 
     } catch (err) {
       return wrap(new Response(JSON.stringify({
