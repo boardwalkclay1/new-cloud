@@ -1,12 +1,10 @@
-// auth.js — FULL AUTHENTICATION ENGINE (UPGRADED FLOW + BOOTSTRAP)
+// auth.js — BELTLINE CLOUD AUTH ENGINE (CLEAN VERSION)
 
 const API = "https://api.beltlinecloud.com";
 
-// DASHBOARD PATHS
-const PATH_RIDER_DASH = "/public/fast-roll/pages/rider/rider-dashboard.html";
-const PATH_VENDOR_DASH = "/public/network/staff/pages/vendor-dashboard.html";
-const PATH_RESPONSE_DASH = "/public/pages/safety/response-unit/pages/response-dash.html";
+// CLOUD PATHS
 const PATH_CLOUD_DASH = "/cloud/dashboard.html";
+const PATH_CLOUD_LOGIN = "/pages/login.html";
 
 const Auth = {
 
@@ -15,58 +13,41 @@ const Auth = {
     // ---------------------------------------------------------
     saveUser(user) {
         try {
-            localStorage.setItem("beltline_user", JSON.stringify(user));
+            localStorage.setItem("cloud_user", JSON.stringify(user));
         } catch (err) {
-            console.error("Error saving user:", err);
+            console.error("Error saving cloud_user:", err);
         }
     },
 
     getUser() {
         try {
-            const raw = localStorage.getItem("beltline_user");
+            const raw = localStorage.getItem("cloud_user");
             return raw ? JSON.parse(raw) : null;
         } catch (err) {
-            console.error("Error loading user:", err);
+            console.error("Error loading cloud_user:", err);
             return null;
         }
     },
 
     clearUser() {
         try {
-            localStorage.removeItem("beltline_user");
+            localStorage.removeItem("cloud_user");
         } catch (err) {
-            console.error("Error clearing user:", err);
+            console.error("Error clearing cloud_user:", err);
         }
     },
 
     // ---------------------------------------------------------
-    // UNIVERSAL ROLE REDIRECTOR
+    // SIMPLE CLOUD REDIRECTOR
     // ---------------------------------------------------------
-    redirectByRole(user) {
-        if (!user || !user.roles) {
+    redirectToCloud() {
+        const user = this.getUser();
+
+        if (user) {
             window.location.href = PATH_CLOUD_DASH;
-            return;
+        } else {
+            window.location.href = PATH_CLOUD_LOGIN;
         }
-
-        const roles = user.roles;
-
-        // Priority: Response → Vendor → Rider → Cloud
-        if (roles.includes("response_unit")) {
-            window.location.href = PATH_RESPONSE_DASH;
-            return;
-        }
-
-        if (roles.includes("vendor")) {
-            window.location.href = PATH_VENDOR_DASH;
-            return;
-        }
-
-        if (roles.includes("rider")) {
-            window.location.href = PATH_RIDER_DASH;
-            return;
-        }
-
-        window.location.href = PATH_CLOUD_DASH;
     },
 
     // ---------------------------------------------------------
@@ -108,7 +89,7 @@ const Auth = {
     },
 
     // ---------------------------------------------------------
-    // CLOUD USER LOGIN
+    // CLOUD USER LOGIN (ONLY CHECKS cloud_user)
     // ---------------------------------------------------------
     async loginCloud(email, password) {
         try {
@@ -119,15 +100,18 @@ const Auth = {
             });
 
             const data = await res.json();
-            if (!data.success) {
+
+            if (!data.success || !data.user) {
                 alert("Invalid login.");
                 return;
             }
 
+            // Save cloud_user
             this.saveUser(data.user);
 
-            // Auto redirect based on roles
-            this.redirectByRole(data.user);
+            // Redirect into the Cloud
+            this.redirectToCloud();
+
         } catch (err) {
             console.error("loginCloud error:", err);
             alert("Login failed. Please try again.");
@@ -135,164 +119,22 @@ const Auth = {
     },
 
     // ---------------------------------------------------------
-    // RIDER LOGIN
-    // ---------------------------------------------------------
-    async loginRider(email, password) {
-        try {
-            const res = await fetch(`${API}/api/rider/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await res.json();
-            if (!data.success) {
-                alert("Invalid rider login.");
-                return;
-            }
-
-            const cloudUser = data.cloudUser;
-
-            if (!cloudUser.roles.includes("rider")) {
-                alert("You are not registered as a Rider.");
-                return;
-            }
-
-            this.saveUser(cloudUser);
-
-            this.redirectByRole(cloudUser);
-        } catch (err) {
-            console.error("loginRider error:", err);
-            alert("Rider login failed. Please try again.");
-        }
-    },
-
-    // ---------------------------------------------------------
-    // VENDOR LOGIN
-    // ---------------------------------------------------------
-    async loginVendor(email, password) {
-        try {
-            const res = await fetch(`${API}/api/vendor/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await res.json();
-            if (!data.success) {
-                alert("Invalid vendor login.");
-                return;
-            }
-
-            const cloudUser = data.cloudUser;
-
-            if (!cloudUser.roles.includes("vendor")) {
-                alert("You are not registered as a Vendor.");
-                return;
-            }
-
-            this.saveUser(cloudUser);
-
-            this.redirectByRole(cloudUser);
-        } catch (err) {
-            console.error("loginVendor error:", err);
-            alert("Vendor login failed. Please try again.");
-        }
-    },
-
-    // ---------------------------------------------------------
-    // RESPONSE UNIT SIGNUP
-    // ---------------------------------------------------------
-    async signupResponseUnit(body) {
-        try {
-            const res = await fetch(`${API}/api/response/signup`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            });
-
-            const data = await res.json();
-            if (!data.success) {
-                alert(data.error || "Signup failed.");
-                return;
-            }
-
-            await this.sendVerificationEmail(data.user.email, data.user.id);
-
-            alert("Response Unit account created! Check your email to verify.");
-        } catch (err) {
-            console.error("signupResponseUnit error:", err);
-            alert("Response Unit signup failed. Please try again.");
-        }
-    },
-
-    // ---------------------------------------------------------
-    // RESPONSE UNIT LOGIN
-    // ---------------------------------------------------------
-    async loginResponseUnit(email, password) {
-        try {
-            const res = await fetch(`${API}/api/response/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await res.json();
-            if (!data.success) {
-                alert("Invalid Response Unit login.");
-                return;
-            }
-
-            const cloudUser = data.cloudUser;
-
-            if (!cloudUser.roles.includes("response_unit")) {
-                alert("You are not registered as a Response Unit member.");
-                return;
-            }
-
-            this.saveUser(cloudUser);
-
-            this.redirectByRole(cloudUser);
-        } catch (err) {
-            console.error("loginResponseUnit error:", err);
-            alert("Response Unit login failed. Please try again.");
-        }
-    },
-
-    // ---------------------------------------------------------
-    // VENDOR PAYOUTS
-    // ---------------------------------------------------------
-    async listVendorPayouts(vendorId) {
-        try {
-            const res = await fetch(`${API}/api/payouts/list?vendorId=${vendorId}`);
-            return await res.json();
-        } catch (err) {
-            console.error("listVendorPayouts error:", err);
-            return null;
-        }
-    },
-
-    // ---------------------------------------------------------
-    // BOOTSTRAP ON DASHBOARD PAGES
+    // BOOTSTRAP ON PAGE LOAD
     // ---------------------------------------------------------
     boot() {
         const user = this.getUser();
-
-        // If we're on the cloud dashboard and have a user, route them
-        if (window.location.pathname === PATH_CLOUD_DASH && user) {
-            this.redirectByRole(user);
-        }
-
-        // If we're on a role dashboard but no user, send back to login
-        const riderDash = PATH_RIDER_DASH;
-        const vendorDash = PATH_VENDOR_DASH;
-        const responseDash = PATH_RESPONSE_DASH;
-
         const path = window.location.pathname;
 
-        if (!user && (path === riderDash || path === vendorDash || path === responseDash)) {
-            // No user stored, force them to Cloud login
-            window.location.href = "/pages/login.html";
+        // If user is logged in and tries to access login page → send to Cloud
+        if (path === PATH_CLOUD_LOGIN && user) {
+            window.location.href = PATH_CLOUD_DASH;
+            return;
+        }
+
+        // If user is NOT logged in and tries to access Cloud dashboard → send to login
+        if (path === PATH_CLOUD_DASH && !user) {
+            window.location.href = PATH_CLOUD_LOGIN;
+            return;
         }
     }
 };
@@ -300,7 +142,7 @@ const Auth = {
 // EXPORT
 window.Auth = Auth;
 
-// AUTO-BOOT ON LOAD
+// AUTO-BOOT
 window.addEventListener("DOMContentLoaded", () => {
     Auth.boot();
 });
