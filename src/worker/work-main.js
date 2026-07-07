@@ -1,4 +1,4 @@
-// worker.js — BELTLINE CLOUD (FULL FIXED VERSION)
+// worker.js — FIXED VERSION (NO REDESIGN)
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
@@ -37,7 +37,7 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN → JSON RESPONSE (FIXED)
+         CLOUD USER LOGIN — FIXED (returns JSON, not redirect)
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
@@ -62,7 +62,7 @@ export default {
       }
 
       /* ---------------------------------------------------------
-         RESPONSE MEMBER VERIFY → JSON RESPONSE
+         RESPONSE MEMBER VERIFY — JSON (unchanged)
       --------------------------------------------------------- */
       if (path === "/api/response/member/verify" && request.method === "POST") {
         const body = await request.json();
