@@ -3,7 +3,7 @@
 const API = "https://api.beltlinecloud.com";
 
 // CLOUD PATHS
-const PATH_CLOUD_DASH = "/pages/dashboard.html";
+const PATH_CLOUD_DASH = "https://beltlinecloud.com/pages/dashboard.html";
 const PATH_CLOUD_LOGIN = "/pages/login.html";
 
 const Auth = {
