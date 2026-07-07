@@ -1,4 +1,4 @@
-// worker.js — FINAL WORKING VERSION
+// worker.js — UPDATED FULL VERSION (CLOUD LOGIN ISOLATED)
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
@@ -45,7 +45,7 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN — SHA-256 HASH VERIFIED
+         CLOUD USER LOGIN — ORIGINAL ROUTE
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
@@ -65,8 +65,44 @@ export default {
         }
 
         const user = results[0];
+        const incomingHash = await sha256Hex(password);
 
-        // hash incoming password and compare to stored hex hash
+        if (incomingHash !== user.passwordHash) {
+          return wrap(new Response(JSON.stringify({
+            success: false,
+            error: "Invalid credentials"
+          }), { status: 401 }));
+        }
+
+        user.roles = user.roles ? user.roles.split(",") : [];
+
+        return wrap(new Response(JSON.stringify({
+          success: true,
+          user
+        }), { status: 200 }));
+      }
+
+      /* ---------------------------------------------------------
+         CLOUD USER LOGIN — ISOLATED ROUTE (NEW)
+      --------------------------------------------------------- */
+      if (path === "/api/users/login-standalone" && request.method === "POST") {
+        const body = await request.json();
+        const { email, password } = body;
+
+        const { results } = await db.prepare(
+          `SELECT id, email, passwordHash, name, photoUrl, bio, roles, createdAt
+           FROM cloud_users
+           WHERE email = ?`
+        ).bind(email).all();
+
+        if (!results.length) {
+          return wrap(new Response(JSON.stringify({
+            success: false,
+            error: "Invalid credentials"
+          }), { status: 401 }));
+        }
+
+        const user = results[0];
         const incomingHash = await sha256Hex(password);
 
         if (incomingHash !== user.passwordHash) {
