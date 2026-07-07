@@ -1,16 +1,18 @@
-// auth.js — BELTLINE CLOUD AUTH ENGINE (CLEAN VERSION)
+// auth.js — BELTLINE CLOUD AUTH ENGINE (NO REDIRECT LOGIC)
 
 const API = "https://api.beltlinecloud.com";
 
-// ABSOLUTE CLOUD PATHS (NO /cloud/ ANYWHERE)
-const PATH_CLOUD_DASH = "https://beltlinecloud.com/pages/dashboard.html";
-const PATH_CLOUD_LOGIN = "https://beltlinecloud.com/pages/login.html";
-
 const Auth = {
 
+    // ---------------------------------------------------------
+    // SAVE + LOAD CLOUD USER
+    // ---------------------------------------------------------
     saveUser(user) {
-        try { localStorage.setItem("cloud_user", JSON.stringify(user)); }
-        catch (err) { console.error("Error saving cloud_user:", err); }
+        try {
+            localStorage.setItem("cloud_user", JSON.stringify(user));
+        } catch (err) {
+            console.error("Error saving cloud_user:", err);
+        }
     },
 
     getUser() {
@@ -24,15 +26,54 @@ const Auth = {
     },
 
     clearUser() {
-        try { localStorage.removeItem("cloud_user"); }
-        catch (err) { console.error("Error clearing cloud_user:", err); }
+        try {
+            localStorage.removeItem("cloud_user");
+        } catch (err) {
+            console.error("Error clearing cloud_user:", err);
+        }
     },
 
-    redirectToCloud() {
-        const user = this.getUser();
-        window.location.href = user ? PATH_CLOUD_DASH : PATH_CLOUD_LOGIN;
+    // ---------------------------------------------------------
+    // CLOUD USER SIGNUP
+    // ---------------------------------------------------------
+    async signupCloud(body) {
+        try {
+            const res = await fetch(`${API}/api/users/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+
+            const data = await res.json();
+            if (!data.success) {
+                alert(data.error || "Signup failed.");
+                return;
+            }
+
+            await this.sendVerificationEmail(data.user.email, data.user.id);
+
+            alert("Account created! Check your email to verify your account.");
+        } catch (err) {
+            console.error("signupCloud error:", err);
+            alert("Signup failed. Please try again.");
+        }
     },
 
+    async sendVerificationEmail(email, userId) {
+        try {
+            await fetch(`${API}/api/users/verify/send`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, userId })
+            });
+        } catch (err) {
+            console.error("sendVerificationEmail error:", err);
+        }
+    },
+
+    // ---------------------------------------------------------
+    // CLOUD USER LOGIN (NO REDIRECT)
+    // ---------------------------------------------------------
     async loginCloud(email, password) {
         try {
             const res = await fetch(`${API}/api/users/login`, {
@@ -48,8 +89,11 @@ const Auth = {
                 return;
             }
 
+            // Save cloud_user
             this.saveUser(data.user);
-            this.redirectToCloud();
+
+            // NO REDIRECT HERE
+            return data.user;
 
         } catch (err) {
             console.error("loginCloud error:", err);
@@ -57,26 +101,10 @@ const Auth = {
         }
     },
 
-    boot() {
-        const user = this.getUser();
-        const currentURL = window.location.href;
-
-        // Logged in → block login page
-        if (currentURL === PATH_CLOUD_LOGIN && user) {
-            window.location.href = PATH_CLOUD_DASH;
-            return;
-        }
-
-        // Not logged in → block dashboard
-        if (currentURL === PATH_CLOUD_DASH && !user) {
-            window.location.href = PATH_CLOUD_LOGIN;
-            return;
-        }
-    }
+    // ---------------------------------------------------------
+    // BOOT LOGIC REMOVED
+    // ---------------------------------------------------------
 };
 
+// EXPORT
 window.Auth = Auth;
-
-window.addEventListener("DOMContentLoaded", () => {
-    Auth.boot();
-});
