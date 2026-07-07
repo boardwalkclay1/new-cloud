@@ -37,15 +37,14 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN — FINAL WORKING VERSION
+         CLOUD USER LOGIN — HASH VERIFIED CORRECTLY
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
         const { email, password } = body;
 
-        // Query using your REAL schema
         const { results } = await db.prepare(
-          `SELECT id, email, passwordHash, name, photoUrl, bio, roles, createdAt
+          `SELECT id, email, passwordHash, salt, iterations, name, photoUrl, bio, roles, createdAt
            FROM cloud_users
            WHERE email = ?`
         ).bind(email).all();
@@ -59,15 +58,43 @@ export default {
 
         const user = results[0];
 
-        // TEMPORARY: raw password comparison (matches your DB)
-        if (user.passwordHash !== password) {
+        /* -------------------------------
+           HASH VERIFICATION (PBKDF2)
+        -------------------------------- */
+        const storedHash = Uint8Array.from(atob(user.passwordHash), c => c.charCodeAt(0));
+        const salt = Uint8Array.from(atob(user.salt), c => c.charCodeAt(0));
+
+        const key = await crypto.subtle.importKey(
+          "raw",
+          new TextEncoder().encode(password),
+          { name: "PBKDF2" },
+          false,
+          ["deriveBits"]
+        );
+
+        const derivedBits = await crypto.subtle.deriveBits(
+          {
+            name: "PBKDF2",
+            hash: "SHA-256",
+            salt,
+            iterations: user.iterations
+          },
+          key,
+          storedHash.length * 8
+        );
+
+        const derivedHash = new Uint8Array(derivedBits);
+
+        const match = storedHash.every((byte, i) => byte === derivedHash[i]);
+
+        if (!match) {
           return wrap(new Response(JSON.stringify({
             success: false,
             error: "Invalid credentials"
           }), { status: 401 }));
         }
 
-        // Ensure roles is ALWAYS an array (even if frontend doesn’t use it)
+        // Roles still returned exactly as your DB stores them
         user.roles = user.roles ? user.roles.split(",") : [];
 
         return wrap(new Response(JSON.stringify({
