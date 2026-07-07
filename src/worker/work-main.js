@@ -1,4 +1,4 @@
-// worker.js — FINAL FIXED VERSION
+// worker.js — FINAL WORKING VERSION
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
@@ -22,7 +22,7 @@ function wrap(res) {
   return new Response(res.body, { status: res.status, headers });
 }
 
-// helper: SHA-256 → hex
+// SHA-256 → hex
 async function sha256Hex(str) {
   const data = new TextEncoder().encode(str);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
@@ -66,7 +66,7 @@ export default {
 
         const user = results[0];
 
-        // hash incoming password with SHA-256 and compare to stored hex hash
+        // hash incoming password and compare to stored hex hash
         const incomingHash = await sha256Hex(password);
 
         if (incomingHash !== user.passwordHash) {
