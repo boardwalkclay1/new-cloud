@@ -1,8 +1,8 @@
-// js/auth-cloud-standalone.js
+// js/auth-login.js
 
 const API = "https://api.beltlinecloud.com";
 
-const AuthStandalone = {
+const AuthLogin = {
   async login(email, password) {
     const res = await fetch(`${API}/api/users/login`, {
       method: "POST",
@@ -22,4 +22,4 @@ const AuthStandalone = {
   }
 };
 
-window.AuthStandalone = AuthStandalone;
+window.AuthLogin = AuthLogin;
