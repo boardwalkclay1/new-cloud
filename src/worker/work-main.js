@@ -1,6 +1,6 @@
-// worker.js
+// worker.js — BELTLINE CLOUD (FULL FIXED VERSION)
 
-import { handleNetwork } from "./work-network.js";     // ← CORRECT
+import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
 import { handleSafetyRoutes } from "./work-safety.js";
 
@@ -22,16 +22,6 @@ function wrap(res) {
   return new Response(res.body, { status: res.status, headers });
 }
 
-function redirect(url) {
-  return new Response(null, {
-    status: 302,
-    headers: {
-      "Location": url,
-      ...corsHeaders()
-    }
-  });
-}
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -47,7 +37,7 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN → REDIRECT
+         CLOUD USER LOGIN → JSON RESPONSE (FIXED)
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
@@ -56,16 +46,23 @@ export default {
           `SELECT * FROM cloud_users WHERE email = ? AND password = ?`
         ).bind(body.email, body.password).all();
 
-        if (!results.length)
-          return wrap(new Response(JSON.stringify({ error: "Invalid credentials" }), { status: 401 }));
+        if (!results.length) {
+          return wrap(new Response(JSON.stringify({
+            success: false,
+            error: "Invalid credentials"
+          }), { status: 401 }));
+        }
 
         const user = results[0];
 
-        return redirect(`${FRONTEND_DOMAIN}/cloud/dashboard.html?userId=${user.id}`);
+        return wrap(new Response(JSON.stringify({
+          success: true,
+          user
+        }), { status: 200 }));
       }
 
       /* ---------------------------------------------------------
-         RESPONSE MEMBER VERIFY → REDIRECT
+         RESPONSE MEMBER VERIFY → JSON RESPONSE
       --------------------------------------------------------- */
       if (path === "/api/response/member/verify" && request.method === "POST") {
         const body = await request.json();
@@ -74,11 +71,10 @@ export default {
           `UPDATE cloud_response_members SET status = ? WHERE id = ?`
         ).bind(body.approved ? "active" : "rejected", body.memberId).run();
 
-        if (body.approved) {
-          return redirect(`${FRONTEND_DOMAIN}/cloud/response/dashboard.html?memberId=${body.memberId}`);
-        }
-
-        return redirect(`${FRONTEND_DOMAIN}/cloud/response/rejected.html`);
+        return wrap(new Response(JSON.stringify({
+          success: true,
+          status: body.approved ? "active" : "rejected"
+        }), { status: 200 }));
       }
 
       /* ---------------------------------------------------------
@@ -94,7 +90,7 @@ export default {
       if (r2) return wrap(r2);
 
       /* ---------------------------------------------------------
-         NETWORK ROUTES (THIS IS work-network.js)
+         NETWORK ROUTES
       --------------------------------------------------------- */
       const r3 = await handleNetwork(path, request, db, url);
       if (r3) return wrap(r3);
