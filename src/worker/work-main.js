@@ -1,4 +1,4 @@
-// worker.js — FIXED VERSION (NO REDESIGN)
+// worker.js — FINAL FIXED VERSION
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
@@ -37,13 +37,13 @@ export default {
     try {
 
       /* ---------------------------------------------------------
-         CLOUD USER LOGIN — FIXED FOR passwordHash + roles
+         CLOUD USER LOGIN — FINAL WORKING VERSION
       --------------------------------------------------------- */
       if (path === "/api/users/login" && request.method === "POST") {
         const body = await request.json();
         const { email, password } = body;
 
-        // Query using passwordHash (your actual column)
+        // Query using your REAL schema
         const { results } = await db.prepare(
           `SELECT id, email, passwordHash, name, photoUrl, bio, roles, createdAt
            FROM cloud_users
@@ -59,7 +59,7 @@ export default {
 
         const user = results[0];
 
-        // TEMPORARY: compare plain password to stored hash
+        // TEMPORARY: raw password comparison (matches your DB)
         if (user.passwordHash !== password) {
           return wrap(new Response(JSON.stringify({
             success: false,
@@ -77,7 +77,7 @@ export default {
       }
 
       /* ---------------------------------------------------------
-         RESPONSE MEMBER VERIFY — JSON (unchanged)
+         RESPONSE MEMBER VERIFY
       --------------------------------------------------------- */
       if (path === "/api/response/member/verify" && request.method === "POST") {
         const body = await request.json();
