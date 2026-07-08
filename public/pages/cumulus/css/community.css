@@ -2,6 +2,8 @@
   --yellow: #f7d354;
   --white: #ffffff;
   --blue-dark: #0a2a43;
+  --blue-light: #1a3f5f;
+  --accent: #4fc3f7;
 }
 
 /* GLOBAL */
@@ -29,7 +31,6 @@ body {
 
 .header-logo {
   height: 85px;
-  width: auto;
   border-radius: 10px;
   border: 2px solid var(--yellow);
 }
@@ -51,13 +52,48 @@ body {
   opacity: 0.9;
 }
 
-.burger-icon {
-  height: 40px;
-  width: auto;
-  cursor: pointer;
+/* REP TOGGLE */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 22px;
 }
 
-/* SIDE MENU */
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #555;
+  border-radius: 22px;
+  transition: .3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--white);
+  border-radius: 50%;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background-color: var(--yellow);
+}
+
+input:checked + .slider:before {
+  transform: translateX(23px);
+}
+
+/* MENU */
 .cloud-menu {
   position: fixed;
   top: 0;
@@ -77,129 +113,101 @@ body {
   transform: translateX(0);
 }
 
-.menu-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 15px;
-  border-bottom: 2px solid var(--yellow);
-}
-
-.menu-logo {
-  height: 85px;
-  width: auto;
-  border-radius: 12px;
-  border: 2px solid var(--yellow);
-}
-
-.menu-close {
-  font-size: 2.2rem;
-  color: var(--yellow);
-  cursor: pointer;
-  padding: 5px 10px;
-}
-
-.menu-content {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.menu-category h3 {
-  font-family: 'Cinzel', serif;
-  font-size: 1.3rem;
-  color: var(--yellow);
-  margin-bottom: 10px;
-}
-
-.menu-category ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu-category li {
-  margin: 8px 0;
-}
-
-.menu-category a {
-  color: var(--white);
-  font-size: 1.05rem;
-  text-decoration: none;
-}
-
-.menu-category a:hover {
-  color: var(--yellow);
-}
-
-/* MAIN TITLE */
-.section-title {
+/* HERO */
+.hero {
   text-align: center;
-  font-family: 'Cinzel', serif;
-  font-size: 2.4rem;
-  color: var(--yellow);
   margin-top: 40px;
 }
 
-.section-subtitle {
-  text-align: center;
-  font-size: 1.1rem;
+.hero h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.8rem;
+  color: var(--yellow);
+}
+
+.hero p {
   opacity: 0.85;
-  margin-bottom: 30px;
 }
 
-/* GRID */
-.grid {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
+/* LEADERBOARD */
+.leaderboard-section {
   width: 90%;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 40px auto;
 }
 
-.tile {
+.leaderboard {
   background: rgba(10, 42, 67, 0.85);
   border: 2px solid var(--yellow);
   border-radius: 12px;
-  padding: 15px;
+  padding: 20px;
+}
+
+/* MAP */
+.map-section {
+  width: 90%;
+  margin: 40px auto;
   text-align: center;
-  color: var(--white);
-  text-decoration: none;
-  backdrop-filter: blur(3px);
 }
 
-.tile img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
+.map-preview {
+  height: 250px;
+  background: rgba(10, 42, 67, 0.85);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
 }
 
-.tile h3 {
-  font-family: 'Cinzel', serif;
-  font-size: 1.3rem;
-  margin-bottom: 8px;
+.full-map-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: var(--yellow);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.tile p {
-  font-size: 0.95rem;
-  opacity: 0.9;
+/* ZONES */
+.zones-section {
+  width: 90%;
+  margin: 40px auto;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
-  .cloud-menu {
-    width: 85%;
-  }
+.zones-list {
+  background: rgba(10, 42, 67, 0.85);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 20px;
+}
 
-  .menu-logo {
-    height: 75px;
-  }
+/* VENDORS */
+.vendors-section {
+  width: 90%;
+  margin: 40px auto;
+}
 
-  .header-logo {
-    height: 75px;
-  }
+.vendor-carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+}
+
+/* NEEDS */
+.needs-section {
+  width: 90%;
+  margin: 40px auto;
+}
+
+.needs-list {
+  background: rgba(10, 42, 67, 0.85);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.post-need-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
