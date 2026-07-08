@@ -20,12 +20,20 @@
   <meta name="twitter:description" content="Your real-life community dashboard for good deeds, volunteer work, bartering, and support." />
   <meta name="twitter:image" content="https://beltlinecloud.com/assets/img/cloud/cumulus.jpg" />
 
-  <link rel="stylesheet" href="/css/community.css" />
+  <!-- CORRECT CSS PATH -->
+  <link rel="stylesheet" href="/public/pages/cumulus/css/community.css" />
 </head>
 
 <body>
-  <!-- FORCED BACKGROUND -->
-  <div class="page-bg"></div>
+
+  <!-- ⭐ THE FIX: BACKGROUND PHOTO CALLED DIRECTLY IN HTML -->
+  <div class="page-bg" style="
+    position:fixed;
+    inset:0;
+    background:url('/public/assets/img/cloud/cumulus.jpg') center/cover no-repeat;
+    opacity:0.28;
+    z-index:-1;
+  "></div>
 
   <!-- HEADER -->
   <header class="header">
