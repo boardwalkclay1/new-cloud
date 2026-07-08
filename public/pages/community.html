@@ -3,35 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cumulus Cloud — Community Dashboard</title>
+  <title>The Cumulus Cloud — Game Community Hub</title>
 
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/logo.png" />
 
   <!-- SOCIAL PREVIEW -->
-  <meta property="og:title" content="The Cumulus Cloud — Beltline Community Hub" />
-  <meta property="og:description" content="Volunteer, barter, help neighbors, post needs, and build real reputation in the Beltline community." />
+  <meta property="og:title" content="The Cumulus Cloud — Game-Style Community Hub" />
+  <meta property="og:description" content="Live Beltline territory battles, leaderboards, community needs, rep points, and geo challenges." />
   <meta property="og:image" content="https://beltlinecloud.com/assets/img/cloud/cumulus.jpg" />
   <meta property="og:url" content="https://beltlinecloud.com/pages/community.html" />
   <meta property="og:type" content="website" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="The Cumulus Cloud — Community Hub" />
-  <meta name="twitter:description" content="Your real-life community dashboard for good deeds, volunteer work, bartering, and support." />
+  <meta name="twitter:title" content="The Cumulus Cloud — Game Community Hub" />
+  <meta name="twitter:description" content="Territory battles, leaderboards, community needs, rep points, and geo challenges." />
   <meta name="twitter:image" content="https://beltlinecloud.com/assets/img/cloud/cumulus.jpg" />
 
-  <!-- CORRECT CSS PATH -->
-  <link rel="stylesheet" href="/pages/cumulus/css/community.css" />
+  <!-- GAME-THEMED CSS -->
+  <link rel="stylesheet" href="/public/pages/cumulus/css/community.css" />
 </head>
 
 <body>
 
-  <!-- ⭐ THE FIX: BACKGROUND PHOTO CALLED DIRECTLY IN HTML -->
+  <!-- BACKGROUND -->
   <div class="page-bg" style="
     position:fixed;
     inset:0;
-    background:url('/assets/img/cloud/cumulus.jpg') center/cover no-repeat;
-    opacity:0.28;
+    background:url('/public/assets/img/cloud/cumulus.jpg') center/cover no-repeat;
+    opacity:0.25;
     z-index:-1;
   "></div>
 
@@ -41,7 +41,15 @@
       <img src="/assets/img/logo.png" class="header-logo" />
       <div class="header-info">
         <div id="userName" class="header-name"></div>
-        <div id="userRep" class="header-stat"></div>
+
+        <!-- REP TOGGLE -->
+        <div class="rep-toggle">
+          <span id="userRep" class="header-stat"></span>
+          <label class="switch">
+            <input type="checkbox" id="repVisibility" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 
@@ -59,59 +67,56 @@
       <div class="menu-category">
         <h3>Cumulus Cloud</h3>
         <ul>
-          <li><a href="/pages/community.html">Community Hub</a></li>
-          <li><a href="/pages/volunteer.html">Volunteer Work</a></li>
-          <li><a href="/pages/barter.html">Bartering</a></li>
+          <li><a href="/pages/community.html">Game Hub</a></li>
+          <li><a href="/pages/leaderboards.html">Leaderboards</a></li>
+          <li><a href="/pages/map.html">Cumulus Map</a></li>
+          <li><a href="/pages/zones.html">Zone Ownership</a></li>
           <li><a href="/pages/needs.html">Community Needs</a></li>
-          <li><a href="/pages/deeds.html">Good Deeds</a></li>
           <li><a href="/pages/messages.html">Messaging</a></li>
+          <li><a href="/pages/phonebook.html">Phone Book ($1/mo)</a></li>
         </ul>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
-  <h1 class="section-title">The Cumulus Cloud</h1>
+  <!-- HERO -->
+  <section class="hero">
+    <h1>The Cumulus Cloud</h1>
+    <p>Game‑style community hub — territory battles, leaderboards, rep points, and real‑life missions.</p>
+  </section>
 
-  <p class="section-subtitle">
-    Your real‑life community hub — volunteer, help, barter, support, and earn reputation.
-  </p>
+  <!-- LEADERBOARD -->
+  <section class="leaderboard-section">
+    <h2>Top Players</h2>
+    <div id="leaderboard" class="leaderboard"></div>
+  </section>
 
-  <div class="grid">
+  <!-- MAP -->
+  <section class="map-section">
+    <h2>Cumulus Map</h2>
+    <div class="map-preview" id="mapPreview"></div>
+    <button class="full-map-btn" onclick="window.location.href='/pages/map.html'">Open Full Map</button>
+  </section>
 
-    <a class="tile" href="/pages/volunteer.html">
-      <img src="/assets/img/community/volunteer.jpg" />
-      <h3>Volunteer Work</h3>
-      <p>Join real community events and earn reputation points.</p>
-    </a>
+  <!-- ZONE OWNERSHIP -->
+  <section class="zones-section">
+    <h2>Beltline Zones</h2>
+    <div id="zonesList" class="zones-list"></div>
+  </section>
 
-    <a class="tile" href="/pages/barter.html">
-      <img src="/assets/img/community/barter.jpg" />
-      <h3>Bartering</h3>
-      <p>Trade skills, tools, and help with neighbors.</p>
-    </a>
+  <!-- VENDOR ADS -->
+  <section class="vendors-section">
+    <h2>Featured Vendors</h2>
+    <div class="vendor-carousel" id="vendorCarousel"></div>
+  </section>
 
-    <a class="tile" href="/pages/needs.html">
-      <img src="/assets/img/community/needs.jpg" />
-      <h3>Community Needs</h3>
-      <p>Post what you need or help someone who needs support.</p>
-    </a>
+  <!-- COMMUNITY NEEDS -->
+  <section class="needs-section">
+    <h2>Community Needs</h2>
+    <div id="needsList" class="needs-list"></div>
+    <button class="post-need-btn" onclick="window.location.href='/pages/needs.html'">Post a Need</button>
+  </section>
 
-    <a class="tile" href="/pages/deeds.html">
-      <img src="/assets/img/community/deeds.jpg" />
-      <h3>Good Deeds</h3>
-      <p>Submit verified real‑life good deeds and earn rep.</p>
-    </a>
-
-    <a class="tile" href="/pages/messages.html">
-      <img src="/assets/img/community/messages.jpg" />
-      <h3>Messaging</h3>
-      <p>Connect with the community in real time.</p>
-    </a>
-
-  </div>
-
-  <script src="/js/auth-login.js"></script>
-  <script src="/js/community.js"></script>
+  <script src="/public/pages/cumulus/js/community.js"></script>
 </body>
 </html>
