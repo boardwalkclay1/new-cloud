@@ -17,13 +17,84 @@
       color: #fff;
     }
 
-    .header-info span {
+    /* MAIN CLOUD — GIANT CENTERED */
+    .main-cloud {
+      height: 260px;
+      width: auto;
       display: block;
-      margin: 4px 0;
-      font-family: Cinzel;
-      font-size: 1rem;
+      margin: 40px auto 10px auto;
+      animation: floaty 6s infinite ease-in-out;
+      filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
+    }
+
+    /* WEATHER + LOCATION + TIME — CENTERED */
+    .center-stats {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      font-family: 'Cinzel', serif;
+    }
+
+    .center-stats .stat {
+      font-size: 1.3rem;
+      margin: 6px 0;
       color: #f7d354;
       text-shadow: 0 0 8px #f7d354;
+    }
+
+    /* CLOUD ROW (Messages + Response + Safety) */
+    .cloud-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+
+    .cloud-row img {
+      height: 180px;
+      width: 180px;
+      object-fit: contain;
+      animation: pulse 2.2s infinite ease-in-out;
+      cursor: pointer;
+    }
+
+    /* QUICK ACTION BUTTONS */
+    .quick-actions {
+      margin: 40px auto;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .qa-btn {
+      background: #0a2a43;
+      border: 2px solid #f7d354;
+      padding: 14px 20px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      width: 48%;
+      transition: 0.2s ease;
+    }
+
+    .qa-btn:hover {
+      transform: scale(1.05);
+      background: #f7d354;
+      color: #000;
+    }
+
+    /* FLOAT + PULSE ANIMATIONS */
+    @keyframes floaty {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+      100% { transform: scale(1); }
     }
 
     /* Bigger bottom logos */
@@ -109,52 +180,42 @@
   </div>
 </div>
 
-<!-- HEADER -->
-<header class="header">
+<!-- MAIN CLOUD -->
+<img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" alt="Main Cloud">
 
-  <div class="header-left">
-    <img src="/assets/img/cloud/cloud-logo.jpg"
-         class="header-logo"
-         id="menuTrigger"
-         alt="Open Menu">
-  </div>
+<!-- WEATHER + LOCATION + TIME -->
+<div class="center-stats">
+  <div class="stat" id="weather">Loading weather…</div>
+  <div class="stat" id="beltlineLocation">Atlanta Beltline</div>
+  <div class="stat" id="timeDisplay"></div>
+</div>
 
-  <div class="header-info">
-    <span id="weather">Loading weather…</span>
-    <span id="beltlineLocation">Atlanta Beltline</span>
-    <span id="timeDisplay"></span>
-  </div>
+<!-- CLOUD ROW -->
+<div class="cloud-row">
 
-  <!-- STACKED TOP-RIGHT ICONS (4× bigger) -->
-  <div class="header-top-right" style="display:flex; flex-direction:column; gap:20px; align-items:flex-end;">
+  <!-- MESSAGES -->
+  <a href="/pages/messages/index.html">
+    <img src="/assets/img/cloud/cloud-talkk-logo.jpg" alt="Messages">
+  </a>
 
-    <!-- MESSAGES -->
-    <a href="/pages/messages/index.html">
-      <img src="/assets/img/cloud/cloud-talkk-logo.jpg"
-           class="cloud-talk-logo"
-           alt="Messages"
-           style="height:220px; width:220px; object-fit:contain;">
-    </a>
+  <!-- RESPONSE -->
+  <img src="/assets/img/cloud/cloud-response-logo.jpg"
+       alt="Response Unit"
+       id="cloudResponseTrigger">
 
-    <!-- RESPONSE UNIT -->
-    <img src="/assets/img/cloud/cloud-response-logo.jpg"
-         class="response-logo"
-         alt="Response Unit"
-         id="cloudResponseTrigger"
-         style="height:220px; width:220px; object-fit:contain; cursor:pointer;">
+  <!-- SAFETY -->
+  <a href="/pages/safety/index.html">
+    <img src="/assets/img/cloud/safety-cloud-logo.jpg" alt="Safety Cloud">
+  </a>
 
-  </div>
-
-</header>
+</div>
 
 <!-- QUICK ACTIONS -->
 <div class="quick-actions">
-
   <div class="quick-row">
     <button type="button" class="qa-btn" onclick="window.location.href='/pages/profile/pages/index.html'">Profile</button>
     <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
   </div>
-
 </div>
 
 <!-- CLOUD RESPONSE MODAL -->
@@ -215,17 +276,6 @@
   </div>
 
 </div>
-
-<!-- SAFETY CLOUD — BIGGER + NO BACKGROUND + CLICKABLE -->
-<a href="/pages/safety/index.html" style="text-decoration:none;">
-  <div style="text-align:center; margin:60px auto 20px;">
-    <img src="/assets/img/cloud/safety-cloud-logo.jpg"
-         alt="Safety Cloud"
-         style="height:160px; width:160px; object-fit:contain; margin-bottom:10px;">
-    <h3 style="font-family:Cinzel; color:#f7d354; margin:0; font-size:1.8rem;">
-    </h3>
-  </div>
-</a>
 
 <h2 class="section-title">Explore Beltline Cloud</h2>
 
@@ -358,10 +408,9 @@
   loadWeather();
 </script>
 
-  <script type="module" defer src="/js/dashboard.js"></script>
-  <script type="module" defer src="/js/cloud-dashboard.js"></script>
-  <script type="module" defer src="/pages/safety/js/cloud.js"></script>
+<script type="module" defer src="/js/dashboard.js"></script>
+<script type="module" defer src="/js/cloud-dashboard.js"></script>
+<script type="module" defer src="/pages/safety/js/cloud.js"></script>
 
 </body>
 </html>
- 
