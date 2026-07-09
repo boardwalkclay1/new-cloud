@@ -1,184 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beltline Cloud Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beltline Cloud Dashboard</title>
 
-  <link rel="stylesheet" href="/css/dashboard.css">
-  <link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
-      font-family: 'Inter', sans-serif;
-      color: #fff;
-    }
+<style>
+  body {
+    margin: 0;
+    background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+  }
 
-    /* MAIN CLOUD — GIANT CENTERED */
-    .main-cloud {
-      height: 260px;
-      width: auto;
-      display: block;
-      margin: 40px auto 10px auto;
-      animation: floaty 6s infinite ease-in-out;
-      filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
-    }
+  /* MAIN CLOUD */
+  .main-cloud {
+    height: 200px;
+    width: auto;
+    display: block;
+    margin: 25px auto 10px auto;
+    animation: floaty 6s infinite ease-in-out;
+    filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
+  }
 
-    /* WEATHER + LOCATION + TIME — CENTERED */
-    .center-stats {
-      text-align: center;
-      margin-top: 10px;
-      margin-bottom: 30px;
-      font-family: 'Cinzel', serif;
-    }
+  /* CENTER STATS */
+  .center-stats {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-family: 'Cinzel', serif;
+  }
 
-    .center-stats .stat {
-      font-size: 1.3rem;
-      margin: 6px 0;
-      color: #f7d354;
-      text-shadow: 0 0 8px #f7d354;
-    }
+  .center-stats .stat {
+    font-size: 1.1rem;
+    margin: 4px 0;
+    color: #f7d354;
+    text-shadow: 0 0 8px #f7d354;
+  }
 
-    /* CLOUD ROW (Messages + Response + Safety) */
-    .cloud-row {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 10px;
-      margin-bottom: 25px;
-    }
+  /* CLOUD ROW — MOBILE PERFECT */
+  .cloud-row {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
 
-    .cloud-row img {
-      height: 180px;
-      width: 180px;
-      object-fit: contain;
-      animation: pulse 2.2s infinite ease-in-out;
-      cursor: pointer;
-    }
+  .cloud-row img {
+    height: 110px;
+    width: 110px;
+    object-fit: contain;
+    cursor: pointer;
+    animation: pulse 2.2s infinite ease-in-out;
+  }
 
-    /* QUICK ACTION BUTTONS */
-    .quick-actions {
-      margin: 40px auto;
-      width: 90%;
-      max-width: 900px;
-    }
+  /* GRID TILES */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 15px;
+  }
 
-    .qa-btn {
-      background: #0a2a43;
-      border: 2px solid #f7d354;
-      padding: 14px 20px;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 1.2rem;
-      cursor: pointer;
-      width: 48%;
-      transition: 0.2s ease;
-    }
+  .tile {
+    background: rgba(0,0,0,0.55);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border: 2px solid #f7d354;
+  }
 
-    .qa-btn:hover {
-      transform: scale(1.05);
-      background: #f7d354;
-      color: #000;
-    }
+  .tile img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
 
-    /* FLOAT + PULSE ANIMATIONS */
-    @keyframes floaty {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-      100% { transform: translateY(0); }
-    }
+  .tile h3 {
+    margin-top: 10px;
+    font-size: 1.3rem;
+    color: #f7d354;
+  }
 
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-      100% { transform: scale(1); }
-    }
+  /* BOTTOM BAR */
+  .bottom-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 10px;
+    margin-top: 30px;
+  }
 
-    /* Bigger bottom logos */
-    .bottom-logo {
-      height: 160px !important;
-      width: 160px !important;
-      object-fit: contain;
-    }
-  </style>
+  .bottom-section {
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .bottom-logo {
+    height: 110px;
+    width: 110px;
+    object-fit: contain;
+  }
+
+  .bottom-text {
+    margin-top: 8px;
+    font-size: 1rem;
+  }
+
+  /* RESPONSE MENU */
+  .response-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10,10,10,0.95);
+    padding: 20px;
+    border-top: 2px solid #f7d354;
+    display: none;
+  }
+
+  .response-box {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+  }
+
+  .response-box select,
+  .response-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 2px solid #f7d354;
+    background: #222;
+    color: white;
+  }
+
+  @keyframes floaty {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+</style>
 </head>
 
 <body>
-
-<div class="page-bg"></div>
-
-<!-- CLOUD MENU -->
-<div id="cloudMenu" class="cloud-menu">
-  <div class="menu-header">
-    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo" alt="Cloud Logo">
-    <span class="menu-close" id="menuClose">&times;</span>
-  </div>
-
-  <div class="menu-content">
-
-    <div class="menu-category">
-      <h3>My Profile</h3>
-      <ul>
-        <li><a href="/pages/profile/pages/index.html">View Profile</a></li>
-        <li><a href="/pages/notifications.html">Notifications</a></li>
-      </ul>
-    </div>
-
-    <div class="menu-category">
-      <h3>Safety Cloud</h3>
-      <ul>
-        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
-        <li><a href="/pages/safety/lost-and-found.html">Lost & Found</a></li>
-        <li><a href="/pages/safety/report-stolen.html">Stolen Items</a></li>
-        <li><a href="/pages/safety/markers/index.html">Marker System</a></li>
-        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
-        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
-      </ul>
-    </div>
-
-    <div class="menu-category">
-      <h3>News Cloud</h3>
-      <ul>
-        <li><a href="/pages/news/beltline-news.html">Beltline News</a></li>
-        <li><a href="/pages/news/weather.html">Weather</a></li>
-        <li><a href="/pages/news/updates.html">Updates</a></li>
-      </ul>
-    </div>
-
-    <div class="menu-category">
-      <h3>Trail Tools</h3>
-      <ul>
-        <li><a href="/pages/map.html">Trail Map</a></li>
-        <li><a href="/pages/map/zones.html">Zones</a></li>
-        <li><a href="/pages/map/etiquette.html">Etiquette</a></li>
-      </ul>
-    </div>
-
-    <div class="menu-category">
-      <h3>Community Cloud</h3>
-      <ul>
-        <li><a href="/pages/chat/pages/index.html">Cloud Chat</a></li>
-        <li><a href="/pages/events/pages/events.html">Events</a></li>
-        <li><a href="/pages/community.html">Cumulus Cloud</a></li>
-      </ul>
-    </div>
-
-    <div class="menu-category">
-      <h3>Sign Up</h3>
-      <ul>
-        <li><a href="/fast-roll/pages/rider/signup.html">Become a Rider</a></li>
-        <li><a href="/network/public/pages/signup.html">Become a Vendor</a></li>
-        <li><a href="/pages/safety/response-unit/pages/signup.html">Join Response Unit</a></li>
-      </ul>
-    </div>
-
-    <div class="logout-btn-menu" onclick="logout()">Logout</div>
-
-  </div>
-</div>
 
 <!-- MAIN CLOUD -->
 <img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" alt="Main Cloud">
@@ -186,98 +166,22 @@
 <!-- WEATHER + LOCATION + TIME -->
 <div class="center-stats">
   <div class="stat" id="weather">Loading weather…</div>
-  <div class="stat" id="beltlineLocation">Atlanta Beltline</div>
+  <div class="stat">Atlanta Beltline</div>
   <div class="stat" id="timeDisplay"></div>
 </div>
 
 <!-- CLOUD ROW -->
 <div class="cloud-row">
 
-  <!-- MESSAGES -->
-  <a href="/pages/messages/index.html">
-    <img src="/assets/img/cloud/cloud-talkk-logo.jpg" alt="Messages">
-  </a>
+  <!-- SAFETY CLOUD -->
+  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud.png" alt="Safety Cloud">
 
-  <!-- RESPONSE -->
-  <img src="/assets/img/cloud/cloud-response-logo.jpg"
-       alt="Response Unit"
-       id="cloudResponseTrigger">
-
-  <!-- SAFETY -->
-  <a href="/pages/safety/index.html">
-    <img src="/assets/img/cloud/safety-cloud-logo.jpg" alt="Safety Cloud">
-  </a>
+  <!-- CLOUD TALK -->
+  <img id="cloudTalk" src="/assets/img/cloud/cloud-talk.png" alt="Cloud Talk">
 
 </div>
 
-<!-- QUICK ACTIONS -->
-<div class="quick-actions">
-  <div class="quick-row">
-    <button type="button" class="qa-btn" onclick="window.location.href='/pages/profile/pages/index.html'">Profile</button>
-    <button type="button" class="qa-btn" onclick="window.location.href='/pages/settings.html'">Settings</button>
-  </div>
-</div>
-
-<!-- CLOUD RESPONSE MODAL -->
-<div id="cloudResponseModal"
-     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; padding:40px;">
-
-  <div style="max-width:600px; margin:auto; background:#111; border:2px solid #f7d354; border-radius:16px; padding:30px;">
-
-    <h2 style="font-family:Cinzel; color:#f7d354; text-align:center;">Cloud Response System</h2>
-
-    <p style="color:white; text-align:center; margin-bottom:20px;">
-      Choose manual or automatic alert mode.
-    </p>
-
-    <!-- MANUAL ALERT -->
-    <div style="margin-bottom:30px;">
-      <h3 style="color:#f7d354;">Manual Alert</h3>
-      <select id="manualAlertSelect"
-              style="width:100%; padding:12px; border-radius:10px; border:2px solid #f7d354; background:#222; color:white;">
-        <option value="">Select Emergency Type</option>
-        <option value="danger">Danger Nearby</option>
-        <option value="medical">Medical Emergency</option>
-        <option value="crime">Crime in Progress</option>
-        <option value="lost">Lost Person</option>
-        <option value="fire">Fire / Smoke</option>
-      </select>
-
-      <button id="manualAlertConfirm"
-              style="margin-top:10px; width:100%; padding:12px; background:#f00; border:none; border-radius:10px; color:white; font-weight:bold;">
-        SEND MANUAL ALERT
-      </button>
-    </div>
-
-    <!-- AUTO ALERT -->
-    <div>
-      <h3 style="color:#f7d354;">Auto Alert Mode</h3>
-      <select id="autoAlertSelect"
-              style="width:100%; padding:12px; border-radius:10px; border:2px solid #f7d354; background:#222; color:white;">
-        <option value="">Select Auto Alert Mode</option>
-        <option value="motion">Motion Detection</option>
-        <option value="pattern">Pattern Recognition</option>
-        <option value="full">Full Monitoring</option>
-        <option value="silent">Silent Background Mode</option>
-        <option value="off">Turn Off Auto Alerts</option>
-      </select>
-
-      <button id="autoAlertConfirm"
-              style="margin-top:10px; width:100%; padding:12px; background:#f7d354; border:none; border-radius:10px; color:black; font-weight:bold;">
-        APPLY AUTO ALERT MODE
-      </button>
-    </div>
-
-    <button onclick="closeCloudResponseModal()"
-            style="margin-top:20px; width:100%; padding:12px; background:#333; border:none; border-radius:10px; color:white;">
-      CLOSE
-    </button>
-
-  </div>
-
-</div>
-
-<h2 class="section-title">Explore Beltline Cloud</h2>
+<h2 class="section-title" style="text-align:center; margin-bottom:15px;">Explore Beltline Cloud</h2>
 
 <section class="grid">
 
@@ -322,48 +226,79 @@
 
 </div>
 
-<div id="notificationsBar" class="notifications-bar" hidden>
-  Loading notifications…
+<!-- RESPONSE MENU -->
+<div id="responseMenu" class="response-menu">
+  <div class="response-box">
+
+    <h3>Response Actions</h3>
+
+    <label>Alert Type</label>
+    <select id="alertType">
+      <option value="">Select Alert Type</option>
+      <option value="emergency">Emergency Alert</option>
+      <option value="disturbance">Disturbance</option>
+      <option value="medical">Medical Concern</option>
+      <option value="suspicious">Suspicious Activity</option>
+    </select>
+
+    <label>Auto Monitoring Mode</label>
+    <select id="autoMode">
+      <option value="">Select Mode</option>
+      <option value="motion">Motion Detection</option>
+      <option value="pattern">Pattern Recognition</option>
+      <option value="full">Full Monitoring</option>
+      <option value="silent">Silent Background Mode</option>
+      <option value="off">Turn Off Auto Alerts</option>
+    </select>
+
+    <button id="sendAlert">SEND ALERT</button>
+    <button id="closeResponseMenu">CLOSE</button>
+
+  </div>
 </div>
 
 <script>
-  // MENU
-  document.getElementById("menuTrigger").onclick = () => {
-    document.getElementById("cloudMenu").classList.add("open");
-  };
-  document.getElementById("menuClose").onclick = () => {
-    document.getElementById("cloudMenu").classList.remove("open");
+  /* SAFETY CLOUD TAP */
+  document.getElementById("safetyCloud").addEventListener("click", () => {
+    window.location.href = "/pages/safety/index.html";
+  });
+
+  /* SAFETY CLOUD HOLD */
+  let pressTimer;
+  const safetyCloud = document.getElementById("safetyCloud");
+
+  safetyCloud.addEventListener("mousedown", () => {
+    pressTimer = setTimeout(() => {
+      document.getElementById("responseMenu").style.display = "block";
+    }, 600);
+  });
+
+  safetyCloud.addEventListener("mouseup", () => {
+    clearTimeout(pressTimer);
+  });
+
+  /* CLOUD TALK */
+  document.getElementById("cloudTalk").addEventListener("click", () => {
+    window.location.href = "/pages/chat/pages/index.html";
+  });
+
+  /* CLOSE RESPONSE MENU */
+  document.getElementById("closeResponseMenu").onclick = () => {
+    document.getElementById("responseMenu").style.display = "none";
   };
 
-  // RESPONSE ICON OPENS MODAL
-  document.getElementById("cloudResponseTrigger").onclick = () => {
-    document.getElementById("cloudResponseModal").style.display = "block";
-  };
+  /* SEND ALERT */
+  document.getElementById("sendAlert").onclick = () => {
+    const type = document.getElementById("alertType").value;
+    const mode = document.getElementById("autoMode").value;
 
-  function closeCloudResponseModal() {
-    document.getElementById("cloudResponseModal").style.display = "none";
-  }
-
-  // MANUAL ALERT CONFIRM
-  document.getElementById("manualAlertConfirm").onclick = () => {
-    const type = document.getElementById("manualAlertSelect").value;
     if (!type) return alert("Select an alert type.");
-    alert("Manual alert sent: " + type.toUpperCase());
+    if (!mode) return alert("Select a monitoring mode.");
+
+    alert("Alert sent: " + type.toUpperCase() + "\nMode: " + mode.toUpperCase());
   };
 
-  // AUTO ALERT CONFIRM
-  document.getElementById("autoAlertConfirm").onclick = () => {
-    const mode = document.getElementById("autoAlertSelect").value;
-    if (!mode) return alert("Select an auto alert mode.");
-    alert("Auto alert mode applied: " + mode.toUpperCase());
-  };
-
-  function logout() {
-    localStorage.removeItem("beltline_user");
-    window.location.href = "/pages/login.html";
-  }
-
-  // TIME
+  /* TIME */
   function updateTime() {
     const now = new Date();
     document.getElementById("timeDisplay").textContent =
@@ -378,7 +313,7 @@
   setInterval(updateTime, 1000);
   updateTime();
 
-  // WEATHER
+  /* WEATHER */
   async function loadWeather() {
     try {
       const res = await fetch(
@@ -407,10 +342,6 @@
   }
   loadWeather();
 </script>
-
-<script type="module" defer src="/js/dashboard.js"></script>
-<script type="module" defer src="/js/cloud-dashboard.js"></script>
-<script type="module" defer src="/pages/safety/js/cloud.js"></script>
 
 </body>
 </html>
