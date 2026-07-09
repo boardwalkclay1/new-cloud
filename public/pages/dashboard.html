@@ -336,14 +336,14 @@
 <!-- WEATHER + LOCATION + TIME -->
 <div class="center-stats">
   <div class="stat" id="weather">Loading weather…</div>
-  <div class="stat" id="beltlineLocation">Locating you on the Beltline…</div>
+  <div class="stat" id="beltlineLocation">Locating you…</div>
   <div class="stat" id="timeDisplay"></div>
 </div>
 
 <!-- CLOUD ROW -->
 <div class="cloud-row">
-  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud-logo.jpg" alt="Safety Cloud">
-  <img id="cloudTalk" src="/assets/img/cloud/cloud-talkk-logo.jpg" alt="Cloud Talk">
+  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud.png" alt="Safety Cloud">
+  <img id="cloudTalk" src="/assets/img/cloud/cloud-talk.png" alt="Cloud Talk">
 </div>
 
 <!-- PROFILE + SETTINGS -->
@@ -484,80 +484,60 @@
     window.location.href = "/pages/login.html";
   }
 
-/* TIME — FIXED */
-function updateTime() {
-  const now = new Date();
-  document.getElementById("timeDisplay").textContent =
-    now.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true,
-      timeZone: "America/New_York"
-    });
-}
-setInterval(updateTime, 1000);
-updateTime();
+  /* TIME */
+  function updateTime() {
+    const now = new Date();
+    document.getElementById("timeDisplay").textContent =
+      now.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+        timeZone: "America/New_York"
+      });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
 
-/* WEATHER + LOCATION — FULLY FIXED */
-async function loadWeatherAndLocation() {
-  try {
-    /* 1 — GET USER GPS */
+  /* REAL WEATHER + REAL LOCATION */
+  async function detectBeltlineLocation() {
+    const beltlineZones = [
+      {
+        name: "Eastside Trail",
+        latMin: 33.745,
+        latMax: 33.760,
+        lngMin: -84.370,
+        lngMax: -84.335
+      },
+      {
+        name: "Westside Trail",
+        latMin: 33.750,
+        latMax: 33.770,
+        lngMin: -84.430,
+        lngMax: -84.400
+      },
+      {
+        name: "Southside Trail",
+        latMin: 33.730,
+        latMax: 33.745,
+        lngMin: -84.395,
+        lngMax: -84.365
+      },
+      {
+        name: "Northside Trail",
+        latMin: 33.780,
+        latMax: 33.800,
+        lngMin: -84.375,
+        lngMax: -84.350
+      }
+    ];
+
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      /* 2 — WEATHER FROM USER LOCATION */
-      const url =
+      /* WEATHER */
+      const weatherURL =
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
 
-      const res = await fetch(url);
-      const data = await res.json();
-      const w = data.current_weather;
-
-      const temp = w.temperature;
-      const code = w.weathercode;
-
-      let emoji = "⛅";
-      if (code === 0) emoji = "☀️";
-      if ([1,2,3].includes(code)) emoji = "🌤️";
-      if ([45,48].includes(code)) emoji = "🌫️";
-      if ([51,53,55].includes(code)) emoji = "🌦️";
-      if ([61,63,65].includes(code)) emoji = "🌧️";
-      if ([71,73,75].includes(code)) emoji = "❄️";
-      if ([95,96,99].includes(code)) emoji = "⛈️";
-
-      document.getElementById("weather").textContent =
-        `${emoji} ${temp}°F`;
-
-      /* 3 — BELTLINE LOCATION DETECTION */
-      let zone = "Outside Beltline";
-
-      /* Quick zone mapping */
-      if (lat > 33.74 && lat < 33.76 && lng > -84.37 && lng < -84.34)
-        zone = "Eastside Trail";
-
-      if (lat > 33.75 && lat < 33.77 && lng > -84.42 && lng < -84.40)
-        zone = "Westside Trail";
-
-      if (lat > 33.73 && lat < 33.74 && lng > -84.39 && lng < -84.37)
-        zone = "Southside Trail";
-
-      if (lat > 33.78 && lat < 33.80 && lng > -84.37 && lng < -84.35)
-        zone = "Northside Trail";
-
-      document.getElementById("beltlineLocation").textContent =
-        `📍 ${zone}`;
-
-    }, () => {
-      document.getElementById("weather").textContent = "Weather unavailable";
-      document.getElementById("beltlineLocation").textContent = "Location unavailable";
-    });
-
-  } catch (err) {
-    document.getElementById("weather").textContent = "Weather unavailable";
-    document.getElementById("beltlineLocation").textContent = "Location unavailable";
-  }
-}
-
-loadWeatherAndLocation();
+      try
