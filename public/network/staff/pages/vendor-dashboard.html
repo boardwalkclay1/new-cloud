@@ -1,203 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Vendor Dashboard — The Network</title>
+<meta charset="UTF-8">
+<title>Vendor Dashboard — The Network</title>
 
-  <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Inter, sans-serif;
-      background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
-      color: #fff;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
+    color: #fff;
+  }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: -1;
-    }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: -1;
+  }
 
-    /* TOP BAR */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 25px;
-    }
+  /* TOP BAR */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 25px;
+  }
 
-    .vendor-logo {
-      height: 80px;
-      width: auto;
-      cursor: pointer;
-    }
+  .vendor-logo {
+    height: 85px;
+    cursor: pointer;
+  }
 
-    .dash-title {
-      font-family: Cinzel;
-      font-size: 2rem;
-      color: #f7d354;
-      text-shadow: 0 0 10px #f7d354;
-    }
+  .dash-title {
+    font-family: Cinzel;
+    font-size: 2.1rem;
+    color: #f7d354;
+    text-shadow: 0 0 10px #f7d354;
+  }
 
-    .dash-sub {
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
+  .dash-sub {
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
 
-    .logout-btn-top {
-      padding: 10px 18px;
-      border-radius: 10px;
-      border: 2px solid #f7d354;
-      background: transparent;
-      color: #f7d354;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
+  .logout-btn-top {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 2px solid #f7d354;
+    background: transparent;
+    color: #f7d354;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
 
-    .logout-btn-top:hover {
-      background: #f7d354;
-      color: #000;
-    }
+  .logout-btn-top:hover {
+    background: #f7d354;
+    color: #000;
+  }
 
-    /* LEFT MENU */
-    .menu-panel {
-      position: fixed;
-      top: 0;
-      left: -320px;
-      width: 320px;
-      height: 100vh;
-      background: rgba(10,42,67,0.96);
-      border-right: 3px solid #f7d354;
-      padding: 25px;
-      transition: 0.3s ease;
-      overflow-y: auto;
-      z-index: 9999;
-    }
+  /* LEFT MENU */
+  .menu-panel {
+    position: fixed;
+    top: 0;
+    left: -330px;
+    width: 330px;
+    height: 100vh;
+    background: rgba(10,42,67,0.96);
+    border-right: 3px solid #f7d354;
+    padding: 25px;
+    transition: 0.3s ease;
+    overflow-y: auto;
+    z-index: 9999;
+  }
 
-    .menu-panel.open {
-      left: 0;
-    }
+  .menu-panel.open {
+    left: 0;
+  }
 
-    .menu-panel h2 {
-      font-family: Cinzel;
-      color: #f7d354;
-      margin-bottom: 15px;
-    }
+  .menu-panel h2 {
+    font-family: Cinzel;
+    color: #f7d354;
+    margin-bottom: 15px;
+  }
 
-    .menu-panel a {
-      display: block;
-      color: #fff;
-      text-decoration: none;
-      padding: 8px 0;
-      font-size: 1rem;
-    }
+  .menu-panel a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 0;
+    font-size: 1rem;
+  }
 
-    .menu-panel a:hover {
-      color: #f7d354;
-    }
+  .menu-panel a:hover {
+    color: #f7d354;
+  }
 
-    .menu-close {
-      margin-top: 20px;
-      cursor: pointer;
-      color: #f7d354;
-    }
+  .menu-close {
+    margin-top: 20px;
+    cursor: pointer;
+    color: #f7d354;
+  }
 
-    /* CARD GRID */
-    .card-grid {
-      width: 95%;
-      max-width: 1200px;
-      margin: 25px auto 40px auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
+  /* CARD GRID */
+  .card-grid {
+    width: 95%;
+    max-width: 1200px;
+    margin: 25px auto 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 25px;
+  }
 
-    .dash-card {
-      background: rgba(10,42,67,0.9);
-      border: 2px solid #f7d354;
-      border-radius: 16px;
-      padding: 20px;
-    }
+  .dash-card {
+    background: rgba(10,42,67,0.9);
+    border: 2px solid #f7d354;
+    border-radius: 16px;
+    padding: 20px;
+  }
 
-    .dash-card h3 {
-      font-family: Cinzel;
-      color: #f7d354;
-      margin-bottom: 10px;
-      text-align: center;
-    }
+  .dash-card h3 {
+    font-family: Cinzel;
+    color: #f7d354;
+    margin-bottom: 10px;
+    text-align: center;
+  }
 
-    .dash-card p {
-      text-align: center;
-      font-size: 0.95rem;
-      opacity: 0.8;
-      margin-bottom: 15px;
-    }
+  .dash-card p {
+    text-align: center;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-bottom: 15px;
+  }
 
-    /* TILE BUTTONS */
-    .tile-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-    }
+  /* ITEM LIST */
+  .item-row {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid #f7d354;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
 
-    .tile {
-      background: rgba(255,255,255,0.08);
-      border: 2px solid #f7d354;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.2s ease;
-      font-size: 0.9rem;
-    }
+  .item-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
 
-    .tile-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
+  .btn-small {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #f7d354;
+    background: transparent;
+    color: #f7d354;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
 
-    .tile-sub {
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
+  .btn-small:hover {
+    background: #f7d354;
+    color: #000;
+  }
 
-    .tile:hover {
-      background: #f7d354;
-      color: #000;
-      transform: translateY(-2px);
-    }
+  .btn-publish {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f7d354;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
 
-    @media (max-width: 768px) {
-      .dash-title {
-        font-size: 1.6rem;
-      }
-      .vendor-logo {
-        height: 60px;
-      }
-    }
-  </style>
+  .btn-preview {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: transparent;
+    border: 2px solid #f7d354;
+    color: #f7d354;
+    cursor: pointer;
+  }
+
+  .btn-preview:hover {
+    background: #f7d354;
+    color: #000;
+  }
+</style>
 </head>
 
 <body>
 
 <!-- LEFT MENU -->
 <div id="menuPanel" class="menu-panel">
-  <h2>Vendor Menu</h2>
+  <h2>Vendor Tools</h2>
 
-  <a onclick="Staff.go('profile.html')">Profile</a>
-  <a onclick="Staff.go('products.html')">Products</a>
-  <a onclick="Staff.go('services.html')">Services</a>
-  <a onclick="Staff.go('workshops.html')">Workshops</a>
-  <a onclick="Staff.go('app.html')">Digital App</a>
-  <a onclick="Staff.go('ads.html')">Vendor Ads</a>
-  <a onclick="Staff.go('orders.html')">Orders</a>
-  <a onclick="Staff.go('payouts.html')">Payouts</a>
-  <a onclick="Staff.go('checkout.html')">Quick Checkout</a>
+  <a onclick="Staff.go('add-product.html')">Add Product</a>
+  <a onclick="Staff.go('add-service.html')">Add Service</a>
+  <a onclick="Staff.go('add-workshop.html')">Add Workshop</a>
+  <a onclick="Staff.go('add-app.html')">Add Digital App</a>
+  <a onclick="Staff.go('add-ad.html')">Create Vendor Ad</a>
   <a onclick="Staff.go('phonebook.html')">Phone Book Listing</a>
   <a onclick="Staff.go('settings.html')">Settings</a>
 
@@ -214,130 +224,39 @@
 
   <div>
     <div class="dash-title" id="vendorTitle">Vendor Dashboard</div>
-    <div class="dash-sub">Manage your Network vendor account.</div>
+    <div class="dash-sub" id="vendorWelcome">Loading vendor...</div>
   </div>
 
   <button class="logout-btn-top" onclick="Staff.go('logout.html')">Log Out</button>
 </div>
 
-<!-- CARD GRID (2×2) -->
+<!-- CARD GRID -->
 <div class="card-grid">
 
-  <!-- CARD 1: BUSINESS -->
+  <!-- CARD 1: ACTIVE STOREFRONT ITEMS -->
   <div class="dash-card">
-    <h3>Your Business</h3>
-    <p>Set up who you are and what you offer.</p>
+    <h3>Your Storefront Items</h3>
+    <p>Manage what customers see.</p>
 
-    <div class="tile-grid">
-      <div class="tile" onclick="Staff.go('profile.html')">
-        <div class="tile-title">Profile</div>
-        <div class="tile-sub">Edit name, bio, tags, PayPal.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('products.html')">
-        <div class="tile-title">Products</div>
-        <div class="tile-sub">Add and manage products.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('services.html')">
-        <div class="tile-title">Services</div>
-        <div class="tile-sub">Offer services and pricing.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('workshops.html')">
-        <div class="tile-title">Workshops</div>
-        <div class="tile-sub">Schedule classes and events.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('app.html')">
-        <div class="tile-title">Digital App</div>
-        <div class="tile-sub">Link your app or tool.</div>
-      </div>
+    <div id="storefront-items">
+      <!-- JS will inject products/services/workshops/apps here -->
     </div>
+
+    <button class="btn-preview" onclick="Staff.previewPage()">Preview Storefront</button>
+    <button class="btn-publish" onclick="Staff.updateStorefront({ publish: true })">Publish Changes</button>
   </div>
 
-  <!-- CARD 2: SALES -->
+  <!-- CARD 2: SALES & MONEY -->
   <div class="dash-card">
-    <h3>Sales & Money</h3>
-    <p>See orders, payouts, and quick checkout.</p>
+    <h3>Sales & Earnings</h3>
+    <p>Your orders, payouts, and quick actions.</p>
 
-    <div class="tile-grid">
-      <div class="tile" onclick="Staff.go('orders.html')">
-        <div class="tile-title">Orders</div>
-        <div class="tile-sub">View all customer orders.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('payouts.html')">
-        <div class="tile-title">Payouts</div>
-        <div class="tile-sub">Track your payouts.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('checkout.html')">
-        <div class="tile-title">Quick Checkout</div>
-        <div class="tile-sub">Create instant checkout links.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('analytics.html')">
-        <div class="tile-title">Analytics</div>
-        <div class="tile-sub">See performance and trends.</div>
-      </div>
+    <div id="sales-items">
+      <!-- JS will inject orders/payouts summary here -->
     </div>
-  </div>
 
-  <!-- CARD 3: Promotion -->
-  <div class="dash-card">
-    <h3>Promotion</h3>
-    <p>Get seen across Beltline Cloud.</p>
-
-    <div class="tile-grid">
-      <div class="tile" onclick="Staff.go('ads.html')">
-        <div class="tile-title">Vendor Ads</div>
-        <div class="tile-sub">Create and manage ads.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('phonebook.html')">
-        <div class="tile-title">Phone Book</div>
-        <div class="tile-sub">$1/mo listing and rewards.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('cumulus-placement.html')">
-        <div class="tile-title">Cumulus Placement</div>
-        <div class="tile-sub">Feature on Cumulus Cloud.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('map-placement.html')">
-        <div class="tile-title">Map Placement</div>
-        <div class="tile-sub">Show up on Beltline map.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CARD 4: Cloud & Settings -->
-  <div class="dash-card">
-    <h3>Cloud & Settings</h3>
-    <p>Control how you appear and connect.</p>
-
-    <div class="tile-grid">
-      <div class="tile" onclick="Staff.previewPage()">
-        <div class="tile-title">Public Vendor Page</div>
-        <div class="tile-sub">See what customers see.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('settings.html')">
-        <div class="tile-title">Settings</div>
-        <div class="tile-sub">Update account settings.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('support.html')">
-        <div class="tile-title">Support</div>
-        <div class="tile-sub">Get help and docs.</div>
-      </div>
-
-      <div class="tile" onclick="Staff.go('integrations.html')">
-        <div class="tile-title">Integrations</div>
-        <div class="tile-sub">Connect other tools.</div>
-      </div>
-    </div>
+    <button class="btn-preview" onclick="Staff.go('orders.html')">View All Orders</button>
+    <button class="btn-preview" onclick="Staff.go('payouts.html')">View Payouts</button>
   </div>
 
 </div>
@@ -346,9 +265,53 @@
 <script>
   Staff.initDashboard();
 
-  // After initDashboard runs, it sets the title text with the real user name
-  // We just rely on that:
-  // .network-title is used in staff.js, so we can mirror it if needed
+  // Render storefront items dynamically
+  const store = Staff.getStorefront();
+  const box = document.getElementById("storefront-items");
+
+  function renderItem(type, item) {
+    return `
+      <div class="item-row">
+        <strong>${item.name || item.title}</strong><br>
+        ${item.description || ""}<br>
+        ${item.price ? "$" + item.price : ""}
+        <div class="item-actions">
+          <button class="btn-small" onclick="Staff.go('${type}.html?id=${item.id}')">Open</button>
+          <button class="btn-small" onclick="Staff.updateStorefront({ toggle: '${type}', id: '${item.id}' })">
+            ${item.active ? "Hide" : "Show"}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  let html = "";
+
+  if (store.products?.length) {
+    html += `<h4>Products</h4>`;
+    store.products.forEach(p => html += renderItem("product", p));
+  }
+
+  if (store.services?.length) {
+    html += `<h4>Services</h4>`;
+    store.services.forEach(s => html += renderItem("service", s));
+  }
+
+  if (store.workshops?.length) {
+    html += `<h4>Workshops</h4>`;
+    store.workshops.forEach(w => html += renderItem("workshop", w));
+  }
+
+  if (store.app) {
+    html += `<h4>Digital App</h4>`;
+    html += renderItem("app", store.app);
+  }
+
+  if (!html.trim()) {
+    html = `<p style="opacity:0.7;">No storefront items yet. Add items from the menu.</p>`;
+  }
+
+  box.innerHTML = html;
 </script>
 
 </body>
