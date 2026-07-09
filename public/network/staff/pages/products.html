@@ -1,64 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Products — Staff</title>
-    <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
-    <style>
-        body { margin:0; padding:0; background:url('/network/public/img/network-back.jpg') no-repeat center center fixed;
-               background-size:cover; font-family:Arial,sans-serif; color:white; overflow-x:hidden; }
-        .lightning { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;
-                     background:radial-gradient(circle, rgba(255,255,0,0.25) 0%, transparent 70%);
-                     opacity:0; animation:lightningFlash 6s infinite; }
-        @keyframes lightningFlash { 0%,93%,100%{opacity:0;} 94%{opacity:0.9;} 95%{opacity:0.2;} 96%{opacity:0.8;} }
-        header { text-align:center; padding:40px 20px; background:rgba(0,0,0,0.55);
-                 border-bottom:2px solid gold; box-shadow:0 0 25px rgba(0,150,255,0.7); }
-        header img { width:140px; filter:drop-shadow(0 0 12px rgba(0,150,255,0.9)); }
-        header h1 { margin:0; font-size:36px; color:gold; text-shadow:0 0 12px rgba(0,150,255,1); }
-        .container { width:92%; max-width:900px; margin:30px auto; background:rgba(0,0,0,0.55);
-                     border:2px solid gold; border-radius:14px; padding:20px; }
-        label { display:block; margin-top:12px; color:gold; }
-        input, textarea { width:100%; padding:10px; margin-top:6px; border-radius:8px;
-                          border:1px solid gold; background:rgba(0,0,0,0.7); color:white; }
-        button { margin-top:12px; padding:10px 16px; border-radius:10px; border:2px solid gold;
-                 background:rgba(0,0,0,0.7); color:gold; cursor:pointer; transition:0.25s; }
-        button:hover { background:gold; color:black; box-shadow:0 0 20px rgba(0,150,255,1); }
-        .product { background:rgba(0,0,0,0.6); border:1px solid gold; border-radius:12px; padding:15px;
-                   margin-top:15px; }
-        .product h3 { margin:0; color:gold; }
-        .product p { margin:4px 0; color:#d4e8ff; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Products | Beltline Cloud Network</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --yellow: #f7d354;
+    --white: #ffffff;
+    --bg: #050810;
+    --card: #0c1424;
+    --accent-soft: rgba(247, 211, 84, 0.18);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #000;
+    color: var(--white);
+  }
+
+  .page {
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: var(--yellow);
+    margin-bottom: 25px;
+  }
+
+  /* PRODUCT FORM */
+  .product-form {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid var(--yellow);
+    margin-bottom: 30px;
+  }
+
+  .product-form label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+  }
+
+  .product-form input,
+  .product-form textarea,
+  .product-form select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 2px solid var(--yellow);
+    background: #111;
+    color: var(--white);
+  }
+
+  .product-form button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background: var(--yellow);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* PRODUCT LIST */
+  .product-list {
+    margin-top: 20px;
+  }
+
+  .product-card {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid var(--yellow);
+    margin-bottom: 20px;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .product-card h3 {
+    margin: 0;
+    color: var(--yellow);
+  }
+
+  .product-card p {
+    margin: 6px 0;
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .product-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .edit-btn { background: #3b82f6; }
+  .delete-btn { background: #ef4444; }
+  .inventory-btn { background: #22c55e; }
+  .visibility-btn { background: #f7d354; color: #000; }
+
+</style>
 </head>
+
 <body>
 
-<div class="lightning"></div>
+<div class="page">
 
-<header>
-    <img src="/network/public/img/network-logo.jpg" alt="Logo">
-    <h1>Products</h1>
-</header>
+  <h1>Vendor Products</h1>
 
-<section class="container">
-    <h2 style="color:gold;">Add Product</h2>
+  <!-- CREATE PRODUCT -->
+  <div class="product-form">
+    <h2 style="color:var(--yellow);">Add New Product</h2>
 
-    <label>Name</label>
-    <input id="product-name">
-
-    <label>Price</label>
-    <input id="product-price">
+    <label>Product Name</label>
+    <input id="pName" type="text">
 
     <label>Description</label>
-    <textarea id="product-description"></textarea>
+    <textarea id="pDesc" rows="4"></textarea>
 
-    <button onclick="Staff.addProduct()">Add Product</button>
+    <label>Category</label>
+    <select id="pCategory">
+      <option value="">Select Category</option>
+      <option value="food">Food</option>
+      <option value="merch">Merchandise</option>
+      <option value="services">Services</option>
+      <option value="equipment">Equipment</option>
+    </select>
 
-    <h2 style="color:gold; margin-top:30px;">Your Products</h2>
-    <div id="product-list"></div>
-</section>
+    <label>Price ($)</label>
+    <input id="pPrice" type="number" step="0.01">
 
-<script src="../js/staff.js"></script>
-<script>
-    Staff.loadProducts();
+    <label>Inventory</label>
+    <input id="pInventory" type="number">
+
+    <label>Product Images</label>
+    <input id="pImages" type="file" multiple>
+
+    <button id="createProductBtn">Create Product</button>
+  </div>
+
+  <!-- PRODUCT LIST -->
+  <h2 style="color:var(--yellow); margin-bottom:10px;">Your Products</h2>
+  <div id="productList" class="product-list">
+    <!-- staff.js will populate this -->
+  </div>
+
+</div>
+
+<script type="module">
+  import { staffGetProducts, staffCreateProduct, staffDeleteProduct, staffUpdateProduct, staffUpdateInventory, staffToggleVisibility } from "/network/staff/js/staff.js";
+
+  // LOAD PRODUCTS
+  async function loadProducts() {
+    const products = await staffGetProducts();
+    const list = document.getElementById("productList");
+    list.innerHTML = "";
+
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      card.innerHTML = `
+        <img src="${p.image || '/assets/img/placeholder.jpg'}">
+        <h3>${p.name}</h3>
+        <p>${p.description}</p>
+        <p><strong>Category:</strong> ${p.category}</p>
+        <p><strong>Price:</strong> $${p.price}</p>
+        <p><strong>Inventory:</strong> ${p.inventory}</p>
+        <p><strong>Visible:</strong> ${p.visible ? "Yes" : "No"}</p>
+
+        <div class="product-actions">
+          <button class="edit-btn" onclick="editProduct('${p.id}')">Edit</button>
+          <button class="delete-btn" onclick="deleteProduct('${p.id}')">Delete</button>
+          <button class="inventory-btn" onclick="updateInventory('${p.id}')">Inventory</button>
+          <button class="visibility-btn" onclick="toggleVisibility('${p.id}')">Visibility</button>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+  }
+
+  // CREATE PRODUCT
+  document.getElementById("createProductBtn").onclick = async () => {
+    const name = document.getElementById("pName").value;
+    const desc = document.getElementById("pDesc").value;
+    const category = document.getElementById("pCategory").value;
+    const price = document.getElementById("pPrice").value;
+    const inventory = document.getElementById("pInventory").value;
+    const images = document.getElementById("pImages").files;
+
+    await staffCreateProduct({ name, desc, category, price, inventory, images });
+    loadProducts();
+  };
+
+  // DELETE PRODUCT
+  window.deleteProduct = async (id) => {
+    await staffDeleteProduct(id);
+    loadProducts();
+  };
+
+  // EDIT PRODUCT
+  window.editProduct = async (id) => {
+    const newName = prompt("New product name:");
+    const newPrice = prompt("New price:");
+    const newDesc = prompt("New description:");
+
+    await staffUpdateProduct(id, { name: newName, price: newPrice, desc: newDesc });
+    loadProducts();
+  };
+
+  // UPDATE INVENTORY
+  window.updateInventory = async (id) => {
+    const newInv = prompt("New inventory count:");
+    await staffUpdateInventory(id, newInv);
+    loadProducts();
+  };
+
+  // TOGGLE VISIBILITY
+  window.toggleVisibility = async (id) => {
+    await staffToggleVisibility(id);
+    loadProducts();
+  };
+
+  // INITIAL LOAD
+  loadProducts();
 </script>
+
 </body>
 </html>
