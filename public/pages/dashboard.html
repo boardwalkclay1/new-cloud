@@ -12,7 +12,6 @@
   :root {
     --yellow: #f7d354;
     --white: #ffffff;
-    --blue-dark: #0a2a43;
   }
 
   body {
@@ -22,6 +21,7 @@
     color: var(--white);
   }
 
+  /* MAIN CLOUD */
   .main-cloud {
     height: 200px;
     display: block;
@@ -31,6 +31,7 @@
     cursor: pointer;
   }
 
+  /* MENU */
   .cloud-menu {
     position: fixed;
     top: 0;
@@ -82,6 +83,7 @@
     cursor: pointer;
   }
 
+  /* STATS */
   .center-stats {
     text-align: center;
     margin-top: 5px;
@@ -95,6 +97,7 @@
     text-shadow: 0 0 8px var(--yellow);
   }
 
+  /* CLOUD ROW */
   .cloud-row {
     display: flex;
     justify-content: center;
@@ -111,6 +114,7 @@
     animation: pulse 2.2s infinite ease-in-out;
   }
 
+  /* PROFILE + SETTINGS */
   .quick-links {
     display: flex;
     justify-content: center;
@@ -127,10 +131,11 @@
     font-size: 1rem;
   }
 
+  /* SQUARE CARDS */
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 25px;
     padding: 0 15px;
   }
   .tile {
@@ -144,7 +149,7 @@
   }
   .tile img {
     width: 100%;
-    height: 240px;
+    height: 260px; /* MORE SQUARE */
     object-fit: cover;
     border-radius: 10px;
   }
@@ -154,6 +159,7 @@
     color: var(--yellow);
   }
 
+  /* BOTTOM BAR */
   .bottom-bar {
     display: flex;
     justify-content: space-around;
@@ -178,6 +184,7 @@
     font-size: 1rem;
   }
 
+  /* RESPONSE MENU */
   .response-menu {
     position: fixed;
     bottom: 0;
@@ -220,10 +227,10 @@
 
 <body>
 
-<!-- CLOUD MENU -->
+<!-- MENU -->
 <div id="cloudMenu" class="cloud-menu">
   <div class="menu-header">
-    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo" alt="Cloud Logo">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo">
     <span class="menu-close" id="menuClose">&times;</span>
   </div>
 
@@ -275,21 +282,12 @@
       </ul>
     </div>
 
-    <div class="menu-category">
-      <h3>Sign Up</h3>
-      <ul>
-        <li><a href="/fast-roll/pages/rider/signup.html">Become a Rider</a></li>
-        <li><a href="/network/public/pages/signup.html">Become a Vendor</a></li>
-        <li><a href="/pages/safety/response-unit/pages/signup.html">Join Response Unit</a></li>
-      </ul>
-    </div>
-
     <div class="logout-btn-menu" onclick="logout()">Logout</div>
   </div>
 </div>
 
 <!-- MAIN CLOUD -->
-<img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" id="menuTrigger" alt="Main Cloud">
+<img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" id="menuTrigger">
 
 <!-- STATS -->
 <div class="center-stats">
@@ -298,10 +296,10 @@
   <div class="stat" id="timeDisplay"></div>
 </div>
 
-<!-- CLOUD ROW -->
+<!-- CLOUD ROW (NEW ICONS) -->
 <div class="cloud-row">
-  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud.png" alt="Safety Cloud">
-  <img id="cloudTalk" src="/assets/img/cloud/cloud-talk.png" alt="Cloud Talk">
+  <img id="safetyCloud" src="/public/assets/img/cloud/safety-cloud-logo.jpg">
+  <img id="cloudTalk" src="/public/assets/img/cloud/cloud-talkk-logo.jpg">
 </div>
 
 <!-- PROFILE + SETTINGS -->
@@ -314,25 +312,25 @@
 
 <section class="grid">
   <a class="tile" href="/pages/chat/pages/index.html">
-    <img src="/assets/img/cloud/cloud-chat.jpg" alt="Cloud Chat">
+    <img src="/assets/img/cloud/cloud-chat.jpg">
     <h3>Cloud Chat</h3>
     <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
   </a>
 
   <a class="tile" href="/pages/map.html">
-    <img src="/assets/img/cloud/cloud-map.jpg" alt="Beltline Map">
+    <img src="/assets/img/cloud/cloud-map.jpg">
     <h3>Beltline Map</h3>
     <p>Trail layout, zones, and navigation.</p>
   </a>
 
   <a class="tile" href="/pages/events/pages/events.html">
-    <img src="/assets/img/cloud/events-cloud.jpg" alt="Events">
+    <img src="/assets/img/cloud/events-cloud.jpg">
     <h3>Events</h3>
     <p>Workshops, rides, meetups, concerts, and more.</p>
   </a>
 
   <a class="tile" href="/pages/community.html">
-    <img src="/assets/img/cloud/community-cloud.jpg" alt="Cumulus Cloud">
+    <img src="/assets/img/cloud/community-cloud.jpg">
     <h3>Cumulus Cloud</h3>
     <p>Connect and interact with your cloud community.</p>
   </a>
@@ -341,12 +339,12 @@
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <div class="bottom-section" onclick="window.location.href='/network/public/pages/index.html'">
-    <img src="/network/public/img/network-logo.jpg" class="bottom-logo" alt="Network">
+    <img src="/network/public/img/network-logo.jpg" class="bottom-logo">
     <div class="bottom-text">Explore Network</div>
   </div>
 
   <div class="bottom-section fast-roll" onclick="window.location.href='/fast-roll/index.html'">
-    <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" alt="Fast Roll">
+    <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo">
     <div class="bottom-text">Place Delivery</div>
   </div>
 </div>
@@ -381,7 +379,7 @@
 </div>
 
 <script>
-  // MENU
+  /* MENU */
   document.getElementById("menuTrigger").onclick = () => {
     document.getElementById("cloudMenu").classList.add("open");
   };
@@ -389,29 +387,28 @@
     document.getElementById("cloudMenu").classList.remove("open");
   };
 
-  // SAFETY CLOUD TAP
-  document.getElementById("safetyCloud").addEventListener("click", () => {
+  /* SAFETY CLOUD TAP */
+  document.getElementById("safetyCloud").onclick = () => {
     window.location.href = "/pages/safety/index.html";
-  });
+  };
 
-  // SAFETY CLOUD HOLD
+  /* SAFETY CLOUD HOLD */
   let pressTimer;
-  const safetyCloud = document.getElementById("safetyCloud");
-  safetyCloud.addEventListener("mousedown", () => {
+  document.getElementById("safetyCloud").addEventListener("mousedown", () => {
     pressTimer = setTimeout(() => {
       document.getElementById("responseMenu").style.display = "block";
     }, 600);
   });
-  safetyCloud.addEventListener("mouseup", () => {
+  document.getElementById("safetyCloud").addEventListener("mouseup", () => {
     clearTimeout(pressTimer);
   });
 
-  // CLOUD TALK
-  document.getElementById("cloudTalk").addEventListener("click", () => {
+  /* CLOUD TALK */
+  document.getElementById("cloudTalk").onclick = () => {
     window.location.href = "/pages/chat/pages/index.html";
-  });
+  };
 
-  // RESPONSE MENU
+  /* RESPONSE MENU */
   document.getElementById("closeResponseMenu").onclick = () => {
     document.getElementById("responseMenu").style.display = "none";
   };
@@ -420,16 +417,16 @@
     const mode = document.getElementById("autoMode").value;
     if (!type) return alert("Select an alert type.");
     if (!mode) return alert("Select a monitoring mode.");
-    alert("Alert sent: " + type.toUpperCase() + "\nMode: " + mode.toUpperCase());
+    alert(`Alert sent: ${type.toUpperCase()} • Mode: ${mode.toUpperCase()}`);
   };
 
-  // LOGOUT
+  /* LOGOUT */
   function logout() {
     localStorage.removeItem("beltline_user");
     window.location.href = "/pages/login.html";
   }
 
-  // TIME
+  /* TIME */
   function updateTime() {
     const now = new Date();
     document.getElementById("timeDisplay").textContent =
@@ -444,7 +441,7 @@
   setInterval(updateTime, 1000);
   updateTime();
 
-  // REAL WEATHER + REAL BELTLINE LOCATION
+  /* REAL WEATHER + REAL BELTLINE LOCATION */
   async function detectBeltlineLocation() {
     const zones = [
       { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
@@ -457,7 +454,7 @@
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      // WEATHER
+      /* WEATHER */
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
       try {
         const res = await fetch(url);
@@ -481,23 +478,5 @@
         document.getElementById("weather").textContent = "Weather unavailable";
       }
 
-      // BELTLINE ZONE
+      /* BELTLINE ZONE */
       let zone = "Outside Beltline";
-      for (const z of zones) {
-        if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
-          zone = z.name;
-          break;
-        }
-      }
-      document.getElementById("beltlineLocation").textContent = `📍 ${zone}`;
-    }, () => {
-      document.getElementById("beltlineLocation").textContent = "Location unavailable";
-      document.getElementById("weather").textContent = "Weather unavailable";
-    });
-  }
-
-  detectBeltlineLocation();
-</script>
-
-</body>
-</html>
