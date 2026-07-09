@@ -15,12 +15,12 @@
     --blue-dark: #0a2a43;
   }
 
- body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
-  color: var(--white);
-}
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
+    color: var(--white);
+  }
 
   /* MAIN CLOUD */
   .main-cloud {
@@ -128,7 +128,7 @@
     padding: 0 10px;
   }
 
-  /* ⭐ Bigger Safety + CloudTalk icons */
+  /* Bigger Safety + CloudTalk icons */
   .cloud-row img {
     height: 190px;
     width: auto;
@@ -155,7 +155,7 @@
     font-size: 1rem;
   }
 
-  /* GRID TILES — SQUARE */
+  /* GRID TILES — MORE SQUARE */
   .grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -175,7 +175,7 @@
 
   .tile img {
     width: 100%;
-    height: 200px;
+    height: 240px; /* MORE SQUARE */
     object-fit: cover;
     border-radius: 10px;
   }
@@ -205,7 +205,7 @@
     object-fit: contain;
   }
 
-  /* ⭐ Fast Roll logo a bit bigger */
+  /* Fast Roll bigger */
   .bottom-section.fast-roll .bottom-logo {
     height: 130px;
     width: 130px;
@@ -342,20 +342,20 @@
   </div>
 </div>
 
-<!-- MAIN CLOUD (MENU TRIGGER) -->
+<!-- MAIN CLOUD -->
 <img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" id="menuTrigger" alt="Main Cloud">
 
 <!-- WEATHER + LOCATION + TIME -->
 <div class="center-stats">
   <div class="stat" id="weather">Loading weather…</div>
-  <div class="stat">Atlanta Beltline</div>
+  <div class="stat" id="beltlineLocation">Locating you on the Beltline…</div>
   <div class="stat" id="timeDisplay"></div>
 </div>
 
 <!-- CLOUD ROW -->
 <div class="cloud-row">
-  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud-logo.jpg" alt="Safety Cloud">
-  <img id="cloudTalk" src="/assets/img/cloud/cloud-talkk-logo.jpg" alt="Cloud Talk">
+  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud.png" alt="Safety Cloud">
+  <img id="cloudTalk" src="/assets/img/cloud/cloud-talk.png" alt="Cloud Talk">
 </div>
 
 <!-- PROFILE + SETTINGS -->
@@ -529,17 +529,4 @@
       if ([45,48].includes(code)) emoji = "🌫️";
       if ([51,53,55].includes(code)) emoji = "🌦️";
       if ([61,63,65].includes(code)) emoji = "🌧️";
-      if ([71,73,75].includes(code)) emoji = "❄️";
-      if ([95,96,99].includes(code)) emoji = "⛈️";
-
-      document.getElementById("weather").textContent =
-        `${emoji} ${temp}°F • Atlanta`;
-    } catch {
-      document.getElementById("weather").textContent = "Weather unavailable";
-    }
-  }
-  loadWeather();
-</script>
-
-</body>
-</html>
+      if ([71,73,75].includes(code)) emoji = "❄️
