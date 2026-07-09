@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Storefront — Beltline Cloud Network</title>
+<link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --yellow: #f7d354;
+    --white: #ffffff;
+    --card: rgba(0,0,0,0.55);
+    --bg: #020617;
+  }
+
+  body {
+    margin: 0;
+    background: url('/network/public/img/network-back.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Inter', sans-serif;
+    color: var(--white);
+  }
+
+  header {
+    text-align: center;
+    padding: 30px 20px;
+    background: rgba(0,0,0,0.65);
+    border-bottom: 2px solid var(--yellow);
+    box-shadow: 0 0 25px rgba(0,150,255,0.7);
+  }
+
+  header img {
+    width: 140px;
+    filter: drop-shadow(0 0 12px rgba(0,150,255,0.9));
+  }
+
+  header h1 {
+    margin: 10px 0 0;
+    font-size: 34px;
+    color: var(--yellow);
+    text-shadow: 0 0 12px rgba(0,150,255,1);
+  }
+
+  .container {
+    width: 92%;
+    max-width: 900px;
+    margin: 25px auto;
+  }
+
+  .add-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--yellow);
+    color: #000;
+    border-radius: 10px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+
+  .product-card {
+    background: var(--card);
+    border: 2px solid var(--yellow);
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .product-card h3 {
+    margin: 0;
+    color: var(--yellow);
+    font-size: 1.4rem;
+  }
+
+  .product-card p {
+    margin: 6px 0;
+    color: #d4e8ff;
+  }
+
+  .edit-row {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .edit-row input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--yellow);
+    background: #111;
+    color: var(--white);
+  }
+
+  .edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .edit-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--yellow);
+    background: rgba(0,0,0,0.7);
+    color: var(--yellow);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .edit-actions button:hover {
+    background: var(--yellow);
+    color: #000;
+  }
+
+  .visibility-toggle {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--yellow);
+    background: rgba(0,0,0,0.7);
+    color: var(--yellow);
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+  }
+
+  .visibility-toggle:hover {
+    background: var(--yellow);
+    color: #000;
+  }
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="/network/public/img/network-logo.jpg" alt="Logo">
+  <h1>Storefront</h1>
+</header>
+
+<div class="container">
+
+  <!-- Vendors see this button -->
+  <a href="/network/staff/pages/products.html" class="add-btn" id="addProductBtn" style="display:none;">
+    + Add New Product
+  </a>
+
+  <div id="productList"></div>
+
+</div>
+
+<script type="module">
+  import {
+    staffGetProducts,
+    staffUpdateProduct,
+    staffToggleVisibility
+  } from "/network/staff/js/staff.js";
+
+  const productList = document.getElementById("productList");
+
+  // Detect vendor mode
+  const isVendor = localStorage.getItem("network_vendor") === "true";
+  if (isVendor) {
+    document.getElementById("addProductBtn").style.display = "block";
+  }
+
+  async function loadProducts() {
+    const products = await staffGetProducts();
+    productList.innerHTML = "";
+
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      card.innerHTML = `
+        <img src="${p.image || '/assets/img/placeholder.jpg'}">
+        <h3>${p.name}</h3>
+        <p>${p.description}</p>
+        <p><strong>Price:</strong> $${p.price}</p>
+        <p><strong>Category:</strong> ${p.category}</p>
+        <p><strong>Inventory:</strong> ${p.inventory}</p>
+        <p><strong>Visible:</strong> ${p.visible ? "Yes" : "No"}</p>
+      `;
+
+      // Vendor inline editing
+      if (isVendor) {
+        const editRow = document.createElement("div");
+        editRow.className = "edit-row";
+
+        editRow.innerHTML = `
+          <input type="text" id="name-${p.id}" value="${p.name}">
+          <input type="number" id="price-${p.id}" value="${p.price}">
+        `;
+
+        const actions = document.createElement("div");
+        actions.className = "edit-actions";
+
+        actions.innerHTML = `
+          <button onclick="saveProduct('${p.id}')">Save</button>
+          <button onclick="window.location.href='/network/staff/pages/products.html'">Advanced Edit</button>
+        `;
+
+        const visibilityBtn = document.createElement("button");
+        visibilityBtn.className = "visibility-toggle";
+        visibilityBtn.innerText = p.visible ? "Hide Product" : "Show Product";
+        visibilityBtn.onclick = () => toggleVisibility(p.id);
+
+        card.appendChild(editRow);
+        card.appendChild(actions);
+        card.appendChild(visibilityBtn);
+      }
+
+      productList.appendChild(card);
+    });
+  }
+
+  // Save inline edits
+  window.saveProduct = async (id) => {
+    const name = document.getElementById(`name-${id}`).value;
+    const price = document.getElementById(`price-${id}`).value;
+
+    await staffUpdateProduct(id, { name, price });
+    loadProducts();
+  };
+
+  // Toggle visibility
+  window.toggleVisibility = async (id) => {
+    await staffToggleVisibility(id);
+    loadProducts();
+  };
+
+  loadProducts();
+</script>
+
+</body>
+</html>
