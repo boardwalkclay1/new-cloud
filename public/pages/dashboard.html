@@ -23,6 +23,76 @@
     margin: 25px auto 10px auto;
     animation: floaty 6s infinite ease-in-out;
     filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
+    cursor: pointer;
+  }
+
+  /* CLOUD MENU */
+  .cloud-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10,10,10,0.95);
+    display: none;
+    overflow-y: auto;
+    padding: 20px;
+    z-index: 9999;
+  }
+
+  .cloud-menu.open {
+    display: block;
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-logo {
+    height: 70px;
+    width: 70px;
+    border-radius: 10px;
+  }
+
+  .menu-close {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  .menu-category {
+    margin-top: 20px;
+    border-bottom: 1px solid #f7d354;
+    padding-bottom: 10px;
+  }
+
+  .menu-category h3 {
+    color: #f7d354;
+  }
+
+  .menu-category ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .menu-category ul li {
+    margin: 8px 0;
+  }
+
+  .menu-category ul li a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .logout-btn-menu {
+    margin-top: 25px;
+    padding: 12px;
+    background: #f7d354;
+    color: black;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
   }
 
   /* CENTER STATS */
@@ -96,7 +166,7 @@
 
   .tile img {
     width: 100%;
-    height: 200px; /* SQUARE */
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
   }
@@ -141,6 +211,7 @@
     padding: 20px;
     border-top: 2px solid #f7d354;
     display: none;
+    z-index: 99999;
   }
 
   .response-box {
@@ -176,8 +247,78 @@
 
 <body>
 
-<!-- MAIN CLOUD -->
-<img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" alt="Main Cloud">
+<!-- CLOUD MENU -->
+<div id="cloudMenu" class="cloud-menu">
+  <div class="menu-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo" alt="Cloud Logo">
+    <span class="menu-close" id="menuClose">&times;</span>
+  </div>
+
+  <div class="menu-content">
+
+    <div class="menu-category">
+      <h3>My Profile</h3>
+      <ul>
+        <li><a href="/pages/profile/pages/index.html">View Profile</a></li>
+        <li><a href="/pages/notifications.html">Notifications</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>Safety Cloud</h3>
+      <ul>
+        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
+        <li><a href="/pages/safety/lost-and-found.html">Lost & Found</a></li>
+        <li><a href="/pages/safety/report-stolen.html">Stolen Items</a></li>
+        <li><a href="/pages/safety/markers/index.html">Marker System</a></li>
+        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
+        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>News Cloud</h3>
+      <ul>
+        <li><a href="/pages/news/beltline-news.html">Beltline News</a></li>
+        <li><a href="/pages/news/weather.html">Weather</a></li>
+        <li><a href="/pages/news/updates.html">Updates</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>Trail Tools</h3>
+      <ul>
+        <li><a href="/pages/map.html">Trail Map</a></li>
+        <li><a href="/pages/map/zones.html">Zones</a></li>
+        <li><a href="/pages/map/etiquette.html">Etiquette</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>Community Cloud</h3>
+      <ul>
+        <li><a href="/pages/chat/pages/index.html">Cloud Chat</a></li>
+        <li><a href="/pages/events/pages/events.html">Events</a></li>
+        <li><a href="/pages/community.html">Cumulus Cloud</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-category">
+      <h3>Sign Up</h3>
+      <ul>
+        <li><a href="/fast-roll/pages/rider/signup.html">Become a Rider</a></li>
+        <li><a href="/network/public/pages/signup.html">Become a Vendor</a></li>
+        <li><a href="/pages/safety/response-unit/pages/signup.html">Join Response Unit</a></li>
+      </ul>
+    </div>
+
+    <div class="logout-btn-menu" onclick="logout()">Logout</div>
+
+  </div>
+</div>
+
+<!-- MAIN CLOUD (MENU TRIGGER RESTORED) -->
+<img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" id="menuTrigger" alt="Main Cloud">
 
 <!-- WEATHER + LOCATION + TIME -->
 <div class="center-stats">
@@ -188,8 +329,8 @@
 
 <!-- CLOUD ROW -->
 <div class="cloud-row">
-  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud-logo.jpg" alt="Safety Cloud">
-  <img id="cloudTalk" src="/assets/img/cloud/cloud-talkk-logo.jpg" alt="Cloud Talk">
+  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud.png" alt="Safety Cloud">
+  <img id="cloudTalk" src="/assets/img/cloud/cloud-talk.png" alt="Cloud Talk">
 </div>
 
 <!-- PROFILE + SETTINGS -->
@@ -275,6 +416,15 @@
 </div>
 
 <script>
+  /* MAIN CLOUD MENU TRIGGER RESTORED */
+  document.getElementById("menuTrigger").onclick = () => {
+    document.getElementById("cloudMenu").classList.add("open");
+  };
+
+  document.getElementById("menuClose").onclick = () => {
+    document.getElementById("cloudMenu").classList.remove("open");
+  };
+
   /* SAFETY CLOUD TAP */
   document.getElementById("safetyCloud").addEventListener("click", () => {
     window.location.href = "/pages/safety/index.html";
