@@ -20,9 +20,10 @@ body {
   margin: 40px auto 10px auto;
   animation: floaty 6s infinite ease-in-out;
   filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
+  cursor: pointer;
 }
 
-/* CLOUD ROW (response, safety, message) */
+/* CLOUD ROW (Safety + CloudTalk) */
 .cloud-row {
   display: flex;
   justify-content: center;
@@ -31,10 +32,13 @@ body {
   margin-bottom: 25px;
 }
 
+/* ⭐ CLOUD ICONS — TWICE THE SIZE */
 .cloud-row img {
-  height: 95px;
+  height: 190px;   /* doubled from 95px */
   width: auto;
   animation: pulse 2.2s infinite ease-in-out;
+  object-fit: contain;
+  cursor: pointer;
 }
 
 /* WEATHER + LOCATION + TIME — CENTERED */
@@ -103,7 +107,7 @@ body {
   100% { transform: scale(1); }
 }
 
-/* MENU (kept from your snippet) */
+/* MENU */
 .cloud-menu {
   position: fixed;
   top: 0;
@@ -125,12 +129,14 @@ body {
 
 /* MOBILE */
 @media (max-width: 768px) {
+
   .main-cloud {
     width: 200px;
   }
 
+  /* ⭐ MOBILE-SAFE CLOUD ICONS */
   .cloud-row img {
-    height: 75px;
+    height: 160px; /* still huge but fits mobile */
   }
 
   .settings-row img {
