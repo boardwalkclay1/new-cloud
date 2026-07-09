@@ -9,11 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+  :root {
+    --yellow: #f7d354;
+    --white: #ffffff;
+    --blue-dark: #0a2a43;
+  }
+
   body {
     margin: 0;
-    background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
     font-family: 'Inter', sans-serif;
-    color: #fff;
+    background: #000;
+    color: var(--white);
   }
 
   /* MAIN CLOUD */
@@ -31,17 +37,19 @@
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(10,10,10,0.95);
-    display: none;
-    overflow-y: auto;
+    width: 310px;
+    height: 100vh;
+    background: rgba(10, 42, 67, 0.96);
+    border-right: 3px solid var(--yellow);
     padding: 20px;
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    overflow-y: auto;
     z-index: 9999;
   }
 
   .cloud-menu.open {
-    display: block;
+    transform: translateX(0);
   }
 
   .menu-header {
@@ -63,12 +71,12 @@
 
   .menu-category {
     margin-top: 20px;
-    border-bottom: 1px solid #f7d354;
+    border-bottom: 1px solid var(--yellow);
     padding-bottom: 10px;
   }
 
   .menu-category h3 {
-    color: #f7d354;
+    color: var(--yellow);
   }
 
   .menu-category ul {
@@ -81,15 +89,15 @@
   }
 
   .menu-category ul li a {
-    color: white;
+    color: var(--white);
     text-decoration: none;
   }
 
   .logout-btn-menu {
     margin-top: 25px;
     padding: 12px;
-    background: #f7d354;
-    color: black;
+    background: var(--yellow);
+    color: #000;
     text-align: center;
     border-radius: 10px;
     cursor: pointer;
@@ -106,8 +114,8 @@
   .center-stats .stat {
     font-size: 1.1rem;
     margin: 4px 0;
-    color: #f7d354;
-    text-shadow: 0 0 8px #f7d354;
+    color: var(--yellow);
+    text-shadow: 0 0 8px var(--yellow);
   }
 
   /* CLOUD ROW */
@@ -120,9 +128,10 @@
     padding: 0 10px;
   }
 
+  /* ⭐ Bigger Safety + CloudTalk icons */
   .cloud-row img {
-    height: 110px;
-    width: 110px;
+    height: 190px;
+    width: auto;
     object-fit: contain;
     cursor: pointer;
     animation: pulse 2.2s infinite ease-in-out;
@@ -140,8 +149,8 @@
     background: rgba(0,0,0,0.55);
     padding: 10px 18px;
     border-radius: 10px;
-    border: 2px solid #f7d354;
-    color: white;
+    border: 2px solid var(--yellow);
+    color: var(--white);
     text-decoration: none;
     font-size: 1rem;
   }
@@ -160,8 +169,8 @@
     border-radius: 12px;
     text-align: center;
     text-decoration: none;
-    color: white;
-    border: 2px solid #f7d354;
+    color: var(--white);
+    border: 2px solid var(--yellow);
   }
 
   .tile img {
@@ -174,7 +183,7 @@
   .tile h3 {
     margin-top: 10px;
     font-size: 1.3rem;
-    color: #f7d354;
+    color: var(--yellow);
   }
 
   /* BOTTOM BAR */
@@ -196,6 +205,12 @@
     object-fit: contain;
   }
 
+  /* ⭐ Fast Roll logo a bit bigger */
+  .bottom-section.fast-roll .bottom-logo {
+    height: 130px;
+    width: 130px;
+  }
+
   .bottom-text {
     margin-top: 8px;
     font-size: 1rem;
@@ -209,7 +224,7 @@
     right: 0;
     background: rgba(10,10,10,0.95);
     padding: 20px;
-    border-top: 2px solid #f7d354;
+    border-top: 2px solid var(--yellow);
     display: none;
     z-index: 99999;
   }
@@ -226,9 +241,9 @@
     padding: 12px;
     margin-top: 10px;
     border-radius: 10px;
-    border: 2px solid #f7d354;
+    border: 2px solid var(--yellow);
     background: #222;
-    color: white;
+    color: var(--white);
   }
 
   @keyframes floaty {
@@ -241,6 +256,16 @@
     0% { transform: scale(1); }
     50% { transform: scale(1.12); }
     100% { transform: scale(1); }
+  }
+
+  @media (max-width: 768px) {
+    .main-cloud {
+      height: 180px;
+    }
+
+    .cloud-row img {
+      height: 170px;
+    }
   }
 </style>
 </head>
@@ -317,7 +342,7 @@
   </div>
 </div>
 
-<!-- MAIN CLOUD (MENU TRIGGER RESTORED) -->
+<!-- MAIN CLOUD (MENU TRIGGER) -->
 <img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" id="menuTrigger" alt="Main Cloud">
 
 <!-- WEATHER + LOCATION + TIME -->
@@ -329,8 +354,8 @@
 
 <!-- CLOUD ROW -->
 <div class="cloud-row">
-  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud-logo.jpg" alt="Safety Cloud">
-  <img id="cloudTalk" src="/assets/img/cloud/cloud-talkk-logo.jpg" alt="Cloud Talk">
+  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud.png" alt="Safety Cloud">
+  <img id="cloudTalk" src="/assets/img/cloud/cloud-talk.png" alt="Cloud Talk">
 </div>
 
 <!-- PROFILE + SETTINGS -->
@@ -377,7 +402,7 @@
     <div class="bottom-text">Explore Network</div>
   </div>
 
-  <div class="bottom-section" onclick="window.location.href='/fast-roll/index.html'">
+  <div class="bottom-section fast-roll" onclick="window.location.href='/fast-roll/index.html'">
     <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo" alt="Fast Roll">
     <div class="bottom-text">Place Delivery</div>
   </div>
@@ -416,7 +441,7 @@
 </div>
 
 <script>
-  /* MAIN CLOUD MENU TRIGGER RESTORED */
+  /* MAIN CLOUD MENU */
   document.getElementById("menuTrigger").onclick = () => {
     document.getElementById("cloudMenu").classList.add("open");
   };
@@ -464,6 +489,12 @@
 
     alert("Alert sent: " + type.toUpperCase() + "\nMode: " + mode.toUpperCase());
   };
+
+  /* LOGOUT */
+  function logout() {
+    localStorage.removeItem("beltline_user");
+    window.location.href = "/pages/login.html";
+  }
 
   /* TIME */
   function updateTime() {
