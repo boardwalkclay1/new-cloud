@@ -9,9 +9,17 @@
 
   <style>
     body {
-      background: radial-gradient(circle at top, #101522 0%, #05060a 55%, #020308 100%);
+      background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
       color: #fff;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: -1;
     }
 
     /* NAV */
@@ -295,31 +303,31 @@
     <img src="/network/public/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
     <div>
       <div class="nav-title">The Network</div>
-      <div class="nav-sub">Beltline vendors • Cloud-powered profiles • Fast Roll riders</div>
+      <div class="nav-sub">Beltline vendors • Cloud-powered storefronts • Fast Roll riders</div>
     </div>
   </div>
   <div class="nav-right">
-    <span class="nav-link" onclick="document.getElementById('section-products').scrollIntoView({behavior:'smooth'})">Products</span>
-    <span class="nav-link" onclick="document.getElementById('section-services').scrollIntoView({behavior:'smooth'})">Services</span>
-    <span class="nav-link" onclick="document.getElementById('section-workshops').scrollIntoView({behavior:'smooth'})">Workshops</span>
-    <span class="nav-link" onclick="document.getElementById('section-apps').scrollIntoView({behavior:'smooth'})">Apps</span>
+    <span class="nav-link" onclick="scrollToSection('section-products')">Products</span>
+    <span class="nav-link" onclick="scrollToSection('section-services')">Services</span>
+    <span class="nav-link" onclick="scrollToSection('section-workshops')">Workshops</span>
+    <span class="nav-link" onclick="scrollToSection('section-apps')">Apps</span>
     <button class="nav-pill" onclick="location.href='/network/staff/pages/signup.html'">Become a Vendor</button>
     <button class="nav-pill" onclick="location.href='/pages/dashboard.html'">Cloud Dashboard</button>
   </div>
 </nav>
 
-<!-- HERO / EXPLORE -->
+<!-- HERO -->
 <section class="network-hero">
   <h1 class="hero-title">Explore The Network</h1>
   <p class="hero-sub">
-    A live Beltline marketplace of products, services, workshops, and apps — all curated by Cloud users and powered by Fast Roll riders.
+    A live Beltline marketplace of storefronts, products, services, workshops, and apps — all powered by Cloud users and Fast Roll riders.
   </p>
   <div class="hero-tags">
     <span class="hero-tag">📦 Products</span>
     <span class="hero-tag">🧰 Services</span>
     <span class="hero-tag">🎓 Workshops</span>
     <span class="hero-tag">📱 Apps</span>
-    <span class="hero-tag">🛍️ Vendor Profiles</span>
+    <span class="hero-tag">🛍️ Storefronts</span>
   </div>
 </section>
 
@@ -398,7 +406,7 @@
     </div>
     <div class="explain-body">
       The Network is a public Beltline hub that connects Cloud users, local vendors, Fast Roll riders, and safety response units.
-      Vendors publish products, services, workshops, and apps. Riders deliver. Cloud users manage everything from a single dashboard.
+      Vendors publish storefronts containing products, services, workshops, and apps. Riders deliver. Cloud users manage everything from a single dashboard.
     </div>
   </div>
 
@@ -408,7 +416,7 @@
       <span class="explain-toggle">Details ▾</span>
     </div>
     <div class="explain-body">
-      Vendors sign up through the vendor portal, complete their profile, and publish their offerings. Once live, their products,
+      Vendors sign up through the vendor portal, complete their storefront, and publish it. Once live, their products,
       services, workshops, and apps appear in these feeds and can be explored, booked, or purchased by Cloud users and visitors.
     </div>
   </div>
@@ -420,7 +428,7 @@
     </div>
     <div class="explain-body">
       When a buyer checks out, a secure order is created and routed through the Network. Vendors see orders and payouts in their
-      staff dashboard. Riders can be assigned to deliveries, and payouts are tracked through the network_payouts system.
+      dashboard. Riders can be assigned to deliveries, and payouts are tracked through the network_payouts system.
     </div>
   </div>
 
@@ -440,20 +448,14 @@
 <script src="/network/public/js/network-api.js"></script>
 
 <script>
-  // FEEDS
-  Network.loadProductsFeed();
-  Network.loadServicesFeed();
-  Network.loadWorkshopsFeed();
-  Network.loadAppsFeed();
+  // SCROLL TO SECTION
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+  }
 
-  // OPTIONAL: vendor profile feeds (you can wire these in network-api.js)
-  if (Network.loadVendorStrips) {
-    Network.loadVendorStrips({
-      productsTarget: "vendors-feed-products",
-      servicesTarget: "vendors-feed-services",
-      workshopsTarget: "vendors-feed-workshops",
-      appsTarget: "vendors-feed-apps"
-    });
+  // DROPDOWN EXPLAINERS
+  function toggleExplain(item) {
+    item.classList.toggle("open");
   }
 
   // AUTO SCROLL
@@ -469,20 +471,18 @@
     }, 40);
   }
 
-  autoScrollFeed("products-feed");
-  autoScrollFeed("services-feed");
-  autoScrollFeed("workshops-feed");
-  autoScrollFeed("apps-feed");
-  autoScrollFeed("vendors-feed-products", 0.3);
-  autoScrollFeed("vendors-feed-services", 0.3);
-  autoScrollFeed("vendors-feed-workshops", 0.3);
-  autoScrollFeed("vendors-feed-apps", 0.3);
+  // LOAD FEEDS
+  Network.loadProductsFeed();
+  Network.loadServicesFeed();
+  Network.loadWorkshopsFeed();
+  Network.loadAppsFeed();
 
-  // DROPDOWN EXPLAINERS
-  function toggleExplain(item) {
-    item.classList.toggle("open");
-  }
-</script>
+  // LOAD VENDOR STRIPS
+  Network.loadVendorStrips({
+    productsTarget: "vendors-feed-products",
+    servicesTarget: "vendors-feed-services",
+    workshopsTarget: "vendors-feed-workshops",
+    appsTarget: "vendors-feed-apps"
+  });
 
-</body>
-</html>
+  // AUTO SCROLL ALL FEEDS
