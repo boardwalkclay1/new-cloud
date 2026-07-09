@@ -1,10 +1,13 @@
 // /network/staff/js/staff.js
-// MINIMAL STAFF WRAPPER — CLOUD USER + STOREFRONT + EARNINGS + PAYPAL + NAVIGATION
+// FINAL STAFF WRAPPER — CLOUD USER + LOADERS + CLOUD MESSAGING + HANDOFF
 
 const Staff = {
   cloudKey: "cloud_user",
   storeKey: "vendor_storefront",
 
+  /* ---------------------------------------------------------
+     CLOUD USER
+  --------------------------------------------------------- */
   getCloudUser() {
     const raw = localStorage.getItem(this.cloudKey);
     return raw ? JSON.parse(raw) : null;
@@ -14,6 +17,9 @@ const Staff = {
     localStorage.setItem(this.cloudKey, JSON.stringify(user));
   },
 
+  /* ---------------------------------------------------------
+     STOREFRONT CACHE
+  --------------------------------------------------------- */
   getStorefront() {
     const raw = localStorage.getItem(this.storeKey);
     return raw ? JSON.parse(raw) : null;
@@ -23,6 +29,10 @@ const Staff = {
     localStorage.setItem(this.storeKey, JSON.stringify(data));
   },
 
+  /* ---------------------------------------------------------
+     INIT DASHBOARD
+     Loads cloud user → storefront → earnings → payout → ads → phonebook → vendor.js
+  --------------------------------------------------------- */
   async initDashboard() {
     const cloudUser = this.getCloudUser();
     if (!cloudUser || !cloudUser.email) {
@@ -31,20 +41,21 @@ const Staff = {
     }
 
     // Load storefront
-    const store = await this.fetchJSON(
-      `/api/vendor/storefront?email=${encodeURIComponent(cloudUser.email)}`
-    );
+    const store = await this.fetchJSON(`/api/vendor/storefront?email=${encodeURIComponent(cloudUser.email)}`);
 
     // Load earnings
-    const earnings = await this.fetchJSON(
-      `/api/vendor/earnings?email=${encodeURIComponent(cloudUser.email)}`
-    );
+    const earnings = await this.fetchJSON(`/api/vendor/earnings?email=${encodeURIComponent(cloudUser.email)}`);
 
-    // Load PayPal connection status
-    const paypal = await this.fetchJSON(
-      `/api/vendor/paypal/status?email=${encodeURIComponent(cloudUser.email)}`
-    );
+    // Load payout connection (PayPal/Venmo)
+    const payout = await this.fetchJSON(`/api/vendor/payout/status?email=${encodeURIComponent(cloudUser.email)}`);
 
+    // Load ads
+    const ads = await this.fetchJSON(`/api/vendor/ads?email=${encodeURIComponent(cloudUser.email)}`);
+
+    // Load phonebook
+    const phonebook = await this.fetchJSON(`/api/vendor/phonebook?email=${encodeURIComponent(cloudUser.email)}`);
+
+    // Build storefront object
     const storefront = {
       email: cloudUser.email,
       name: cloudUser.name,
@@ -56,8 +67,8 @@ const Staff = {
       services: store?.services || [],
       workshops: store?.workshops || [],
       apps: store?.apps || [],
-      ads: store?.ads || [],
-      phonebook: store?.phonebook || null,
+      ads: ads?.error ? [] : ads,
+      phonebook: phonebook?.error ? null : phonebook,
       published: store?.published || false,
 
       earnings: earnings?.error ? {
@@ -67,11 +78,12 @@ const Staff = {
         total: 0
       } : earnings,
 
-      paypal: paypal?.error ? {
+      payout: payout?.error ? {
         connected: false,
+        method: null,
         email: null,
         venmo: false
-      } : paypal
+      } : payout
     };
 
     this.saveStorefront(storefront);
@@ -82,6 +94,16 @@ const Staff = {
     }
   },
 
+  /* ---------------------------------------------------------
+     CLOUD MESSAGING
+  --------------------------------------------------------- */
+  message(email) {
+    window.location.href = `/pages/messages/index.html?to=${encodeURIComponent(email)}`;
+  },
+
+  /* ---------------------------------------------------------
+     NAVIGATION
+  --------------------------------------------------------- */
   go(page) {
     window.location.href = `/network/staff/pages/${page}`;
   },
@@ -98,6 +120,9 @@ const Staff = {
     window.location.href = "/pages/login.html";
   },
 
+  /* ---------------------------------------------------------
+     FETCH HELPERS
+  --------------------------------------------------------- */
   async fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
