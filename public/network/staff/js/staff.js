@@ -1,443 +1,438 @@
 // /network/staff/js/staff.js
-// UPGRADED VENDOR STAFF SYSTEM — PROFILE + PRODUCTS + SERVICES + WORKSHOPS + APP + CHECKOUT + PHONE BOOK + ADS
+// FULL REWRITE — VENDOR STOREFRONT ENGINE CONNECTED TO CLOUD USER
 
 const Staff = {
-  key: "network_staff_user",
+  cloudKey: "cloud_user",
+  storeKey: "vendor_storefront",
 
-  // -----------------------------
-  // AUTH CACHE
-  // -----------------------------
-  getUser() {
-    const raw = localStorage.getItem(this.key);
+  /* ---------------------------------------------------------
+     CLOUD USER
+  --------------------------------------------------------- */
+  getCloudUser() {
+    const raw = localStorage.getItem(this.cloudKey);
     return raw ? JSON.parse(raw) : null;
   },
 
-  saveUser(user) {
-    localStorage.setItem(this.key, JSON.stringify(user));
+  /* ---------------------------------------------------------
+     STOREFRONT CACHE
+  --------------------------------------------------------- */
+  getStorefront() {
+    const raw = localStorage.getItem(this.storeKey);
+    return raw ? JSON.parse(raw) : null;
   },
 
-  // -----------------------------
-  // DASHBOARD INIT
-  // -----------------------------
+  saveStorefront(data) {
+    localStorage.setItem(this.storeKey, JSON.stringify(data));
+  },
+
+  /* ---------------------------------------------------------
+     INIT DASHBOARD
+  --------------------------------------------------------- */
   async initDashboard() {
-    const user = this.getUser();
-    if (!user || !user.email) {
-      window.location.href = "/network/staff/pages/login.html";
+    const cloudUser = this.getCloudUser();
+
+    if (!cloudUser || !cloudUser.email) {
+      window.location.href = "/pages/login.html";
       return;
     }
 
-    const profile = await this.fetchJSON(`/api/staff/me?email=${encodeURIComponent(user.email)}`);
-    if (!profile || profile.error) {
-      window.location.href = "/network/staff/pages/login.html";
+    const store = await this.fetchJSON(
+      `/api/vendor/storefront?email=${encodeURIComponent(cloudUser.email)}`
+    );
+
+    if (!store || store.error) {
+      const newStore = {
+        email: cloudUser.email,
+        name: cloudUser.name,
+        description: "",
+        tags: "",
+        logo: "",
+        cover: "",
+        products: [],
+        services: [],
+        workshops: [],
+        app: null,
+        ads: [],
+        phonebook: null
+      };
+
+      this.saveStorefront(newStore);
+      this.renderDashboard(newStore);
       return;
     }
 
-    user.name = profile.name;
-    user.types = profile.types ? profile.types.split(",") : [];
-    this.saveUser(user);
-
-    const types = user.types;
-
-    if (!types.includes("product")) document.getElementById("node-products")?.classList.add("hidden");
-    if (!types.includes("service")) document.getElementById("node-services")?.classList.add("hidden");
-    if (!types.includes("workshop")) document.getElementById("node-workshops")?.classList.add("hidden");
-    if (!types.includes("product") && !types.includes("service"))
-      document.getElementById("node-orders")?.classList.add("hidden");
-
-    const title = document.querySelector(".network-title");
-    if (title) title.textContent = `Vendor Dashboard — ${user.name}`;
-
-    // Vendor‑focused extras
-    this.loadPhoneBookStatus();
-    this.loadAdsSummary();
+    this.saveStorefront(store);
+    this.renderDashboard(store);
   },
 
-  // -----------------------------
-  // PROFILE PAGE INIT
-  // -----------------------------
-  async loadProfile() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+  /* ---------------------------------------------------------
+     RENDER DASHBOARD
+  --------------------------------------------------------- */
+  renderDashboard(store) {
+    const title = document.getElementById("vendorTitle");
+    const welcome = document.getElementById("vendorWelcome");
 
-    const profile = await this.fetchJSON(`/api/staff/me?email=${encodeURIComponent(user.email)}`);
-    if (!profile || profile.error) return;
-
-    document.getElementById("vendor-name").value = profile.name || "";
-    document.getElementById("vendor-bio").value = profile.bio || "";
-    document.getElementById("vendor-tags").value = profile.tags || "";
-    document.getElementById("vendor-paypal").value = profile.paypal || "";
-
-    const types = (profile.types || "").split(",").map(t => t.trim());
-    document.getElementById("type-product").checked = types.includes("product");
-    document.getElementById("type-service").checked = types.includes("service");
-    document.getElementById("type-workshop").checked = types.includes("workshop");
-    document.getElementById("type-creator").checked = types.includes("creator");
-    document.getElementById("type-app").checked = types.includes("app");
-
-    if (profile.photoUrl) {
-      const photoInput = document.getElementById("vendor-photo");
-      if (photoInput) photoInput.value = profile.photoUrl;
-    }
-
-    await this.loadProducts();
-    await this.loadServices();
-    await this.loadWorkshops();
-    await this.loadApp();
-    await this.loadAds();
-    await this.loadPhoneBookEntry();
-
-    this.updatePreview();
-    this.buildCheckoutItems();
+    if (title) title.innerText = `Vendor Dashboard — ${store.name}`;
+    if (welcome) welcome.innerText = `Welcome back, ${store.name}`;
   },
 
-  async saveProfile() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+  /* ---------------------------------------------------------
+     UPDATE STOREFRONT
+  --------------------------------------------------------- */
+  async updateStorefront(payload) {
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return false;
 
-    const types = [];
-    if (document.getElementById("type-product").checked) types.push("product");
-    if (document.getElementById("type-service").checked) types.push("service");
-    if (document.getElementById("type-workshop").checked) types.push("workshop");
-    if (document.getElementById("type-creator").checked) types.push("creator");
-    if (document.getElementById("type-app").checked) types.push("app");
+    payload.email = cloudUser.email;
 
-    const payload = {
-      email: user.email,
-      name: document.getElementById("vendor-name").value,
-      bio: document.getElementById("vendor-bio").value,
-      tags: document.getElementById("vendor-tags").value,
-      paypal: document.getElementById("vendor-paypal").value,
-      types: types.join(",")
-    };
-
-    const res = await this.postJSON("/api/staff/profile/update", payload);
+    const res = await this.postJSON("/api/vendor/storefront/update", payload);
     if (res && !res.error) {
-      document.getElementById("publish-status")?.innerText = "Profile saved.";
-      this.updatePreview();
-    } else {
-      alert("Error updating profile");
+      this.saveStorefront(res);
+      return true;
     }
+    return false;
   },
 
-  async publishProfile() {
-    await this.saveProfile();
-    const user = this.getUser();
-    if (!user || !user.email) return;
-
-    const res = await this.postJSON("/api/staff/profile/publish", { email: user.email });
-    if (res && !res.error) {
-      document.getElementById("publish-status")?.innerText = "Profile published and live on The Network.";
-    } else {
-      alert("Error publishing profile");
-    }
-  },
-
-  // -----------------------------
-  // PRODUCTS
-  // -----------------------------
+  /* ---------------------------------------------------------
+     PRODUCTS
+  --------------------------------------------------------- */
   async loadProducts() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const products = await this.fetchJSON(`/api/network/products?vendor=${encodeURIComponent(user.email)}`);
-    if (!products || products.error) return;
+    const products = await this.fetchJSON(
+      `/api/vendor/products?email=${encodeURIComponent(cloudUser.email)}`
+    );
 
     const list = document.getElementById("product-list");
     const publicList = document.getElementById("public-products");
+
     if (!list || !publicList) return;
 
-    list.innerHTML = products.map(p => `
+    if (!products || products.error || !products.length) {
+      list.innerHTML = `<p>No products yet.</p>`;
+      publicList.innerHTML = `<p>No products yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = products
+      .map(
+        p => `
       <div class="item-row">
-        <span>
-          <strong>${p.name}</strong> — <span class="price-tag">$${p.price}</span><br>
-          ${p.description || ""}
-        </span>
+        <strong>${p.name}</strong> — $${p.price}<br>
+        ${p.description || ""}
         <div class="item-actions">
           <button onclick="Staff.deleteProduct('${p.id}')">Delete</button>
         </div>
       </div>
-    `).join("");
+    `
+      )
+      .join("");
 
-    publicList.innerHTML = products.length
-      ? products.map(p => `
-        <div class="item-row">
-          <span>
-            <strong>${p.name}</strong> — <span class="price-tag">$${p.price}</span><br>
-            ${p.description || ""}
-          </span>
-        </div>
-      `).join("")
-      : `<p style="font-size:13px;opacity:0.7;">No products yet.</p>`;
+    publicList.innerHTML = products
+      .map(
+        p => `
+      <div class="item-row">
+        <strong>${p.name}</strong> — $${p.price}<br>
+        ${p.description || ""}
+      </div>
+    `
+      )
+      .join("");
 
     this._products = products;
   },
 
   async addProduct() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
     const payload = {
-      vendorId: user.email,
+      email: cloudUser.email,
       name: document.getElementById("product-name").value,
       description: document.getElementById("product-desc").value,
       price: parseFloat(document.getElementById("product-price").value || "0")
     };
 
-    const res = await this.postJSON("/api/network/product/create", payload);
+    const res = await this.postJSON("/api/vendor/product/create", payload);
     if (res && !res.error) {
       await this.loadProducts();
-      this.buildCheckoutItems();
     } else {
       alert("Error creating product");
     }
   },
 
   async deleteProduct(id) {
-    const res = await this.postJSON("/api/network/product/delete", { id });
+    const res = await this.postJSON("/api/vendor/product/delete", { id });
     if (res && !res.error) {
       await this.loadProducts();
-      this.buildCheckoutItems();
     } else {
       alert("Error deleting product");
     }
   },
 
-  // -----------------------------
-  // SERVICES
-  // -----------------------------
+  /* ---------------------------------------------------------
+     SERVICES
+  --------------------------------------------------------- */
   async loadServices() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const services = await this.fetchJSON(`/api/network/services?vendor=${encodeURIComponent(user.email)}`);
-    if (!services || services.error) return;
+    const services = await this.fetchJSON(
+      `/api/vendor/services?email=${encodeURIComponent(cloudUser.email)}`
+    );
 
     const list = document.getElementById("service-list");
     const publicList = document.getElementById("public-services");
+
     if (!list || !publicList) return;
 
-    list.innerHTML = services.map(s => `
+    if (!services || services.error || !services.length) {
+      list.innerHTML = `<p>No services yet.</p>`;
+      publicList.innerHTML = `<p>No services yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = services
+      .map(
+        s => `
       <div class="item-row">
-        <span>
-          <strong>${s.name}</strong> — <span class="price-tag">$${s.price}</span><br>
-          ${s.description || ""}
-        </span>
+        <strong>${s.name}</strong> — $${s.price}<br>
+        ${s.description || ""}
         <div class="item-actions">
           <button onclick="Staff.deleteService('${s.id}')">Delete</button>
         </div>
       </div>
-    `).join("");
+    `
+      )
+      .join("");
 
-    publicList.innerHTML = services.length
-      ? services.map(s => `
-        <div class="item-row">
-          <span>
-            <strong>${s.name}</strong> — <span class="price-tag">$${s.price}</span><br>
-            ${s.description || ""}
-          </span>
-        </div>
-      `).join("")
-      : `<p style="font-size:13px;opacity:0.7;">No services yet.</p>`;
+    publicList.innerHTML = services
+      .map(
+        s => `
+      <div class="item-row">
+        <strong>${s.name}</strong> — $${s.price}<br>
+        ${s.description || ""}
+      </div>
+    `
+      )
+      .join("");
 
     this._services = services;
   },
 
   async addService() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
     const payload = {
-      vendorId: user.email,
+      email: cloudUser.email,
       name: document.getElementById("service-name").value,
       description: document.getElementById("service-desc").value,
       price: parseFloat(document.getElementById("service-price").value || "0")
     };
 
-    const res = await this.postJSON("/api/network/service/create", payload);
+    const res = await this.postJSON("/api/vendor/service/create", payload);
     if (res && !res.error) {
       await this.loadServices();
-      this.buildCheckoutItems();
     } else {
       alert("Error creating service");
     }
   },
 
   async deleteService(id) {
-    const res = await this.postJSON("/api/network/service/delete", { id });
+    const res = await this.postJSON("/api/vendor/service/delete", { id });
     if (res && !res.error) {
       await this.loadServices();
-      this.buildCheckoutItems();
     } else {
       alert("Error deleting service");
     }
   },
 
-  // -----------------------------
-  // WORKSHOPS
-  // -----------------------------
+  /* ---------------------------------------------------------
+     WORKSHOPS
+  --------------------------------------------------------- */
   async loadWorkshops() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const workshops = await this.fetchJSON(`/api/network/workshops?vendor=${encodeURIComponent(user.email)}`);
-    if (!workshops || workshops.error) return;
+    const workshops = await this.fetchJSON(
+      `/api/vendor/workshops?email=${encodeURIComponent(cloudUser.email)}`
+    );
 
     const list = document.getElementById("workshop-list");
     const publicList = document.getElementById("public-workshops");
+
     if (!list || !publicList) return;
 
-    list.innerHTML = workshops.map(w => `
+    if (!workshops || workshops.error || !workshops.length) {
+      list.innerHTML = `<p>No workshops yet.</p>`;
+      publicList.innerHTML = `<p>No workshops yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = workshops
+      .map(
+        w => `
       <div class="calendar-row">
-        <strong>${w.title}</strong> — <span class="price-tag">$${w.price}</span><br>
-        ${w.date} • ${w.location || ""}<br>
+        <strong>${w.title}</strong> — $${w.price}<br>
+        ${w.date} • ${w.location}<br>
         ${w.description || ""}
         <div class="item-actions">
           <button onclick="Staff.deleteWorkshop('${w.id}')">Delete</button>
         </div>
       </div>
-    `).join("");
+    `
+      )
+      .join("");
 
-    publicList.innerHTML = workshops.length
-      ? workshops.map(w => `
-        <div class="calendar-row">
-          <strong>${w.title}</strong> — <span class="price-tag">$${w.price}</span><br>
-          ${w.date} • ${w.location || ""}<br>
-          ${w.description || ""}
-        </div>
-      `).join("")
-      : `<p style="font-size:13px;opacity:0.7;">No workshops scheduled.</p>`;
+    publicList.innerHTML = workshops
+      .map(
+        w => `
+      <div class="calendar-row">
+        <strong>${w.title}</strong> — $${w.price}<br>
+        ${w.date} • ${w.location}<br>
+        ${w.description || ""}
+      </div>
+    `
+      )
+      .join("");
 
     this._workshops = workshops;
   },
 
   async addWorkshop() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
     const payload = {
-      vendorId: user.email,
+      email: cloudUser.email,
       title: document.getElementById("workshop-title").value,
       description: document.getElementById("workshop-desc").value,
       date: document.getElementById("workshop-date").value,
       time: document.getElementById("workshop-time").value,
       location: document.getElementById("workshop-location").value,
       price: parseFloat(document.getElementById("workshop-price").value || "0"),
-      maxSeats: parseInt(document.getElementById("workshop-max")?.value || "0")
+      maxSeats: parseInt(document.getElementById("workshop-max").value || "0")
     };
 
-    const res = await this.postJSON("/api/network/workshop/create", payload);
+    const res = await this.postJSON("/api/vendor/workshop/create", payload);
     if (res && !res.error) {
       await this.loadWorkshops();
-      this.buildCheckoutItems();
     } else {
       alert("Error creating workshop");
     }
   },
 
   async deleteWorkshop(id) {
-    const res = await this.postJSON("/api/network/workshop/delete", { id });
+    const res = await this.postJSON("/api/vendor/workshop/delete", { id });
     if (res && !res.error) {
       await this.loadWorkshops();
-      this.buildCheckoutItems();
     } else {
       alert("Error deleting workshop");
     }
   },
 
-  // -----------------------------
-  // APP / DIGITAL TOOL
-  // -----------------------------
+  /* ---------------------------------------------------------
+     DIGITAL APP
+  --------------------------------------------------------- */
   async loadApp() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const app = await this.fetchJSON(`/api/network/app?vendor=${encodeURIComponent(user.email)}`);
+    const app = await this.fetchJSON(
+      `/api/vendor/app?email=${encodeURIComponent(cloudUser.email)}`
+    );
+
     const publicBox = document.getElementById("public-app");
     if (!publicBox) return;
 
     if (!app || app.error || !app.name) {
-      publicBox.innerHTML = `<p style="font-size:13px;opacity:0.7;">No app linked yet.</p>`;
+      publicBox.innerHTML = `<p>No app linked yet.</p>`;
       return;
     }
 
-    document.getElementById("app-name").value = app.name || "";
-    document.getElementById("app-url").value = app.url || "";
-    document.getElementById("app-desc").value = app.description || "";
+    document.getElementById("app-name").value = app.name;
+    document.getElementById("app-url").value = app.url;
+    document.getElementById("app-desc").value = app.description;
 
     publicBox.innerHTML = `
       <div class="item-row">
-        <span>
-          <strong>${app.name}</strong><br>
-          <a href="${app.url}" target="_blank" style="color:#00c3ff;">${app.url}</a><br>
-          ${app.description || ""}
-        </span>
+        <strong>${app.name}</strong><br>
+        <a href="${app.url}" target="_blank">${app.url}</a><br>
+        ${app.description}
       </div>
     `;
   },
 
   async saveApp() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
     const payload = {
-      vendorId: user.email,
+      email: cloudUser.email,
       name: document.getElementById("app-name").value,
       url: document.getElementById("app-url").value,
       description: document.getElementById("app-desc").value
     };
 
-    const res = await this.postJSON("/api/network/app/save", payload);
+    const res = await this.postJSON("/api/vendor/app/save", payload);
     if (res && !res.error) {
       await this.loadApp();
     } else {
-      alert("Error saving app info");
+      alert("Error saving app");
     }
   },
 
-  // -----------------------------
-  // VENDOR ADS
-  // -----------------------------
+  /* ---------------------------------------------------------
+     ADS
+  --------------------------------------------------------- */
   async loadAds() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const ads = await this.fetchJSON(`/api/network/vendor-ads?vendor=${encodeURIComponent(user.email)}`);
+    const ads = await this.fetchJSON(
+      `/api/vendor/ads?email=${encodeURIComponent(cloudUser.email)}`
+    );
+
     const list = document.getElementById("ads-list");
     if (!list) return;
 
     if (!ads || ads.error || !ads.length) {
-      list.innerHTML = `<p style="font-size:13px;opacity:0.7;">No ads running yet.</p>`;
+      list.innerHTML = `<p>No ads yet.</p>`;
       return;
     }
 
-    list.innerHTML = ads.map(a => `
+    list.innerHTML = ads
+      .map(
+        a => `
       <div class="item-row">
-        <span>
-          <strong>${a.title}</strong><br>
-          ${a.copy || ""}<br>
-          Placement: ${a.placement || "general"} • Status: ${a.status || "pending"}
-        </span>
+        <strong>${a.title}</strong><br>
+        ${a.copy}<br>
+        Placement: ${a.placement} • Status: ${a.status}
         <div class="item-actions">
-          <button onclick="Staff.deleteAd('${a.id}')">Stop Ad</button>
+          <button onclick="Staff.deleteAd('${a.id}')">Stop</button>
         </div>
       </div>
-    `).join("");
+    `
+      )
+      .join("");
 
     this._ads = ads;
   },
 
   async saveAd() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
     const payload = {
-      vendorId: user.email,
+      email: cloudUser.email,
       title: document.getElementById("ad-title").value,
       copy: document.getElementById("ad-copy").value,
       placement: document.getElementById("ad-placement").value
     };
 
-    const res = await this.postJSON("/api/network/vendor-ads/create", payload);
+    const res = await this.postJSON("/api/vendor/ads/create", payload);
     if (res && !res.error) {
       await this.loadAds();
     } else {
@@ -446,7 +441,7 @@ const Staff = {
   },
 
   async deleteAd(id) {
-    const res = await this.postJSON("/api/network/vendor-ads/delete", { id });
+    const res = await this.postJSON("/api/vendor/ads/delete", { id });
     if (res && !res.error) {
       await this.loadAds();
     } else {
@@ -454,230 +449,136 @@ const Staff = {
     }
   },
 
-  async loadAdsSummary() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+  /* ---------------------------------------------------------
+     PHONE BOOK
+  --------------------------------------------------------- */
+  async loadPhoneBook() {
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const summaryEl = document.getElementById("ads-summary");
-    if (!summaryEl) return;
+    const entry = await this.fetchJSON(
+      `/api/vendor/phonebook?email=${encodeURIComponent(cloudUser.email)}`
+    );
 
-    const ads = await this.fetchJSON(`/api/network/vendor-ads?vendor=${encodeURIComponent(user.email)}`);
-    if (!ads || ads.error) {
-      summaryEl.innerText = "No ads yet.";
-      return;
-    }
-
-    const active = ads.filter(a => a.status === "active").length;
-    summaryEl.innerText = `${active} active ads`;
-  },
-
-  // -----------------------------
-  // PHONE BOOK
-  // -----------------------------
-  async loadPhoneBookEntry() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
-
-    const entry = await this.fetchJSON(`/api/network/phonebook?vendor=${encodeURIComponent(user.email)}`);
     const box = document.getElementById("phonebook-box");
     if (!box) return;
 
     if (!entry || entry.error || !entry.name) {
-      box.innerHTML = `<p style="font-size:13px;opacity:0.7;">No phone book listing yet.</p>`;
+      box.innerHTML = `<p>No phone book listing.</p>`;
       return;
     }
 
     box.innerHTML = `
       <div class="item-row">
-        <span>
-          <strong>${entry.name}</strong><br>
-          ${entry.description || ""}<br>
-          Phone: ${entry.phone || ""}<br>
-          Link: <a href="${entry.link || "#"}" target="_blank" style="color:#00c3ff;">${entry.link || "N/A"}</a>
-        </span>
+        <strong>${entry.name}</strong><br>
+        ${entry.description}<br>
+        Phone: ${entry.phone}<br>
+        <a href="${entry.link}" target="_blank">${entry.link}</a>
       </div>
     `;
   },
 
-  async savePhoneBookEntry() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+  async savePhoneBook() {
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
     const payload = {
-      vendorId: user.email,
+      email: cloudUser.email,
       name: document.getElementById("phonebook-name").value,
       description: document.getElementById("phonebook-desc").value,
       phone: document.getElementById("phonebook-phone").value,
       link: document.getElementById("phonebook-link").value
     };
 
-    const res = await this.postJSON("/api/network/phonebook/save", payload);
+    const res = await this.postJSON("/api/vendor/phonebook/save", payload);
     if (res && !res.error) {
-      await this.loadPhoneBookEntry();
+      await this.loadPhoneBook();
     } else {
-      alert("Error saving phone book entry");
+      alert("Error saving phone book");
     }
   },
 
-  async loadPhoneBookStatus() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
-
-    const statusEl = document.getElementById("phonebook-status");
-    if (!statusEl) return;
-
-    const sub = await this.fetchJSON(`/api/network/phonebook/subscription?vendor=${encodeURIComponent(user.email)}`);
-    if (!sub || sub.error || !sub.active) {
-      statusEl.innerText = "Phone Book: Not subscribed ($1/mo)";
-      return;
-    }
-
-    statusEl.innerText = `Phone Book: Active • Renews ${sub.renewsAt || ""}`;
-  },
-
-  async subscribePhoneBook() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
-
-    const res = await this.postJSON("/api/network/phonebook/subscribe", { vendorId: user.email });
-    if (res && !res.error && res.redirectUrl) {
-      window.location.href = res.redirectUrl;
-    } else {
-      alert("Error starting phone book subscription");
-    }
-  },
-
-  // -----------------------------
-  // PREVIEW + CHECKOUT
-  // -----------------------------
-  updatePreview() {
-    const name = document.getElementById("vendor-name").value || "Vendor Name";
-    const bio = document.getElementById("vendor-bio").value || "Your bio will appear here for buyers.";
-
-    const types = [];
-    if (document.getElementById("type-product").checked) types.push("Products");
-    if (document.getElementById("type-service").checked) types.push("Services");
-    if (document.getElementById("type-workshop").checked) types.push("Workshops");
-    if (document.getElementById("type-creator").checked) types.push("Creator");
-    if (document.getElementById("type-app").checked) types.push("App";
-
-    document.getElementById("public-name").innerText = name;
-    document.getElementById("public-bio").innerText = bio;
-    document.getElementById("public-types").innerText = types.join(" • ") || "Vendor";
-  },
-
-  buildCheckoutItems() {
-    const select = document.getElementById("checkout-item");
-    if (!select) return;
-
-    const items = [];
-
-    (this._products || []).forEach(p => {
-      items.push({ type: "product", id: p.id, label: `Product: ${p.name} — $${p.price}` });
-    });
-
-    (this._services || []).forEach(s => {
-      items.push({ type: "service", id: s.id, label: `Service: ${s.name} — $${s.price}` });
-    });
-
-    (this._workshops || []).forEach(w => {
-      items.push({ type: "workshop", id: w.id, label: `Workshop: ${w.title} — $${w.price}` });
-    });
-
-    select.innerHTML = items.length
-      ? items.map(i => `<option value="${i.type}:${i.id}">${i.label}</option>`).join("")
-      : `<option value="">No items available yet</option>`;
-
-    this._checkoutItems = items;
-  },
-
-  async checkout() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
-
-    const select = document.getElementById("checkout-item");
-    const qty = parseInt(document.getElementById("checkout-qty").value || "1");
-    const statusEl = document.getElementById("checkout-status");
-
-    if (!select.value) {
-      statusEl.innerText = "Select an item first.";
-      return;
-    }
-
-    const [type, id] = select.value.split(":");
-
-    const payload = {
-      vendorId: user.email,
-      itemType: type,
-      itemId: id,
-      quantity: qty
-    };
-
-    const res = await this.postJSON("/api/network/checkout/create", payload);
-    if (res && !res.error) {
-      statusEl.innerText = "Checkout created. Redirecting to payment…";
-      if (res.redirectUrl) window.location.href = res.redirectUrl;
-    } else {
-      statusEl.innerText = "Error creating checkout.";
-    }
-  },
-
-  // -----------------------------
-  // ORDERS + PAYOUTS (for dashboard)
-  // -----------------------------
+  /* ---------------------------------------------------------
+     ORDERS
+  --------------------------------------------------------- */
   async loadOrders() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const orders = await this.fetchJSON(`/api/staff/orders?email=${encodeURIComponent(user.email)}`);
-    if (!orders || orders.error) return;
+    const orders = await this.fetchJSON(
+      `/api/vendor/orders?email=${encodeURIComponent(cloudUser.email)}`
+    );
 
     const list = document.getElementById("order-list");
     if (!list) return;
 
-    list.innerHTML = orders.map(o => `
+    if (!orders || orders.error || !orders.length) {
+      list.innerHTML = `<p>No orders yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = orders
+      .map(
+        o => `
       <div class="order">
-        <h3>${o.itemName || "Order"} — $${o.amount}</h3>
-        <p>Buyer: ${o.buyerName} (${o.buyerEmail})</p>
-        <p>Status: ${o.paymentStatus}</p>
-        <p>Created: ${o.createdAt}</p>
+        <strong>${o.itemName}</strong> — $${o.amount}<br>
+        Buyer: ${o.buyerName} (${o.buyerEmail})<br>
+        Status: ${o.paymentStatus}<br>
+        Created: ${o.createdAt}
       </div>
-    `).join("");
+    `
+      )
+      .join("");
   },
 
+  /* ---------------------------------------------------------
+     PAYOUTS
+  --------------------------------------------------------- */
   async loadPayouts() {
-    const user = this.getUser();
-    if (!user || !user.email) return;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
 
-    const payouts = await this.fetchJSON(`/api/staff/payouts?email=${encodeURIComponent(user.email)}`);
-    if (!payouts || payouts.error) return;
+    const payouts = await this.fetchJSON(
+      `/api/vendor/payouts?email=${encodeURIComponent(cloudUser.email)}`
+    );
 
     const list = document.getElementById("payout-list");
     if (!list) return;
 
-    list.innerHTML = payouts.map(p => `
+    if (!payouts || payouts.error || !payouts.length) {
+      list.innerHTML = `<p>No payouts yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = payouts
+      .map(
+        p => `
       <div class="payout">
-        <h3>$${p.amount}</h3>
-        <p>Status: ${p.status}</p>
-        <p>Created: ${p.createdAt}</p>
+        <strong>$${p.amount}</strong><br>
+        Status: ${p.status}<br>
+        Created: ${p.createdAt}
       </div>
-    `).join("");
+    `
+      )
+      .join("");
   },
 
-  // -----------------------------
-  // NAVIGATION
-  // -----------------------------
+  /* ---------------------------------------------------------
+     NAVIGATION
+  --------------------------------------------------------- */
   go(page) {
     window.location.href = `/network/staff/pages/${page}`;
   },
 
   previewPage() {
-    window.location.href = `/network/public/pages/vendor.html?id=me`;
+    const cloudUser = this.getCloudUser();
+    if (!cloudUser) return;
+    window.location.href = `/network/public/pages/vendor.html?id=${encodeURIComponent(cloudUser.email)}`;
   },
 
-  // -----------------------------
-  // FETCH / POST
-  // -----------------------------
+  /* ---------------------------------------------------------
+     FETCH / POST HELPERS
+  --------------------------------------------------------- */
   async fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
@@ -696,10 +597,4 @@ const Staff = {
         credentials: "include",
         body: JSON.stringify(body)
       });
-      return await res.json();
-    } catch (e) {
-      console.error("postJSON error", e);
-      return null;
-    }
-  }
-};
+      return await res.json
