@@ -1,267 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Vendor Dashboard — The Network</title>
+<meta charset="UTF-8">
+<title>Vendor Dashboard — The Network</title>
 
-  <link rel="stylesheet" href="/network/staff/css/staff.css">
-  <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      background: #0a0f14;
-      color: white;
-      font-family: Inter, sans-serif;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: url('/assets/img/cloud/cumulus.jpg') center/cover no-repeat fixed;
+    color: white;
+  }
 
-    .network-header {
-      padding: 20px;
-      background: #0a2a43;
-      border-bottom: 3px solid #f7d354;
-      text-align: center;
-    }
+  /* DARK OVERLAY */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: -1;
+  }
 
-    .network-title {
-      font-family: Cinzel;
-      font-size: 2rem;
-      color: #f7d354;
-    }
+  /* FLOATING LOGO MENU */
+  .vendor-logo {
+    height: 160px;
+    width: auto;
+    display: block;
+    margin: 30px auto 10px auto;
+    cursor: pointer;
+    animation: floaty 6s infinite ease-in-out;
+    filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
+  }
 
-    .dashboard-wrapper {
-      width: 95%;
-      max-width: 1200px;
-      margin: 30px auto;
-    }
+  @keyframes floaty {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0); }
+  }
 
-    .node {
-      background: rgba(10,42,67,0.85);
-      border: 2px solid #f7d354;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
+  /* MENU */
+  .menu-panel {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100vh;
+    background: rgba(10,42,67,0.95);
+    border-left: 3px solid #f7d354;
+    padding: 25px;
+    transition: 0.35s ease;
+    overflow-y: auto;
+    z-index: 9999;
+  }
 
-    .node h2 {
-      font-family: Cinzel;
-      color: #f7d354;
-      margin-bottom: 10px;
-    }
+  .menu-panel.open {
+    right: 0;
+  }
 
-    .hidden {
-      display: none !important;
-    }
+  .menu-panel h2 {
+    font-family: Cinzel;
+    color: #f7d354;
+    margin-bottom: 20px;
+  }
 
-    .item-row, .calendar-row, .order, .payout {
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
+  .menu-panel a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+    font-size: 1.1rem;
+  }
 
-    .item-actions button {
-      background: #f00;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-    }
+  .menu-panel a:hover {
+    color: #f7d354;
+  }
 
-    .primary-btn, .secondary-btn {
-      padding: 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
-    }
+  /* DASHBOARD TITLE */
+  .dash-title {
+    text-align: center;
+    font-family: Cinzel;
+    font-size: 2.4rem;
+    color: #f7d354;
+    margin-top: 10px;
+    text-shadow: 0 0 12px #f7d354;
+  }
 
-    .primary-btn {
-      background: #f7d354;
-      color: black;
-      font-weight: bold;
-      border: none;
-    }
+  /* TWO MAIN CARDS */
+  .card-row {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
 
-    .secondary-btn {
-      background: transparent;
-      border: 2px solid #f7d354;
-      color: #f7d354;
-    }
+  .dash-card {
+    width: 45%;
+    min-width: 350px;
+    background: rgba(10,42,67,0.85);
+    border: 3px solid #f7d354;
+    border-radius: 16px;
+    padding: 25px;
+    animation: fadeIn 1s ease;
+  }
 
-    .secondary-btn:hover {
-      background: #f7d354;
-      color: black;
-    }
-  </style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dash-card h3 {
+    font-family: Cinzel;
+    color: #f7d354;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  /* TILE BUTTONS */
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+  }
+
+  .tile {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid #f7d354;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.25s ease;
+    font-size: 1rem;
+  }
+
+  .tile:hover {
+    background: #f7d354;
+    color: black;
+    transform: scale(1.05);
+  }
+
+  /* LOGOUT */
+  .logout-btn {
+    display: block;
+    margin: 40px auto;
+    width: 200px;
+    padding: 12px;
+    border-radius: 10px;
+    background: transparent;
+    border: 2px solid #f7d354;
+    color: #f7d354;
+    cursor: pointer;
+    transition: 0.25s ease;
+    font-size: 1.1rem;
+  }
+
+  .logout-btn:hover {
+    background: #f7d354;
+    color: black;
+  }
+</style>
 </head>
 
 <body>
 
-  <header class="network-header">
-    <h1 class="network-title">Vendor Dashboard</h1>
-  </header>
+<!-- FLOATING LOGO -->
+<img src="/network/public/img/network-logo.jpg"
+     class="vendor-logo"
+     onclick="document.getElementById('menuPanel').classList.add('open')">
 
-  <div class="dashboard-wrapper">
+<h1 class="dash-title">Vendor Dashboard</h1>
 
-    <!-- PROFILE -->
-    <div class="node" id="node-profile">
-      <h2>Vendor Profile</h2>
+<!-- TWO MAIN CARDS -->
+<div class="card-row">
 
-      <label>Name</label>
-      <input id="vendor-name" class="input" />
+  <!-- CARD 1 -->
+  <div class="dash-card">
+    <h3>Your Business</h3>
 
-      <label>Bio</label>
-      <textarea id="vendor-bio" class="input"></textarea>
-
-      <label>Tags</label>
-      <input id="vendor-tags" class="input" />
-
-      <label>PayPal Email</label>
-      <input id="vendor-paypal" class="input" />
-
-      <h3>Vendor Types</h3>
-      <label><input type="checkbox" id="type-product"> Products</label><br>
-      <label><input type="checkbox" id="type-service"> Services</label><br>
-      <label><input type="checkbox" id="type-workshop"> Workshops</label><br>
-      <label><input type="checkbox" id="type-creator"> Creator</label><br>
-      <label><input type="checkbox" id="type-app"> App / Digital Tool</label><br>
-
-      <button class="primary-btn" onclick="Staff.saveProfile()">Save Profile</button>
-      <button class="secondary-btn" onclick="Staff.publishProfile()">Publish Profile</button>
-
-      <p id="publish-status" style="margin-top:10px; color:#f7d354;"></p>
+    <div class="tile-grid">
+      <div class="tile" onclick="Staff.go('profile.html')">Profile</div>
+      <div class="tile" onclick="Staff.go('products.html')">Products</div>
+      <div class="tile" onclick="Staff.go('services.html')">Services</div>
+      <div class="tile" onclick="Staff.go('workshops.html')">Workshops</div>
+      <div class="tile" onclick="Staff.go('app.html')">Digital App</div>
     </div>
-
-    <!-- PRODUCTS -->
-    <div class="node" id="node-products">
-      <h2>Products</h2>
-
-      <input id="product-name" placeholder="Product Name" class="input">
-      <textarea id="product-desc" placeholder="Description" class="input"></textarea>
-      <input id="product-price" placeholder="Price" class="input">
-
-      <button class="primary-btn" onclick="Staff.addProduct()">Add Product</button>
-
-      <h3>Your Products</h3>
-      <div id="product-list"></div>
-
-      <h3>Public View</h3>
-      <div id="public-products"></div>
-    </div>
-
-    <!-- SERVICES -->
-    <div class="node" id="node-services">
-      <h2>Services</h2>
-
-      <input id="service-name" placeholder="Service Name" class="input">
-      <textarea id="service-desc" placeholder="Description" class="input"></textarea>
-      <input id="service-price" placeholder="Price" class="input">
-
-      <button class="primary-btn" onclick="Staff.addService()">Add Service</button>
-
-      <h3>Your Services</h3>
-      <div id="service-list"></div>
-
-      <h3>Public View</h3>
-      <div id="public-services"></div>
-    </div>
-
-    <!-- WORKSHOPS -->
-    <div class="node" id="node-workshops">
-      <h2>Workshops</h2>
-
-      <input id="workshop-title" placeholder="Workshop Title" class="input">
-      <textarea id="workshop-desc" placeholder="Description" class="input"></textarea>
-      <input id="workshop-date" type="date" class="input">
-      <input id="workshop-time" type="time" class="input">
-      <input id="workshop-location" placeholder="Location" class="input">
-      <input id="workshop-price" placeholder="Price" class="input">
-      <input id="workshop-max" placeholder="Max Seats" class="input">
-
-      <button class="primary-btn" onclick="Staff.addWorkshop()">Add Workshop</button>
-
-      <h3>Your Workshops</h3>
-      <div id="workshop-list"></div>
-
-      <h3>Public View</h3>
-      <div id="public-workshops"></div>
-    </div>
-
-    <!-- APP -->
-    <div class="node" id="node-app">
-      <h2>App / Digital Tool</h2>
-
-      <input id="app-name" placeholder="App Name" class="input">
-      <input id="app-url" placeholder="App URL" class="input">
-      <textarea id="app-desc" placeholder="Description" class="input"></textarea>
-
-      <button class="primary-btn" onclick="Staff.saveApp()">Save App</button>
-
-      <h3>Public View</h3>
-      <div id="public-app"></div>
-    </div>
-
-    <!-- ADS -->
-    <div class="node">
-      <h2>Vendor Ads</h2>
-
-      <input id="ad-title" placeholder="Ad Title" class="input">
-      <textarea id="ad-copy" placeholder="Ad Copy" class="input"></textarea>
-      <select id="ad-placement" class="input">
-        <option value="general">General</option>
-        <option value="cumulus">Cumulus Cloud</option>
-        <option value="map">Map</option>
-        <option value="needs">Community Needs</option>
-      </select>
-
-      <button class="primary-btn" onclick="Staff.saveAd()">Create Ad</button>
-
-      <h3>Your Ads</h3>
-      <div id="ads-list"></div>
-
-      <p id="ads-summary" style="margin-top:10px; color:#f7d354;"></p>
-    </div>
-
-    <!-- PHONE BOOK -->
-    <div class="node">
-      <h2>Phone Book Listing ($1/mo)</h2>
-
-      <p id="phonebook-status" style="color:#f7d354;"></p>
-
-      <input id="phonebook-name" placeholder="Business Name" class="input">
-      <textarea id="phonebook-desc" placeholder="Description" class="input"></textarea>
-      <input id="phonebook-phone" placeholder="Phone Number" class="input">
-      <input id="phonebook-link" placeholder="Website / Link" class="input">
-
-      <button class="primary-btn" onclick="Staff.savePhoneBookEntry()">Save Listing</button>
-      <button class="secondary-btn" onclick="Staff.subscribePhoneBook()">Subscribe ($1/mo)</button>
-
-      <h3>Your Listing</h3>
-      <div id="phonebook-box"></div>
-    </div>
-
-    <!-- ORDERS -->
-    <div class="node" id="node-orders">
-      <h2>Orders</h2>
-      <div id="order-list"></div>
-    </div>
-
-    <!-- PAYOUTS -->
-    <div class="node">
-      <h2>Payouts</h2>
-      <div id="payout-list"></div>
-    </div>
-
   </div>
 
-  <script src="/network/staff/js/staff.js"></script>
-  <script>
-    Staff.initDashboard();
-    Staff.loadOrders();
-    Staff.loadPayouts();
-  </script>
+  <!-- CARD 2 -->
+  <div class="dash-card">
+    <h3>Sales & Tools</h3>
+
+    <div class="tile-grid">
+      <div class="tile" onclick="Staff.go('ads.html')">Vendor Ads</div>
+      <div class="tile" onclick="Staff.go('orders.html')">Orders</div>
+      <div class="tile" onclick="Staff.go('payouts.html')">Payouts</div>
+      <div class="tile" onclick="Staff.go('analytics.html')">Analytics</div>
+      <div class="tile" onclick="Staff.go('settings.html')">Settings</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- LOGOUT -->
+<button class="logout-btn" onclick="Staff.go('logout.html')">Log Out</button>
+
+<!-- MENU PANEL -->
+<div id="menuPanel" class="menu-panel">
+  <h2>Vendor Menu</h2>
+
+  <a onclick="Staff.go('profile.html')">Profile</a>
+  <a onclick="Staff.go('products.html')">Products</a>
+  <a onclick="Staff.go('services.html')">Services</a>
+  <a onclick="Staff.go('workshops.html')">Workshops</a>
+  <a onclick="Staff.go('app.html')">Digital App</a>
+  <a onclick="Staff.go('ads.html')">Vendor Ads</a>
+  <a onclick="Staff.go('orders.html')">Orders</a>
+  <a onclick="Staff.go('payouts.html')">Payouts</a>
+  <a onclick="Staff.go('analytics.html')">Analytics</a>
+
+  <!-- PHONE BOOK MOVED HERE -->
+  <a onclick="Staff.go('phonebook.html')">Phone Book Listing</a>
+
+  <a onclick="document.getElementById('menuPanel').classList.remove('open')" style="margin-top:20px;">Close Menu</a>
+</div>
+
+<script src="/network/staff/js/staff.js"></script>
+<script>
+  Staff.initDashboard();
+</script>
 
 </body>
 </html>
