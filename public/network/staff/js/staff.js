@@ -1,5 +1,5 @@
 // /network/staff/js/staff.js
-// UPGRADED STAFF SYSTEM — PROFILE + PRODUCTS + SERVICES + WORKSHOPS + APP + CHECKOUT
+// UPGRADED VENDOR STAFF SYSTEM — PROFILE + PRODUCTS + SERVICES + WORKSHOPS + APP + CHECKOUT + PHONE BOOK + ADS
 
 const Staff = {
   key: "network_staff_user",
@@ -45,7 +45,11 @@ const Staff = {
       document.getElementById("node-orders")?.classList.add("hidden");
 
     const title = document.querySelector(".network-title");
-    if (title) title.textContent = `Staff Dashboard — ${user.name}`;
+    if (title) title.textContent = `Vendor Dashboard — ${user.name}`;
+
+    // Vendor‑focused extras
+    this.loadPhoneBookStatus();
+    this.loadAdsSummary();
   },
 
   // -----------------------------
@@ -79,6 +83,8 @@ const Staff = {
     await this.loadServices();
     await this.loadWorkshops();
     await this.loadApp();
+    await this.loadAds();
+    await this.loadPhoneBookEntry();
 
     this.updatePreview();
     this.buildCheckoutItems();
@@ -389,6 +395,159 @@ const Staff = {
   },
 
   // -----------------------------
+  // VENDOR ADS
+  // -----------------------------
+  async loadAds() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const ads = await this.fetchJSON(`/api/network/vendor-ads?vendor=${encodeURIComponent(user.email)}`);
+    const list = document.getElementById("ads-list");
+    if (!list) return;
+
+    if (!ads || ads.error || !ads.length) {
+      list.innerHTML = `<p style="font-size:13px;opacity:0.7;">No ads running yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = ads.map(a => `
+      <div class="item-row">
+        <span>
+          <strong>${a.title}</strong><br>
+          ${a.copy || ""}<br>
+          Placement: ${a.placement || "general"} • Status: ${a.status || "pending"}
+        </span>
+        <div class="item-actions">
+          <button onclick="Staff.deleteAd('${a.id}')">Stop Ad</button>
+        </div>
+      </div>
+    `).join("");
+
+    this._ads = ads;
+  },
+
+  async saveAd() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const payload = {
+      vendorId: user.email,
+      title: document.getElementById("ad-title").value,
+      copy: document.getElementById("ad-copy").value,
+      placement: document.getElementById("ad-placement").value
+    };
+
+    const res = await this.postJSON("/api/network/vendor-ads/create", payload);
+    if (res && !res.error) {
+      await this.loadAds();
+    } else {
+      alert("Error creating ad");
+    }
+  },
+
+  async deleteAd(id) {
+    const res = await this.postJSON("/api/network/vendor-ads/delete", { id });
+    if (res && !res.error) {
+      await this.loadAds();
+    } else {
+      alert("Error stopping ad");
+    }
+  },
+
+  async loadAdsSummary() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const summaryEl = document.getElementById("ads-summary");
+    if (!summaryEl) return;
+
+    const ads = await this.fetchJSON(`/api/network/vendor-ads?vendor=${encodeURIComponent(user.email)}`);
+    if (!ads || ads.error) {
+      summaryEl.innerText = "No ads yet.";
+      return;
+    }
+
+    const active = ads.filter(a => a.status === "active").length;
+    summaryEl.innerText = `${active} active ads`;
+  },
+
+  // -----------------------------
+  // PHONE BOOK
+  // -----------------------------
+  async loadPhoneBookEntry() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const entry = await this.fetchJSON(`/api/network/phonebook?vendor=${encodeURIComponent(user.email)}`);
+    const box = document.getElementById("phonebook-box");
+    if (!box) return;
+
+    if (!entry || entry.error || !entry.name) {
+      box.innerHTML = `<p style="font-size:13px;opacity:0.7;">No phone book listing yet.</p>`;
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="item-row">
+        <span>
+          <strong>${entry.name}</strong><br>
+          ${entry.description || ""}<br>
+          Phone: ${entry.phone || ""}<br>
+          Link: <a href="${entry.link || "#"}" target="_blank" style="color:#00c3ff;">${entry.link || "N/A"}</a>
+        </span>
+      </div>
+    `;
+  },
+
+  async savePhoneBookEntry() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const payload = {
+      vendorId: user.email,
+      name: document.getElementById("phonebook-name").value,
+      description: document.getElementById("phonebook-desc").value,
+      phone: document.getElementById("phonebook-phone").value,
+      link: document.getElementById("phonebook-link").value
+    };
+
+    const res = await this.postJSON("/api/network/phonebook/save", payload);
+    if (res && !res.error) {
+      await this.loadPhoneBookEntry();
+    } else {
+      alert("Error saving phone book entry");
+    }
+  },
+
+  async loadPhoneBookStatus() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const statusEl = document.getElementById("phonebook-status");
+    if (!statusEl) return;
+
+    const sub = await this.fetchJSON(`/api/network/phonebook/subscription?vendor=${encodeURIComponent(user.email)}`);
+    if (!sub || sub.error || !sub.active) {
+      statusEl.innerText = "Phone Book: Not subscribed ($1/mo)";
+      return;
+    }
+
+    statusEl.innerText = `Phone Book: Active • Renews ${sub.renewsAt || ""}`;
+  },
+
+  async subscribePhoneBook() {
+    const user = this.getUser();
+    if (!user || !user.email) return;
+
+    const res = await this.postJSON("/api/network/phonebook/subscribe", { vendorId: user.email });
+    if (res && !res.error && res.redirectUrl) {
+      window.location.href = res.redirectUrl;
+    } else {
+      alert("Error starting phone book subscription");
+    }
+  },
+
+  // -----------------------------
   // PREVIEW + CHECKOUT
   // -----------------------------
   updatePreview() {
@@ -400,7 +559,7 @@ const Staff = {
     if (document.getElementById("type-service").checked) types.push("Services");
     if (document.getElementById("type-workshop").checked) types.push("Workshops");
     if (document.getElementById("type-creator").checked) types.push("Creator");
-    if (document.getElementById("type-app").checked) types.push("App");
+    if (document.getElementById("type-app").checked) types.push("App";
 
     document.getElementById("public-name").innerText = name;
     document.getElementById("public-bio").innerText = bio;
