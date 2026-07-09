@@ -194,6 +194,20 @@
     background: #f7d354;
     color: #000;
   }
+
+  .earn-number {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #00e0ff;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .earn-sub {
+    text-align: center;
+    opacity: 0.75;
+    margin-bottom: 20px;
+  }
 </style>
 </head>
 
@@ -233,30 +247,36 @@
 <!-- CARD GRID -->
 <div class="card-grid">
 
-  <!-- CARD 1: ACTIVE STOREFRONT ITEMS -->
+  <!-- CARD 1: EARNINGS -->
+  <div class="dash-card">
+    <h3>Your Earnings</h3>
+    <p>Real-time vendor earnings from your storefront.</p>
+
+    <div class="earn-number" id="earnToday">$0.00</div>
+    <div class="earn-sub">Today</div>
+
+    <div class="earn-number" id="earnWeek">$0.00</div>
+    <div class="earn-sub">This Week</div>
+
+    <div class="earn-number" id="earnMonth">$0.00</div>
+    <div class="earn-sub">This Month</div>
+
+    <div class="earn-number" id="earnTotal">$0.00</div>
+    <div class="earn-sub">Total Earnings</div>
+
+    <button class="btn-preview" onclick="Staff.go('orders.html')">View Orders</button>
+    <button class="btn-preview" onclick="Staff.go('payouts.html')">View Payouts</button>
+  </div>
+
+  <!-- CARD 2: STOREFRONT ITEMS -->
   <div class="dash-card">
     <h3>Your Storefront Items</h3>
-    <p>Manage what customers see.</p>
+    <p>Interact with your products, services, workshops, and apps.</p>
 
-    <div id="storefront-items">
-      <!-- JS will inject products/services/workshops/apps here -->
-    </div>
+    <div id="storefront-items"></div>
 
     <button class="btn-preview" onclick="Staff.previewPage()">Preview Storefront</button>
     <button class="btn-publish" onclick="Staff.updateStorefront({ publish: true })">Publish Changes</button>
-  </div>
-
-  <!-- CARD 2: SALES & MONEY -->
-  <div class="dash-card">
-    <h3>Sales & Earnings</h3>
-    <p>Your orders, payouts, and quick actions.</p>
-
-    <div id="sales-items">
-      <!-- JS will inject orders/payouts summary here -->
-    </div>
-
-    <button class="btn-preview" onclick="Staff.go('orders.html')">View All Orders</button>
-    <button class="btn-preview" onclick="Staff.go('payouts.html')">View Payouts</button>
   </div>
 
 </div>
@@ -312,6 +332,12 @@
   }
 
   box.innerHTML = html;
+
+  // Earnings (placeholder until API wired)
+  document.getElementById("earnToday").innerText = "$" + (store.earnToday || "0.00");
+  document.getElementById("earnWeek").innerText = "$" + (store.earnWeek || "0.00");
+  document.getElementById("earnMonth").innerText = "$" + (store.earnMonth || "0.00");
+  document.getElementById("earnTotal").innerText = "$" + (store.earnTotal || "0.00");
 </script>
 
 </body>
