@@ -1,93 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rider Dashboard — The Fast Roll</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rider Dashboard — The Fast Roll</title>
 
-    <link rel="icon" type="image/jpeg" href="/fast-roll/img/Fast-logo.jpg">
+  <link rel="icon" type="image/jpeg" href="/fast-roll/img/Fast-logo.jpg">
+  <link rel="stylesheet" href="/fast-roll/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <meta property="og:title" content="Rider Dashboard — The Fast Roll">
-    <meta property="og:description" content="Your jobs, tools, and profile — all in one place.">
-    <meta property="og:image" content="/fast-roll/img/rider.jpg">
+  <style>
+    body {
+      margin: 0;
+      background: url('/fast-roll/img/rider.jpg') center/cover no-repeat fixed;
+      background-color: #05060a;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.75));
+      z-index: -1;
+    }
 
-    <link rel="stylesheet" href="/fast-roll/css/style.css" />
+    /* CLOUD CONNECT */
+    .cloud-connect {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .cloud-connect img {
+      height: 120px;
+      width: auto;
+      filter: drop-shadow(0px 0px 12px rgba(255,255,255,0.4));
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .cloud-connect img:hover {
+      transform: scale(1.05);
+    }
+    .cloud-connect p {
+      color: #f7d354;
+      font-family: Cinzel;
+      margin-top: 8px;
+    }
 
-    <style>
-        body {
-            background: url('/fast-roll/img/rider.jpg') center/cover no-repeat fixed;
-            background-color: #05060a;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.55),
-                rgba(0,0,0,0.75)
-            );
-            z-index: -1;
-        }
-    </style>
+    /* RIDER DASH WRAPPER */
+    .dash-wrapper {
+      margin-top: 140px;
+      width: 90%;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(0,0,0,0.55);
+      padding: 25px;
+      border-radius: 14px;
+      border: 2px solid #f7d354;
+    }
+
+    .dash-wrapper h1 {
+      font-family: Cinzel;
+      color: #f7d354;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .dash-wrapper p {
+      text-align: center;
+      opacity: 0.85;
+      margin-bottom: 25px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section label {
+      font-family: Cinzel;
+      color: #f7d354;
+      font-size: 1.2rem;
+    }
+
+    .card {
+      background: rgba(10, 42, 67, 0.85);
+      border: 2px solid #f7d354;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 10px;
+      color: white;
+    }
+
+    .primary-btn, .secondary-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: #f7d354;
+      color: black;
+      border: none;
+      font-weight: bold;
+    }
+
+    .secondary-btn {
+      background: transparent;
+      border: 2px solid #f7d354;
+      color: #f7d354;
+    }
+
+    .secondary-btn:hover {
+      background: #f7d354;
+      color: black;
+    }
+  </style>
 </head>
 
 <body>
 
-<nav class="nav">
-    <div class="logo">
-        <img src="/fast-roll/img/Fast-logo.png" class="logo-img" alt="The Fast Roll Logo" />
-    </div>
+<!-- CLOUD CONNECT -->
+<div class="cloud-connect">
+  <img src="/assets/img/cloud/cloud-logo.jpg" onclick="window.location.href='/dashboard.html'">
+  <p>Connected to Beltline Cloud</p>
+</div>
 
-    <div class="nav-links">
-        <a href="/fast-roll/index.html#how">How It Works</a>
-        <a href="/fast-roll/index.html#order">Order</a>
-        <a href="/fast-roll/index.html#riders">Riders</a>
-    </div>
+<!-- FAST ROLL NAV -->
+<nav class="nav">
+  <div class="logo">
+    <img src="/fast-roll/img/Fast-logo.png" class="logo-img" alt="The Fast Roll Logo" />
+  </div>
+
+  <div class="nav-links">
+    <a href="/fast-roll/index.html#how">How It Works</a>
+    <a href="/fast-roll/index.html#order">Order</a>
+    <a href="/fast-roll/index.html#riders">Riders</a>
+  </div>
 </nav>
 
-<div class="form-wrapper" style="margin-top:140px;">
-    <h1>Rider Dashboard</h1>
-    <p>Your zone, your jobs, your tools — all in one place.</p>
+<!-- RIDER DASH -->
+<div class="dash-wrapper">
 
-    <!-- PROFILE SUMMARY -->
-    <div class="form-group">
-        <label>Your Profile</label>
-        <div id="riderProfileSummary" class="form-note"></div>
-        <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/profile.html'">
-            Edit Profile
-        </button>
-    </div>
+  <h1>Rider Dashboard</h1>
+  <p>Your zone, your jobs, your tools — all in one place.</p>
 
-    <!-- JOB LIST -->
-    <div class="form-group">
-        <label>Available Jobs</label>
-        <div id="jobList" class="rider-grid"></div>
-    </div>
+  <!-- PROFILE -->
+  <div class="section">
+    <label>Your Profile</label>
+    <div id="riderProfileSummary" class="card"></div>
+    <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/profile.html'">Edit Profile</button>
+  </div>
 
-    <!-- ACTIVE DELIVERY -->
-    <div class="form-group">
-        <label>Active Delivery</label>
-        <div id="activeDelivery" class="rider-card">No active delivery.</div>
-    </div>
+  <!-- JOBS -->
+  <div class="section">
+    <label>Available Jobs</label>
+    <div id="jobList" class="card"></div>
+  </div>
 
-    <!-- STATUS -->
-    <div class="form-group">
-        <label>Safety & Status</label>
-        <div id="riderStatus" class="form-note"></div>
+  <!-- ACTIVE DELIVERY -->
+  <div class="section">
+    <label>Active Delivery</label>
+    <div id="activeDelivery" class="card">No active delivery.</div>
+  </div>
 
-        <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/agreement.html'">
-            Rider Agreement
-        </button>
+  <!-- STATUS -->
+  <div class="section">
+    <label>Safety & Status</label>
+    <div id="riderStatus" class="card"></div>
 
-        <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/how-it-works.html'">
-            How Riding Works
-        </button>
-    </div>
+    <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/agreement.html'">Rider Agreement</button>
+    <button class="secondary-btn" onclick="location.href='/fast-roll/pages/rider/how-it-works.html'">How Riding Works</button>
+  </div>
 
-    <button class="secondary-btn" onclick="logoutRider()">
-        Log Out
-    </button>
+  <button class="secondary-btn" onclick="logoutRider()">Log Out</button>
+
 </div>
 
 <script src="/fast-roll/js/fastroll.js"></script>
