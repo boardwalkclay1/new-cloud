@@ -1,31 +1,46 @@
 // /fast-roll/js/rider-dash.js
-// CLEAN RIDER DASHBOARD LOADER
+// UPDATED RIDER DASHBOARD — CLEAN, CLOUD-CONNECTED, FUTURE-PROOF
 
 document.addEventListener("DOMContentLoaded", async () => {
     const rider = FastRiderAuth.current();
 
+    // Redirect if not logged in
     if (!rider) {
         window.location.href = "/fast-roll/pages/rider/login.html";
         return;
     }
 
+    // Load rider info
     loadProfileSummary(rider);
     loadStatus(rider);
 
-    const jobs = await fastRiderLoadJobs();
+    // Load jobs
+    let jobs = [];
+    try {
+        jobs = await fastRiderLoadJobs();
+    } catch (err) {
+        console.error("Failed to load jobs:", err);
+    }
+
     loadJobList(jobs);
     loadActiveDelivery(jobs);
+
+    // Cloud sync (future use)
+    syncWithCloud(rider);
 });
 
 /* ---------------------------------------------------------
    PROFILE SUMMARY
 --------------------------------------------------------- */
 function loadProfileSummary(rider) {
-    document.getElementById("riderProfileSummary").innerHTML = `
+    const el = document.getElementById("riderProfileSummary");
+
+    el.innerHTML = `
         <strong>${rider.name}</strong><br>
-        Vehicle: ${rider.vehicle}<br>
-        Phone: ${rider.phone}<br>
-        PayPal: ${rider.paypal || "Not set"}
+        Vehicle: ${rider.vehicle || "Not set"}<br>
+        Phone: ${rider.phone || "Not set"}<br>
+        PayPal: ${rider.paypal || "Not set"}<br>
+        Zone: ${rider.zone || "Unassigned"}
     `;
 }
 
@@ -33,7 +48,9 @@ function loadProfileSummary(rider) {
    STATUS
 --------------------------------------------------------- */
 function loadStatus(rider) {
-    document.getElementById("riderStatus").innerHTML = `
+    const el = document.getElementById("riderStatus");
+
+    el.innerHTML = `
         Status: <strong>${rider.status || "offline"}</strong>
     `;
 }
@@ -44,7 +61,7 @@ function loadStatus(rider) {
 function loadJobList(jobs) {
     const jobList = document.getElementById("jobList");
 
-    if (!jobs.length) {
+    if (!jobs || !jobs.length) {
         jobList.innerHTML = `<p style="opacity:0.7;">No jobs available right now.</p>`;
         return;
     }
@@ -55,7 +72,8 @@ function loadJobList(jobs) {
             <p><strong>Pickup:</strong> ${job.pickup}</p>
             <p><strong>Dropoff:</strong> ${job.dropoff}</p>
             <p><strong>Payout:</strong> $${job.price || job.payout || 0}</p>
-            <button class="primary-btn" onclick="fastRiderAcceptJob('${job.id}')">
+
+            <button class="primary-btn" onclick="acceptJob('${job.id}')">
                 Accept Job
             </button>
         </div>
@@ -66,8 +84,14 @@ function loadJobList(jobs) {
    ACTIVE DELIVERY
 --------------------------------------------------------- */
 function loadActiveDelivery(jobs) {
-    const active = jobs.find(j => j.status === "assigned");
     const el = document.getElementById("activeDelivery");
+
+    if (!jobs || !jobs.length) {
+        el.innerHTML = "No active delivery.";
+        return;
+    }
+
+    const active = jobs.find(j => j.status === "assigned");
 
     if (!active) {
         el.innerHTML = "No active delivery.";
@@ -78,10 +102,54 @@ function loadActiveDelivery(jobs) {
         <strong>Delivery Active</strong><br>
         Pickup: ${active.pickup}<br>
         Dropoff: ${active.dropoff}<br>
-        <button class="primary-btn" onclick="fastRiderCompleteJob('${active.id}')">
+
+        <button class="primary-btn" onclick="completeJob('${active.id}')">
             Mark Complete
         </button>
     `;
+}
+
+/* ---------------------------------------------------------
+   ACCEPT JOB (WRAPPER)
+--------------------------------------------------------- */
+async function acceptJob(jobId) {
+    try {
+        await fastRiderAcceptJob(jobId);
+        location.reload();
+    } catch (err) {
+        alert("Unable to accept job.");
+        console.error(err);
+    }
+}
+
+/* ---------------------------------------------------------
+   COMPLETE JOB (WRAPPER)
+--------------------------------------------------------- */
+async function completeJob(jobId) {
+    try {
+        await fastRiderCompleteJob(jobId);
+        location.reload();
+    } catch (err) {
+        alert("Unable to complete job.");
+        console.error(err);
+    }
+}
+
+/* ---------------------------------------------------------
+   CLOUD SYNC (FUTURE USE)
+--------------------------------------------------------- */
+async function syncWithCloud(rider) {
+    // This will later sync:
+    // - Rider rep
+    // - Rider territory
+    // - Rider cloud badges
+    // - Rider cloud notifications
+    // - Rider cloud profile
+    try {
+        console.log("Cloud sync ready for future expansion.");
+    } catch (err) {
+        console.error("Cloud sync failed:", err);
+    }
 }
 
 /* ---------------------------------------------------------
