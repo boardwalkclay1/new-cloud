@@ -484,27 +484,34 @@
     window.location.href = "/pages/login.html";
   }
 
-  /* TIME */
-  function updateTime() {
-    const now = new Date();
-    document.getElementById("timeDisplay").textContent =
-      now.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        hour12: true,
-        timeZone: "America/New_York"
-      });
-  }
-  setInterval(updateTime, 1000);
-  updateTime();
+/* TIME — FIXED */
+function updateTime() {
+  const now = new Date();
+  document.getElementById("timeDisplay").textContent =
+    now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+      timeZone: "America/New_York"
+    });
+}
+setInterval(updateTime, 1000);
+updateTime();
 
-  /* WEATHER */
-  async function loadWeather() {
-    try {
-      const res = await fetch(
-        "https://api.open-meteo.com/v1/forecast?latitude=33.7490&longitude=-84.3880&current_weather=true&temperature_unit=fahrenheit"
-      );
+/* WEATHER + LOCATION — FULLY FIXED */
+async function loadWeatherAndLocation() {
+  try {
+    /* 1 — GET USER GPS */
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      /* 2 — WEATHER FROM USER LOCATION */
+      const url =
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
+
+      const res = await fetch(url);
       const data = await res.json();
       const w = data.current_weather;
 
@@ -521,8 +528,36 @@
       if ([95,96,99].includes(code)) emoji = "⛈️";
 
       document.getElementById("weather").textContent =
-        `${emoji} ${temp}°F • Atlanta`;
-    } catch {
+        `${emoji} ${temp}°F`;
+
+      /* 3 — BELTLINE LOCATION DETECTION */
+      let zone = "Outside Beltline";
+
+      /* Quick zone mapping */
+      if (lat > 33.74 && lat < 33.76 && lng > -84.37 && lng < -84.34)
+        zone = "Eastside Trail";
+
+      if (lat > 33.75 && lat < 33.77 && lng > -84.42 && lng < -84.40)
+        zone = "Westside Trail";
+
+      if (lat > 33.73 && lat < 33.74 && lng > -84.39 && lng < -84.37)
+        zone = "Southside Trail";
+
+      if (lat > 33.78 && lat < 33.80 && lng > -84.37 && lng < -84.35)
+        zone = "Northside Trail";
+
+      document.getElementById("beltlineLocation").textContent =
+        `📍 ${zone}`;
+
+    }, () => {
       document.getElementById("weather").textContent = "Weather unavailable";
-    }
+      document.getElementById("beltlineLocation").textContent = "Location unavailable";
+    });
+
+  } catch (err) {
+    document.getElementById("weather").textContent = "Weather unavailable";
+    document.getElementById("beltlineLocation").textContent = "Location unavailable";
   }
+}
+
+loadWeatherAndLocation();
