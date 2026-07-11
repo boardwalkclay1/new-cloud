@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beltline Cloud Dashboard</title>
+<title>Vendor Control Center</title>
 
-<link rel="icon" type="image/jpg" href="/assets/img/cloud/cloud-logo.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/jpg" href="/network/public/img/network-logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
     --yellow: #f7d354;
     --white: #ffffff;
+    --bg-dark: #05070b;
+    --card-bg: rgba(0,0,0,0.72);
   }
 
   body {
@@ -21,451 +23,535 @@
     color: var(--white);
   }
 
-  /* MAIN CLOUD */
-  .main-cloud {
-    height: 200px;
-    display: block;
-    margin: 25px auto 10px auto;
-    animation: floaty 6s infinite ease-in-out;
-    filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
-    cursor: pointer;
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    background: linear-gradient(120deg, rgba(0,0,0,0.8), rgba(10,10,20,0.85));
   }
 
-  /* MENU */
-  .cloud-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 310px;
-    height: 100vh;
-    background: rgba(10, 42, 67, 0.96);
-    border-right: 3px solid var(--yellow);
+  /* SIDEBAR */
+  .sidebar {
+    background: rgba(0,0,0,0.85);
+    border-right: 2px solid var(--yellow);
     padding: 20px;
-    transform: translateX(-100%);
-    transition: transform 0.35s ease;
-    overflow-y: auto;
-    z-index: 9999;
   }
-  .cloud-menu.open { transform: translateX(0); }
 
-  .menu-header {
+  .sidebar-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-  }
-  .menu-logo {
-    height: 70px;
-    width: 70px;
-    border-radius: 10px;
-  }
-  .menu-close {
-    font-size: 2rem;
-    cursor: pointer;
-  }
-
-  .menu-category {
-    margin-top: 20px;
-    border-bottom: 1px solid var(--yellow);
-    padding-bottom: 10px;
-  }
-  .menu-category h3 { color: var(--yellow); }
-  .menu-category ul { list-style: none; padding: 0; }
-  .menu-category ul li { margin: 8px 0; }
-  .menu-category ul li a { color: var(--white); text-decoration: none; }
-
-  .logout-btn-menu {
-    margin-top: 25px;
-    padding: 12px;
-    background: var(--yellow);
-    color: #000;
-    text-align: center;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  /* STATS */
-  .center-stats {
-    text-align: center;
-    margin-top: 5px;
-    margin-bottom: 20px;
-    font-family: 'Cinzel', serif;
-  }
-  .center-stats .stat {
-    font-size: 1.1rem;
-    margin: 4px 0;
-    color: var(--yellow);
-    text-shadow: 0 0 8px var(--yellow);
-  }
-
-  /* CLOUD ROW */
-  .cloud-row {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 0 10px;
-  }
-  .cloud-row img {
-    height: 190px;
-    width: 190px;
-    object-fit: contain;
-    cursor: pointer;
-    animation: pulse 2.2s infinite ease-in-out;
-  }
-
-  /* PROFILE + SETTINGS */
-  .quick-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+    gap: 10px;
     margin-bottom: 25px;
   }
-  .quick-links a {
-    background: rgba(0,0,0,0.55);
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: 2px solid var(--yellow);
-    color: var(--white);
-    text-decoration: none;
-    font-size: 1rem;
+
+  .sidebar-header img {
+    height: 50px;
+    width: 50px;
+    border-radius: 12px;
   }
 
-  /* PERFECT SQUARE CARDS */
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 25px;
-    padding: 0 15px;
-  }
-  .tile {
-    background: rgba(0,0,0,0.55);
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    text-decoration: none;
-    color: var(--white);
-    border: 2px solid var(--yellow);
-  }
-  .tile img {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* PERFECT SQUARE */
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  .tile h3 {
-    margin-top: 10px;
+  .sidebar-header h2 {
+    margin: 0;
     font-size: 1.3rem;
     color: var(--yellow);
   }
 
-  /* BOTTOM BAR */
-  .bottom-bar {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px 10px;
-    margin-top: 30px;
-  }
-  .bottom-section {
-    text-align: center;
-    cursor: pointer;
-  }
-  .bottom-logo {
-    height: 110px;
-    width: 110px;
-    object-fit: contain;
-  }
-  .bottom-section.fast-roll .bottom-logo {
-    height: 130px;
-    width: 130px;
-  }
-  .bottom-text {
-    margin-top: 8px;
-    font-size: 1rem;
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
-  /* RESPONSE MENU */
-  .response-menu {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(10,10,10,0.95);
-    padding: 20px;
-    border-top: 2px solid var(--yellow);
-    display: none;
-    z-index: 99999;
+  .sidebar-nav li {
+    margin-bottom: 12px;
   }
-  .response-box {
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
+
+  .sidebar-nav a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--white);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(247,211,84,0.35);
+    font-size: 0.95rem;
   }
-  .response-box select,
-  .response-box button {
+
+  .sidebar-nav a:hover {
+    background: rgba(247,211,84,0.18);
+    border-color: var(--yellow);
+  }
+
+  .sidebar-footer {
+    margin-top: 25px;
+  }
+
+  .sidebar-footer button {
     width: 100%;
-    padding: 12px;
-    margin-top: 10px;
+    padding: 10px;
     border-radius: 10px;
     border: 2px solid var(--yellow);
-    background: #222;
-    color: var(--white);
+    background: transparent;
+    color: var(--yellow);
+    font-weight: 600;
+    cursor: pointer;
   }
 
-  @keyframes floaty {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-    100% { transform: translateY(0); }
+  .sidebar-footer button:hover {
+    background: var(--yellow);
+    color: #000;
   }
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.12); }
-    100% { transform: scale(1); }
+
+  /* MAIN */
+  .main {
+    padding: 20px 22px;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .top-bar-left h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: var(--yellow);
+  }
+
+  .top-bar-left span {
+    font-size: 0.9rem;
+    color: #cfd9ff;
+  }
+
+  .top-bar-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  .top-bar-right img {
+    height: 46px;
+    width: 46px;
+    border-radius: 14px;
+    border: 2px solid var(--yellow);
+    background: rgba(0,0,0,0.7);
+    padding: 6px;
+    cursor: pointer;
+  }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 12px 12px 10px;
+    border: 1px solid rgba(247,211,84,0.6);
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-top: 4px;
+  }
+
+  .stat-sub {
+    font-size: 0.8rem;
+    color: #9fb3ff;
+    margin-top: 2px;
+  }
+
+  /* CONTENT GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 18px;
+  }
+
+  .panel {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid rgba(247,211,84,0.6);
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .panel-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--yellow);
+  }
+
+  .panel-header span {
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
+  /* PRODUCTS: SQUARE CARDS */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .product-card {
+    background: rgba(0,0,0,0.8);
+    border-radius: 14px;
+    border: 1px solid rgba(247,211,84,0.6);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* PERFECT SQUARE */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+
+  .product-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--yellow);
+  }
+
+  .product-meta {
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .product-actions button {
+    flex: 1;
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid var(--yellow);
+    background: transparent;
+    color: var(--yellow);
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .product-actions button:hover {
+    background: var(--yellow);
+    color: #000;
+  }
+
+  /* ORDERS */
+  .orders-list {
+    max-height: 260px;
+    overflow-y: auto;
+    margin-top: 6px;
+  }
+
+  .order-item {
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(247,211,84,0.4);
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  .order-item strong {
+    color: var(--yellow);
+  }
+
+  /* MESSAGES */
+  .messages-list {
+    max-height: 260px;
+    overflow-y: auto;
+    margin-top: 6px;
+  }
+
+  .message-item {
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(247,211,84,0.4);
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  .message-item strong {
+    color: var(--yellow);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      display: none;
+    }
+    .stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+    .products-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
 
 <body>
 
-<!-- MENU -->
-<div id="cloudMenu" class="cloud-menu">
-  <div class="menu-header">
-    <img src="/assets/img/cloud/cloud-logo.jpg" class="menu-logo">
-    <span class="menu-close" id="menuClose">&times;</span>
-  </div>
+<div class="layout">
 
-  <div class="menu-content">
-    <div class="menu-category">
-      <h3>My Profile</h3>
-      <ul>
-        <li><a href="/pages/profile/pages/index.html">View Profile</a></li>
-        <li><a href="/pages/notifications.html">Notifications</a></li>
-      </ul>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="/network/public/img/network-logo.jpg" alt="Network">
+      <div>
+        <h2>Vendor Cloud</h2>
+        <small>Control Center</small>
+      </div>
     </div>
 
-    <div class="menu-category">
-      <h3>Safety Cloud</h3>
-      <ul>
-        <li><a href="/pages/safety/index.html">Safety Overview</a></li>
-        <li><a href="/pages/safety/lost-and-found.html">Lost & Found</a></li>
-        <li><a href="/pages/safety/report-stolen.html">Stolen Items</a></li>
-        <li><a href="/pages/safety/markers/index.html">Marker System</a></li>
-        <li><a href="/pages/safety/live-feed.html">Live Feed</a></li>
-        <li><a href="/pages/safety/alerts.html">Alerts</a></li>
-      </ul>
+    <ul class="sidebar-nav">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#orders">Orders</a></li>
+      <li><a href="#messages">Messages</a></li>
+      <li><a href="/network/public/pages/storefront.html">View Storefront</a></li>
+      <li><a href="/network/public/pages/settings.html">Vendor Settings</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <button onclick="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>Vendor Dashboard</h1>
+        <span id="vendorSubtitle">Live performance overview</span>
+      </div>
+      <div class="top-bar-right">
+        <img src="/public/assets/img/cloud/safety-cloud-logo.jpg" id="safetyIcon" alt="Safety Cloud">
+        <img src="/public/assets/img/cloud/cloud-talkk-logo.jpg" id="talkIcon" alt="CloudTalk">
+      </div>
     </div>
 
-    <div class="menu-category">
-      <h3>News Cloud</h3>
-      <ul>
-        <li><a href="/pages/news/beltline-news.html">Beltline News</a></li>
-        <li><a href="/pages/news/weather.html">Weather</a></li>
-        <li><a href="/pages/news/updates.html">Updates</a></li>
-      </ul>
-    </div>
+    <!-- STATS -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Today’s Revenue</div>
+        <div class="stat-value" id="statRevenue">$0</div>
+        <div class="stat-sub" id="statRevenueSub">0 orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Products</div>
+        <div class="stat-value" id="statProducts">0</div>
+        <div class="stat-sub">Visible in storefront</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Open Orders</div>
+        <div class="stat-value" id="statOpenOrders">0</div>
+        <div class="stat-sub">Awaiting fulfillment</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New Messages</div>
+        <div class="stat-value" id="statMessages">0</div>
+        <div class="stat-sub">Customer inquiries</div>
+      </div>
+    </section>
 
-    <div class="menu-category">
-      <h3>Trail Tools</h3>
-      <ul>
-        <li><a href="/pages/map.html">Trail Map</a></li>
-        <li><a href="/pages/map/zones.html">Zones</a></li>
-        <li><a href="/pages/map/etiquette.html">Etiquette</a></li>
-      </ul>
-    </div>
+    <!-- CONTENT -->
+    <section class="content-grid">
+      <!-- PRODUCTS -->
+      <div class="panel" id="products">
+        <div class="panel-header">
+          <h3>Products</h3>
+          <span><a href="/network/staff/pages/products.html" style="color:#cfd9ff;text-decoration:none;">Advanced editor</a></span>
+        </div>
 
-    <div class="menu-category">
-      <h3>Community Cloud</h3>
-      <ul>
-        <li><a href="/pages/chat/pages/index.html">Cloud Chat</a></li>
-        <li><a href="/pages/events/pages/events.html">Events</a></li>
-        <li><a href="/pages/community.html">Cumulus Cloud</a></li>
-      </ul>
-    </div>
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
 
-    <div class="logout-btn-menu" onclick="logout()">Logout</div>
-  </div>
+      <!-- ORDERS + MESSAGES -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Orders</h3>
+          <span>Recent activity</span>
+        </div>
+        <div class="orders-list" id="ordersList"></div>
+
+        <div class="panel-header" style="margin-top:14px;">
+          <h3>Messages</h3>
+          <span>Customer chat</span>
+        </div>
+        <div class="messages-list" id="messagesList"></div>
+      </div>
+    </section>
+  </main>
+
 </div>
 
-<!-- MAIN CLOUD -->
-<img src="/assets/img/cloud/cloud-logo.jpg" class="main-cloud" id="menuTrigger">
+<script type="module">
+  // You can wire these to your real backend / staff.js
+  // For now, this expects similar functions or you can replace with fetch calls.
 
-<!-- STATS -->
-<div class="center-stats">
-  <div class="stat" id="weather">Loading weather…</div>
-  <div class="stat" id="beltlineLocation">Locating you…</div>
-  <div class="stat" id="timeDisplay"></div>
-</div>
+  import {
+    staffGetProducts,
+    staffUpdateProduct,
+    staffToggleVisibility,
+    staffGetOrders,
+    staffGetMessages,
+    staffGetTodayStats
+  } from "/network/staff/js/staff.js";
 
-<!-- CLOUD ROW (NEW ICONS) -->
-<div class="cloud-row">
-  <img id="safetyCloud" src="/public/assets/img/cloud/safety-cloud-logo.jpg">
-  <img id="cloudTalk" src="/public/assets/img/cloud/cloud-talkk-logo.jpg">
-</div>
+  const productsGrid = document.getElementById("productsGrid");
+  const ordersList = document.getElementById("ordersList");
+  const messagesList = document.getElementById("messagesList");
 
-<!-- PROFILE + SETTINGS -->
-<div class="quick-links">
-  <a href="/pages/profile/pages/index.html">Profile</a>
-  <a href="/pages/settings/index.html">Settings</a>
-</div>
+  const statRevenue = document.getElementById("statRevenue");
+  const statRevenueSub = document.getElementById("statRevenueSub");
+  const statProducts = document.getElementById("statProducts");
+  const statOpenOrders = document.getElementById("statOpenOrders");
+  const statMessages = document.getElementById("statMessages");
 
-<h2 style="text-align:center; margin-bottom:15px;">Explore Beltline Cloud</h2>
+  async function loadStats() {
+    const stats = await staffGetTodayStats(); // { revenue, ordersCount, activeProducts, openOrders, newMessages }
+    if (!stats) return;
 
-<section class="grid">
-  <a class="tile" href="/pages/chat/pages/index.html">
-    <img src="/assets/img/cloud/cloud-chat.jpg">
-    <h3>Cloud Chat</h3>
-    <p>Live Beltline conversation, chatrooms, games, and safety guidance.</p>
-  </a>
+    statRevenue.textContent = `$${stats.revenue || 0}`;
+    statRevenueSub.textContent = `${stats.ordersCount || 0} orders`;
+    statProducts.textContent = stats.activeProducts || 0;
+    statOpenOrders.textContent = stats.openOrders || 0;
+    statMessages.textContent = stats.newMessages || 0;
+  }
 
-  <a class="tile" href="/pages/map.html">
-    <img src="/assets/img/cloud/cloud-map.jpg">
-    <h3>Beltline Map</h3>
-    <p>Trail layout, zones, and navigation.</p>
-  </a>
+  async function loadProducts() {
+    const products = await staffGetProducts();
+    productsGrid.innerHTML = "";
 
-  <a class="tile" href="/pages/events/pages/events.html">
-    <img src="/assets/img/cloud/events-cloud.jpg">
-    <h3>Events</h3>
-    <p>Workshops, rides, meetups, concerts, and more.</p>
-  </a>
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
 
-  <a class="tile" href="/pages/community.html">
-    <img src="/assets/img/cloud/community-cloud.jpg">
-    <h3>Cumulus Cloud</h3>
-    <p>Connect and interact with your cloud community.</p>
-  </a>
-</section>
+      card.innerHTML = `
+        <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name}">
+        <div class="product-name">${p.name}</div>
+        <div class="product-meta">
+          $${p.price} • Inv: ${p.inventory} • ${p.visible ? "Visible" : "Hidden"}
+        </div>
+      `;
 
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <div class="bottom-section" onclick="window.location.href='/network/public/pages/index.html'">
-    <img src="/network/public/img/network-logo.jpg" class="bottom-logo">
-    <div class="bottom-text">Explore Network</div>
-  </div>
+      const actions = document.createElement("div");
+      actions.className = "product-actions";
 
-  <div class="bottom-section fast-roll" onclick="window.location.href='/fast-roll/index.html'">
-    <img src="/fast-roll/img/Fast-logo.png" class="bottom-logo">
-    <div class="bottom-text">Place Delivery</div>
-  </div>
-</div>
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.onclick = () => window.location.href = "/network/staff/pages/products.html";
 
-<!-- RESPONSE MENU -->
-<div id="responseMenu" class="response-menu">
-  <div class="response-box">
-    <h3>Response Actions</h3>
+      const toggleBtn = document.createElement("button");
+      toggleBtn.textContent = p.visible ? "Hide" : "Show";
+      toggleBtn.onclick = async () => {
+        await staffToggleVisibility(p.id);
+        loadProducts();
+        loadStats();
+      };
 
-    <label>Alert Type</label>
-    <select id="alertType">
-      <option value="">Select Alert Type</option>
-      <option value="emergency">Emergency Alert</option>
-      <option value="disturbance">Disturbance</option>
-      <option value="medical">Medical Concern</option>
-      <option value="suspicious">Suspicious Activity</option>
-    </select>
+      actions.appendChild(editBtn);
+      actions.appendChild(toggleBtn);
+      card.appendChild(actions);
 
-    <label>Auto Monitoring Mode</label>
-    <select id="autoMode">
-      <option value="">Select Mode</option>
-      <option value="motion">Motion Detection</option>
-      <option value="pattern">Pattern Recognition</option>
-      <option value="full">Full Monitoring</option>
-      <option value="silent">Silent Background Mode</option>
-      <option value="off">Turn Off Auto Alerts</option>
-    </select>
+      productsGrid.appendChild(card);
+    });
+  }
 
-    <button id="sendAlert">SEND ALERT</button>
-    <button id="closeResponseMenu">CLOSE</button>
-  </div>
-</div>
+  async function loadOrders() {
+    const orders = await staffGetOrders();
+    ordersList.innerHTML = "";
 
-<script>
-  /* MENU */
-  document.getElementById("menuTrigger").onclick = () => {
-    document.getElementById("cloudMenu").classList.add("open");
-  };
-  document.getElementById("menuClose").onclick = () => {
-    document.getElementById("cloudMenu").classList.remove("open");
-  };
+    orders.forEach(o => {
+      const item = document.createElement("div");
+      item.className = "order-item";
+      item.innerHTML = `
+        <strong>#${o.id}</strong> • ${o.status}<br>
+        ${o.customer} • $${o.total}<br>
+        ${o.items.length} items
+      `;
+      ordersList.appendChild(item);
+    });
+  }
 
-  /* SAFETY CLOUD TAP */
-  document.getElementById("safetyCloud").onclick = () => {
+  async function loadMessages() {
+    const messages = await staffGetMessages();
+    messagesList.innerHTML = "";
+
+    messages.forEach(m => {
+      const item = document.createElement("div");
+      item.className = "message-item";
+      item.innerHTML = `
+        <strong>${m.from}</strong> • ${m.channel}<br>
+        ${m.preview}
+      `;
+      messagesList.appendChild(item);
+    });
+  }
+
+  async function initDashboard() {
+    await loadStats();
+    await loadProducts();
+    await loadOrders();
+    await loadMessages();
+  }
+
+  initDashboard();
+
+  // ICON ACTIONS
+  document.getElementById("safetyIcon").onclick = () => {
     window.location.href = "/pages/safety/index.html";
   };
 
-  /* SAFETY CLOUD HOLD */
-  let pressTimer;
-  document.getElementById("safetyCloud").addEventListener("mousedown", () => {
-    pressTimer = setTimeout(() => {
-      document.getElementById("responseMenu").style.display = "block";
-    }, 600);
-  });
-  document.getElementById("safetyCloud").addEventListener("mouseup", () => {
-    clearTimeout(pressTimer);
-  });
-
-  /* CLOUD TALK */
-  document.getElementById("cloudTalk").onclick = () => {
+  document.getElementById("talkIcon").onclick = () => {
     window.location.href = "/pages/chat/pages/index.html";
   };
 
-  /* RESPONSE MENU */
-  document.getElementById("closeResponseMenu").onclick = () => {
-    document.getElementById("responseMenu").style.display = "none";
+  // LOGOUT
+  window.logout = function() {
+    localStorage.removeItem("vendor_user");
+    window.location.href = "/network/public/pages/login.html";
   };
-  document.getElementById("sendAlert").onclick = () => {
-    const type = document.getElementById("alertType").value;
-    const mode = document.getElementById("autoMode").value;
-    if (!type) return alert("Select an alert type.");
-    if (!mode) return alert("Select a monitoring mode.");
-    alert(`Alert sent: ${type.toUpperCase()} • Mode: ${mode.toUpperCase()}`);
-  };
+</script>
 
-  /* LOGOUT */
-  function logout() {
-    localStorage.removeItem("beltline_user");
-    window.location.href = "/pages/login.html";
-  }
-
-  /* TIME */
-  function updateTime() {
-    const now = new Date();
-    document.getElementById("timeDisplay").textContent =
-      now.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        hour12: true,
-        timeZone: "America/New_York"
-      });
-  }
-  setInterval(updateTime, 1000);
-  updateTime();
-
-  /* REAL WEATHER + REAL BELTLINE LOCATION */
-  async function detectBeltlineLocation() {
-    const zones = [
-      { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
-      { name: "Westside Trail", latMin: 33.750, latMax: 33.770, lngMin: -84.430, lngMax: -84.400 },
-      { name: "Southside Trail", latMin: 33.730, latMax: 33.745, lngMin: -84.395, lngMax: -84.365 },
-      { name: "Northside Trail", latMin: 33.780, latMax: 33.800, lngMin: -84.375, lngMax: -84.350 }
-    ];
-
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-
-      /* WEATHER */
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        const w = data.current_weather;
-        const temp = w.temperature;
-        const code = w.weathercode;
-
-        let emoji = "⛅";
-        if (code === 0) emoji = "☀️";
-        if ([1,2,3].includes(code)) emoji = "🌤️";
-        if ([45,48].includes(code)) emoji = "🌫️";
-        if ([51,53,55].includes(code)) emoji = "🌦️";
-        if ([61,63,65].includes
+</body>
+</html>
