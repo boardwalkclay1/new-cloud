@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vendor Control Center</title>
 
-<link rel="icon" type="image/jpg" href="/network/public/img/network-logo.jpg">
+<link rel="icon" type="image/jpg" href="/network/img/network-logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -19,7 +19,7 @@
   body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: url('/network/public/img/vendor-back.jpg') center/cover no-repeat fixed;
+    background: url('/network/img/vendor-back.jpg') center/cover no-repeat fixed;
     color: var(--white);
   }
 
@@ -128,6 +128,7 @@
   .top-bar-right {
     display: flex;
     gap: 12px;
+    align-items: center;
   }
 
   .top-bar-right img {
@@ -205,7 +206,7 @@
     color: #cfd9ff;
   }
 
-  /* PRODUCTS: SQUARE CARDS */
+  /* PRODUCTS */
   .products-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -223,7 +224,7 @@
 
   .product-card img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* PERFECT SQUARE */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 6px;
@@ -336,7 +337,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="/network/public/img/network-logo.jpg" alt="Network">
+      <img src="/network/img/network-logo.jpg" alt="Network">
       <div>
         <h2>Vendor Cloud</h2>
         <small>Control Center</small>
@@ -347,8 +348,8 @@
       <li><a href="#products">Products</a></li>
       <li><a href="#orders">Orders</a></li>
       <li><a href="#messages">Messages</a></li>
-      <li><a href="/network/public/pages/storefront.html">View Storefront</a></li>
-      <li><a href="/network/public/pages/settings.html">Vendor Settings</a></li>
+      <li><a href="/network/pages/storefront.html">View Storefront</a></li>
+      <li><a href="/network/pages/settings.html">Vendor Settings</a></li>
     </ul>
 
     <div class="sidebar-footer">
@@ -364,8 +365,8 @@
         <span id="vendorSubtitle">Live performance overview</span>
       </div>
       <div class="top-bar-right">
-        <img src="/public/assets/img/cloud/safety-cloud-logo.jpg" id="safetyIcon" alt="Safety Cloud">
-        <img src="/public/assets/img/cloud/cloud-talkk-logo.jpg" id="talkIcon" alt="CloudTalk">
+        <img src="/assets/img/cloud/safety-cloud-logo.jpg" id="safetyIcon" alt="Safety Cloud">
+        <img src="/assets/img/cloud/cloud-talkk-logo.jpg" id="talkIcon" alt="CloudTalk">
       </div>
     </div>
 
@@ -425,9 +426,6 @@
 </div>
 
 <script type="module">
-  // You can wire these to your real backend / staff.js
-  // For now, this expects similar functions or you can replace with fetch calls.
-
   import {
     staffGetProducts,
     staffUpdateProduct,
@@ -448,7 +446,7 @@
   const statMessages = document.getElementById("statMessages");
 
   async function loadStats() {
-    const stats = await staffGetTodayStats(); // { revenue, ordersCount, activeProducts, openOrders, newMessages }
+    const stats = await staffGetTodayStats();
     if (!stats) return;
 
     statRevenue.textContent = `$${stats.revenue || 0}`;
@@ -537,7 +535,6 @@
 
   initDashboard();
 
-  // ICON ACTIONS
   document.getElementById("safetyIcon").onclick = () => {
     window.location.href = "/pages/safety/index.html";
   };
@@ -546,10 +543,9 @@
     window.location.href = "/pages/chat/pages/index.html";
   };
 
-  // LOGOUT
   window.logout = function() {
     localStorage.removeItem("vendor_user");
-    window.location.href = "/network/public/pages/login.html";
+    window.location.href = "/network/pages/login.html";
   };
 </script>
 
