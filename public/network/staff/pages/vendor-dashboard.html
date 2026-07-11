@@ -56,6 +56,12 @@
     color: var(--yellow);
   }
 
+  .sidebar-header small {
+    display: block;
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
   .sidebar-nav {
     list-style: none;
     padding: 0;
@@ -111,7 +117,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
 
   .top-bar-left h1 {
@@ -139,6 +145,23 @@
     background: rgba(0,0,0,0.7);
     padding: 6px;
     cursor: pointer;
+  }
+
+  /* CLOUD STATS (WEATHER / LOCATION / TIME) */
+  .cloud-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+  }
+
+  .cloud-stat {
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(247,211,84,0.6);
+    color: var(--yellow);
   }
 
   /* STATS GRID */
@@ -303,6 +326,16 @@
     color: var(--yellow);
   }
 
+  /* VENDOR MAP PANEL */
+  #vendorMapContainer {
+    width: 100%;
+    height: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid rgba(247,211,84,0.6);
+  }
+
   /* RESPONSIVE */
   @media (max-width: 900px) {
     .layout {
@@ -340,7 +373,7 @@
       <img src="/network/img/network-logo.jpg" alt="Network">
       <div>
         <h2>Vendor Cloud</h2>
-        <small>Control Center</small>
+        <small id="sidebarUser">Connected</small>
       </div>
     </div>
 
@@ -350,6 +383,7 @@
       <li><a href="#messages">Messages</a></li>
       <li><a href="/network/pages/storefront.html">View Storefront</a></li>
       <li><a href="/network/pages/settings.html">Vendor Settings</a></li>
+      <li><a href="#vendor-map">Vendor Map</a></li>
     </ul>
 
     <div class="sidebar-footer">
@@ -368,6 +402,13 @@
         <img src="/assets/img/cloud/safety-cloud-logo.jpg" id="safetyIcon" alt="Safety Cloud">
         <img src="/assets/img/cloud/cloud-talkk-logo.jpg" id="talkIcon" alt="CloudTalk">
       </div>
+    </div>
+
+    <!-- CLOUD STATS (WEATHER / LOCATION / TIME) -->
+    <div class="cloud-stats">
+      <div class="cloud-stat" id="weatherStat">Weather: …</div>
+      <div class="cloud-stat" id="locationStat">Location: …</div>
+      <div class="cloud-stat" id="timeStat">Time: …</div>
     </div>
 
     <!-- STATS -->
@@ -406,7 +447,7 @@
         <div class="products-grid" id="productsGrid"></div>
       </div>
 
-      <!-- ORDERS + MESSAGES -->
+      <!-- ORDERS + MESSAGES + MAP -->
       <div class="panel">
         <div class="panel-header">
           <h3>Orders</h3>
@@ -419,6 +460,12 @@
           <span>Customer chat</span>
         </div>
         <div class="messages-list" id="messagesList"></div>
+
+        <div class="panel-header" id="vendor-map" style="margin-top:14px;">
+          <h3>Vendor Map</h3>
+          <span>Live Beltline placement</span>
+        </div>
+        <div id="vendorMapContainer"></div>
       </div>
     </section>
   </main>
@@ -435,6 +482,8 @@
     staffGetTodayStats
   } from "/network/staff/js/staff.js";
 
+  import { initVendorMap } from "/network/js/vendor-map.js";
+
   const productsGrid = document.getElementById("productsGrid");
   const ordersList = document.getElementById("ordersList");
   const messagesList = document.getElementById("messagesList");
@@ -445,6 +494,102 @@
   const statOpenOrders = document.getElementById("statOpenOrders");
   const statMessages = document.getElementById("statMessages");
 
+  const weatherStat = document.getElementById("weatherStat");
+  const locationStat = document.getElementById("locationStat");
+  const timeStat = document.getElementById("timeStat");
+  const sidebarUser = document.getElementById("sidebarUser");
+  const vendorSubtitle = document.getElementById("vendorSubtitle");
+
+  // CLOUD USER CONNECTION
+  function connectCloudUser() {
+    const beltlineUser = JSON.parse(localStorage.getItem("beltline_user") || "null");
+    const vendorUser = JSON.parse(localStorage.getItem("vendor_user") || "null");
+    const user = vendorUser || beltlineUser;
+
+    if (user && user.name) {
+      sidebarUser.textContent = `Connected: ${user.name}`;
+      vendorSubtitle.textContent = `Live performance for ${user.name}`;
+    } else {
+      sidebarUser.textContent = "Connected to Cloud";
+      vendorSubtitle.textContent = "Live performance overview";
+    }
+  }
+
+  // TIME
+  function updateTime() {
+    const now = new Date();
+    timeStat.textContent = now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+      timeZone: "America/New_York"
+    });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+
+  // WEATHER + LOCATION
+  async function detectBeltlineLocation() {
+    const zones = [
+      { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
+      { name: "Westside Trail", latMin: 33.750, latMax: 33.770, lngMin: -84.430, lngMax: -84.400 },
+      { name: "Southside Trail", latMin: 33.730, latMax: 33.745, lngMin: -84.395, lngMax: -84.365 },
+      { name: "Northside Trail", latMin: 33.780, latMax: 33.800, lngMin: -84.375, lngMax: -84.350 }
+    ];
+
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      // WEATHER
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const w = data.current_weather;
+        const temp = w.temperature;
+        const code = w.weathercode;
+
+        let emoji = "⛅";
+        if (code === 0) emoji = "☀️";
+        if ([1,2,3].includes(code)) emoji = "🌤️";
+        if ([45,48].includes(code)) emoji = "🌫️";
+        if ([51,53,55].includes(code)) emoji = "🌦️";
+        if ([61,63,65].includes(code)) emoji = "🌧️";
+        if ([71,73,75].includes(code)) emoji = "❄️";
+        if ([95,96,99].includes(code)) emoji = "⛈️";
+
+        weatherStat.textContent = `Weather: ${emoji} ${temp}°F`;
+      } catch {
+        weatherStat.textContent = "Weather: unavailable";
+      }
+
+      // BELTLINE ZONE
+      let zone = "Outside Beltline";
+      for (const z of zones) {
+        if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
+          zone = z.name;
+          break;
+        }
+      }
+      locationStat.textContent = `Location: ${zone}`;
+
+      // VENDOR MAP INIT (WITH CLOUD USER + LOCATION)
+      initVendorMap({
+        lat,
+        lng,
+        zone,
+        containerId: "vendorMapContainer"
+      });
+    }, () => {
+      locationStat.textContent = "Location: unavailable";
+      weatherStat.textContent = "Weather: unavailable";
+      initVendorMap({ containerId: "vendorMapContainer" });
+    });
+  }
+
+  // STATS
   async function loadStats() {
     const stats = await staffGetTodayStats();
     if (!stats) return;
@@ -456,6 +601,7 @@
     statMessages.textContent = stats.newMessages || 0;
   }
 
+  // PRODUCTS
   async function loadProducts() {
     const products = await staffGetProducts();
     productsGrid.innerHTML = "";
@@ -483,8 +629,8 @@
       toggleBtn.textContent = p.visible ? "Hide" : "Show";
       toggleBtn.onclick = async () => {
         await staffToggleVisibility(p.id);
-        loadProducts();
-        loadStats();
+        await loadProducts();
+        await loadStats();
       };
 
       actions.appendChild(editBtn);
@@ -495,6 +641,7 @@
     });
   }
 
+  // ORDERS
   async function loadOrders() {
     const orders = await staffGetOrders();
     ordersList.innerHTML = "";
@@ -511,6 +658,7 @@
     });
   }
 
+  // MESSAGES
   async function loadMessages() {
     const messages = await staffGetMessages();
     messagesList.innerHTML = "";
@@ -527,14 +675,17 @@
   }
 
   async function initDashboard() {
+    connectCloudUser();
     await loadStats();
     await loadProducts();
     await loadOrders();
     await loadMessages();
+    await detectBeltlineLocation();
   }
 
   initDashboard();
 
+  // ICON ACTIONS
   document.getElementById("safetyIcon").onclick = () => {
     window.location.href = "/pages/safety/index.html";
   };
@@ -543,8 +694,10 @@
     window.location.href = "/pages/chat/pages/index.html";
   };
 
+  // LOGOUT
   window.logout = function() {
     localStorage.removeItem("vendor_user");
+    localStorage.removeItem("beltline_user");
     window.location.href = "/network/pages/login.html";
   };
 </script>
