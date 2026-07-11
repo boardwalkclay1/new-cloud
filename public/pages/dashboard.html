@@ -149,7 +149,7 @@
   }
   .tile img {
     width: 100%;
-    height: 260px; /* MORE SQUARE */
+    aspect-ratio: 1 / 1; /* PERFECT SQUARE */
     object-fit: cover;
     border-radius: 10px;
   }
@@ -480,3 +480,21 @@
 
       /* BELTLINE ZONE */
       let zone = "Outside Beltline";
+      for (const z of zones) {
+        if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
+          zone = z.name;
+          break;
+        }
+      }
+      document.getElementById("beltlineLocation").textContent = `📍 ${zone}`;
+    }, () => {
+      document.getElementById("beltlineLocation").textContent = "Location unavailable";
+      document.getElementById("weather").textContent = "Weather unavailable";
+    });
+  }
+
+  detectBeltlineLocation();
+</script>
+
+</body>
+</html>
