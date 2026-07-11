@@ -9,23 +9,18 @@
 
 <style>
 /* ---------------------------------------------------------
-   GLOBAL ANIMATIONS
---------------------------------------------------------- */
-@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
-@keyframes slideIn { from {opacity:0; transform:translateX(-40px);} to {opacity:1; transform:translateX(0);} }
-@keyframes hoverLift { from {transform:translateY(0);} to {transform:translateY(-4px);} }
-@keyframes pulseGlow { 0%{text-shadow:0 0 4px #f7d354;} 50%{text-shadow:0 0 14px #f7d354;} 100%{text-shadow:0 0 4px #f7d354;} }
-
-/* ---------------------------------------------------------
-   BODY
+   GLOBAL — NO FLICKER ANIMATIONS
 --------------------------------------------------------- */
 body {
   margin: 0;
   font-family: Inter, sans-serif;
   background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
   color: #fff;
-  animation: fadeIn 0.8s ease;
+  opacity: 0;
+  animation: fadeInBody 0.6s ease forwards;
 }
+@keyframes fadeInBody { to { opacity: 1; } }
+
 body::before {
   content: "";
   position: fixed;
@@ -42,12 +37,11 @@ body::before {
   justify-content: space-between;
   align-items: center;
   padding: 18px 25px;
-  animation: slideIn 0.6s ease;
 }
 .vendor-logo {
   height: 85px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: transform 0.2s ease;
 }
 .vendor-logo:hover { transform: scale(1.05); }
 
@@ -55,12 +49,12 @@ body::before {
   font-family: Cinzel;
   font-size: 2.1rem;
   color: #f7d354;
-  animation: pulseGlow 2.5s infinite;
+  text-shadow: 0 0 10px #f7d354;
 }
 .dash-sub { opacity: 0.8; }
 
 /* ---------------------------------------------------------
-   MENU (LOCKED UNTIL LOGO CLICK)
+   MENU — LOCKED UNTIL LOGO CLICK
 --------------------------------------------------------- */
 .menu-panel {
   position: fixed;
@@ -71,22 +65,14 @@ body::before {
   background: rgba(10,42,67,0.96);
   border-right: 3px solid #f7d354;
   padding: 25px;
-  transition: 0.3s ease;
+  transition: left 0.3s ease;
   overflow-y: auto;
   z-index: 9999;
 }
-.menu-panel.open { left: 0; animation: slideIn 0.3s ease; }
-
-.menu-panel a {
-  display: block;
-  padding: 10px 0;
-  color: #fff;
-  transition: 0.2s ease;
-}
-.menu-panel a:hover { color: #f7d354; transform: translateX(4px); }
+.menu-panel.open { left: 0; }
 
 /* ---------------------------------------------------------
-   CARD GRID (4 CARDS)
+   CARD GRID
 --------------------------------------------------------- */
 .card-grid {
   width: 95%;
@@ -95,26 +81,23 @@ body::before {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   gap: 25px;
-  animation: fadeIn 0.8s ease;
 }
 .dash-card {
   background: rgba(10,42,67,0.9);
   border: 2px solid #f7d354;
   border-radius: 16px;
   padding: 20px;
-  animation: slideIn 0.8s ease;
-  transition: 0.2s ease;
 }
-.dash-card:hover { animation: hoverLift 0.2s forwards; }
 
 /* ---------------------------------------------------------
-   HYBRID QUICK ACTION ROWS
+   HYBRID QUICK ACTION ROWS — NON-FLICKERING
 --------------------------------------------------------- */
 .scroll-row {
   display: flex;
   overflow-x: auto;
   gap: 15px;
   padding-bottom: 10px;
+  scroll-behavior: smooth;
 }
 .scroll-row::-webkit-scrollbar { height: 6px; }
 .scroll-row::-webkit-scrollbar-thumb { background: #f7d354; border-radius: 10px; }
@@ -125,10 +108,12 @@ body::before {
   border: 1px solid #f7d354;
   border-radius: 10px;
   padding: 12px;
-  animation: fadeIn 0.5s ease;
-  transition: 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
-.item-row:hover { animation: hoverLift 0.2s forwards; border-color: #ffe48a; }
+.item-row:hover {
+  transform: translateY(-4px);
+  border-color: #ffe48a;
+}
 
 .item-thumb {
   width: 70px;
@@ -144,47 +129,29 @@ body::before {
 .item-desc { opacity: 0.7; font-size: 0.85rem; }
 .item-status { margin-top: 5px; opacity: 0.6; }
 
+/* ---------------------------------------------------------
+   QUICK ACTION BUTTONS — 20 ACTIONS
+--------------------------------------------------------- */
 .item-actions {
   margin-top: 10px;
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 8px;
 }
-
-/* ---------------------------------------------------------
-   BUTTONS
---------------------------------------------------------- */
 .btn-small {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 8px;
   border: 2px solid #f7d354;
   background: transparent;
   color: #f7d354;
   cursor: pointer;
-  transition: 0.2s ease;
+  font-size: 0.75rem;
+  transition: background 0.2s ease, color 0.2s ease;
 }
-.btn-small:hover { background: #f7d354; color: #000; animation: hoverLift 0.2s forwards; }
-
-.btn-preview, .btn-publish {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  margin-top: 10px;
-  transition: 0.2s ease;
-}
-.btn-preview {
-  background: transparent;
-  border: 2px solid #f7d354;
-  color: #f7d354;
-}
-.btn-preview:hover { background: #f7d354; color: #000; animation: hoverLift 0.2s forwards; }
-
-.btn-publish {
+.btn-small:hover {
   background: #f7d354;
   color: #000;
-  border: none;
 }
-.btn-publish:hover { animation: hoverLift 0.2s forwards; }
 
 /* ---------------------------------------------------------
    EARNINGS
@@ -194,7 +161,6 @@ body::before {
   font-weight: 700;
   color: #00e0ff;
   text-align: center;
-  animation: pulseGlow 2s infinite;
 }
 .earn-sub { text-align: center; opacity: 0.75; }
 </style>
