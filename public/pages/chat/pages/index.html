@@ -23,31 +23,38 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 22px;
+      padding: 18px 22px;
       background: rgba(0,0,0,0.78);
       border-bottom: 2px solid #f7d354;
     }
 
-    /* LEFT LOGO — FIXED, NOT CUT OFF */
+    /* LOGOS — TWICE THE SIZE */
     #burgerLogo {
-      width: 78px;
-      height: 78px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
       cursor: pointer;
     }
 
-    /* RIGHT LOGO — SHIFTED LEFT, MOBILE SAFE */
     #messagesIcon {
-      width: 68px;
-      height: 68px;
+      width: 140px;
+      height: 140px;
       object-fit: contain;
       cursor: pointer;
-      margin-right: 12px; /* pulls it left */
+      margin-right: 12px;
     }
 
+    /* MOBILE SAFE LOGO SCALING */
     @media (max-width: 600px) {
-      #burgerLogo { width: 64px; height: 64px; }
-      #messagesIcon { width: 54px; height: 54px; margin-right: 6px; }
+      #burgerLogo {
+        width: 110px;
+        height: 110px;
+      }
+      #messagesIcon {
+        width: 100px;
+        height: 100px;
+        margin-right: 6px;
+      }
     }
 
     /* BURGER MENU PANEL */
@@ -55,7 +62,7 @@
       position: fixed;
       top: 0;
       left: -100%;
-      width: 300px;
+      width: 350px;
       height: 100%;
       background: rgba(0,0,0,0.92);
       border-right: 2px solid #f7d354;
@@ -67,7 +74,7 @@
     #burgerMenu.open { left: 0; }
 
     #burgerMenu .menu-close {
-      font-size: 32px;
+      font-size: 40px;
       color: #f7d354;
       cursor: pointer;
       float: right;
@@ -78,14 +85,15 @@
       color: #f7d354;
       margin-top: 25px;
       margin-bottom: 10px;
+      font-size: 1.4rem;
     }
 
     #burgerMenu a {
       display: block;
-      padding: 8px 0;
+      padding: 10px 0;
       color: white;
       text-decoration: none;
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
     #burgerMenu a:hover { color: #00b86b; }
@@ -93,27 +101,28 @@
     /* HEADER */
     .dashboard-header {
       text-align: center;
-      padding: 30px 20px 10px;
+      padding: 40px 20px 20px;
       color: #f7d354;
       text-shadow: 0 0 8px #f7d354;
       font-family: Cinzel;
+      font-size: 2.4rem;
     }
 
-    /* MAIN GRID */
+    /* MAIN GRID — BIGGER CARDS */
     .dashboard-grid {
-      max-width: 900px;
+      max-width: 1100px;
       margin: auto;
       padding: 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
     }
 
     .dash-card {
       background: rgba(0,0,0,0.65);
       border: 2px solid #f7d354;
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 20px;
+      padding: 22px;
       color: white;
       font-family: Inter;
     }
@@ -121,37 +130,39 @@
     .dash-card h3 {
       font-family: Cinzel;
       color: #f7d354;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      font-size: 1.4rem;
     }
 
     .dash-card img {
       width: 100%;
-      height: 140px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 10px;
+      border-radius: 16px;
+      margin-bottom: 14px;
       background: #111;
     }
 
     .dash-btn {
       display: inline-block;
-      margin-top: 12px;
-      padding: 10px 16px;
+      margin-top: 14px;
+      padding: 12px 18px;
       background: #f7d354;
       color: black;
-      border-radius: 12px;
+      border-radius: 14px;
       font-family: Cinzel;
       text-decoration: none;
+      font-size: 1rem;
     }
 
-    /* INBOX PREVIEW */
+    /* INBOX PREVIEW — BIGGER */
     .inbox-preview-box {
       background: rgba(0,0,0,0.65);
       border: 2px solid #f7d354;
-      border-radius: 16px;
-      padding: 15px;
-      margin: 20px auto;
-      max-width: 900px;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 30px auto;
+      max-width: 1100px;
       color: white;
       font-family: Inter;
     }
@@ -159,22 +170,24 @@
     .inbox-preview-box h3 {
       font-family: Cinzel;
       color: #f7d354;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      font-size: 1.4rem;
     }
 
     .inbox-item {
-      padding: 10px;
+      padding: 12px;
       border-bottom: 1px solid #444;
+      font-size: 1rem;
     }
 
-    /* CLOUD FRIENDS */
+    /* CLOUD FRIENDS — BIGGER */
     .friends-box {
       background: rgba(0,0,0,0.65);
       border: 2px solid #f7d354;
-      border-radius: 16px;
-      padding: 15px;
-      margin: 20px auto;
-      max-width: 900px;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 30px auto;
+      max-width: 1100px;
       color: white;
       font-family: Inter;
     }
@@ -182,36 +195,39 @@
     .friends-box h3 {
       font-family: Cinzel;
       color: #f7d354;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      font-size: 1.4rem;
     }
 
-    /* NOTIFICATIONS RECEIVER — TOGGLE ON/OFF */
+    /* NOTIFICATIONS */
     #notifReceiver {
       position: fixed;
       bottom: 15px;
       right: 15px;
       background: rgba(0,0,0,0.85);
       border: 2px solid #f7d354;
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 16px;
+      padding: 14px;
       color: white;
       font-family: Inter;
-      width: 240px;
+      width: 260px;
       display: none;
       z-index: 99999;
+      font-size: 1rem;
     }
 
     #notifReceiverToggle {
       position: fixed;
       bottom: 15px;
-      right: 270px;
+      right: 290px;
       background: #f7d354;
       color: black;
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 12px 16px;
+      border-radius: 14px;
       font-family: Cinzel;
       cursor: pointer;
       z-index: 99999;
+      font-size: 1rem;
     }
   </style>
 </head>
