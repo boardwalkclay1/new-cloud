@@ -3,367 +3,554 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vendor Dashboard</title>
+<title>Vendor Control Center</title>
 
-<link rel="icon" type="image/jpg" href="/network/img/network-logo.jpg">
+<link rel="icon" type="image/jpg" href="/network/public/img/network-logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --yellow: #f7d354;
-  --white: #ffffff;
-  --dark: #000;
-}
+  :root {
+    --yellow: #f7d354;
+    --white: #ffffff;
+    --bg-dark: #05070b;
+    --card-bg: rgba(0,0,0,0.72);
+  }
 
-/* GLOBAL */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #000;
-  color: var(--white);
-}
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: url('/network/public/img/vendor-back.jpg') center/cover no-repeat fixed;
+    color: var(--white);
+  }
 
-/* HEADER */
-header {
-  text-align: center;
-  padding: 25px 20px;
-  background: rgba(0,0,0,0.65);
-  border-bottom: 2px solid var(--yellow);
-}
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    background: linear-gradient(120deg, rgba(0,0,0,0.8), rgba(10,10,20,0.85));
+  }
 
-header h1 {
-  margin: 0;
-  font-size: 32px;
-  color: var(--yellow);
-}
+  /* SIDEBAR */
+  .sidebar {
+    background: rgba(0,0,0,0.85);
+    border-right: 2px solid var(--yellow);
+    padding: 20px;
+  }
 
-/* CLOUD ICONS */
-.cloud-row {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 20px;
-  margin-bottom: 25px;
-}
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+  }
 
-.cloud-row img {
-  height: 160px;
-  width: auto;
-  object-fit: contain;
-  cursor: pointer;
-  animation: pulse 2.2s infinite ease-in-out;
-}
+  .sidebar-header img {
+    height: 50px;
+    width: 50px;
+    border-radius: 12px;
+  }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
+  .sidebar-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: var(--yellow);
+  }
 
-/* STATS */
-.center-stats {
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  font-family: 'Cinzel', serif;
-}
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-.center-stats .stat {
-  font-size: 1.2rem;
-  margin: 6px 0;
-  color: var(--yellow);
-}
+  .sidebar-nav li {
+    margin-bottom: 12px;
+  }
 
-/* PRODUCT GRID */
-.container {
-  width: 92%;
-  max-width: 900px;
-  margin: 25px auto;
-}
+  .sidebar-nav a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--white);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(247,211,84,0.35);
+    font-size: 0.95rem;
+  }
 
-.add-btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  background: var(--yellow);
-  color: #000;
-  border-radius: 10px;
-  font-weight: 700;
-  text-align: center;
-  text-decoration: none;
-  margin-bottom: 20px;
-}
+  .sidebar-nav a:hover {
+    background: rgba(247,211,84,0.18);
+    border-color: var(--yellow);
+  }
 
-/* SQUARE PRODUCT CARDS */
-.product-card {
-  background: rgba(0,0,0,0.55);
-  border: 2px solid var(--yellow);
-  border-radius: 14px;
-  padding: 15px;
-  margin-bottom: 20px;
-}
+  .sidebar-footer {
+    margin-top: 25px;
+  }
 
-.product-card img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
+  .sidebar-footer button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--yellow);
+    background: transparent;
+    color: var(--yellow);
+    font-weight: 600;
+    cursor: pointer;
+  }
 
-.product-card h3 {
-  margin: 0;
-  color: var(--yellow);
-  font-size: 1.4rem;
-}
+  .sidebar-footer button:hover {
+    background: var(--yellow);
+    color: #000;
+  }
 
-.product-card p {
-  margin: 6px 0;
-  color: #d4e8ff;
-}
+  /* MAIN */
+  .main {
+    padding: 20px 22px;
+  }
 
-/* EDITING */
-.edit-row {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
 
-.edit-row input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid var(--yellow);
-  background: #111;
-  color: var(--white);
-}
+  .top-bar-left h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: var(--yellow);
+  }
 
-.edit-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
+  .top-bar-left span {
+    font-size: 0.9rem;
+    color: #cfd9ff;
+  }
 
-.edit-actions button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid var(--yellow);
-  background: rgba(0,0,0,0.7);
-  color: var(--yellow);
-  cursor: pointer;
-  font-weight: 600;
-}
+  .top-bar-right {
+    display: flex;
+    gap: 12px;
+  }
 
-.edit-actions button:hover {
-  background: var(--yellow);
-  color: #000;
-}
+  .top-bar-right img {
+    height: 46px;
+    width: 46px;
+    border-radius: 14px;
+    border: 2px solid var(--yellow);
+    background: rgba(0,0,0,0.7);
+    padding: 6px;
+    cursor: pointer;
+  }
 
-.visibility-toggle {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid var(--yellow);
-  background: rgba(0,0,0,0.7);
-  color: var(--yellow);
-  cursor: pointer;
-  font-weight: 600;
-}
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+  }
 
-.visibility-toggle:hover {
-  background: var(--yellow);
-  color: #000;
-}
+  .stat-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 12px 12px 10px;
+    border: 1px solid rgba(247,211,84,0.6);
+  }
 
-/* MOBILE */
-@media (max-width: 768px) {
-  .cloud-row img {
-    height: 130px;
+  .stat-label {
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-top: 4px;
+  }
+
+  .stat-sub {
+    font-size: 0.8rem;
+    color: #9fb3ff;
+    margin-top: 2px;
+  }
+
+  /* CONTENT GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 18px;
+  }
+
+  .panel {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid rgba(247,211,84,0.6);
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .panel-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--yellow);
+  }
+
+  .panel-header span {
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
+  /* PRODUCTS: SQUARE CARDS */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .product-card {
+    background: rgba(0,0,0,0.8);
+    border-radius: 14px;
+    border: 1px solid rgba(247,211,84,0.6);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
   }
 
   .product-card img {
-    aspect-ratio: 1 / 1;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* PERFECT SQUARE */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 6px;
   }
-}
+
+  .product-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--yellow);
+  }
+
+  .product-meta {
+    font-size: 0.8rem;
+    color: #cfd9ff;
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .product-actions button {
+    flex: 1;
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid var(--yellow);
+    background: transparent;
+    color: var(--yellow);
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .product-actions button:hover {
+    background: var(--yellow);
+    color: #000;
+  }
+
+  /* ORDERS */
+  .orders-list {
+    max-height: 260px;
+    overflow-y: auto;
+    margin-top: 6px;
+  }
+
+  .order-item {
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(247,211,84,0.4);
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  .order-item strong {
+    color: var(--yellow);
+  }
+
+  /* MESSAGES */
+  .messages-list {
+    max-height: 260px;
+    overflow-y: auto;
+    margin-top: 6px;
+  }
+
+  .message-item {
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(247,211,84,0.4);
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  .message-item strong {
+    color: var(--yellow);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar {
+      display: none;
+    }
+    .stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+    .products-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>Vendor Dashboard</h1>
-</header>
+<div class="layout">
 
-<!-- CLOUD ICONS -->
-<div class="cloud-row">
-  <img id="safetyCloud" src="/assets/img/cloud/safety-cloud-logo.jpg">
-  <img id="cloudTalk" src="/assets/img/cloud/cloud-talkk-logo.jpg">
-</div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="/network/public/img/network-logo.jpg" alt="Network">
+      <div>
+        <h2>Vendor Cloud</h2>
+        <small>Control Center</small>
+      </div>
+    </div>
 
-<!-- STATS -->
-<div class="center-stats">
-  <div class="stat" id="weather">Loading weather…</div>
-  <div class="stat" id="beltlineLocation">Locating you…</div>
-  <div class="stat" id="timeDisplay"></div>
-</div>
+    <ul class="sidebar-nav">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#orders">Orders</a></li>
+      <li><a href="#messages">Messages</a></li>
+      <li><a href="/network/public/pages/storefront.html">View Storefront</a></li>
+      <li><a href="/network/public/pages/settings.html">Vendor Settings</a></li>
+    </ul>
 
-<div class="container">
+    <div class="sidebar-footer">
+      <button onclick="logout()">Logout</button>
+    </div>
+  </aside>
 
-  <a href="/network/staff/pages/products.html" class="add-btn">+ Add New Product</a>
+  <!-- MAIN -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>Vendor Dashboard</h1>
+        <span id="vendorSubtitle">Live performance overview</span>
+      </div>
+      <div class="top-bar-right">
+        <img src="/public/assets/img/cloud/safety-cloud-logo.jpg" id="safetyIcon" alt="Safety Cloud">
+        <img src="/public/assets/img/cloud/cloud-talkk-logo.jpg" id="talkIcon" alt="CloudTalk">
+      </div>
+    </div>
 
-  <div id="productList"></div>
+    <!-- STATS -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Today’s Revenue</div>
+        <div class="stat-value" id="statRevenue">$0</div>
+        <div class="stat-sub" id="statRevenueSub">0 orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Products</div>
+        <div class="stat-value" id="statProducts">0</div>
+        <div class="stat-sub">Visible in storefront</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Open Orders</div>
+        <div class="stat-value" id="statOpenOrders">0</div>
+        <div class="stat-sub">Awaiting fulfillment</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New Messages</div>
+        <div class="stat-value" id="statMessages">0</div>
+        <div class="stat-sub">Customer inquiries</div>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="content-grid">
+      <!-- PRODUCTS -->
+      <div class="panel" id="products">
+        <div class="panel-header">
+          <h3>Products</h3>
+          <span><a href="/network/staff/pages/products.html" style="color:#cfd9ff;text-decoration:none;">Advanced editor</a></span>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+
+      <!-- ORDERS + MESSAGES -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Orders</h3>
+          <span>Recent activity</span>
+        </div>
+        <div class="orders-list" id="ordersList"></div>
+
+        <div class="panel-header" style="margin-top:14px;">
+          <h3>Messages</h3>
+          <span>Customer chat</span>
+        </div>
+        <div class="messages-list" id="messagesList"></div>
+      </div>
+    </section>
+  </main>
 
 </div>
 
 <script type="module">
-import {
-  staffGetProducts,
-  staffUpdateProduct,
-  staffToggleVisibility
-} from "/network/staff/js/staff.js";
+  // You can wire these to your real backend / staff.js
+  // For now, this expects similar functions or you can replace with fetch calls.
 
-/* CLOUD ICONS */
-document.getElementById("safetyCloud").onclick = () => {
-  window.location.href = "/pages/safety/index.html";
-};
+  import {
+    staffGetProducts,
+    staffUpdateProduct,
+    staffToggleVisibility,
+    staffGetOrders,
+    staffGetMessages,
+    staffGetTodayStats
+  } from "/network/staff/js/staff.js";
 
-document.getElementById("cloudTalk").onclick = () => {
-  window.location.href = "/pages/chat/pages/index.html";
-};
+  const productsGrid = document.getElementById("productsGrid");
+  const ordersList = document.getElementById("ordersList");
+  const messagesList = document.getElementById("messagesList");
 
-/* TIME */
-function updateTime() {
-  const now = new Date();
-  document.getElementById("timeDisplay").textContent =
-    now.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true,
-      timeZone: "America/New_York"
+  const statRevenue = document.getElementById("statRevenue");
+  const statRevenueSub = document.getElementById("statRevenueSub");
+  const statProducts = document.getElementById("statProducts");
+  const statOpenOrders = document.getElementById("statOpenOrders");
+  const statMessages = document.getElementById("statMessages");
+
+  async function loadStats() {
+    const stats = await staffGetTodayStats(); // { revenue, ordersCount, activeProducts, openOrders, newMessages }
+    if (!stats) return;
+
+    statRevenue.textContent = `$${stats.revenue || 0}`;
+    statRevenueSub.textContent = `${stats.ordersCount || 0} orders`;
+    statProducts.textContent = stats.activeProducts || 0;
+    statOpenOrders.textContent = stats.openOrders || 0;
+    statMessages.textContent = stats.newMessages || 0;
+  }
+
+  async function loadProducts() {
+    const products = await staffGetProducts();
+    productsGrid.innerHTML = "";
+
+    products.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      card.innerHTML = `
+        <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name}">
+        <div class="product-name">${p.name}</div>
+        <div class="product-meta">
+          $${p.price} • Inv: ${p.inventory} • ${p.visible ? "Visible" : "Hidden"}
+        </div>
+      `;
+
+      const actions = document.createElement("div");
+      actions.className = "product-actions";
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.onclick = () => window.location.href = "/network/staff/pages/products.html";
+
+      const toggleBtn = document.createElement("button");
+      toggleBtn.textContent = p.visible ? "Hide" : "Show";
+      toggleBtn.onclick = async () => {
+        await staffToggleVisibility(p.id);
+        loadProducts();
+        loadStats();
+      };
+
+      actions.appendChild(editBtn);
+      actions.appendChild(toggleBtn);
+      card.appendChild(actions);
+
+      productsGrid.appendChild(card);
     });
-}
-setInterval(updateTime, 1000);
-updateTime();
+  }
 
-/* WEATHER + LOCATION */
-async function detectBeltlineLocation() {
-  const zones = [
-    { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
-    { name: "Westside Trail", latMin: 33.750, latMax: 33.770, lngMin: -84.430, lngMax: -84.400 },
-    { name: "Southside Trail", latMin: 33.730, latMax: 33.745, lngMin: -84.395, lngMax: -84.365 },
-    { name: "Northside Trail", latMin: 33.780, latMax: 33.800, lngMin: -84.375, lngMax: -84.350 }
-  ];
+  async function loadOrders() {
+    const orders = await staffGetOrders();
+    ordersList.innerHTML = "";
 
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+    orders.forEach(o => {
+      const item = document.createElement("div");
+      item.className = "order-item";
+      item.innerHTML = `
+        <strong>#${o.id}</strong> • ${o.status}<br>
+        ${o.customer} • $${o.total}<br>
+        ${o.items.length} items
+      `;
+      ordersList.appendChild(item);
+    });
+  }
 
-    /* WEATHER */
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      const w = data.current_weather;
-      const temp = w.temperature;
-      const code = w.weathercode;
+  async function loadMessages() {
+    const messages = await staffGetMessages();
+    messagesList.innerHTML = "";
 
-      let emoji = "⛅";
-      if (code === 0) emoji = "☀️";
-      if ([1,2,3].includes(code)) emoji = "🌤️";
-      if ([45,48].includes(code)) emoji = "🌫️";
-      if ([51,53,55].includes(code)) emoji = "🌦️";
-      if ([61,63,65].includes(code)) emoji = "🌧️";
-      if ([71,73,75].includes(code)) emoji = "❄️";
-      if ([95,96,99].includes(code)) emoji = "⛈️";
+    messages.forEach(m => {
+      const item = document.createElement("div");
+      item.className = "message-item";
+      item.innerHTML = `
+        <strong>${m.from}</strong> • ${m.channel}<br>
+        ${m.preview}
+      `;
+      messagesList.appendChild(item);
+    });
+  }
 
-      document.getElementById("weather").textContent =
-        `${emoji} ${temp}°F`;
-    } catch {
-      document.getElementById("weather").textContent = "Weather unavailable";
-    }
+  async function initDashboard() {
+    await loadStats();
+    await loadProducts();
+    await loadOrders();
+    await loadMessages();
+  }
 
-    /* BELTLINE ZONE */
-    let zone = "Outside Beltline";
-    for (const z of zones) {
-      if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
-        zone = z.name;
-        break;
-      }
-    }
-    document.getElementById("beltlineLocation").textContent = `📍 ${zone}`;
-  }, () => {
-    document.getElementById("beltlineLocation").textContent = "Location unavailable";
-    document.getElementById("weather").textContent = "Weather unavailable";
-  });
-}
+  initDashboard();
 
-detectBeltlineLocation();
+  // ICON ACTIONS
+  document.getElementById("safetyIcon").onclick = () => {
+    window.location.href = "/pages/safety/index.html";
+  };
 
-/* PRODUCTS */
-const productList = document.getElementById("productList");
+  document.getElementById("talkIcon").onclick = () => {
+    window.location.href = "/pages/chat/pages/index.html";
+  };
 
-async function loadProducts() {
-  const products = await staffGetProducts();
-  productList.innerHTML = "";
-
-  products.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-
-    card.innerHTML = `
-      <img src="${p.image || '/assets/img/placeholder.jpg'}">
-      <h3>${p.name}</h3>
-      <p><strong>Price:</strong> $${p.price}</p>
-      <p><strong>Inventory:</strong> ${p.inventory}</p>
-      <p><strong>Visible:</strong> ${p.visible ? "Yes" : "No"}</p>
-    `;
-
-    const editRow = document.createElement("div");
-    editRow.className = "edit-row";
-
-    editRow.innerHTML = `
-      <input type="text" id="name-${p.id}" value="${p.name}">
-      <input type="number" id="price-${p.id}" value="${p.price}">
-    `;
-
-    const actions = document.createElement("div");
-    actions.className = "edit-actions";
-
-    actions.innerHTML = `
-      <button onclick="saveProduct('${p.id}')">Save</button>
-      <button onclick="window.location.href='/network/staff/pages/products.html'">Advanced Edit</button>
-    `;
-
-    const visibilityBtn = document.createElement("button");
-    visibilityBtn.className = "visibility-toggle";
-    visibilityBtn.innerText = p.visible ? "Hide Product" : "Show Product";
-    visibilityBtn.onclick = () => toggleVisibility(p.id);
-
-    card.appendChild(editRow);
-    card.appendChild(actions);
-    card.appendChild(visibilityBtn);
-
-    productList.appendChild(card);
-  });
-}
-
-window.saveProduct = async (id) => {
-  const name = document.getElementById(`name-${id}`).value;
-  const price = document.getElementById(`price-${id}`).value;
-
-  await staffUpdateProduct(id, { name, price });
-  loadProducts();
-};
-
-window.toggleVisibility = async (id) => {
-  await staffToggleVisibility(id);
-  loadProducts();
-};
-
-loadProducts();
+  // LOGOUT
+  window.logout = function() {
+    localStorage.removeItem("vendor_user");
+    window.location.href = "/network/public/pages/login.html";
+  };
 </script>
 
 </body>
