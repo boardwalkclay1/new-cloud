@@ -1,12 +1,9 @@
 // /network/js/customer.js
-// PUBLIC CUSTOMER ENGINE — CLOUD USER + VENDOR INTERACTION + ORDERS + MESSAGES + DIRECTIONS
+// PUBLIC CUSTOMER ENGINE — Cloud user + vendor interaction + orders + messages + directions
 
 const Customer = {
   cloudKey: "cloud_user",
 
-  /* ---------------------------------------------------------
-     CLOUD USER
-  --------------------------------------------------------- */
   getCloudUser() {
     const raw = localStorage.getItem(this.cloudKey);
     return raw ? JSON.parse(raw) : null;
@@ -16,9 +13,6 @@ const Customer = {
     localStorage.setItem(this.cloudKey, JSON.stringify(user));
   },
 
-  /* ---------------------------------------------------------
-     FETCH HELPERS
-  --------------------------------------------------------- */
   async fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
@@ -44,9 +38,6 @@ const Customer = {
     }
   },
 
-  /* ---------------------------------------------------------
-     LOAD PUBLIC FEEDS (PRODUCTS / SERVICES / WORKSHOPS / APPS)
-  --------------------------------------------------------- */
   async loadProductsFeed(targetId = "products-feed") {
     const el = document.getElementById(targetId);
     if (!el) return;
@@ -139,9 +130,6 @@ const Customer = {
     });
   },
 
-  /* ---------------------------------------------------------
-     VENDOR STRIPS
-  --------------------------------------------------------- */
   async loadVendorStrips(targets = {}) {
     const {
       productsTarget = "vendors-feed-products",
@@ -178,9 +166,6 @@ const Customer = {
     });
   },
 
-  /* ---------------------------------------------------------
-     INTERACTION: OPEN / MESSAGE / DIRECTIONS / PURCHASE
-  --------------------------------------------------------- */
   openVendor(vendor) {
     window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(vendor.id || vendor.email)}`;
   },
@@ -208,14 +193,12 @@ const Customer = {
   async getDirectionsToVendor(vendor) {
     const destLat = vendor.lat;
     const destLng = vendor.lng;
-
     if (!destLat || !destLng) return;
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
         const sLat = pos.coords.latitude;
         const sLng = pos.coords.longitude;
-
         const url = `https://www.google.com/maps/dir/${sLat},${sLng}/${destLat},${destLng}`;
         window.open(url, "_blank");
       }, () => {
@@ -248,9 +231,6 @@ const Customer = {
     }
   },
 
-  /* ---------------------------------------------------------
-     REAL-TIME REFRESH (POLLING)
-  --------------------------------------------------------- */
   startRealtimeFeeds(intervalMs = 15000) {
     this.loadProductsFeed();
     this.loadServicesFeed();
@@ -265,7 +245,28 @@ const Customer = {
       this.loadAppsFeed();
       this.loadVendorStrips();
     }, intervalMs);
+  },
+
+  initHeroUser() {
+    const heroUser = document.getElementById("heroUser");
+    if (!heroUser) return;
+    const cloudUser = this.getCloudUser();
+    if (cloudUser && cloudUser.email) {
+      heroUser.innerHTML = `
+        Signed in as <span>${cloudUser.name || cloudUser.email}</span><br>
+        Cloud user • ${cloudUser.email}
+      `;
+    } else {
+      heroUser.innerHTML = `Browse publicly. Sign in to manage your storefront and rider routes.`;
+    }
+  },
+
+  init() {
+    this.initHeroUser();
+    this.startRealtimeFeeds();
   }
 };
+
+Customer.init();
 
 export default Customer;
