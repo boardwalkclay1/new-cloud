@@ -71,7 +71,7 @@ export async function handleNetwork(path, request, db, url) {
 
 
   /* -----------------------------
-     STAFF SYSTEM
+     STAFF SYSTEM (NETWORK VENDORS)
   ----------------------------- */
 
   if (path === "/api/staff/login" && request.method === "POST")
@@ -94,10 +94,48 @@ export async function handleNetwork(path, request, db, url) {
 
 
   /* -----------------------------
-     CHECKOUT
+     VENDOR API FOR STAFF.JS
   ----------------------------- */
 
-  if (path === "/api/network/checkout/create" && request.method === "POST")
+  if (path === "/api/vendor/storefront" && request.method === "GET")
+    return vendorStorefront(db, url);
+
+  if (path === "/api/vendor/earnings" && request.method === "GET")
+    return vendorEarnings(db, url);
+
+  if (path === "/api/vendor/payout/status" && request.method === "GET")
+    return vendorPayoutStatus(db, url);
+
+  if (path === "/api/vendor/ads" && request.method === "GET")
+    return vendorAds(db, url);
+
+  if (path === "/api/vendor/phonebook" && request.method === "GET")
+    return vendorPhonebook(db, url);
+
+  if (path === "/api/vendor/products" && request.method === "GET")
+    return vendorProducts(db, url);
+
+  if (path === "/api/vendor/orders" && request.method === "GET")
+    return vendorOrders(db, url);
+
+  if (path === "/api/vendor/messages" && request.method === "GET")
+    return vendorMessages(db, url);
+
+  if (path === "/api/vendor/stats/today" && request.method === "GET")
+    return vendorStatsToday(db, url);
+
+  if (path === "/api/vendor/products/update" && request.method === "POST")
+    return vendorProductUpdate(request, db);
+
+  if (path === "/api/vendor/products/toggle" && request.method === "POST")
+    return vendorProductToggle(request, db);
+
+
+  /* -----------------------------
+     CHECKOUT (CUSTOMER.JS)
+  ----------------------------- */
+
+  if (path === "/api/network/checkout" && request.method === "POST")
     return createCheckout(request, db);
 
 
@@ -229,7 +267,7 @@ async function saveVendorApp(request, db) {
 
 
 /* ---------------------------------------------------------
-   STAFF SYSTEM
+   STAFF SYSTEM (NETWORK VENDORS)
 --------------------------------------------------------- */
 
 async function staffLogin(request, db) {
@@ -301,20 +339,269 @@ async function staffPayouts(db, url) {
 
 
 /* ---------------------------------------------------------
+   VENDOR API FOR STAFF.JS
+--------------------------------------------------------- */
+
+async function vendorStorefront(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const vendor = await db.prepare(
+    "SELECT * FROM network_vendors WHERE email = ?"
+  ).bind(email).first();
+
+  if (!vendor) return json({ error: "Vendor not found" }, 404);
+
+  const products = await db.prepare(
+    "SELECT * FROM network_products WHERE vendorId = ?"
+  ).bind(email).all();
+
+  const services = await db.prepare(
+    "SELECT * FROM network_services WHERE vendorId = ?"
+  ).bind(email).all();
+
+  const workshops = await db.prepare(
+    "SELECT * FROM network_workshops WHERE vendorId = ?"
+  ).bind(email).all();
+
+  const apps = await db.prepare(
+    "SELECT * FROM network_apps WHERE vendorId = ?"
+  ).bind(email).all();
+
+  return json({
+    description: vendor.description || "",
+    tags: vendor.tags || "",
+    logo: vendor.logo || "",
+    cover: vendor.cover || "",
+    products: products.results || [],
+    services: services.results || [],
+    workshops: workshops.results || [],
+    apps: apps.results || [],
+    published: vendor.published || 0
+  });
+}
+
+async function vendorEarnings(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const rows = await db.prepare(
+    "SELECT total, period FROM network_earnings WHERE vendorId = ?"
+  ).bind(email).all();
+
+  const results = rows.results || [];
+  let today = 0, week = 0, month = 0, total = 0;
+
+  for (const r of results) {
+    if (r.period === "today") today = r.total;
+    else if (r.period === "week") week = r.total;
+    else if (r.period === "month") month = r.total;
+    else if (r.period === "total") total = r.total;
+  }
+
+  return json({ today, week, month, total });
+}
+
+async function vendorPayoutStatus(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const row = await db.prepare(
+    "SELECT * FROM network_payout_status WHERE vendorId = ?"
+  ).bind(email).first();
+
+  if (!row) {
+    return json({
+      connected: false,
+      method: null,
+      email: null,
+      venmo: false
+    });
+  }
+
+  return json({
+    connected: !!row.connected,
+    method: row.method,
+    email: row.payoutEmail,
+    venmo: !!row.venmo
+  });
+}
+
+async function vendorAds(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const rows = await db.prepare(
+    "SELECT * FROM network_ads WHERE vendorId = ?"
+  ).bind(email).all();
+
+  return json(rows.results || []);
+}
+
+async function vendorPhonebook(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const row = await db.prepare(
+    "SELECT * FROM network_phonebook WHERE vendorId = ?"
+  ).bind(email).first();
+
+  if (!row) return json({ error: "Not found" }, 404);
+  return json(row);
+}
+
+async function vendorProducts(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const rows = await db.prepare(
+    "SELECT * FROM network_products WHERE vendorId = ?"
+  ).bind(email).all();
+
+  return json(rows.results || []);
+}
+
+async function vendorOrders(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const rows = await db.prepare(
+    "SELECT * FROM network_orders WHERE vendorId = ?"
+  ).bind(email).all();
+
+  return json(rows.results || []);
+}
+
+async function vendorMessages(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const rows = await db.prepare(
+    "SELECT * FROM network_messages WHERE vendorId = ? OR toEmail = ?"
+  ).bind(email, email).all();
+
+  return json(rows.results || []);
+}
+
+async function vendorStatsToday(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const revenueRow = await db.prepare(
+    "SELECT SUM(amount) AS revenue FROM network_orders WHERE vendorId = ? AND date(createdAt) = date('now') AND paymentStatus = 'paid'"
+  ).bind(email).first();
+
+  const ordersRow = await db.prepare(
+    "SELECT COUNT(*) AS count FROM network_orders WHERE vendorId = ? AND date(createdAt) = date('now')"
+  ).bind(email).first();
+
+  const activeProductsRow = await db.prepare(
+    "SELECT COUNT(*) AS count FROM network_products WHERE vendorId = ? AND active = 1"
+  ).bind(email).first();
+
+  const openOrdersRow = await db.prepare(
+    "SELECT COUNT(*) AS count FROM network_orders WHERE vendorId = ? AND status = 'open'"
+  ).bind(email).first();
+
+  const newMessagesRow = await db.prepare(
+    "SELECT COUNT(*) AS count FROM network_messages WHERE vendorId = ? AND date(createdAt) = date('now')"
+  ).bind(email).first();
+
+  return json({
+    revenue: revenueRow?.revenue || 0,
+    ordersCount: ordersRow?.count || 0,
+    activeProducts: activeProductsRow?.count || 0,
+    openOrders: openOrdersRow?.count || 0,
+    newMessages: newMessagesRow?.count || 0
+  });
+}
+
+async function vendorProductUpdate(request, db) {
+  const body = await request.json();
+  const { id, ...fields } = body;
+
+  const keys = Object.keys(fields);
+  const values = Object.values(fields);
+
+  if (!id || keys.length === 0) return json({ error: "Missing id or fields" }, 400);
+
+  const setClause = keys.map(k => `${k}=?`).join(",");
+
+  await db.prepare(
+    `UPDATE network_products SET ${setClause} WHERE id=?`
+  ).bind(...values, id).run();
+
+  return json({ success: true });
+}
+
+async function vendorProductToggle(request, db) {
+  const body = await request.json();
+  const { id } = body;
+  if (!id) return json({ error: "Missing id" }, 400);
+
+  const row = await db.prepare(
+    "SELECT active FROM network_products WHERE id = ?"
+  ).bind(id).first();
+
+  const current = row?.active ? 1 : 0;
+  const next = current ? 0 : 1;
+
+  await db.prepare(
+    "UPDATE network_products SET active=? WHERE id=?"
+  ).bind(next, id).run();
+
+  return json({ success: true, active: next });
+}
+
+
+/* ---------------------------------------------------------
    CHECKOUT
 --------------------------------------------------------- */
 
 async function createCheckout(request, db) {
   const body = await request.json();
+  const { buyerEmail, itemId, type, quantity } = body;
+
+  if (!buyerEmail || !itemId || !type) {
+    return json({ error: "Missing buyerEmail, itemId, or type" }, 400);
+  }
+
+  let vendorId = null;
+
+  if (type === "product") {
+    const p = await db.prepare(
+      "SELECT vendorId FROM network_products WHERE id = ?"
+    ).bind(itemId).first();
+    vendorId = p?.vendorId || null;
+  } else if (type === "service") {
+    const s = await db.prepare(
+      "SELECT vendorId FROM network_services WHERE id = ?"
+    ).bind(itemId).first();
+    vendorId = s?.vendorId || null;
+  } else if (type === "workshop") {
+    const w = await db.prepare(
+      "SELECT vendorId FROM network_workshops WHERE id = ?"
+    ).bind(itemId).first();
+    vendorId = w?.vendorId || null;
+  } else if (type === "app") {
+    const a = await db.prepare(
+      "SELECT vendorId FROM network_apps WHERE id = ?"
+    ).bind(itemId).first();
+    vendorId = a?.vendorId || null;
+  }
+
+  if (!vendorId) return json({ error: "Vendor not found for item" }, 404);
+
   const id = crypto.randomUUID();
 
   await db.prepare(
-    `INSERT INTO network_orders (id, vendorId, itemType, itemId, quantity, paymentStatus)
-     VALUES (?, ?, ?, ?, ?, ?)`
-  ).bind(id, body.vendorId, body.itemType, body.itemId, body.quantity, "pending").run();
+    `INSERT INTO network_orders (id, vendorId, buyerEmail, itemType, itemId, quantity, paymentStatus)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
+  ).bind(id, vendorId, buyerEmail, type, itemId, quantity || 1, "pending").run();
 
   return json({
     success: true,
+    orderId: id,
     redirectUrl: `https://fast-roll.pages.dev/?orderId=${id}`
   });
 }
