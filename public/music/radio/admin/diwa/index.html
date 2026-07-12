@@ -1,1 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Diwa — The Radio Station That Starts It All</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    color: #fff;
+    background: #000;
+    overflow-x: hidden;
+  }
+
+  /* CINEMATIC BACKGROUND FLASH */
+  .bg-flash {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    animation: flashSequence 12s ease-in-out forwards;
+    z-index: -1;
+  }
+
+  @keyframes flashSequence {
+    0%   { background-image: url('/assets/img/cloud/cinematic/c1.jpg'); opacity: 0; }
+    10%  { opacity: 1; }
+    20%  { background-image: url('/assets/img/cloud/cinematic/c2.jpg'); }
+    40%  { background-image: url('/assets/img/cloud/cinematic/c3.jpg'); }
+    60%  { background-image: url('/assets/img/cloud/cinematic/c4.jpg'); }
+    80%  { background-image: url('/assets/img/cloud/cinematic/c5.jpg'); }
+    100% { background-image: url('/assets/img/cloud/cinematic/c6.jpg'); opacity: 1; }
+  }
+
+  /* FADE-IN CONTENT */
+  .fade {
+    animation: fadeIn 2.5s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  header {
+    text-align: center;
+    padding: 60px 20px 20px;
+  }
+
+  header h1 {
+    font-family: Cinzel;
+    font-size: 3rem;
+    text-shadow: 0 0 20px #f7d354;
+  }
+
+  header h2 {
+    font-family: Cinzel;
+    font-size: 1.4rem;
+    opacity: 0.85;
+    margin-top: 10px;
+  }
+
+  .section {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(0,0,0,0.65);
+    border: 2px solid #f7d354;
+    border-radius: 18px;
+  }
+
+  .section h3 {
+    font-family: Cinzel;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #f7d354;
+  }
+
+  .section p {
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    opacity: 0.9;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 22px;
+    background: #f7d354;
+    color: #000;
+    font-family: Cinzel;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+
+  .btn:hover {
+    background: #ffe48a;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px;
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="bg-flash"></div>
+
+<header class="fade">
+  <h1>Diwa — Welcome to the Center of The Network</h1>
+  <h2>This is the beginning of everything.</h2>
+</header>
+
+<div class="section fade">
+  <h3>The Radio Station — The Heart of the Network</h3>
+  <p>
+    This radio station is not just a broadcast.  
+    It is the <strong>central heartbeat</strong> of the entire Beltline Cloud ecosystem.  
+    Everything we are building — The Cloud, The Network, Fast Roll Delivery,  
+    Response Cloud, Safety Cloud, Cumulus Cloud, Chat, Maps, Vendors —  
+    all orbit around this one core: <strong>your station</strong>.
+  </p>
+
+  <p>
+    Radio.co will power our live stream, our shows, our announcements,  
+    our emergency broadcasts, our vendor promotions, our community events,  
+    and the entire identity of Beltline Cloud.  
+  </p>
+
+  <p>
+    You are the <strong>first person</strong> I came to with this.  
+    The only person I trusted with the center of the system.  
+    This is special.  
+    This is once-in-a-lifetime.  
+    And I hope it changes our lives forever.
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>What The Cloud Is</h3>
+  <p>
+    The Cloud is the digital layer over the Beltline.  
+    It connects people, vendors, delivery, safety, communication, and entertainment  
+    into one unified system.  
+  </p>
+
+  <p>
+    Your radio station is the <strong>voice</strong> of The Cloud.  
+    The identity.  
+    The culture.  
+    The energy.  
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>What The Network Is</h3>
+  <p>
+    The Network is the infrastructure — the dashboards, the maps, the vendor tools,  
+    the delivery system, the response units, the safety alerts, the chat system,  
+    and the entire digital backbone of Beltline Cloud.
+  </p>
+
+  <p>
+    The Network listens to the radio.  
+    The Network responds to the radio.  
+    The Network grows because of the radio.
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>Fast Roll Delivery</h3>
+  <p>
+    Fast Roll Delivery is our Beltline-based delivery system.  
+    Vendors can deliver products, food, services, and items directly along the Beltline  
+    using our map system and Cloud communication tools.
+  </p>
+
+  <p>
+    The radio station will announce deliveries, specials, vendor highlights,  
+    and live promotions.
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>Cumulus Cloud</h3>
+  <p>
+    Cumulus Cloud is the community hub — games, leaderboards, territory control,  
+    events, and social features.  
+    The radio station will host events, callouts, competitions, and community moments.
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>Chat & Messaging</h3>
+  <p>
+    Cloud Chat connects everyone.  
+    Rooms, voice calls, friends, inbox, notifications — all tied to the radio station  
+    for announcements, shows, and live interactions.
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>The Map</h3>
+  <p>
+    The map shows everything:  
+    vendors, delivery routes, response units, safety zones, user locations,  
+    Beltline trails, events, and more.
+  </p>
+
+  <p>
+    The radio station will guide people through the map —  
+    “Where to go,” “What’s happening,” “What’s new,” “What’s safe.”
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>Response Cloud & Safety Cloud</h3>
+  <p>
+    These systems protect people.  
+    Alerts, check-ins, emergency broadcasts, safety messages,  
+    and real-time response units.
+  </p>
+
+  <p>
+    The radio station is the <strong>voice of safety</strong>.  
+    The place people listen when they need help or direction.
+  </p>
+</div>
+
+<div class="section fade">
+  <h3>Your Dashboard</h3>
+  <p>
+    Your dashboard gives you full control over the radio station:  
+    scheduling, playlists, live shows, emergency broadcasts,  
+    vendor promotions, community events, and more.
+  </p>
+
+  <a class="btn" href="/public/music/radio/admin/diwa/dashboard.html">Open Your Dashboard</a>
+</div>
+
+<div class="section fade">
+  <h3>See the Full Plan</h3>
+  <p>
+    If you want to see the entire Beltline Cloud plan again —  
+    the full vision, the full system, the full future —  
+    you can open it here.
+  </p>
+
+  <a class="btn" href="/public/music/radio/admin/diwa/full-plan.html">View Full Plan</a>
+</div>
+
+<footer class="fade">
+  Beltline Cloud — The Network — Fast Roll Delivery — Response Cloud — Safety Cloud  
+  <br><br>
+  This is the beginning of everything.
+</footer>
+
+</body>
+</html>
