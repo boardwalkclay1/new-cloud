@@ -4,11 +4,23 @@
   <meta charset="UTF-8">
   <title>The Network — Explore Beltline Vendors</title>
 
-  <link rel="icon" type="image/jpeg" href="/network/public/img/network-logo.jpg">
-  <link rel="stylesheet" href="/network/public/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/jpeg" href="/network/img/network-logo.jpg">
+  <link rel="stylesheet" href="/network/css/style.css">
 
   <style>
+    :root {
+      --bg-overlay: rgba(5, 6, 12, 0.88);
+      --card-bg: rgba(255,255,255,0.06);
+      --card-border: rgba(255,255,255,0.16);
+      --accent: #00e0ff;
+      --accent-soft: rgba(0,224,255,0.18);
+      --text-soft: rgba(255,255,255,0.82);
+    }
+
     body {
+      margin: 0;
       background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat fixed;
       color: #fff;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -18,8 +30,13 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: radial-gradient(circle at top, rgba(0,0,0,0.75), rgba(0,0,0,0.9));
       z-index: -1;
+    }
+
+    .page-shell {
+      min-height: 100vh;
+      background: linear-gradient(160deg, rgba(0,0,0,0.7), rgba(5,6,12,0.95));
     }
 
     /* NAV */
@@ -27,58 +44,62 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 32px;
+      padding: 12px 18px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 20;
-      background: rgba(5,6,10,0.92);
+      background: var(--bg-overlay);
     }
     .nav-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
     .nav-logo {
-      width: 46px;
-      height: 46px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid rgba(255,255,255,0.25);
     }
     .nav-title {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
     }
     .nav-sub {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       opacity: 0.75;
     }
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
     .nav-pill {
-      padding: 7px 14px;
+      padding: 7px 13px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.04);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: 0.2s ease;
+      white-space: nowrap;
     }
     .nav-pill:hover {
       background: rgba(255,255,255,0.16);
     }
     .nav-link {
-      font-size: 0.86rem;
+      font-size: 0.8rem;
       opacity: 0.85;
       cursor: pointer;
       padding: 6px 10px;
       border-radius: 999px;
       transition: 0.2s ease;
+      white-space: nowrap;
     }
     .nav-link:hover {
       background: rgba(255,255,255,0.12);
@@ -87,19 +108,35 @@
 
     /* HERO */
     .network-hero {
-      padding: 40px 32px 10px;
+      padding: 26px 18px 8px;
       max-width: 1100px;
       margin: 0 auto;
     }
+    .hero-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
     .hero-title {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .hero-sub {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       opacity: 0.82;
       max-width: 640px;
+    }
+    .hero-user {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      text-align: right;
+    }
+    .hero-user span {
+      color: var(--accent);
+      font-weight: 600;
     }
     .hero-tags {
       margin-top: 14px;
@@ -117,7 +154,7 @@
 
     /* SECTION SHELL */
     .network-section {
-      padding: 26px 32px 10px;
+      padding: 22px 18px 8px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -126,9 +163,11 @@
       align-items: baseline;
       justify-content: space-between;
       margin-bottom: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .section-title {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 700;
     }
     .section-sub {
@@ -154,13 +193,14 @@
       background: rgba(255,255,255,0.22);
       border-radius: 999px;
     }
+
     .feed-card {
-      min-width: 230px;
+      min-width: 220px;
       max-width: 260px;
       background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
       border-radius: 16px;
-      padding: 12px 12px 11px;
-      border: 1px solid rgba(255,255,255,0.16);
+      padding: 11px 11px 10px;
+      border: 1px solid var(--card-border);
       cursor: pointer;
       transition: 0.22s ease;
       position: relative;
@@ -181,7 +221,7 @@
       opacity: 0.9;
     }
     .feed-title {
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 600;
       margin-bottom: 4px;
       color: #fff;
@@ -194,12 +234,12 @@
     .feed-price {
       font-size: 0.86rem;
       font-weight: 600;
-      color: #00e0ff;
+      color: var(--accent);
     }
 
     /* VENDOR STRIP */
     .vendor-strip {
-      margin-top: 18px;
+      margin-top: 16px;
     }
     .vendor-strip-title {
       font-size: 0.9rem;
@@ -214,20 +254,21 @@
       scroll-behavior: smooth;
     }
     .vendor-card {
-      min-width: 190px;
-      background: rgba(255,255,255,0.05);
+      min-width: 180px;
+      background: var(--card-bg);
       border-radius: 14px;
       padding: 10px;
-      border: 1px solid rgba(255,255,255,0.14);
+      border: 1px solid var(--card-border);
       cursor: pointer;
       transition: 0.2s ease;
     }
     .vendor-card:hover {
       transform: translateY(-2px);
       border-color: rgba(255,255,255,0.26);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
     .vendor-name {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
       margin-bottom: 3px;
     }
@@ -238,7 +279,7 @@
 
     /* DROPDOWN EXPLAINERS */
     .network-explain {
-      padding: 30px 32px 40px;
+      padding: 26px 18px 40px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -249,7 +290,7 @@
     }
     .explain-item {
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.16);
+      border: 1px solid var(--card-border);
       background: rgba(255,255,255,0.04);
       margin-bottom: 10px;
       overflow: hidden;
@@ -283,182 +324,201 @@
       .network-hero,
       .network-section,
       .network-explain {
-        padding: 22px 18px;
+        padding: 20px 14px;
       }
       .network-nav {
-        padding: 10px 16px;
+        padding: 10px 12px;
       }
       .hero-title {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
+      }
+      .hero-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-user {
+        text-align: left;
       }
     }
   </style>
 </head>
 
 <body>
+<div class="page-shell">
 
-<!-- NAV -->
-<nav class="network-nav">
-  <div class="nav-left">
-    <img src="/network/public/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
-    <div>
-      <div class="nav-title">The Network</div>
-      <div class="nav-sub">Beltline vendors • Cloud-powered storefronts • Fast Roll riders</div>
+  <!-- NAV -->
+  <nav class="network-nav">
+    <div class="nav-left">
+      <img src="/network/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
+      <div>
+        <div class="nav-title">The Network</div>
+        <div class="nav-sub">Beltline vendors • Cloud-powered storefronts • Fast Roll riders</div>
+      </div>
     </div>
-  </div>
-  <div class="nav-right">
-    <span class="nav-link" onclick="scrollToSection('section-products')">Products</span>
-    <span class="nav-link" onclick="scrollToSection('section-services')">Services</span>
-    <span class="nav-link" onclick="scrollToSection('section-workshops')">Workshops</span>
-    <span class="nav-link" onclick="scrollToSection('section-apps')">Apps</span>
-    <button class="nav-pill" onclick="location.href='/network/staff/pages/signup.html'">Become a Vendor</button>
-    <button class="nav-pill" onclick="location.href='/pages/dashboard.html'">Cloud Dashboard</button>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="network-hero">
-  <h1 class="hero-title">Explore The Network</h1>
-  <p class="hero-sub">
-    A live Beltline marketplace of storefronts, products, services, workshops, and apps — all powered by Cloud users and Fast Roll riders.
-  </p>
-  <div class="hero-tags">
-    <span class="hero-tag">📦 Products</span>
-    <span class="hero-tag">🧰 Services</span>
-    <span class="hero-tag">🎓 Workshops</span>
-    <span class="hero-tag">📱 Apps</span>
-    <span class="hero-tag">🛍️ Storefronts</span>
-  </div>
-</section>
-
-<!-- PRODUCTS -->
-<section class="network-section" id="section-products">
-  <div class="section-header">
-    <div>
-      <div class="section-title">📦 Products</div>
-      <div class="section-sub">Physical and digital items from Beltline vendors.</div>
+    <div class="nav-right">
+      <span class="nav-link" onclick="scrollToSection('section-products')">Products</span>
+      <span class="nav-link" onclick="scrollToSection('section-services')">Services</span>
+      <span class="nav-link" onclick="scrollToSection('section-workshops')">Workshops</span>
+      <span class="nav-link" onclick="scrollToSection('section-apps')">Apps</span>
+      <button class="nav-pill" onclick="location.href='/network/staff/pages/signup.html'">Become a Vendor</button>
+      <button class="nav-pill" onclick="location.href='/pages/dashboard.html'">Cloud Dashboard</button>
     </div>
-  </div>
-  <div class="scroll-feed" id="products-feed"></div>
+  </nav>
 
-  <div class="vendor-strip">
-    <div class="vendor-strip-title">Featured Vendors</div>
-    <div class="vendor-feed" id="vendors-feed-products"></div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="network-section" id="section-services">
-  <div class="section-header">
-    <div>
-      <div class="section-title">🧰 Services</div>
-      <div class="section-sub">On-demand help, repairs, creative work, and more.</div>
+  <!-- HERO -->
+  <section class="network-hero">
+    <div class="hero-title-row">
+      <div>
+        <h1 class="hero-title">Explore The Network</h1>
+        <p class="hero-sub">
+          A live Beltline marketplace of storefronts, products, services, workshops, and apps — all powered by Cloud users and Fast Roll riders.
+        </p>
+      </div>
+      <div class="hero-user" id="heroUser">
+        <!-- filled by cloud user -->
+      </div>
     </div>
-  </div>
-  <div class="scroll-feed" id="services-feed"></div>
-
-  <div class="vendor-strip">
-    <div class="vendor-strip-title">Service Vendors</div>
-    <div class="vendor-feed" id="vendors-feed-services"></div>
-  </div>
-</section>
-
-<!-- WORKSHOPS -->
-<section class="network-section" id="section-workshops">
-  <div class="section-header">
-    <div>
-      <div class="section-title">🎓 Workshops</div>
-      <div class="section-sub">Group sessions, classes, and Beltline experiences.</div>
+    <div class="hero-tags">
+      <span class="hero-tag">📦 Products</span>
+      <span class="hero-tag">🧰 Services</span>
+      <span class="hero-tag">🎓 Workshops</span>
+      <span class="hero-tag">📱 Apps</span>
+      <span class="hero-tag">🛍️ Storefronts</span>
     </div>
-  </div>
-  <div class="scroll-feed" id="workshops-feed"></div>
+  </section>
 
-  <div class="vendor-strip">
-    <div class="vendor-strip-title">Workshop Hosts</div>
-    <div class="vendor-feed" id="vendors-feed-workshops"></div>
-  </div>
-</section>
-
-<!-- APPS -->
-<section class="network-section" id="section-apps">
-  <div class="section-header">
-    <div>
-      <div class="section-title">📱 Apps</div>
-      <div class="section-sub">Digital tools and platforms built by vendors.</div>
+  <!-- PRODUCTS -->
+  <section class="network-section" id="section-products">
+    <div class="section-header">
+      <div>
+        <div class="section-title">📦 Products</div>
+        <div class="section-sub">Physical and digital items from Beltline vendors.</div>
+      </div>
     </div>
-  </div>
-  <div class="scroll-feed" id="apps-feed"></div>
+    <div class="scroll-feed" id="products-feed"></div>
 
-  <div class="vendor-strip">
-    <div class="vendor-strip-title">App Creators</div>
-    <div class="vendor-feed" id="vendors-feed-apps"></div>
-  </div>
-</section>
+    <div class="vendor-strip">
+      <div class="vendor-strip-title">Featured Vendors</div>
+      <div class="vendor-feed" id="vendors-feed-products"></div>
+    </div>
+  </section>
 
-<!-- EXPLAINERS -->
-<section class="network-explain">
-  <h2 class="explain-title">About The Network</h2>
+  <!-- SERVICES -->
+  <section class="network-section" id="section-services">
+    <div class="section-header">
+      <div>
+        <div class="section-title">🧰 Services</div>
+        <div class="section-sub">On-demand help, repairs, creative work, and more.</div>
+      </div>
+    </div>
+    <div class="scroll-feed" id="services-feed"></div>
 
-  <div class="explain-item">
-    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
-      <span class="explain-label">What is The Network?</span>
-      <span class="explain-toggle">Details ▾</span>
+    <div class="vendor-strip">
+      <div class="vendor-strip-title">Service Vendors</div>
+      <div class="vendor-feed" id="vendors-feed-services"></div>
     </div>
-    <div class="explain-body">
-      The Network is a public Beltline hub that connects Cloud users, local vendors, Fast Roll riders, and safety response units.
-      Vendors publish storefronts containing products, services, workshops, and apps. Riders deliver. Cloud users manage everything from a single dashboard.
-    </div>
-  </div>
+  </section>
 
-  <div class="explain-item">
-    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
-      <span class="explain-label">How do vendors get listed?</span>
-      <span class="explain-toggle">Details ▾</span>
+  <!-- WORKSHOPS -->
+  <section class="network-section" id="section-workshops">
+    <div class="section-header">
+      <div>
+        <div class="section-title">🎓 Workshops</div>
+        <div class="section-sub">Group sessions, classes, and Beltline experiences.</div>
+      </div>
     </div>
-    <div class="explain-body">
-      Vendors sign up through the vendor portal, complete their storefront, and publish it. Once live, their products,
-      services, workshops, and apps appear in these feeds and can be explored, booked, or purchased by Cloud users and visitors.
-    </div>
-  </div>
+    <div class="scroll-feed" id="workshops-feed"></div>
 
-  <div class="explain-item">
-    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
-      <span class="explain-label">How does checkout and payout work?</span>
-      <span class="explain-toggle">Details ▾</span>
+    <div class="vendor-strip">
+      <div class="vendor-strip-title">Workshop Hosts</div>
+      <div class="vendor-feed" id="vendors-feed-workshops"></div>
     </div>
-    <div class="explain-body">
-      When a buyer checks out, a secure order is created and routed through the Network. Vendors see orders and payouts in their
-      dashboard. Riders can be assigned to deliveries, and payouts are tracked through the network_payouts system.
-    </div>
-  </div>
+  </section>
 
-  <div class="explain-item">
-    <div class="explain-header" onclick="toggleExplain(this.parentElement)">
-      <span class="explain-label">How does this connect to Cloud and Fast Roll?</span>
-      <span class="explain-toggle">Details ▾</span>
+  <!-- APPS -->
+  <section class="network-section" id="section-apps">
+    <div class="section-header">
+      <div>
+        <div class="section-title">📱 Apps</div>
+        <div class="section-sub">Digital tools and platforms built by vendors.</div>
+      </div>
     </div>
-    <div class="explain-body">
-      Cloud users own the core identity and dashboards. Vendors are Cloud users with vendor roles. Fast Roll riders are Cloud users
-      with rider roles. The Network is the public-facing layer that showcases what vendors publish and what riders deliver.
+    <div class="scroll-feed" id="apps-feed"></div>
+
+    <div class="vendor-strip">
+      <div class="vendor-strip-title">App Creators</div>
+      <div class="vendor-feed" id="vendors-feed-apps"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<script src="/network/public/js/app.js"></script>
-<script src="/network/public/js/network-api.js"></script>
+  <!-- EXPLAINERS -->
+  <section class="network-explain">
+    <h2 class="explain-title">About The Network</h2>
 
-<script>
-  // SCROLL TO SECTION
+    <div class="explain-item">
+      <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+        <span class="explain-label">What is The Network?</span>
+        <span class="explain-toggle">Details ▾</span>
+      </div>
+      <div class="explain-body">
+        The Network is a public Beltline hub that connects Cloud users, local vendors, Fast Roll riders, and safety response units.
+        Vendors publish storefronts containing products, services, workshops, and apps. Riders deliver. Cloud users manage everything from a single dashboard.
+      </div>
+    </div>
+
+    <div class="explain-item">
+      <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+        <span class="explain-label">How do vendors get listed?</span>
+        <span class="explain-toggle">Details ▾</span>
+      </div>
+      <div class="explain-body">
+        Vendors sign up through the vendor portal, complete their storefront, and publish it. Once live, their products,
+        services, workshops, and apps appear in these feeds and can be explored, booked, or purchased by Cloud users and visitors.
+      </div>
+    </div>
+
+    <div class="explain-item">
+      <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+        <span class="explain-label">How does checkout and payout work?</span>
+        <span class="explain-toggle">Details ▾</span>
+      </div>
+      <div class="explain-body">
+        When a buyer checks out, a secure order is created and routed through the Network. Vendors see orders and payouts in their
+        dashboard. Riders can be assigned to deliveries, and payouts are tracked through the network_payouts system.
+      </div>
+    </div>
+
+    <div class="explain-item">
+      <div class="explain-header" onclick="toggleExplain(this.parentElement)">
+        <span class="explain-label">How does this connect to Cloud and Fast Roll?</span>
+        <span class="explain-toggle">Details ▾</span>
+      </div>
+      <div class="explain-body">
+        Cloud users own the core identity and dashboards. Vendors are Cloud users with vendor roles. Fast Roll riders are Cloud users
+        with rider roles. The Network is the public-facing layer that showcases what vendors publish and what riders deliver.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="/network/js/app.js"></script>
+<script src="/network/js/network-api.js"></script>
+<script src="/network/staff/js/staff.js" type="module"></script>
+
+<script type="module">
+  import Staff from "/network/staff/js/staff.js";
+
   function scrollToSection(id) {
-    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth" });
   }
 
-  // DROPDOWN EXPLAINERS
   function toggleExplain(item) {
     item.classList.toggle("open");
   }
 
-  // AUTO SCROLL
   function autoScrollFeed(id, speed = 0.4) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -471,18 +531,42 @@
     }, 40);
   }
 
-  // LOAD FEEDS
-  Network.loadProductsFeed();
-  Network.loadServicesFeed();
-  Network.loadWorkshopsFeed();
-  Network.loadAppsFeed();
+  function initHeroUser() {
+    const heroUser = document.getElementById("heroUser");
+    const cloudUser = Staff.getCloudUser();
+    if (!heroUser) return;
+    if (cloudUser && cloudUser.email) {
+      heroUser.innerHTML = `
+        Signed in as <span>${cloudUser.name || cloudUser.email}</span><br>
+        Cloud user • ${cloudUser.email}
+      `;
+    } else {
+      heroUser.innerHTML = `Browse publicly. Sign in to manage your storefront and rider routes.`;
+    }
+  }
 
-  // LOAD VENDOR STRIPS
-  Network.loadVendorStrips({
-    productsTarget: "vendors-feed-products",
-    servicesTarget: "vendors-feed-services",
-    workshopsTarget: "vendors-feed-workshops",
-    appsTarget: "vendors-feed-apps"
-  });
+  // LOAD FEEDS (Network API expected to exist)
+  if (window.Network) {
+    Network.loadProductsFeed();
+    Network.loadServicesFeed();
+    Network.loadWorkshopsFeed();
+    Network.loadAppsFeed();
 
-  // AUTO SCROLL ALL FEEDS
+    Network.loadVendorStrips({
+      productsTarget: "vendors-feed-products",
+      servicesTarget: "vendors-feed-services",
+      workshopsTarget: "vendors-feed-workshops",
+      appsTarget: "vendors-feed-apps"
+    });
+  }
+
+  autoScrollFeed("products-feed");
+  autoScrollFeed("services-feed");
+  autoScrollFeed("workshops-feed");
+  autoScrollFeed("apps-feed");
+
+  initHeroUser();
+</script>
+
+</body>
+</html>
