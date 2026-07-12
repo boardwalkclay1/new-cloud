@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>The Network — Explore Beltline Vendors</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="icon" type="image/jpeg" href="/network/img/network-logo.jpg">
@@ -39,7 +38,6 @@
       background: linear-gradient(160deg, rgba(0,0,0,0.7), rgba(5,6,12,0.95));
     }
 
-    /* NAV */
     .network-nav {
       display: flex;
       align-items: center;
@@ -106,7 +104,6 @@
       opacity: 1;
     }
 
-    /* HERO */
     .network-hero {
       padding: 26px 18px 8px;
       max-width: 1100px;
@@ -152,7 +149,6 @@
       background: rgba(255,255,255,0.04);
     }
 
-    /* SECTION SHELL */
     .network-section {
       padding: 22px 18px 8px;
       max-width: 1100px;
@@ -175,7 +171,6 @@
       opacity: 0.78;
     }
 
-    /* SCROLL FEEDS */
     .scroll-feed {
       display: flex;
       gap: 16px;
@@ -237,7 +232,6 @@
       color: var(--accent);
     }
 
-    /* VENDOR STRIP */
     .vendor-strip {
       margin-top: 16px;
     }
@@ -277,7 +271,6 @@
       opacity: 0.8;
     }
 
-    /* DROPDOWN EXPLAINERS */
     .network-explain {
       padding: 26px 18px 40px;
       max-width: 1100px;
@@ -346,7 +339,6 @@
 <body>
 <div class="page-shell">
 
-  <!-- NAV -->
   <nav class="network-nav">
     <div class="nav-left">
       <img src="/network/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
@@ -365,7 +357,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="network-hero">
     <div class="hero-title-row">
       <div>
@@ -374,9 +365,7 @@
           A live Beltline marketplace of storefronts, products, services, workshops, and apps — all powered by Cloud users and Fast Roll riders.
         </p>
       </div>
-      <div class="hero-user" id="heroUser">
-        <!-- filled by cloud user -->
-      </div>
+      <div class="hero-user" id="heroUser"></div>
     </div>
     <div class="hero-tags">
       <span class="hero-tag">📦 Products</span>
@@ -387,7 +376,6 @@
     </div>
   </section>
 
-  <!-- PRODUCTS -->
   <section class="network-section" id="section-products">
     <div class="section-header">
       <div>
@@ -396,14 +384,12 @@
       </div>
     </div>
     <div class="scroll-feed" id="products-feed"></div>
-
     <div class="vendor-strip">
       <div class="vendor-strip-title">Featured Vendors</div>
       <div class="vendor-feed" id="vendors-feed-products"></div>
     </div>
   </section>
 
-  <!-- SERVICES -->
   <section class="network-section" id="section-services">
     <div class="section-header">
       <div>
@@ -412,14 +398,12 @@
       </div>
     </div>
     <div class="scroll-feed" id="services-feed"></div>
-
     <div class="vendor-strip">
       <div class="vendor-strip-title">Service Vendors</div>
       <div class="vendor-feed" id="vendors-feed-services"></div>
     </div>
   </section>
 
-  <!-- WORKSHOPS -->
   <section class="network-section" id="section-workshops">
     <div class="section-header">
       <div>
@@ -428,14 +412,12 @@
       </div>
     </div>
     <div class="scroll-feed" id="workshops-feed"></div>
-
     <div class="vendor-strip">
       <div class="vendor-strip-title">Workshop Hosts</div>
       <div class="vendor-feed" id="vendors-feed-workshops"></div>
     </div>
   </section>
 
-  <!-- APPS -->
   <section class="network-section" id="section-apps">
     <div class="section-header">
       <div>
@@ -444,14 +426,12 @@
       </div>
     </div>
     <div class="scroll-feed" id="apps-feed"></div>
-
     <div class="vendor-strip">
       <div class="vendor-strip-title">App Creators</div>
       <div class="vendor-feed" id="vendors-feed-apps"></div>
     </div>
   </section>
 
-  <!-- EXPLAINERS -->
   <section class="network-explain">
     <h2 class="explain-title">About The Network</h2>
 
@@ -480,7 +460,7 @@
     <div class="explain-item">
       <div class="explain-header" onclick="toggleExplain(this.parentElement)">
         <span class="explain-label">How does checkout and payout work?</span>
-        <span class="explain-toggle">Details ▾</span>
+      <span class="explain-toggle">Details ▾</span>
       </div>
       <div class="explain-body">
         When a buyer checks out, a secure order is created and routed through the Network. Vendors see orders and payouts in their
@@ -502,13 +482,8 @@
 
 </div>
 
-<script src="/network/js/app.js"></script>
-<script src="/network/js/network-api.js"></script>
-<script src="/network/staff/js/staff.js" type="module"></script>
-
-<script type="module">
-  import Staff from "/network/staff/js/staff.js";
-
+<script type="module" src="/network/js/customer.js"></script>
+<script>
   function scrollToSection(id) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -518,55 +493,6 @@
   function toggleExplain(item) {
     item.classList.toggle("open");
   }
-
-  function autoScrollFeed(id, speed = 0.4) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    let scrollPos = 0;
-    setInterval(() => {
-      if (el.scrollWidth <= el.clientWidth) return;
-      scrollPos += speed;
-      if (scrollPos >= el.scrollWidth) scrollPos = 0;
-      el.scrollLeft = scrollPos;
-    }, 40);
-  }
-
-  function initHeroUser() {
-    const heroUser = document.getElementById("heroUser");
-    const cloudUser = Staff.getCloudUser();
-    if (!heroUser) return;
-    if (cloudUser && cloudUser.email) {
-      heroUser.innerHTML = `
-        Signed in as <span>${cloudUser.name || cloudUser.email}</span><br>
-        Cloud user • ${cloudUser.email}
-      `;
-    } else {
-      heroUser.innerHTML = `Browse publicly. Sign in to manage your storefront and rider routes.`;
-    }
-  }
-
-  // LOAD FEEDS (Network API expected to exist)
-  if (window.Network) {
-    Network.loadProductsFeed();
-    Network.loadServicesFeed();
-    Network.loadWorkshopsFeed();
-    Network.loadAppsFeed();
-
-    Network.loadVendorStrips({
-      productsTarget: "vendors-feed-products",
-      servicesTarget: "vendors-feed-services",
-      workshopsTarget: "vendors-feed-workshops",
-      appsTarget: "vendors-feed-apps"
-    });
-  }
-
-  autoScrollFeed("products-feed");
-  autoScrollFeed("services-feed");
-  autoScrollFeed("workshops-feed");
-  autoScrollFeed("apps-feed");
-
-  initHeroUser();
 </script>
-
 </body>
 </html>
