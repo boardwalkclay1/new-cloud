@@ -3,9 +3,10 @@ main = "src/worker/work-main.js"
 compatibility_date = "2024-11-20"
 compatibility_flags = ["nodejs_compat"]
 
-# 🔥 Your Worker is now bound to your API domain
+# 🔥 Worker mounted to BOTH API domains
 routes = [
-  { pattern = "api.beltlinecloud.com/*", zone_name = "beltlinecloud.com" }
+  { pattern = "api.beltlinecloud.com/*", zone_name = "beltlinecloud.com" },
+  { pattern = "beltlinecloud.com/api/*", zone_name = "beltlinecloud.com" }
 ]
 
 [[d1_databases]]
