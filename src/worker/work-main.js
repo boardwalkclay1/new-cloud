@@ -1,4 +1,4 @@
-// worker.js — UPDATED FULL VERSION (CLOUD LOGIN ISOLATED)
+// worker.js — FINAL VERSION (FULL NETWORK + STAFF + RESPONSE + SAFETY + STATIC)
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
@@ -137,8 +137,22 @@ export default {
       }
 
       /* ---------------------------------------------------------
-         ROUTE HANDLING REMOVED AS REQUESTED
+         NETWORK API (PUBLIC + STAFF + VENDOR + CHECKOUT)
       --------------------------------------------------------- */
+      const net = await handleNetwork(path, request, db, url);
+      if (net) return wrap(net);
+
+      /* ---------------------------------------------------------
+         RESPONSE ROUTES
+      --------------------------------------------------------- */
+      const r1 = await handleResponseRoutes(path, request, db, url);
+      if (r1) return wrap(r1);
+
+      /* ---------------------------------------------------------
+         SAFETY ROUTES
+      --------------------------------------------------------- */
+      const r2 = await handleSafetyRoutes(path, request, db, url);
+      if (r2) return wrap(r2);
 
     } catch (err) {
       return wrap(new Response(JSON.stringify({
