@@ -1,10 +1,10 @@
-import maplibregl from "https://cdn.jsdelivr.net/npm/maplibre-gl@3.6.1/dist/maplibre-gl.esm.js";
+import maplibregl from "https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.esm.js";
 
 let map = null;
 let userMarker = null;
 let userVisible = false;
 
-/* BELTLINE ZONES (POLYGONS) */
+/* BELTLINE ZONES */
 const beltlineZones = [
   {
     name: "Eastside Trail",
@@ -48,20 +48,17 @@ const beltlineZones = [
   }
 ];
 
-/* MAIN INIT FUNCTION */
+/* INIT MAP */
 export function initVendorMap(options = {}) {
   const containerId = options.containerId || "vendorMapContainer";
   const lat = options.lat || 33.755;
   const lng = options.lng || -84.39;
-  const zone = options.zone || "Unknown";
 
-  /* DESTROY OLD MAP */
   if (map) {
     map.remove();
     map = null;
   }
 
-  /* INIT MAP */
   map = new maplibregl.Map({
     container: containerId,
     style: "https://demotiles.maplibre.org/style.json",
@@ -72,7 +69,6 @@ export function initVendorMap(options = {}) {
     attributionControl: false
   });
 
-  /* CONTROLS */
   map.addControl(new maplibregl.NavigationControl(), "top-right");
   map.addControl(new maplibregl.ScaleControl({ maxWidth: 120 }), "bottom-left");
 
@@ -94,8 +90,8 @@ export function initVendorMap(options = {}) {
   toggleBtn.onclick = () => toggleUserLocation(lat, lng);
   document.getElementById(containerId).appendChild(toggleBtn);
 
-  /* LOAD ZONES */
   map.on("load", () => {
+    /* BELTLINE ZONES */
     beltlineZones.forEach((z, i) => {
       const id = `zone-${i}`;
 
