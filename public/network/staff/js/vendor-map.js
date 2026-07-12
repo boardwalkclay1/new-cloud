@@ -1,64 +1,97 @@
-import maplibregl from "https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.esm.js";
+/* ============================================================
+   VENDOR MAP ENGINE — MAPLIBRE + GEOJSON + USER LOCATION
+   ============================================================ */
 
 let map = null;
 let userMarker = null;
 let userVisible = false;
 
-/* BELTLINE ZONES */
-const beltlineZones = [
-  {
-    name: "Eastside Trail",
-    color: "#ffcc00",
-    coords: [
-      [-84.370, 33.745],
-      [-84.335, 33.745],
-      [-84.335, 33.760],
-      [-84.370, 33.760]
-    ]
-  },
-  {
-    name: "Westside Trail",
-    color: "#00ccff",
-    coords: [
-      [-84.430, 33.750],
-      [-84.400, 33.750],
-      [-84.400, 33.770],
-      [-84.430, 33.770]
-    ]
-  },
-  {
-    name: "Southside Trail",
-    color: "#ff0066",
-    coords: [
-      [-84.395, 33.730],
-      [-84.365, 33.730],
-      [-84.365, 33.745],
-      [-84.395, 33.745]
-    ]
-  },
-  {
-    name: "Northside Trail",
-    color: "#66ff00",
-    coords: [
-      [-84.375, 33.780],
-      [-84.350, 33.780],
-      [-84.350, 33.800],
-      [-84.375, 33.800]
-    ]
-  }
-];
+/* ============================================================
+   BELTLINE ZONES — GEOJSON POLYGONS
+   ============================================================ */
+const beltlineZones = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      properties: { name: "Eastside Trail", color: "#ffcc00" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[
+          [-84.370, 33.745],
+          [-84.335, 33.745],
+          [-84.335, 33.760],
+          [-84.370, 33.760],
+          [-84.370, 33.745]
+        ]]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { name: "Westside Trail", color: "#00ccff" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[
+          [-84.430, 33.750],
+          [-84.400, 33.750],
+          [-84.400, 33.770],
+          [-84.430, 33.770],
+          [-84.430, 33.750]
+        ]]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { name: "Southside Trail", color: "#ff0066" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[
+          [-84.395, 33.730],
+          [-84.365, 33.730],
+          [-84.365, 33.745],
+          [-84.395, 33.745],
+          [-84.395, 33.730]
+        ]]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { name: "Northside Trail", color: "#66ff00" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[
+          [-84.375, 33.780],
+          [-84.350, 33.780],
+          [-84.350, 33.800],
+          [-84.375, 33.800],
+          [-84.375, 33.780]
+        ]]
+      }
+    }
+  ]
+};
 
-/* INIT MAP */
+/* ============================================================
+   MAIN INIT FUNCTION
+   ============================================================ */
 export function initVendorMap(options = {}) {
   const containerId = options.containerId || "vendorMapContainer";
   const lat = options.lat || 33.755;
   const lng = options.lng || -84.39;
 
+  /* Destroy old map */
   if (map) {
     map.remove();
     map = null;
   }
 
+  /* MapLibre global script must already be loaded in HTML */
+  if (!window.maplibregl) {
+    console.error("MapLibre GL not loaded. Add script tag in HTML.");
+    return;
+  }
+
+  /* Create map */
   map = new maplibregl.Map({
     container: containerId,
     style: "https://demotiles.maplibre.org/style.json",
@@ -69,10 +102,11 @@ export function initVendorMap(options = {}) {
     attributionControl: false
   });
 
+  /* Controls */
   map.addControl(new maplibregl.NavigationControl(), "top-right");
   map.addControl(new maplibregl.ScaleControl({ maxWidth: 120 }), "bottom-left");
 
-  /* USER LOCATION TOGGLE BUTTON */
+  /* Toggle Button */
   const toggleBtn = document.createElement("button");
   toggleBtn.innerText = "Toggle User Location";
   toggleBtn.style.cssText = `
@@ -90,49 +124,40 @@ export function initVendorMap(options = {}) {
   toggleBtn.onclick = () => toggleUserLocation(lat, lng);
   document.getElementById(containerId).appendChild(toggleBtn);
 
+  /* Load map layers */
   map.on("load", () => {
-    /* BELTLINE ZONES */
-    beltlineZones.forEach((z, i) => {
-      const id = `zone-${i}`;
-
-      map.addSource(id, {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          geometry: {
-            type: "Polygon",
-            coordinates: [z.coords]
-          }
-        }
-      });
-
-      map.addLayer({
-        id: `${id}-fill`,
-        type: "fill",
-        source: id,
-        paint: {
-          "fill-color": z.color,
-          "fill-opacity": 0.25
-        }
-      });
-
-      map.addLayer({
-        id: `${id}-outline`,
-        type: "line",
-        source: id,
-        paint: {
-          "line-color": z.color,
-          "line-width": 2
-        }
-      });
+    /* Beltline Zones */
+    map.addSource("beltline-zones", {
+      type: "geojson",
+      data: beltlineZones
     });
 
-    /* USER MARKER (HIDDEN BY DEFAULT) */
+    map.addLayer({
+      id: "beltline-fill",
+      type: "fill",
+      source: "beltline-zones",
+      paint: {
+        "fill-color": ["get", "color"],
+        "fill-opacity": 0.25
+      }
+    });
+
+    map.addLayer({
+      id: "beltline-outline",
+      type: "line",
+      source: "beltline-zones",
+      paint: {
+        "line-color": ["get", "color"],
+        "line-width": 2
+      }
+    });
+
+    /* User Marker (hidden initially) */
     userMarker = new maplibregl.Marker({
       color: "#f7d354"
     }).setLngLat([lng, lat]);
 
-    /* SMOOTH CAMERA */
+    /* Smooth camera */
     map.flyTo({
       center: [lng, lat],
       zoom: 14,
@@ -142,7 +167,9 @@ export function initVendorMap(options = {}) {
   });
 }
 
-/* TOGGLE USER LOCATION */
+/* ============================================================
+   USER LOCATION TOGGLE
+   ============================================================ */
 function toggleUserLocation(lat, lng) {
   if (!map || !userMarker) return;
 
