@@ -1,5 +1,5 @@
 // /network/staff/js/staff.js
-// FINAL STAFF WRAPPER — CLOUD USER + LOADERS + CLOUD MESSAGING + HANDOFF
+// FINAL STAFF WRAPPER — CLOUD USER + FULL VENDOR LOADERS + EXPORTS
 
 const Staff = {
   cloudKey: "cloud_user",
@@ -31,7 +31,7 @@ const Staff = {
 
   /* ---------------------------------------------------------
      INIT DASHBOARD
-     Loads cloud user → storefront → earnings → payout → ads → phonebook → vendor.js
+     Loads EVERYTHING → hands off to Vendor.init()
   --------------------------------------------------------- */
   async initDashboard() {
     const cloudUser = this.getCloudUser();
@@ -40,25 +40,21 @@ const Staff = {
       return;
     }
 
-    // Load storefront
-    const store = await this.fetchJSON(`/api/vendor/storefront?email=${encodeURIComponent(cloudUser.email)}`);
+    const email = encodeURIComponent(cloudUser.email);
 
-    // Load earnings
-    const earnings = await this.fetchJSON(`/api/vendor/earnings?email=${encodeURIComponent(cloudUser.email)}`);
+    const store     = await this.fetchJSON(`/api/vendor/storefront?email=${email}`);
+    const earnings  = await this.fetchJSON(`/api/vendor/earnings?email=${email}`);
+    const payout    = await this.fetchJSON(`/api/vendor/payout/status?email=${email}`);
+    const ads       = await this.fetchJSON(`/api/vendor/ads?email=${email}`);
+    const phonebook = await this.fetchJSON(`/api/vendor/phonebook?email=${email}`);
+    const orders    = await this.fetchJSON(`/api/vendor/orders?email=${email}`);
+    const messages  = await this.fetchJSON(`/api/vendor/messages?email=${email}`);
+    const stats     = await this.fetchJSON(`/api/vendor/stats/today?email=${email}`);
 
-    // Load payout connection (PayPal/Venmo)
-    const payout = await this.fetchJSON(`/api/vendor/payout/status?email=${encodeURIComponent(cloudUser.email)}`);
-
-    // Load ads
-    const ads = await this.fetchJSON(`/api/vendor/ads?email=${encodeURIComponent(cloudUser.email)}`);
-
-    // Load phonebook
-    const phonebook = await this.fetchJSON(`/api/vendor/phonebook?email=${encodeURIComponent(cloudUser.email)}`);
-
-    // Build storefront object
     const storefront = {
       email: cloudUser.email,
       name: cloudUser.name,
+
       description: store?.description || "",
       tags: store?.tags || "",
       logo: store?.logo || "",
@@ -83,12 +79,21 @@ const Staff = {
         method: null,
         email: null,
         venmo: false
-      } : payout
+      } : payout,
+
+      orders: orders?.error ? [] : orders,
+      messages: messages?.error ? [] : messages,
+      stats: stats?.error ? {
+        revenue: 0,
+        ordersCount: 0,
+        activeProducts: 0,
+        openOrders: 0,
+        newMessages: 0
+      } : stats
     };
 
     this.saveStorefront(storefront);
 
-    // Hand off to vendor.js
     if (window.Vendor) {
       Vendor.init(storefront, cloudUser);
     }
@@ -111,7 +116,7 @@ const Staff = {
   previewPage() {
     const cloudUser = this.getCloudUser();
     if (!cloudUser) return;
-    window.location.href = `/network/public/pages/vendor.html?id=${encodeURIComponent(cloudUser.email)}`;
+    window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(cloudUser.email)}`;
   },
 
   logout() {
@@ -148,3 +153,56 @@ const Staff = {
     }
   }
 };
+
+/* ============================================================
+   EXPORTS FOR VENDOR DASHBOARD
+   ============================================================ */
+
+export async function staffGetProducts() {
+  const user = Staff.getCloudUser();
+  if (!user) return [];
+  return await Staff.fetchJSON(`/api/vendor/products?email=${encodeURIComponent(user.email)}`) || [];
+}
+
+export async function staffUpdateProduct(id, data) {
+  return await Staff.postJSON(`/api/vendor/products/update?id=${id}`, data);
+}
+
+export async function staffToggleVisibility(id) {
+  return await Staff.postJSON(`/api/vendor/products/toggle?id=${id}`, {});
+}
+
+export async function staffGetOrders() {
+  const user = Staff.getCloudUser();
+  if (!user) return [];
+  return await Staff.fetchJSON(`/api/vendor/orders?email=${encodeURIComponent(user.email)}`) || [];
+}
+
+export async function staffGetMessages() {
+  const user = Staff.getCloudUser();
+  if (!user) return [];
+  return await Staff.fetchJSON(`/api/vendor/messages?email=${encodeURIComponent(user.email)}`) || [];
+}
+
+export async function staffGetTodayStats() {
+  const user = Staff.getCloudUser();
+  if (!user) return {
+    revenue: 0,
+    ordersCount: 0,
+    activeProducts: 0,
+    openOrders: 0,
+    newMessages: 0
+  };
+  return await Staff.fetchJSON(`/api/vendor/stats/today?email=${encodeURIComponent(user.email)}`) || {
+    revenue: 0,
+    ordersCount: 0,
+    activeProducts: 0,
+    openOrders: 0,
+    newMessages: 0
+  };
+}
+
+/* ============================================================
+   DEFAULT EXPORT
+   ============================================================ */
+export default Staff;
