@@ -14,7 +14,7 @@ const beltlineZones = {
   features: [
     {
       type: "Feature",
-      properties: { name: "Eastside Trail", color: "#ffcc00" },
+      properties: { name: "Eastside Trail", zoneColor: "#ffcc00" },
       geometry: {
         type: "Polygon",
         coordinates: [[
@@ -28,7 +28,7 @@ const beltlineZones = {
     },
     {
       type: "Feature",
-      properties: { name: "Westside Trail", color: "#00ccff" },
+      properties: { name: "Westside Trail", zoneColor: "#00ccff" },
       geometry: {
         type: "Polygon",
         coordinates: [[
@@ -42,7 +42,7 @@ const beltlineZones = {
     },
     {
       type: "Feature",
-      properties: { name: "Southside Trail", color: "#ff0066" },
+      properties: { name: "Southside Trail", zoneColor: "#ff0066" },
       geometry: {
         type: "Polygon",
         coordinates: [[
@@ -56,7 +56,7 @@ const beltlineZones = {
     },
     {
       type: "Feature",
-      properties: { name: "Northside Trail", color: "#66ff00" },
+      properties: { name: "Northside Trail", zoneColor: "#66ff00" },
       geometry: {
         type: "Polygon",
         coordinates: [[
@@ -132,22 +132,40 @@ export function initVendorMap(options = {}) {
       data: beltlineZones
     });
 
+    /* Fill layer */
     map.addLayer({
       id: "beltline-fill",
       type: "fill",
       source: "beltline-zones",
       paint: {
-        "fill-color": ["get", "color"],
+        "fill-color": [
+          "match",
+          ["get", "name"],
+          "Eastside Trail", "#ffcc00",
+          "Westside Trail", "#00ccff",
+          "Southside Trail", "#ff0066",
+          "Northside Trail", "#66ff00",
+          "#ffffff"
+        ],
         "fill-opacity": 0.25
       }
     });
 
+    /* Outline layer */
     map.addLayer({
       id: "beltline-outline",
       type: "line",
       source: "beltline-zones",
       paint: {
-        "line-color": ["get", "color"],
+        "line-color": [
+          "match",
+          ["get", "name"],
+          "Eastside Trail", "#ffcc00",
+          "Westside Trail", "#00ccff",
+          "Southside Trail", "#ff0066",
+          "Northside Trail", "#66ff00",
+          "#ffffff"
+        ],
         "line-width": 2
       }
     });
