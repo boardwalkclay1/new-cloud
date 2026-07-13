@@ -1,13 +1,12 @@
-/* GLOBAL */
 body {
   margin: 0;
-  font-family: Inter, sans-serif;
+  font-family: Arial, sans-serif;
   color: #fff;
   background: #000;
   overflow-x: hidden;
 }
 
-/* CINEMATIC INTRO CONTAINER */
+/* CINEMATIC INTRO */
 #cinematicContainer {
   position: fixed;
   inset: 0;
@@ -17,7 +16,6 @@ body {
   transition: opacity 2s ease;
 }
 
-/* BACKGROUND SLIDE */
 #cinematicSlide {
   position: absolute;
   inset: 0;
@@ -27,7 +25,6 @@ body {
   transition: opacity 2s ease;
 }
 
-/* ZOOM-IN MOVIE EFFECT */
 #cinematicSlide.zoomIn {
   animation: zoomInCinematic 4s ease forwards;
 }
@@ -38,14 +35,12 @@ body {
   100% { transform: scale(1.15); filter: brightness(1.1); }
 }
 
-/* CINEMATIC TEXT */
 #cinematicText {
   position: absolute;
   bottom: 15%;
   width: 100%;
   text-align: center;
-  font-family: Cinzel;
-  font-size: 2.4rem;
+  font-size: 2rem;
   text-shadow: 0 0 35px #f7d354;
   opacity: 0;
   transition: opacity 1.5s ease;
@@ -60,7 +55,6 @@ body {
   color: #000;
   border: none;
   border-radius: 12px;
-  font-family: Cinzel;
   cursor: pointer;
   font-size: 1.1rem;
   z-index: 10000;
@@ -73,32 +67,28 @@ body {
   background: #ffe48a;
 }
 
-/* MAIN CONTENT (HIDDEN UNTIL INTRO ENDS) */
+/* MAIN CONTENT */
 .fadeContent {
   opacity: 0;
   transition: opacity 2s ease;
 }
 
-/* HEADER */
 header {
   text-align: center;
   padding: 60px 20px 20px;
 }
 
 header h1 {
-  font-family: Cinzel;
-  font-size: 3.2rem;
+  font-size: 3rem;
   text-shadow: 0 0 25px #f7d354;
 }
 
 header h2 {
-  font-family: Cinzel;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   opacity: 0.85;
   margin-top: 10px;
 }
 
-/* SECTIONS */
 .section {
   max-width: 900px;
   margin: 40px auto;
@@ -109,7 +99,6 @@ header h2 {
 }
 
 .section h3 {
-  font-family: Cinzel;
   font-size: 2rem;
   margin-bottom: 10px;
   color: #f7d354;
@@ -121,14 +110,12 @@ header h2 {
   opacity: 0.9;
 }
 
-/* BUTTONS */
 .btn {
   display: inline-block;
   margin-top: 20px;
   padding: 16px 26px;
   background: #f7d354;
   color: #000;
-  font-family: Cinzel;
   border-radius: 12px;
   text-decoration: none;
   font-size: 1.2rem;
@@ -138,7 +125,6 @@ header h2 {
   background: #ffe48a;
 }
 
-/* FOOTER */
 footer {
   text-align: center;
   padding: 40px;
