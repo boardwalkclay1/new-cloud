@@ -6,34 +6,39 @@ body {
   overflow-x: hidden;
 }
 
-/* CINEMATIC BACKGROUND FLASH */
-#bgFlash {
+/* CINEMATIC INTRO */
+#cinematicContainer {
   position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.cinematicSlide {
+  position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  animation: flashSequence 12s ease-in-out forwards;
-  z-index: -1;
-}
-
-@keyframes flashSequence {
-  0%   { background-image: url('/assets/img/cloud/cinematic/c1.jpg'); opacity: 0; }
-  10%  { opacity: 1; }
-  20%  { background-image: url('/assets/img/cloud/cinematic/c2.jpg'); }
-  40%  { background-image: url('/assets/img/cloud/cinematic/c3.jpg'); }
-  60%  { background-image: url('/assets/img/cloud/cinematic/c4.jpg'); }
-  80%  { background-image: url('/assets/img/cloud/cinematic/c5.jpg'); }
-  100% { background-image: url('/assets/img/cloud/cinematic/c6.jpg'); opacity: 1; }
-}
-
-/* FADE-IN CONTENT */
-.fade {
-  animation: fadeIn 2.5s ease forwards;
   opacity: 0;
+  transition: opacity 2s ease;
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
+#cinematicText {
+  position: absolute;
+  bottom: 15%;
+  width: 100%;
+  text-align: center;
+  font-family: Cinzel;
+  font-size: 2rem;
+  text-shadow: 0 0 20px #f7d354;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* MAIN CONTENT */
+.fadeContent {
+  opacity: 0;
+  transition: opacity 2s ease;
 }
 
 header {
