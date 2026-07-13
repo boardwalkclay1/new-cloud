@@ -16,11 +16,11 @@
 */
 
 const images = {
-  chat: "",      // Chat Cloud background
-  response: "",  // Response Unit / Response Cloud icon background
-  safety: "",    // Safety Cloud icon background
+  chat: "/assets/img/cloud/cloud-chat.jpg",      // Chat Cloud background
+  response: "/assets/img/cloud/cloud-response-logo.jpg",  // Response Unit / Response Cloud icon background
+  safety: "/assets/img/cloud/safety-cloud-logo.jpg",    // Safety Cloud icon background
   map: "",       // Map / Beltline Map background
-  radio: ""      // Radio Station / Cloud Station background
+  radio: "/assets/img/cloud/radio.jpg"      // Radio Station / Cloud Station background
 };
 
 const texts = {
