@@ -1,8 +1,7 @@
 /* ============================================================
-   DIWA CINEMATIC INTRO — FINAL MOVIE VERSION
+   DIWA CINEMATIC MOVIE INTRO — FINAL VERSION
    ============================================================ */
 
-/* YOUR IMAGE PATHS — ALREADY CONFIRMED */
 const images = {
   chat: "/assets/img/cloud/cloud-chat.jpg",
   response: "/assets/img/cloud/cloud-response-logo.jpg",
@@ -11,7 +10,6 @@ const images = {
   radio: "/assets/img/cloud/radio.jpg"
 };
 
-/* TEXT FOR EACH CINEMATIC SCENE */
 const texts = {
   chat: "Chat Cloud — the way the entire Beltline talks, connects, and shares.",
   response: "Response Cloud — the units that protect, respond, and stand ready.",
@@ -20,7 +18,6 @@ const texts = {
   radio: "Your Radio Station — the center of the Cloud Station, the heartbeat of the Network."
 };
 
-/* ORDER OF SCENES */
 const order = ["chat", "response", "safety", "map", "radio"];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let index = 0;
 
-  /* TYPEWRITER EFFECT */
   function typeWriter(text, callback) {
     textBox.innerHTML = "";
     let i = 0;
@@ -42,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (i < text.length) {
         textBox.innerHTML += text.charAt(i);
         i++;
-        setTimeout(type, 40); // typing speed
+        setTimeout(type, 40);
       } else {
         callback();
       }
@@ -51,21 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
     type();
   }
 
-  /* SHOW EACH CINEMATIC SCENE */
   function showSlide() {
     if (index >= order.length) return finishIntro();
 
     const key = order[index];
-    const bg = images[key];
-    const line = texts[key];
-
-    slide.style.backgroundImage = `url('${bg}')`;
+    slide.style.backgroundImage = `url('${images[key]}')`;
     slide.style.opacity = 1;
     slide.classList.add("zoomIn");
 
     textBox.style.opacity = 1;
 
-    typeWriter(line, () => {
+    typeWriter(texts[key], () => {
       setTimeout(() => {
         textBox.style.opacity = 0;
         slide.style.opacity = 0;
@@ -76,35 +68,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* END OF MOVIE — FADE OUT AND SHOW PAGE */
   function finishIntro() {
     const container = document.getElementById("cinematicContainer");
     container.style.opacity = 0;
 
     setTimeout(() => {
       container.style.display = "none";
-
-      content.forEach(el => {
-        el.style.opacity = 1;
-      });
+      content.forEach(el => el.style.opacity = 1);
     }, 2000);
   }
 
-  /* SKIP BUTTON */
   skipBtn.onclick = finishIntro;
 
-  /* REPLAY BUTTON */
   replayBtn.onclick = () => {
     index = 0;
     const container = document.getElementById("cinematicContainer");
     container.style.display = "block";
     container.style.opacity = 1;
-
     content.forEach(el => el.style.opacity = 0);
-
     showSlide();
   };
 
-  /* START MOVIE */
   showSlide();
 });
