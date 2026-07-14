@@ -1,151 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Diwa — Beltline Cloud Station</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Diwa — Beltline Cloud Station</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #fff;
-      background: #000;
-      overflow-x: hidden;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background: #000;
+    overflow-x: hidden;
+  }
 
-    /* CINEMATIC INTRO */
-    #cinematicContainer {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 9999;
-      transition: opacity 1.5s ease;
-    }
+  /* CINEMATIC INTRO */
+  #cinematicContainer {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    transition: opacity 1.5s ease;
+  }
 
-    #cinematicSlide {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
+  #cinematicSlide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
 
-    #cinematicSlide.zoomIn {
-      animation: zoomIn 4s ease forwards;
-    }
+  #cinematicSlide.zoomIn {
+    animation: zoomIn 4s ease forwards;
+  }
 
-    @keyframes zoomIn {
-      0%   { transform: scale(1.05); filter: brightness(0.8); }
-      50%  { transform: scale(1.1);  filter: brightness(1); }
-      100% { transform: scale(1.15); filter: brightness(1.1); }
-    }
+  @keyframes zoomIn {
+    0%   { transform: scale(1.05); filter: brightness(0.8); }
+    50%  { transform: scale(1.1);  filter: brightness(1); }
+    100% { transform: scale(1.15); filter: brightness(1.1); }
+  }
 
-    #cinematicText {
-      position: absolute;
-      bottom: 15%;
-      width: 100%;
-      text-align: center;
-      font-size: 2rem;
-      text-shadow: 0 0 25px #f7d354;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
+  #cinematicText {
+    position: absolute;
+    bottom: 15%;
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    text-shadow: 0 0 25px #f7d354;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
 
-    /* BUTTONS */
-    #skipBtn, #replayBtn {
-      position: absolute;
-      bottom: 30px;
-      padding: 12px 22px;
-      background: #f7d354;
-      color: #000;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1rem;
-      z-index: 10000;
-    }
+  /* BLACK BLOCK BEHIND TEXT */
+  #textBlock {
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    padding: 20px;
+    background: rgba(0,0,0,0.65);
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
 
-    #skipBtn { right: 30px; }
-    #replayBtn { left: 30px; }
+  /* BUTTONS */
+  #skipBtn, #replayBtn {
+    position: absolute;
+    bottom: 30px;
+    padding: 12px 22px;
+    background: #f7d354;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    z-index: 10000;
+  }
 
-    #skipBtn:hover, #replayBtn:hover {
-      background: #ffe48a;
-    }
+  #skipBtn { right: 30px; }
+  #replayBtn { left: 30px; }
 
-    /* MAIN CONTENT */
-    .fadeContent {
-      opacity: 0;
-      transition: opacity 2s ease;
-    }
+  #skipBtn:hover, #replayBtn:hover {
+    background: #ffe48a;
+  }
 
-    header {
-      text-align: center;
-      padding: 60px 20px 20px;
-    }
+  /* MAIN CONTENT */
+  .fadeContent {
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
 
-    header h1 {
-      font-size: 3rem;
-      text-shadow: 0 0 25px #f7d354;
-    }
+  header {
+    text-align: center;
+    padding: 60px 20px 20px;
+  }
 
-    header h2 {
-      font-size: 1.4rem;
-      opacity: 0.85;
-      margin-top: 10px;
-    }
+  header h1 {
+    font-size: 3rem;
+    text-shadow: 0 0 25px #f7d354;
+  }
 
-    .section {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      background: rgba(0,0,0,0.6);
-      border: 2px solid #f7d354;
-      border-radius: 18px;
-    }
+  header h2 {
+    font-size: 1.4rem;
+    opacity: 0.85;
+    margin-top: 10px;
+  }
 
-    .section h3 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: #f7d354;
-    }
+  .section {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    border: 2px solid #f7d354;
+    border-radius: 18px;
+  }
 
-    .section p {
-      font-size: 1.2rem;
-      line-height: 1.7rem;
-      opacity: 0.9;
-    }
+  .section h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #f7d354;
+  }
 
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 14px 22px;
-      background: #f7d354;
-      color: #000;
-      border-radius: 12px;
-      text-decoration: none;
-      font-size: 1.1rem;
-    }
+  .section p {
+    font-size: 1.2rem;
+    line-height: 1.7rem;
+    opacity: 0.9;
+  }
 
-    .btn:hover {
-      background: #ffe48a;
-    }
+  .btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 22px;
+    background: #f7d354;
+    color: #000;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
 
-    footer {
-      text-align: center;
-      padding: 40px;
-      opacity: 0.8;
-      font-size: 1rem;
-    }
-  </style>
+  footer {
+    text-align: center;
+    padding: 40px;
+    opacity: 0.8;
+    font-size: 1rem;
+  }
+
+  /* FLOATING BACKGROUND IMAGES AFTER INTRO */
+  #floatingBackground {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: floatBG 12s infinite alternate ease-in-out;
+  }
+
+  @keyframes floatBG {
+    0%   { opacity: 0.25; transform: scale(1); }
+    50%  { opacity: 0.45; transform: scale(1.05); }
+    100% { opacity: 0.25; transform: scale(1); }
+  }
+</style>
 </head>
 
 <body>
 
+<!-- FLOATING BACKGROUND AFTER INTRO -->
+<div id="floatingBackground"></div>
+
 <!-- CINEMATIC MOVIE INTRO -->
 <div id="cinematicContainer">
   <div id="cinematicSlide"></div>
+  <div id="textBlock"></div>
   <div id="cinematicText"></div>
 
   <button id="replayBtn">Replay</button>
@@ -195,11 +226,11 @@
   };
 
   const texts = {
-    chat: "Chat Cloud — the way the entire Beltline talks, connects, and shares.",
-    response: "Response Cloud — the units that protect, respond, and stand ready.",
-    safety: "Safety Cloud — alerts, check-ins, and guidance when it matters most.",
-    map: "Map Cloud — every vendor, every route, every trail, every person in one view.",
-    radio: "Your Radio Station — the center of the Cloud Station, the heartbeat of the Network."
+    chat: "Chat Cloud — the living pulse of communication across the Beltline. Every voice, every message, every moment shared.",
+    response: "Response Cloud — the guardians of the Beltline. Real-time protection, rapid deployment, and unwavering readiness.",
+    safety: "Safety Cloud — the shield above everything. Alerts, guidance, emergency pathways, and the calm in the storm.",
+    map: "Map Cloud — the entire Beltline visualized. Vendors, routes, trails, response units, events, and every moving piece.",
+    radio: "Your Radio Station — the heart of the Cloud. Culture, identity, announcements, emergencies, and the voice everyone trusts."
   };
 
   const order = ["chat", "response", "safety", "map", "radio"];
@@ -207,6 +238,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     const slide = document.getElementById("cinematicSlide");
     const textBox = document.getElementById("cinematicText");
+    const textBlock = document.getElementById("textBlock");
+    const floatingBG = document.getElementById("floatingBackground");
     const content = document.querySelectorAll(".fadeContent");
 
     const skipBtn = document.getElementById("skipBtn");
@@ -239,11 +272,14 @@
       slide.style.opacity = 1;
       slide.classList.add("zoomIn");
 
+      textBlock.innerHTML = texts[key];
+      textBlock.style.opacity = 1;
       textBox.style.opacity = 1;
 
       typeWriter(texts[key], () => {
         setTimeout(() => {
           textBox.style.opacity = 0;
+          textBlock.style.opacity = 0;
           slide.style.opacity = 0;
           slide.classList.remove("zoomIn");
           index++;
@@ -255,6 +291,9 @@
     function finishIntro() {
       const container = document.getElementById("cinematicContainer");
       container.style.opacity = 0;
+
+      floatingBG.style.backgroundImage = `url('${images.radio}')`;
+      floatingBG.style.opacity = 1;
 
       setTimeout(() => {
         container.style.display = "none";
@@ -269,6 +308,7 @@
       const container = document.getElementById("cinematicContainer");
       container.style.display = "block";
       container.style.opacity = 1;
+      floatingBG.style.opacity = 0;
       content.forEach(el => el.style.opacity = 0);
       showSlide();
     };
