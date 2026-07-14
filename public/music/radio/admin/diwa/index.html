@@ -14,6 +14,23 @@
     overflow-x: hidden;
   }
 
+  /* FLOATING BACKGROUND AFTER INTRO */
+  #floatingBackground {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: floatBG 12s infinite alternate ease-in-out;
+  }
+
+  @keyframes floatBG {
+    0%   { opacity: 0.25; transform: scale(1); }
+    50%  { opacity: 0.45; transform: scale(1.05); }
+    100% { opacity: 0.25; transform: scale(1); }
+  }
+
   /* CINEMATIC INTRO */
   #cinematicContainer {
     position: fixed;
@@ -42,18 +59,7 @@
     100% { transform: scale(1.15); filter: brightness(1.1); }
   }
 
-  #cinematicText {
-    position: absolute;
-    bottom: 15%;
-    width: 100%;
-    text-align: center;
-    font-size: 2rem;
-    text-shadow: 0 0 25px #f7d354;
-    opacity: 0;
-    transition: opacity 1s ease;
-  }
-
-  /* BLACK BLOCK BEHIND TEXT */
+  /* BLACK BLOCK BEHIND TYPEWRITER TEXT */
   #textBlock {
     position: absolute;
     bottom: 12%;
@@ -63,6 +69,20 @@
     padding: 20px;
     background: rgba(0,0,0,0.65);
     border-radius: 12px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  /* TYPEWRITER TEXT */
+  #cinematicText {
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    text-align: center;
+    font-size: 2rem;
+    text-shadow: 0 0 25px #f7d354;
     opacity: 0;
     transition: opacity 1s ease;
   }
@@ -148,23 +168,6 @@
     opacity: 0.8;
     font-size: 1rem;
   }
-
-  /* FLOATING BACKGROUND IMAGES AFTER INTRO */
-  #floatingBackground {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    animation: floatBG 12s infinite alternate ease-in-out;
-  }
-
-  @keyframes floatBG {
-    0%   { opacity: 0.25; transform: scale(1); }
-    50%  { opacity: 0.45; transform: scale(1.05); }
-    100% { opacity: 0.25; transform: scale(1); }
-  }
 </style>
 </head>
 
@@ -173,7 +176,7 @@
 <!-- FLOATING BACKGROUND AFTER INTRO -->
 <div id="floatingBackground"></div>
 
-<!-- CINEMATIC MOVIE INTRO -->
+<!-- CINEMATIC INTRO -->
 <div id="cinematicContainer">
   <div id="cinematicSlide"></div>
   <div id="textBlock"></div>
@@ -226,11 +229,11 @@
   };
 
   const texts = {
-    chat: "Chat Cloud — the living pulse of communication across the Beltline. Every voice, every message, every moment shared.",
-    response: "Response Cloud — the guardians of the Beltline. Real-time protection, rapid deployment, and unwavering readiness.",
-    safety: "Safety Cloud — the shield above everything. Alerts, guidance, emergency pathways, and the calm in the storm.",
-    map: "Map Cloud — the entire Beltline visualized. Vendors, routes, trails, response units, events, and every moving piece.",
-    radio: "Your Radio Station — the heart of the Cloud. Culture, identity, announcements, emergencies, and the voice everyone trusts."
+    chat: "Chat Cloud — the living pulse of communication across the Beltline.",
+    response: "Response Cloud — the guardians of the Beltline, always ready.",
+    safety: "Safety Cloud — the shield above everything, guiding the community.",
+    map: "Map Cloud — the entire Beltline visualized in one living map.",
+    radio: "Your Radio Station — the heartbeat of the Cloud, the voice everyone trusts."
   };
 
   const order = ["chat", "response", "safety", "map", "radio"];
@@ -272,7 +275,6 @@
       slide.style.opacity = 1;
       slide.classList.add("zoomIn");
 
-      textBlock.innerHTML = texts[key];
       textBlock.style.opacity = 1;
       textBox.style.opacity = 1;
 
