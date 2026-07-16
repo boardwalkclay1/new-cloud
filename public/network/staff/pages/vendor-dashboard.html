@@ -3,364 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vendor Control Center</title>
+<title>Vendor Dashboard</title>
 
 <link rel="icon" type="image/jpg" href="/network/img/network-logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-  :root {
-    --yellow: #f7d354;
-    --white: #ffffff;
-    --bg-dark: #05070b;
-    --card-bg: rgba(0,0,0,0.72);
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: url('/network/public/img/vendor-back.jpg') center/cover no-repeat fixed;
-    color: var(--white);
-  }
-
-  .layout {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    min-height: 100vh;
-    background: linear-gradient(120deg, rgba(0,0,0,0.8), rgba(10,10,20,0.85));
-  }
-
-  /* SIDEBAR */
-  .sidebar {
-    background: rgba(0,0,0,0.85);
-    border-right: 2px solid var(--yellow);
-    padding: 20px;
-  }
-
-  .sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-  }
-
-  .sidebar-header img {
-    height: 50px;
-    width: 50px;
-    border-radius: 12px;
-  }
-
-  .sidebar-header h2 {
-    margin: 0;
-    font-size: 1.3rem;
-    color: var(--yellow);
-  }
-
-  .sidebar-header small {
-    display: block;
-    font-size: 0.8rem;
-    color: #cfd9ff;
-  }
-
-  .sidebar-nav {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .sidebar-nav li {
-    margin-bottom: 12px;
-  }
-
-  .sidebar-nav a {
-    display: block;
-    padding: 10px 12px;
-    border-radius: 10px;
-    text-decoration: none;
-    color: var(--white);
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(247,211,84,0.35);
-    font-size: 0.95rem;
-  }
-
-  .sidebar-nav a:hover {
-    background: rgba(247,211,84,0.18);
-    border-color: var(--yellow);
-  }
-
-  .sidebar-footer {
-    margin-top: 25px;
-  }
-
-  .sidebar-footer button {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid var(--yellow);
-    background: transparent;
-    color: var(--yellow);
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .sidebar-footer button:hover {
-    background: var(--yellow);
-    color: #000;
-  }
-
-  /* MAIN */
-  .main {
-    padding: 20px 22px;
-  }
-
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-
-  .top-bar-left h1 {
-    margin: 0;
-    font-size: 1.6rem;
-    color: var(--yellow);
-  }
-
-  .top-bar-left span {
-    font-size: 0.9rem;
-    color: #cfd9ff;
-  }
-
-  .top-bar-right {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .top-bar-right img {
-    height: 46px;
-    width: 46px;
-    border-radius: 14px;
-    border: 2px solid var(--yellow);
-    background: rgba(0,0,0,0.7);
-    padding: 6px;
-    cursor: pointer;
-  }
-
-  /* CLOUD STATS (WEATHER / LOCATION / TIME) */
-  .cloud-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 18px;
-    font-size: 0.9rem;
-  }
-
-  .cloud-stat {
-    padding: 6px 10px;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid rgba(247,211,84,0.6);
-    color: var(--yellow);
-  }
-
-  /* STATS GRID */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-    margin-bottom: 22px;
-  }
-
-  .stat-card {
-    background: var(--card-bg);
-    border-radius: 14px;
-    padding: 12px 12px 10px;
-    border: 1px solid rgba(247,211,84,0.6);
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-    color: #cfd9ff;
-  }
-
-  .stat-value {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--yellow);
-    margin-top: 4px;
-  }
-
-  .stat-sub {
-    font-size: 0.8rem;
-    color: #9fb3ff;
-    margin-top: 2px;
-  }
-
-  /* CONTENT GRID */
-  .content-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 18px;
-  }
-
-  .panel {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 14px;
-    border: 1px solid rgba(247,211,84,0.6);
-  }
-
-  .panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .panel-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--yellow);
-  }
-
-  .panel-header span {
-    font-size: 0.8rem;
-    color: #cfd9ff;
-  }
-
-  /* PRODUCTS */
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .product-card {
-    background: rgba(0,0,0,0.8);
-    border-radius: 14px;
-    border: 1px solid rgba(247,211,84,0.6);
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .product-card img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 6px;
-  }
-
-  .product-name {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--yellow);
-  }
-
-  .product-meta {
-    font-size: 0.8rem;
-    color: #cfd9ff;
-  }
-
-  .product-actions {
-    display: flex;
-    gap: 6px;
-    margin-top: 6px;
-  }
-
-  .product-actions button {
-    flex: 1;
-    padding: 6px;
-    border-radius: 8px;
-    border: 1px solid var(--yellow);
-    background: transparent;
-    color: var(--yellow);
-    font-size: 0.75rem;
-    cursor: pointer;
-  }
-
-  .product-actions button:hover {
-    background: var(--yellow);
-    color: #000;
-  }
-
-  /* ORDERS */
-  .orders-list {
-    max-height: 260px;
-    overflow-y: auto;
-    margin-top: 6px;
-  }
-
-  .order-item {
-    padding: 8px;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid rgba(247,211,84,0.4);
-    margin-bottom: 6px;
-    font-size: 0.85rem;
-  }
-
-  .order-item strong {
-    color: var(--yellow);
-  }
-
-  /* MESSAGES */
-  .messages-list {
-    max-height: 260px;
-    overflow-y: auto;
-    margin-top: 6px;
-  }
-
-  .message-item {
-    padding: 8px;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid rgba(247,211,84,0.4);
-    margin-bottom: 6px;
-    font-size: 0.85rem;
-  }
-
-  .message-item strong {
-    color: var(--yellow);
-  }
-
-  /* VENDOR MAP PANEL */
-  #vendorMapContainer {
-    width: 100%;
-    height: 260px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #000;
-    border: 1px solid rgba(247,211,84,0.6);
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    .layout {
-      grid-template-columns: 1fr;
-    }
-    .sidebar {
-      display: none;
-    }
-    .stats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .content-grid {
-      grid-template-columns: 1fr;
-    }
-    .products-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 600px) {
-    .products-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+<link rel="stylesheet" href="/network/vendor/css/vendor-dashboard.css">
 </head>
 
 <body>
@@ -399,6 +46,15 @@
         <span id="vendorSubtitle">Live performance overview</span>
       </div>
       <div class="top-bar-right">
+        <!-- VENDOR LOGO + UPLOAD -->
+        <div class="top-logo-wrap">
+          <img src="/network/vendors/go-time/logo.png" id="vendorLogoImg" alt="Vendor Logo">
+          <label class="upload-btn">
+            Upload Logo
+            <input type="file" id="vendorLogoUpload" accept="image/*">
+          </label>
+        </div>
+
         <img src="/assets/img/cloud/safety-cloud-logo.jpg" id="safetyIcon" alt="Safety Cloud">
         <img src="/assets/img/cloud/cloud-talkk-logo.jpg" id="talkIcon" alt="CloudTalk">
       </div>
@@ -441,7 +97,17 @@
       <div class="panel" id="products">
         <div class="panel-header">
           <h3>Products</h3>
-          <span><a href="/network/staff/pages/products.html" style="color:#cfd9ff;text-decoration:none;">Advanced editor</a></span>
+          <span>
+            <a href="/network/staff/pages/products.html" style="color:#cfd9ff;text-decoration:none;">Advanced editor</a>
+          </span>
+        </div>
+
+        <!-- GLOBAL PRODUCT IMAGE UPLOAD -->
+        <div class="panel-upload-row">
+          <label class="upload-btn">
+            Upload Product Image
+            <input type="file" id="productImageUpload" accept="image/*">
+          </label>
         </div>
 
         <div class="products-grid" id="productsGrid"></div>
@@ -465,6 +131,15 @@
           <h3>Vendor Map</h3>
           <span>Live Beltline placement</span>
         </div>
+
+        <!-- COVER PHOTO UPLOAD + MAP -->
+        <div class="panel-upload-row">
+          <label class="upload-btn">
+            Upload Cover Photo
+            <input type="file" id="coverUpload" accept="image/*">
+          </label>
+        </div>
+
         <div id="vendorMapContainer"></div>
       </div>
     </section>
@@ -499,6 +174,11 @@
   const timeStat = document.getElementById("timeStat");
   const sidebarUser = document.getElementById("sidebarUser");
   const vendorSubtitle = document.getElementById("vendorSubtitle");
+
+  const vendorLogoUpload = document.getElementById("vendorLogoUpload");
+  const vendorLogoImg = document.getElementById("vendorLogoImg");
+  const productImageUpload = document.getElementById("productImageUpload");
+  const coverUpload = document.getElementById("coverUpload");
 
   // CLOUD USER CONNECTION
   function connectCloudUser() {
@@ -542,7 +222,6 @@
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      // WEATHER
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
       try {
         const res = await fetch(url);
@@ -565,7 +244,6 @@
         weatherStat.textContent = "Weather: unavailable";
       }
 
-      // BELTLINE ZONE
       let zone = "Outside Beltline";
       for (const z of zones) {
         if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
@@ -575,7 +253,6 @@
       }
       locationStat.textContent = `Location: ${zone}`;
 
-      // VENDOR MAP INIT (WITH CLOUD USER + LOCATION)
       initVendorMap({
         lat,
         lng,
@@ -700,6 +377,48 @@
     localStorage.removeItem("beltline_user");
     window.location.href = "/network/pages/login.html";
   };
+
+  // UPLOAD HANDLERS (hook to your Worker routes)
+  vendorLogoUpload.addEventListener("change", async () => {
+    const file = vendorLogoUpload.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/vendor/upload/logo", {
+      method: "POST",
+      body: formData,
+      credentials: "include"
+    });
+    const data = await res.json();
+    if (data.success && data.url) {
+      vendorLogoImg.src = data.url;
+    }
+  });
+
+  productImageUpload.addEventListener("change", async () => {
+    const file = productImageUpload.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    await fetch("/api/vendor/upload/product-image", {
+      method: "POST",
+      body: formData,
+      credentials: "include"
+    });
+    await loadProducts();
+  });
+
+  coverUpload.addEventListener("change", async () => {
+    const file = coverUpload.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    await fetch("/api/vendor/upload/cover", {
+      method: "POST",
+      body: formData,
+      credentials: "include"
+    });
+  });
 </script>
 
 </body>
