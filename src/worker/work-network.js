@@ -1,7 +1,7 @@
 // work-network.js
-// FULL NETWORK BACKEND — PUBLIC + STAFF + VENDOR + CHECKOUT
+// FULL NETWORK BACKEND — PUBLIC + STAFF + VENDOR + CHECKOUT + UPLOADS
 
-export async function handleNetwork(path, request, db, url) {
+export async function handleNetwork(path, request, db, url, env) {
 
   /* -----------------------------
      PUBLIC NETWORK FEEDS
@@ -129,6 +129,20 @@ export async function handleNetwork(path, request, db, url) {
 
   if (path === "/api/vendor/products/toggle" && request.method === "POST")
     return vendorProductToggle(request, db);
+
+
+  /* -----------------------------
+     VENDOR UPLOAD ROUTES (NEW)
+  ----------------------------- */
+
+  if (path === "/api/vendor/upload/logo" && request.method === "POST")
+    return vendorUploadLogo(request, db, env);
+
+  if (path === "/api/vendor/upload/product-image" && request.method === "POST")
+    return vendorUploadProductImage(request, db, env);
+
+  if (path === "/api/vendor/upload/cover" && request.method === "POST")
+    return vendorUploadCover(request, db, env);
 
 
   /* -----------------------------
@@ -555,53 +569,7 @@ async function vendorProductToggle(request, db) {
 
 
 /* ---------------------------------------------------------
-   CHECKOUT
+   UPLOAD HANDLERS (NEW)
 --------------------------------------------------------- */
 
-async function createCheckout(request, db) {
-  const body = await request.json();
-  const { buyerEmail, itemId, type, quantity } = body;
-
-  if (!buyerEmail || !itemId || !type) {
-    return json({ error: "Missing buyerEmail, itemId, or type" }, 400);
-  }
-
-  let vendorId = null;
-
-  if (type === "product") {
-    const p = await db.prepare(
-      "SELECT vendorId FROM network_products WHERE id = ?"
-    ).bind(itemId).first();
-    vendorId = p?.vendorId || null;
-  } else if (type === "service") {
-    const s = await db.prepare(
-      "SELECT vendorId FROM network_services WHERE id = ?"
-    ).bind(itemId).first();
-    vendorId = s?.vendorId || null;
-  } else if (type === "workshop") {
-    const w = await db.prepare(
-      "SELECT vendorId FROM network_workshops WHERE id = ?"
-    ).bind(itemId).first();
-    vendorId = w?.vendorId || null;
-  } else if (type === "app") {
-    const a = await db.prepare(
-      "SELECT vendorId FROM network_apps WHERE id = ?"
-    ).bind(itemId).first();
-    vendorId = a?.vendorId || null;
-  }
-
-  if (!vendorId) return json({ error: "Vendor not found for item" }, 404);
-
-  const id = crypto.randomUUID();
-
-  await db.prepare(
-    `INSERT INTO network_orders (id, vendorId, buyerEmail, itemType, itemId, quantity, paymentStatus)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`
-  ).bind(id, vendorId, buyerEmail, type, itemId, quantity || 1, "pending").run();
-
-  return json({
-    success: true,
-    orderId: id,
-    redirectUrl: `https://fast-roll.pages.dev/?orderId=${id}`
-  });
-}
+async function vendorUploadLogo(request, db,
