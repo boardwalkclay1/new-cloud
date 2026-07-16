@@ -1,274 +1,274 @@
-// /network/staff/js/vendor.js
-// VENDOR ENGINE — 4 CARDS + HYBRID QUICK ACTIONS + STOREFRONT + EARNINGS + PAYOUT
+// VENDOR ENGINE — staff/vendor dashboard shared logic
 
-const Vendor = {
-  storefront: null,
-  cloudUser: null,
+import {
+  staffGetProducts,
+  staffToggleVisibility,
+  staffGetOrders,
+  staffGetMessages,
+  staffGetTodayStats
+} from "/network/staff/js/staff.js";
 
-  init(storefront, cloudUser) {
-    this.storefront = storefront;
-    this.cloudUser = cloudUser;
+import { initVendorMap } from "/network/staff/js/vendor-map.js";
 
-    this.renderVendorHeader();
-    this.renderEarningsCard();
-    this.renderProductsCard();
-    this.renderWorkshopsCard();
-    this.renderServicesAppsCard();
-  },
+// DOM
+const productsGrid = document.getElementById("productsGrid");
+const ordersList = document.getElementById("ordersList");
+const messagesList = document.getElementById("messagesList");
 
-  /* ---------------------------------------------------------
-     HEADER
-  --------------------------------------------------------- */
-  renderVendorHeader() {
-    const titleEl = document.getElementById("vendorTitle");
-    const welcomeEl = document.getElementById("vendorWelcome");
-    if (!titleEl || !welcomeEl) return;
+const statRevenue = document.getElementById("statRevenue");
+const statRevenueSub = document.getElementById("statRevenueSub");
+const statProducts = document.getElementById("statProducts");
+const statOpenOrders = document.getElementById("statOpenOrders");
+const statMessages = document.getElementById("statMessages");
 
-    titleEl.textContent = this.storefront.name || "Vendor Dashboard";
-    welcomeEl.textContent = `Signed in as ${this.cloudUser.email}`;
-  },
+const weatherStat = document.getElementById("weatherStat");
+const locationStat = document.getElementById("locationStat");
+const timeStat = document.getElementById("timeStat");
+const sidebarUser = document.getElementById("sidebarUser");
+const vendorSubtitle = document.getElementById("vendorSubtitle");
 
-  /* ---------------------------------------------------------
-     CARD 1 — EARNINGS
-  --------------------------------------------------------- */
-  renderEarningsCard() {
-    const e = this.storefront.earnings || {
-      today: 0,
-      week: 0,
-      month: 0,
-      total: 0
-    };
-    const p = this.storefront.payout || {
-      connected: false,
-      method: null,
-      email: null,
-      venmo: false
-    };
+// UPLOAD INPUTS
+const vendorLogoUpload = document.getElementById("vendorLogoUpload");
+const vendorLogoImg = document.getElementById("vendorLogoImg");
+const productImageUpload = document.getElementById("productImageUpload");
+const coverUpload = document.getElementById("coverUpload");
 
-    this.setText("earnToday", `$${e.today.toFixed ? e.today.toFixed(2) : e.today}`);
-    this.setText("earnWeek", `$${e.week.toFixed ? e.week.toFixed(2) : e.week}`);
-    this.setText("earnMonth", `$${e.month.toFixed ? e.month.toFixed(2) : e.month}`);
-    this.setText("earnTotal", `$${e.total.toFixed ? e.total.toFixed(2) : e.total}`);
+// CLOUD USER CONNECTION
+export function connectCloudUser() {
+  const beltlineUser = JSON.parse(localStorage.getItem("beltline_user") || "null");
+  const vendorUser = JSON.parse(localStorage.getItem("vendor_user") || "null");
+  const user = vendorUser || beltlineUser;
 
-    const payoutEl = document.getElementById("payoutStatus");
-    if (payoutEl) {
-      if (!p.connected) {
-        payoutEl.textContent = "Payout not connected — connect PayPal or Venmo in settings.";
-      } else {
-        payoutEl.textContent = `Payout connected via ${p.method || "PayPal"} (${p.email || "no email"})`;
-      }
-    }
-  },
+  if (user && user.name) {
+    sidebarUser.textContent = `Connected: ${user.name}`;
+    vendorSubtitle.textContent = `Live performance for ${user.name}`;
+  } else {
+    sidebarUser.textContent = "Connected to Cloud";
+    vendorSubtitle.textContent = "Live performance overview";
+  }
+}
 
-  /* ---------------------------------------------------------
-     CARD 2 — PRODUCTS (MAIN COMMAND CENTER)
-  --------------------------------------------------------- */
-  renderProductsCard() {
-    const container = document.getElementById("productsFeed");
-    if (!container) return;
+// TIME
+function updateTime() {
+  const now = new Date();
+  timeStat.textContent = now.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+    timeZone: "America/New_York"
+  });
+}
+setInterval(updateTime, 1000);
+updateTime();
 
-    const products = this.storefront.products || [];
-    const services = this.storefront.services || [];
-    const workshops = this.storefront.workshops || [];
-    const apps = this.storefront.apps || [];
+// WEATHER + LOCATION
+export async function detectBeltlineLocation() {
+  const zones = [
+    { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
+    { name: "Westside Trail", latMin: 33.750, latMax: 33.770, lngMin: -84.430, lngMax: -84.400 },
+    { name: "Southside Trail", latMin: 33.730, latMax: 33.745, lngMin: -84.395, lngMax: -84.365 },
+    { name: "Northside Trail", latMin: 33.780, latMax: 33.800, lngMin: -84.375, lngMax: -84.350 }
+  ];
 
-    let html = "";
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-    if (!products.length && !services.length && !workshops.length && !apps.length) {
-      html = `<p style="opacity:0.75;">No items yet. Use the menu to add products, services, workshops, or apps.</p>`;
-    } else {
-      if (products.length) {
-        html += `<h4>Products</h4><div class="scroll-row">`;
-        products.forEach(p => html += this.renderItemRow("product", p));
-        html += `</div>`;
-      }
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const w = data.current_weather;
+      const temp = w.temperature;
+      const code = w.weathercode;
 
-      if (services.length) {
-        html += `<h4>Services</h4><div class="scroll-row">`;
-        services.forEach(s => html += this.renderItemRow("service", s));
-        html += `</div>`;
-      }
+      let emoji = "⛅";
+      if (code === 0) emoji = "☀️";
+      if ([1,2,3].includes(code)) emoji = "🌤️";
+      if ([45,48].includes(code)) emoji = "🌫️";
+      if ([51,53,55].includes(code)) emoji = "🌦️";
+      if ([61,63,65].includes(code)) emoji = "🌧️";
+      if ([71,73,75].includes(code)) emoji = "❄️";
+      if ([95,96,99].includes(code)) emoji = "⛈️";
 
-      if (apps.length) {
-        html += `<h4>Apps</h4><div class="scroll-row">`;
-        apps.forEach(a => html += this.renderItemRow("app", a));
-        html += `</div>`;
-      }
-    }
-
-    container.innerHTML = html;
-
-    this.autoScroll("productsFeed");
-  },
-
-  /* ---------------------------------------------------------
-     CARD 3 — WORKSHOPS
-  --------------------------------------------------------- */
-  renderWorkshopsCard() {
-    const container = document.getElementById("workshopsFeed");
-    if (!container) return;
-
-    const workshops = this.storefront.workshops || [];
-    let html = "";
-
-    if (!workshops.length) {
-      html = `<p style="opacity:0.75;">No workshops yet. Add workshops from the menu.</p>`;
-    } else {
-      html += `<div class="scroll-row">`;
-      workshops.forEach(w => html += this.renderItemRow("workshop", w));
-      html += `</div>`;
+      weatherStat.textContent = `Weather: ${emoji} ${temp}°F`;
+    } catch {
+      weatherStat.textContent = "Weather: unavailable";
     }
 
-    container.innerHTML = html;
-    this.autoScroll("workshopsFeed");
-  },
-
-  /* ---------------------------------------------------------
-     CARD 4 — SERVICES + APPS
-  --------------------------------------------------------- */
-  renderServicesAppsCard() {
-    const container = document.getElementById("servicesAppsFeed");
-    if (!container) return;
-
-    const services = this.storefront.services || [];
-    const apps = this.storefront.apps || [];
-    let html = "";
-
-    if (!services.length && !apps.length) {
-      html = `<p style="opacity:0.75;">No services or apps yet. Add them from the menu.</p>`;
-    } else {
-      if (services.length) {
-        html += `<h4>Services</h4><div class="scroll-row">`;
-        services.forEach(s => html += this.renderItemRow("service", s));
-        html += `</div>`;
-      }
-      if (apps.length) {
-        html += `<h4>Apps</h4><div class="scroll-row">`;
-        apps.forEach(a => html += this.renderItemRow("app", a));
-        html += `</div>`;
+    let zone = "Outside Beltline";
+    for (const z of zones) {
+      if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
+        zone = z.name;
+        break;
       }
     }
+    locationStat.textContent = `Location: ${zone}`;
 
-    container.innerHTML = html;
-    this.autoScroll("servicesAppsFeed");
-  },
+    initVendorMap({
+      lat,
+      lng,
+      zone,
+      containerId: "vendorMapContainer"
+    });
+  }, () => {
+    locationStat.textContent = "Location: unavailable";
+    weatherStat.textContent = "Weather: unavailable";
+    initVendorMap({ containerId: "vendorMapContainer" });
+  });
+}
 
-  /* ---------------------------------------------------------
-     HYBRID QUICK ACTION ROW (C)
-  --------------------------------------------------------- */
-  renderItemRow(type, item) {
-    const thumb = item.thumbnail || "/network/public/img/network-logo.jpg";
-    const name = item.name || item.title || "(Untitled)";
-    const price = item.price ? `$${item.price}` : "";
-    const desc = item.description || "";
-    const activeLabel = item.active ? "Active" : "Hidden";
+// STATS
+export async function loadStats() {
+  const stats = await staffGetTodayStats();
+  if (!stats) return;
 
-    return `
-      <div class="item-row">
-        <div class="item-row-main">
-          <img src="${thumb}" class="item-thumb" alt="${name}">
-          <div class="item-info">
-            <div class="item-name">${name}</div>
-            <div class="item-meta">${price}</div>
-            <div class="item-desc">${desc}</div>
-            <div class="item-status">${activeLabel}</div>
-          </div>
-        </div>
-        <div class="item-actions">
-          <button class="btn-small" onclick="Vendor.openItem('${type}', '${item.id}')">Open</button>
-          <button class="btn-small" onclick="Vendor.editItem('${type}', '${item.id}')">Edit</button>
-          <button class="btn-small" onclick="Vendor.toggleItem('${type}', '${item.id}')">
-            ${item.active ? "Hide" : "Show"}
-          </button>
-          <button class="btn-small" onclick="Vendor.deleteItem('${type}', '${item.id}')">Delete</button>
-        </div>
+  statRevenue.textContent = `$${stats.revenue || 0}`;
+  statRevenueSub.textContent = `${stats.ordersCount || 0} orders`;
+  statProducts.textContent = stats.activeProducts || 0;
+  statOpenOrders.textContent = stats.openOrders || 0;
+  statMessages.textContent = stats.newMessages || 0;
+}
+
+// PRODUCTS
+export async function loadProducts() {
+  const products = await staffGetProducts();
+  productsGrid.innerHTML = "";
+
+  products.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+
+    card.innerHTML = `
+      <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name}">
+      <div class="product-name">${p.name}</div>
+      <div class="product-meta">
+        $${p.price} • Inv: ${p.inventory} • ${p.visible ? "Visible" : "Hidden"}
       </div>
     `;
-  },
 
-  /* ---------------------------------------------------------
-     ITEM ACTIONS
-  --------------------------------------------------------- */
-  openItem(type, id) {
-    Staff.go(`${type}.html?id=${encodeURIComponent(id)}`);
-  },
+    const actions = document.createElement("div");
+    actions.className = "product-actions";
 
-  editItem(type, id) {
-    Staff.go(`${type}-edit.html?id=${encodeURIComponent(id)}`);
-  },
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.onclick = () => window.location.href = "/network/staff/pages/products.html";
 
-  async toggleItem(type, id) {
-    const res = await Staff.postJSON("/api/vendor/item/toggle", {
-      email: this.storefront.email,
-      type,
-      id
-    });
-    if (res && !res.error) {
-      this.storefront = res.storefront;
-      Staff.saveStorefront(this.storefront);
-      this.refreshAll();
-    }
-  },
+    const toggleBtn = document.createElement("button");
+    toggleBtn.textContent = p.visible ? "Hide" : "Show";
+    toggleBtn.onclick = async () => {
+      await staffToggleVisibility(p.id);
+      await loadProducts();
+      await loadStats();
+    };
 
-  async deleteItem(type, id) {
-    if (!confirm("Delete this item?")) return;
-    const res = await Staff.postJSON("/api/vendor/item/delete", {
-      email: this.storefront.email,
-      type,
-      id
-    });
-    if (res && !res.error) {
-      this.storefront = res.storefront;
-      Staff.saveStorefront(this.storefront);
-      this.refreshAll();
-    }
-  },
+    actions.appendChild(editBtn);
+    actions.appendChild(toggleBtn);
+    card.appendChild(actions);
 
-  /* ---------------------------------------------------------
-     STOREFRONT PUBLISH / PREVIEW
-  --------------------------------------------------------- */
-  async publishStorefront() {
-    const res = await Staff.postJSON("/api/vendor/storefront/publish", {
-      email: this.storefront.email
-    });
-    if (res && !res.error) {
-      this.storefront.published = true;
-      Staff.saveStorefront(this.storefront);
-      alert("Storefront published.");
-    }
-  },
+    productsGrid.appendChild(card);
+  });
+}
 
-  previewStorefront() {
-    Staff.previewPage();
-  },
+// ORDERS
+export async function loadOrders() {
+  const orders = await staffGetOrders();
+  ordersList.innerHTML = "";
 
-  /* ---------------------------------------------------------
-     REFRESH
-  --------------------------------------------------------- */
-  refreshAll() {
-    this.renderEarningsCard();
-    this.renderProductsCard();
-    this.renderWorkshopsCard();
-    this.renderServicesAppsCard();
-  },
+  orders.forEach(o => {
+    const item = document.createElement("div");
+    item.className = "order-item";
+    item.innerHTML = `
+      <strong>#${o.id}</strong> • ${o.status}<br>
+      ${o.customer} • $${o.total}<br>
+      ${o.items.length} items
+    `;
+    ordersList.appendChild(item);
+  });
+}
 
-  /* ---------------------------------------------------------
-     UTIL
-  --------------------------------------------------------- */
-  setText(id, text) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
-  },
+// MESSAGES
+export async function loadMessages() {
+  const messages = await staffGetMessages();
+  messagesList.innerHTML = "";
 
-  autoScroll(id, speed = 0.4) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    let scrollPos = 0;
-    setInterval(() => {
-      if (el.scrollWidth <= el.clientWidth) return;
-      scrollPos += speed;
-      if (scrollPos >= el.scrollWidth) scrollPos = 0;
-      el.scrollLeft = scrollPos;
-    }, 40);
+  messages.forEach(m => {
+    const item = document.createElement("div");
+    item.className = "message-item";
+    item.innerHTML = `
+      <strong>${m.from}</strong> • ${m.channel}<br>
+      ${m.preview}
+    `;
+    messagesList.appendChild(item);
+  });
+}
+
+// UPLOAD HANDLERS
+vendorLogoUpload.addEventListener("change", async () => {
+  const file = vendorLogoUpload.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch("/api/vendor/upload/logo", {
+    method: "POST",
+    body: formData,
+    credentials: "include"
+  });
+
+  const data = await res.json();
+  if (data.success && data.url) {
+    vendorLogoImg.src = data.url;
   }
+});
+
+productImageUpload.addEventListener("change", async () => {
+  const file = productImageUpload.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await fetch("/api/vendor/upload/product-image", {
+    method: "POST",
+    body: formData,
+    credentials: "include"
+  });
+
+  await loadProducts();
+});
+
+coverUpload.addEventListener("change", async () => {
+  const file = coverUpload.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await fetch("/api/vendor/upload/cover", {
+    method: "POST",
+    body: formData,
+    credentials: "include"
+  });
+});
+
+// INIT
+export async function initVendorDashboard() {
+  connectCloudUser();
+  await loadStats();
+  await loadProducts();
+  await loadOrders();
+  await loadMessages();
+  await detectBeltlineLocation();
+}
+
+initVendorDashboard();
+
+// LOGOUT
+window.logout = function() {
+  localStorage.removeItem("vendor_user");
+  localStorage.removeItem("beltline_user");
+  window.location.href = "/network/pages/login.html";
 };
