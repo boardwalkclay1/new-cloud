@@ -7,7 +7,7 @@
 
 <link rel="icon" type="image/jpg" href="/network/img/network-logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/network/staff/css/vendor.css">
+<link rel="stylesheet" href="/network/vendor/css/vendor-dashboard.css">
 </head>
 
 <body>
@@ -40,13 +40,17 @@
 
   <!-- MAIN -->
   <main class="main">
+
+    <!-- TOP BAR -->
     <div class="top-bar">
       <div class="top-bar-left">
         <h1>Vendor Dashboard</h1>
         <span id="vendorSubtitle">Live performance overview</span>
       </div>
+
       <div class="top-bar-right">
-        <!-- VENDOR LOGO + UPLOAD -->
+
+        <!-- LOGO + UPLOAD -->
         <div class="top-logo-wrap">
           <img src="/network/vendors/go-time/logo.png" id="vendorLogoImg" alt="Vendor Logo">
           <label class="upload-btn">
@@ -60,30 +64,33 @@
       </div>
     </div>
 
-    <!-- CLOUD STATS (WEATHER / LOCATION / TIME) -->
+    <!-- CLOUD STATS -->
     <div class="cloud-stats">
       <div class="cloud-stat" id="weatherStat">Weather: …</div>
       <div class="cloud-stat" id="locationStat">Location: …</div>
       <div class="cloud-stat" id="timeStat">Time: …</div>
     </div>
 
-    <!-- STATS -->
+    <!-- STATS GRID -->
     <section class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">Today’s Revenue</div>
         <div class="stat-value" id="statRevenue">$0</div>
         <div class="stat-sub" id="statRevenueSub">0 orders</div>
       </div>
+
       <div class="stat-card">
         <div class="stat-label">Active Products</div>
         <div class="stat-value" id="statProducts">0</div>
         <div class="stat-sub">Visible in storefront</div>
       </div>
+
       <div class="stat-card">
         <div class="stat-label">Open Orders</div>
         <div class="stat-value" id="statOpenOrders">0</div>
         <div class="stat-sub">Awaiting fulfillment</div>
       </div>
+
       <div class="stat-card">
         <div class="stat-label">New Messages</div>
         <div class="stat-value" id="statMessages">0</div>
@@ -91,18 +98,17 @@
       </div>
     </section>
 
-    <!-- CONTENT -->
+    <!-- CONTENT GRID -->
     <section class="content-grid">
-      <!-- PRODUCTS -->
+
+      <!-- PRODUCTS PANEL -->
       <div class="panel" id="products">
         <div class="panel-header">
           <h3>Products</h3>
-          <span>
-            <a href="/network/staff/pages/products.html" style="color:#cfd9ff;text-decoration:none;">Advanced editor</a>
-          </span>
+          <span><a href="/network/staff/pages/products.html" style="color:#cfd9ff;text-decoration:none;">Advanced editor</a></span>
         </div>
 
-        <!-- GLOBAL PRODUCT IMAGE UPLOAD -->
+        <!-- PRODUCT IMAGE UPLOAD -->
         <div class="panel-upload-row">
           <label class="upload-btn">
             Upload Product Image
@@ -115,6 +121,7 @@
 
       <!-- ORDERS + MESSAGES + MAP -->
       <div class="panel">
+
         <div class="panel-header">
           <h3>Orders</h3>
           <span>Recent activity</span>
@@ -132,7 +139,7 @@
           <span>Live Beltline placement</span>
         </div>
 
-        <!-- COVER PHOTO UPLOAD + MAP -->
+        <!-- COVER UPLOAD -->
         <div class="panel-upload-row">
           <label class="upload-btn">
             Upload Cover Photo
@@ -142,284 +149,15 @@
 
         <div id="vendorMapContainer"></div>
       </div>
+
     </section>
+
   </main>
 
 </div>
 
-<script type="module">
-  import {
-    staffGetProducts,
-    staffUpdateProduct,
-    staffToggleVisibility,
-    staffGetOrders,
-    staffGetMessages,
-    staffGetTodayStats
-  } from "/network/staff/js/staff.js";
-
-  import { initVendorMap } from "/network/staff/js/vendor-map.js";
-
-  const productsGrid = document.getElementById("productsGrid");
-  const ordersList = document.getElementById("ordersList");
-  const messagesList = document.getElementById("messagesList");
-
-  const statRevenue = document.getElementById("statRevenue");
-  const statRevenueSub = document.getElementById("statRevenueSub");
-  const statProducts = document.getElementById("statProducts");
-  const statOpenOrders = document.getElementById("statOpenOrders");
-  const statMessages = document.getElementById("statMessages");
-
-  const weatherStat = document.getElementById("weatherStat");
-  const locationStat = document.getElementById("locationStat");
-  const timeStat = document.getElementById("timeStat");
-  const sidebarUser = document.getElementById("sidebarUser");
-  const vendorSubtitle = document.getElementById("vendorSubtitle");
-
-  const vendorLogoUpload = document.getElementById("vendorLogoUpload");
-  const vendorLogoImg = document.getElementById("vendorLogoImg");
-  const productImageUpload = document.getElementById("productImageUpload");
-  const coverUpload = document.getElementById("coverUpload");
-
-  // CLOUD USER CONNECTION
-  function connectCloudUser() {
-    const beltlineUser = JSON.parse(localStorage.getItem("beltline_user") || "null");
-    const vendorUser = JSON.parse(localStorage.getItem("vendor_user") || "null");
-    const user = vendorUser || beltlineUser;
-
-    if (user && user.name) {
-      sidebarUser.textContent = `Connected: ${user.name}`;
-      vendorSubtitle.textContent = `Live performance for ${user.name}`;
-    } else {
-      sidebarUser.textContent = "Connected to Cloud";
-      vendorSubtitle.textContent = "Live performance overview";
-    }
-  }
-
-  // TIME
-  function updateTime() {
-    const now = new Date();
-    timeStat.textContent = now.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true,
-      timeZone: "America/New_York"
-    });
-  }
-  setInterval(updateTime, 1000);
-  updateTime();
-
-  // WEATHER + LOCATION
-  async function detectBeltlineLocation() {
-    const zones = [
-      { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
-      { name: "Westside Trail", latMin: 33.750, latMax: 33.770, lngMin: -84.430, lngMax: -84.400 },
-      { name: "Southside Trail", latMin: 33.730, latMax: 33.745, lngMin: -84.395, lngMax: -84.365 },
-      { name: "Northside Trail", latMin: 33.780, latMax: 33.800, lngMin: -84.375, lngMax: -84.350 }
-    ];
-
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        const w = data.current_weather;
-        const temp = w.temperature;
-        const code = w.weathercode;
-
-        let emoji = "⛅";
-        if (code === 0) emoji = "☀️";
-        if ([1,2,3].includes(code)) emoji = "🌤️";
-        if ([45,48].includes(code)) emoji = "🌫️";
-        if ([51,53,55].includes(code)) emoji = "🌦️";
-        if ([61,63,65].includes(code)) emoji = "🌧️";
-        if ([71,73,75].includes(code)) emoji = "❄️";
-        if ([95,96,99].includes(code)) emoji = "⛈️";
-
-        weatherStat.textContent = `Weather: ${emoji} ${temp}°F`;
-      } catch {
-        weatherStat.textContent = "Weather: unavailable";
-      }
-
-      let zone = "Outside Beltline";
-      for (const z of zones) {
-        if (lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax) {
-          zone = z.name;
-          break;
-        }
-      }
-      locationStat.textContent = `Location: ${zone}`;
-
-      initVendorMap({
-        lat,
-        lng,
-        zone,
-        containerId: "vendorMapContainer"
-      });
-    }, () => {
-      locationStat.textContent = "Location: unavailable";
-      weatherStat.textContent = "Weather: unavailable";
-      initVendorMap({ containerId: "vendorMapContainer" });
-    });
-  }
-
-  // STATS
-  async function loadStats() {
-    const stats = await staffGetTodayStats();
-    if (!stats) return;
-
-    statRevenue.textContent = `$${stats.revenue || 0}`;
-    statRevenueSub.textContent = `${stats.ordersCount || 0} orders`;
-    statProducts.textContent = stats.activeProducts || 0;
-    statOpenOrders.textContent = stats.openOrders || 0;
-    statMessages.textContent = stats.newMessages || 0;
-  }
-
-  // PRODUCTS
-  async function loadProducts() {
-    const products = await staffGetProducts();
-    productsGrid.innerHTML = "";
-
-    products.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-
-      card.innerHTML = `
-        <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name}">
-        <div class="product-name">${p.name}</div>
-        <div class="product-meta">
-          $${p.price} • Inv: ${p.inventory} • ${p.visible ? "Visible" : "Hidden"}
-        </div>
-      `;
-
-      const actions = document.createElement("div");
-      actions.className = "product-actions";
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "Edit";
-      editBtn.onclick = () => window.location.href = "/network/staff/pages/products.html";
-
-      const toggleBtn = document.createElement("button");
-      toggleBtn.textContent = p.visible ? "Hide" : "Show";
-      toggleBtn.onclick = async () => {
-        await staffToggleVisibility(p.id);
-        await loadProducts();
-        await loadStats();
-      };
-
-      actions.appendChild(editBtn);
-      actions.appendChild(toggleBtn);
-      card.appendChild(actions);
-
-      productsGrid.appendChild(card);
-    });
-  }
-
-  // ORDERS
-  async function loadOrders() {
-    const orders = await staffGetOrders();
-    ordersList.innerHTML = "";
-
-    orders.forEach(o => {
-      const item = document.createElement("div");
-      item.className = "order-item";
-      item.innerHTML = `
-        <strong>#${o.id}</strong> • ${o.status}<br>
-        ${o.customer} • $${o.total}<br>
-        ${o.items.length} items
-      `;
-      ordersList.appendChild(item);
-    });
-  }
-
-  // MESSAGES
-  async function loadMessages() {
-    const messages = await staffGetMessages();
-    messagesList.innerHTML = "";
-
-    messages.forEach(m => {
-      const item = document.createElement("div");
-      item.className = "message-item";
-      item.innerHTML = `
-        <strong>${m.from}</strong> • ${m.channel}<br>
-        ${m.preview}
-      `;
-      messagesList.appendChild(item);
-    });
-  }
-
-  async function initDashboard() {
-    connectCloudUser();
-    await loadStats();
-    await loadProducts();
-    await loadOrders();
-    await loadMessages();
-    await detectBeltlineLocation();
-  }
-
-  initDashboard();
-
-  // ICON ACTIONS
-  document.getElementById("safetyIcon").onclick = () => {
-    window.location.href = "/pages/safety/index.html";
-  };
-
-  document.getElementById("talkIcon").onclick = () => {
-    window.location.href = "/pages/chat/pages/index.html";
-  };
-
-  // LOGOUT
-  window.logout = function() {
-    localStorage.removeItem("vendor_user");
-    localStorage.removeItem("beltline_user");
-    window.location.href = "/network/pages/login.html";
-  };
-
-  // UPLOAD HANDLERS (hook to your Worker routes)
-  vendorLogoUpload.addEventListener("change", async () => {
-    const file = vendorLogoUpload.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch("/api/vendor/upload/logo", {
-      method: "POST",
-      body: formData,
-      credentials: "include"
-    });
-    const data = await res.json();
-    if (data.success && data.url) {
-      vendorLogoImg.src = data.url;
-    }
-  });
-
-  productImageUpload.addEventListener("change", async () => {
-    const file = productImageUpload.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("file", file);
-    await fetch("/api/vendor/upload/product-image", {
-      method: "POST",
-      body: formData,
-      credentials: "include"
-    });
-    await loadProducts();
-  });
-
-  coverUpload.addEventListener("change", async () => {
-    const file = coverUpload.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append("file", file);
-    await fetch("/api/vendor/upload/cover", {
-      method: "POST",
-      body: formData,
-      credentials: "include"
-    });
-  });
-</script>
+<!-- JS -->
+<script type="module" src="/network/staff/js/vendor.js"></script>
 
 </body>
 </html>
