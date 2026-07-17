@@ -1,4 +1,4 @@
-// VENDOR ENGINE — staff/vendor dashboard shared logic
+// VENDOR ENGINE — FINAL VERSION (MATCHES work-network.js + staff.js)
 
 import {
   staffGetProducts,
@@ -27,21 +27,17 @@ const timeStat = document.getElementById("timeStat");
 const sidebarUser = document.getElementById("sidebarUser");
 const vendorSubtitle = document.getElementById("vendorSubtitle");
 
-// UPLOAD INPUTS
 const vendorLogoUpload = document.getElementById("vendorLogoUpload");
 const vendorLogoImg = document.getElementById("vendorLogoImg");
-const productImageUpload = document.getElementById("productImageUpload");
 const coverUpload = document.getElementById("coverUpload");
 
-// CLOUD USER CONNECTION
+// CLOUD USER ONLY
 export function connectCloudUser() {
-  const beltlineUser = JSON.parse(localStorage.getItem("beltline_user") || "null");
-  const vendorUser = JSON.parse(localStorage.getItem("vendor_user") || "null");
-  const user = vendorUser || beltlineUser;
+  const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
 
-  if (user && user.name) {
-    sidebarUser.textContent = `Connected: ${user.name}`;
-    vendorSubtitle.textContent = `Live performance for ${user.name}`;
+  if (cloudUser && cloudUser.name) {
+    sidebarUser.textContent = `Connected: ${cloudUser.name}`;
+    vendorSubtitle.textContent = `Live performance for ${cloudUser.name}`;
   } else {
     sidebarUser.textContent = "Connected to Cloud";
     vendorSubtitle.textContent = "Live performance overview";
@@ -143,7 +139,7 @@ export async function loadProducts() {
     card.className = "product-card";
 
     card.innerHTML = `
-      <img src="${p.photoUrl || '/network/img/network-logo.jpg'}" alt="${p.name || ''}">
+      <img src="${p.image || '/network/img/network-logo.jpg'}" alt="${p.name || ''}">
       <div class="product-name">${p.name || "Unnamed product"}</div>
       <div class="product-meta">
         $${p.price || 0} • ${p.active ? "Active" : "Inactive"}
@@ -177,7 +173,6 @@ export async function loadProducts() {
     productsGrid.appendChild(card);
   });
 
-  // Attach per-product image upload handlers
   document.querySelectorAll(".product-image-input").forEach(input => {
     input.addEventListener("change", async () => {
       const file = input.files[0];
@@ -210,8 +205,8 @@ export async function loadOrders() {
     const item = document.createElement("div");
     item.className = "order-item";
     item.innerHTML = `
-      <strong>#${o.id}</strong> • ${o.status || "pending"}<br>
-      ${o.buyerEmail || ""} • $${o.amount || 0}<br>
+      <strong>#${o.id}</strong> • ${o.status || o.paymentStatus || "pending"}<br>
+      ${o.buyerEmail || ""}<br>
       ${o.itemType || ""} • Qty: ${o.quantity || 1}
     `;
     ordersList.appendChild(item);
@@ -229,19 +224,17 @@ export async function loadMessages() {
     const item = document.createElement("div");
     item.className = "message-item";
     item.innerHTML = `
-      <strong>${m.fromEmail || "Unknown"}</strong><br>
-      ${m.preview || m.body || ""}
+      <strong>${m.toEmail || "Customer"}</strong><br>
+      ${m.text || ""}
     `;
     messagesList.appendChild(item);
   });
 }
 
-// UPLOAD HELPERS — include vendor email header
+// UPLOAD HELPERS — use cloud_user email
 function getVendorEmail() {
-  const beltlineUser = JSON.parse(localStorage.getItem("beltline_user") || "null");
-  const vendorUser = JSON.parse(localStorage.getItem("vendor_user") || "null");
-  const user = vendorUser || beltlineUser;
-  return user?.email || null;
+  const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
+  return cloudUser?.email || null;
 }
 
 // UPLOAD HANDLERS
@@ -304,7 +297,6 @@ initVendorDashboard();
 
 // LOGOUT
 window.logout = function() {
-  localStorage.removeItem("vendor_user");
-  localStorage.removeItem("beltline_user");
+  localStorage.removeItem("cloud_user");
   window.location.href = "/network/pages/login.html";
 };
