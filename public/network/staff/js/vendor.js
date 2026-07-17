@@ -143,11 +143,16 @@ export async function loadProducts() {
     card.className = "product-card";
 
     card.innerHTML = `
-      <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name || ''}">
+      <img src="${p.photoUrl || '/network/img/network-logo.jpg'}" alt="${p.name || ''}">
       <div class="product-name">${p.name || "Unnamed product"}</div>
       <div class="product-meta">
-        $${p.price || 0} • Inv: ${p.inventory || 0} • ${p.visible ? "Visible" : "Hidden"}
+        $${p.price || 0} • ${p.active ? "Active" : "Inactive"}
       </div>
+
+      <label class="upload-btn">
+        Upload Image
+        <input type="file" class="product-image-input" data-product-id="${p.id}" accept="image/*">
+      </label>
     `;
 
     const actions = document.createElement("div");
@@ -158,7 +163,7 @@ export async function loadProducts() {
     editBtn.onclick = () => window.location.href = "/network/staff/pages/products.html";
 
     const toggleBtn = document.createElement("button");
-    toggleBtn.textContent = p.visible ? "Hide" : "Show";
+    toggleBtn.textContent = p.active ? "Deactivate" : "Activate";
     toggleBtn.onclick = async () => {
       await staffToggleVisibility(p.id);
       await loadProducts();
@@ -170,6 +175,27 @@ export async function loadProducts() {
     card.appendChild(actions);
 
     productsGrid.appendChild(card);
+  });
+
+  // Attach per-product image upload handlers
+  document.querySelectorAll(".product-image-input").forEach(input => {
+    input.addEventListener("change", async () => {
+      const file = input.files[0];
+      const productId = input.dataset.productId;
+      if (!file || !productId) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("productId", productId);
+
+      await fetch("/api/vendor/upload/product-image", {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+      });
+
+      await loadProducts();
+    });
   });
 }
 
@@ -203,7 +229,7 @@ export async function loadMessages() {
     const item = document.createElement("div");
     item.className = "message-item";
     item.innerHTML = `
-      <strong>${m.fromEmail || m.from || "Unknown"}</strong><br>
+      <strong>${m.fromEmail || "Unknown"}</strong><br>
       ${m.preview || m.body || ""}
     `;
     messagesList.appendChild(item);
@@ -242,28 +268,6 @@ vendorLogoUpload.addEventListener("change", async () => {
   if (data && data.success && data.url) {
     vendorLogoImg.src = data.url;
   }
-});
-
-productImageUpload.addEventListener("change", async () => {
-  const file = productImageUpload.files[0];
-  if (!file) return;
-
-  // You need a way to know which product this image belongs to.
-  // For now, try to read a data attribute from the input:
-  const productId = productImageUpload.dataset.productId;
-  if (!productId) return;
-
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("productId", productId);
-
-  await fetch("/api/vendor/upload/product-image", {
-    method: "POST",
-    body: formData,
-    credentials: "include"
-  });
-
-  await loadProducts();
 });
 
 coverUpload.addEventListener("change", async () => {
