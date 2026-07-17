@@ -1,5 +1,5 @@
 // /network/staff/js/staff.js
-// FINAL STAFF WRAPPER — CLOUD USER + FULL VENDOR LOADERS + EXPORTS
+// FINAL STAFF WRAPPER — CLOUD USER + FULL VENDOR LOADERS + EXPORTS (SAFE)
 
 const Staff = {
   cloudKey: "cloud_user",
@@ -40,56 +40,63 @@ const Staff = {
       return;
     }
 
-    const email = encodeURIComponent(cloudUser.email);
+    const emailParam = encodeURIComponent(cloudUser.email);
 
-    const store     = await this.fetchJSON(`/api/vendor/storefront?email=${email}`);
-    const earnings  = await this.fetchJSON(`/api/vendor/earnings?email=${email}`);
-    const payout    = await this.fetchJSON(`/api/vendor/payout/status?email=${email}`);
-    const ads       = await this.fetchJSON(`/api/vendor/ads?email=${email}`);
-    const phonebook = await this.fetchJSON(`/api/vendor/phonebook?email=${email}`);
-    const orders    = await this.fetchJSON(`/api/vendor/orders?email=${email}`);
-    const messages  = await this.fetchJSON(`/api/vendor/messages?email=${email}`);
-    const stats     = await this.fetchJSON(`/api/vendor/stats/today?email=${email}`);
+    const store     = await this.fetchJSON(`/api/vendor/storefront?email=${emailParam}`);
+    const earnings  = await this.fetchJSON(`/api/vendor/earnings?email=${emailParam}`);
+    const payout    = await this.fetchJSON(`/api/vendor/payout/status?email=${emailParam}`);
+    const ads       = await this.fetchJSON(`/api/vendor/ads?email=${emailParam}`);
+    const phonebook = await this.fetchJSON(`/api/vendor/phonebook?email=${emailParam}`);
+    const orders    = await this.fetchJSON(`/api/vendor/orders?email=${emailParam}`);
+    const messages  = await this.fetchJSON(`/api/vendor/messages?email=${emailParam}`);
+    const stats     = await this.fetchJSON(`/api/vendor/stats/today?email=${emailParam}`);
+
+    const safeStore = store && !store.error ? store : {};
 
     const storefront = {
       email: cloudUser.email,
       name: cloudUser.name,
 
-      description: store?.description || "",
-      tags: store?.tags || "",
-      logo: store?.logo || "",
-      cover: store?.cover || "",
-      products: store?.products || [],
-      services: store?.services || [],
-      workshops: store?.workshops || [],
-      apps: store?.apps || [],
-      ads: ads?.error ? [] : ads,
-      phonebook: phonebook?.error ? null : phonebook,
-      published: store?.published || false,
+      // vendorId from backend (UUID) so we can use it for preview/vendor page
+      vendorId: safeStore.vendorId || null,
 
-      earnings: earnings?.error ? {
+      description: safeStore.description || "",
+      tags: safeStore.tags || "",
+      logo: safeStore.logo || "",
+      cover: safeStore.cover || "",
+      products: Array.isArray(safeStore.products) ? safeStore.products : [],
+      services: Array.isArray(safeStore.services) ? safeStore.services : [],
+      workshops: Array.isArray(safeStore.workshops) ? safeStore.workshops : [],
+      apps: Array.isArray(safeStore.apps) ? safeStore.apps : [],
+
+      ads: Array.isArray(ads) && !ads.error ? ads : [],
+      phonebook: phonebook && !phonebook.error ? phonebook : null,
+      published: safeStore.published || false,
+
+      earnings: earnings && !earnings.error ? earnings : {
         today: 0,
         week: 0,
         month: 0,
         total: 0
-      } : earnings,
+      },
 
-      payout: payout?.error ? {
+      payout: payout && !payout.error ? payout : {
         connected: false,
         method: null,
         email: null,
         venmo: false
-      } : payout,
+      },
 
-      orders: orders?.error ? [] : orders,
-      messages: messages?.error ? [] : messages,
-      stats: stats?.error ? {
+      orders: Array.isArray(orders) && !orders.error ? orders : [],
+      messages: Array.isArray(messages) && !messages.error ? messages : [],
+
+      stats: stats && !stats.error ? stats : {
         revenue: 0,
         ordersCount: 0,
         activeProducts: 0,
         openOrders: 0,
         newMessages: 0
-      } : stats
+      }
     };
 
     this.saveStorefront(storefront);
@@ -114,9 +121,11 @@ const Staff = {
   },
 
   previewPage() {
-    const cloudUser = this.getCloudUser();
-    if (!cloudUser) return;
-    window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(cloudUser.email)}`;
+    const storefront = this.getStorefront();
+    // Use vendorId (UUID) if we have it, fall back to email
+    const id = storefront?.vendorId || storefront?.email;
+    if (!id) return;
+    window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(id)}`;
   },
 
   logout() {
@@ -131,10 +140,13 @@ const Staff = {
   async fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
-      return await res.json();
+      // If backend returns 404/500, still try to parse JSON but mark error
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) return { error: true };
+      return data;
     } catch (e) {
       console.error("fetchJSON error", e);
-      return null;
+      return { error: true };
     }
   },
 
@@ -146,10 +158,12 @@ const Staff = {
         credentials: "include",
         body: JSON.stringify(body)
       });
-      return await res.json();
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) return { error: true };
+      return data;
     } catch (e) {
       console.error("postJSON error", e);
-      return null;
+      return { error: true };
     }
   }
 };
@@ -161,7 +175,8 @@ const Staff = {
 export async function staffGetProducts() {
   const user = Staff.getCloudUser();
   if (!user) return [];
-  return await Staff.fetchJSON(`/api/vendor/products?email=${encodeURIComponent(user.email)}`) || [];
+  const data = await Staff.fetchJSON(`/api/vendor/products?email=${encodeURIComponent(user.email)}`);
+  return Array.isArray(data) && !data.error ? data : [];
 }
 
 export async function staffUpdateProduct(id, data) {
@@ -175,31 +190,42 @@ export async function staffToggleVisibility(id) {
 export async function staffGetOrders() {
   const user = Staff.getCloudUser();
   if (!user) return [];
-  return await Staff.fetchJSON(`/api/vendor/orders?email=${encodeURIComponent(user.email)}`) || [];
+  const data = await Staff.fetchJSON(`/api/vendor/orders?email=${encodeURIComponent(user.email)}`);
+  return Array.isArray(data) && !data.error ? data : [];
 }
 
 export async function staffGetMessages() {
   const user = Staff.getCloudUser();
   if (!user) return [];
-  return await Staff.fetchJSON(`/api/vendor/messages?email=${encodeURIComponent(user.email)}`) || [];
+  const data = await Staff.fetchJSON(`/api/vendor/messages?email=${encodeURIComponent(user.email)}`);
+  return Array.isArray(data) && !data.error ? data : [];
 }
 
 export async function staffGetTodayStats() {
   const user = Staff.getCloudUser();
-  if (!user) return {
-    revenue: 0,
-    ordersCount: 0,
-    activeProducts: 0,
-    openOrders: 0,
-    newMessages: 0
-  };
-  return await Staff.fetchJSON(`/api/vendor/stats/today?email=${encodeURIComponent(user.email)}`) || {
-    revenue: 0,
-    ordersCount: 0,
-    activeProducts: 0,
-    openOrders: 0,
-    newMessages: 0
-  };
+  if (!user) {
+    return {
+      revenue: 0,
+      ordersCount: 0,
+      activeProducts: 0,
+      openOrders: 0,
+      newMessages: 0
+    };
+  }
+
+  const stats = await Staff.fetchJSON(`/api/vendor/stats/today?email=${encodeURIComponent(user.email)}`);
+
+  if (!stats || stats.error) {
+    return {
+      revenue: 0,
+      ordersCount: 0,
+      activeProducts: 0,
+      openOrders: 0,
+      newMessages: 0
+    };
+  }
+
+  return stats;
 }
 
 /* ============================================================
