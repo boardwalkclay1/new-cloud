@@ -1,6 +1,6 @@
 // work-network.js
 // FULL NETWORK BACKEND — PUBLIC + STAFF + VENDOR + CHECKOUT + UPLOADS
-// FIXED: robust email lookup + auto-create vendor from email
+// FIXED: robust email lookup + auto-create vendor from email (MATCHES network_vendors SCHEMA)
 
 export async function handleNetwork(path, request, db, url, env) {
 
@@ -202,8 +202,9 @@ async function deleteItem(request, db, table) {
   return json({ success: true });
 }
 
+
 /* ---------------------------------------------------------
-   EMAIL → VENDOR (ROBUST + AUTO-CREATE)
+   EMAIL → VENDOR (ROBUST + AUTO-CREATE, MATCHES SCHEMA)
 --------------------------------------------------------- */
 
 async function getOrCreateVendorByEmail(db, rawEmail) {
@@ -217,18 +218,36 @@ async function getOrCreateVendorByEmail(db, rawEmail) {
 
   if (!vendor) {
     const id = crypto.randomUUID();
+
+    // MATCHES YOUR TABLE:
+    // id, ownerUserId, email, name, bio, logo, cover, photoUrl,
+    // categories, tags, lat, lng, hasProducts, hasServices,
+    // hasWorkshops, hasApps, published, active, createdAt
     await db.prepare(
-      `INSERT INTO network_vendors (id, email, name, description, tags, logo, cover, published, createdAt)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
+      `INSERT INTO network_vendors (
+         id, ownerUserId, email, name, bio, logo, cover, photoUrl,
+         categories, tags, lat, lng,
+         hasProducts, hasServices, hasWorkshops, hasApps,
+         published, active, createdAt
+       ) VALUES (
+         ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?,
+         0, 0, 0, 0,
+         0, 1, datetime('now')
+       )`
     ).bind(
       id,
+      null,          // ownerUserId
       email,
-      email,                 // name default = email
-      "",                    // description
-      "",                    // tags
-      "",                    // logo
-      "",                    // cover
-      0                      // published
+      email,         // name default = email
+      "",            // bio
+      "",            // logo
+      "",            // cover
+      "",            // photoUrl
+      "",            // categories
+      "",            // tags
+      null,          // lat
+      null           // lng
     ).run();
 
     vendor = await db.prepare(
@@ -340,13 +359,13 @@ async function staffMe(db, url) {
 
 async function staffUpdateProfile(request, db) {
   const body = await request.json();
-  const { vendorId, name, bio, tags, paypal, active, shareLocation, types } = body;
+  const { vendorId, name, bio, tags, active } = body;
 
   await db.prepare(
     `UPDATE network_vendors
-     SET name=?, bio=?, tags=?, paypal=?, active=?, shareLocation=?, types=?
+     SET name=?, bio=?, tags=?, active=?
      WHERE id=?`
-  ).bind(name, bio, tags, paypal, active, shareLocation, types, vendorId).run();
+  ).bind(name, bio, tags, active, vendorId).run();
 
   return json({ success: true });
 }
@@ -412,7 +431,7 @@ async function vendorStorefront(db, url) {
 
   return json({
     vendorId,
-    description: vendor.description || "",
+    description: vendor.bio || "",
     tags: vendor.tags || "",
     logo: vendor.logo || "",
     cover: vendor.cover || "",
