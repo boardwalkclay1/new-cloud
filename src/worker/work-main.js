@@ -1,8 +1,9 @@
-// worker.js — FINAL VERSION (FULL NETWORK + STAFF + RESPONSE + SAFETY + STATIC)
+// worker.js — FINAL + CLOUD MESSAGING (WORK MESSAGE)
 
 import { handleNetwork } from "./work-network.js";
 import { handleResponseRoutes } from "./work-response.js";
 import { handleSafetyRoutes } from "./work-safety.js";
+import { handleWorkMessage } from "./work-message.js";
 
 const FRONTEND_DOMAIN = "https://beltlinecloud.com";
 
@@ -161,6 +162,12 @@ export default {
           headers: { "Content-Type": "application/json" }
         }));
       }
+
+      /* ---------------------------------------------------------
+         CLOUD MESSAGING (WORK MESSAGE)
+      --------------------------------------------------------- */
+      const wm = await handleWorkMessage(path, request, db, url, env);
+      if (wm) return wrap(wm);
 
       /* ---------------------------------------------------------
          NETWORK API (PUBLIC + STAFF + VENDOR + CHECKOUT)
