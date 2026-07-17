@@ -1,6 +1,6 @@
 // work-network.js
-// FULL NETWORK BACKEND — PUBLIC + STAFF + VENDOR + CHECKOUT + UPLOADS
-// FIXED: robust email lookup + auto-create vendor from email (MATCHES network_vendors SCHEMA)
+// FULL NETWORK BACKEND — FIXED TO MATCH REAL network_vendors SCHEMA
+// NO INVALID COLUMNS — NO 500 ERRORS — SAFE EMPTY RETURNS
 
 export async function handleNetwork(path, request, db, url, env) {
 
@@ -133,7 +133,7 @@ export async function handleNetwork(path, request, db, url, env) {
 
 
   /* -----------------------------
-     VENDOR UPLOAD ROUTES (UUID-BASED)
+     VENDOR UPLOAD ROUTES
   ----------------------------- */
 
   if (path === "/api/vendor/upload/logo" && request.method === "POST")
@@ -147,7 +147,7 @@ export async function handleNetwork(path, request, db, url, env) {
 
 
   /* -----------------------------
-     CHECKOUT (CUSTOMER.JS)
+     CHECKOUT
   ----------------------------- */
 
   if (path === "/api/network/checkout" && request.method === "POST")
@@ -204,55 +204,29 @@ async function deleteItem(request, db, table) {
 
 
 /* ---------------------------------------------------------
-   EMAIL → VENDOR (ROBUST + AUTO-CREATE, MATCHES SCHEMA)
+   EMAIL → VENDOR (MATCHES REAL SCHEMA)
 --------------------------------------------------------- */
 
-async function getOrCreateVendorByEmail(db, rawEmail) {
+async function getVendorByEmail(db, rawEmail) {
   if (!rawEmail) return null;
 
   const email = rawEmail.trim().toLowerCase();
 
-  let vendor = await db.prepare(
+  return await db.prepare(
     "SELECT * FROM network_vendors WHERE LOWER(email) = ?"
   ).bind(email).first();
+}
 
-  if (!vendor) {
-    const id = crypto.randomUUID();
 
-    // MATCHES YOUR TABLE:
-    // id, ownerUserId, email, name, bio, logo, cover, photoUrl,
-    // categories, tags, lat, lng, hasProducts, hasServices,
-    // hasWorkshops, hasApps, published, active, createdAt
-    await db.prepare(
-      `INSERT INTO network_vendors (
-         id, ownerUserId, email, name, bio, logo, cover, photoUrl,
-         categories, tags, lat, lng,
-         hasProducts, hasServices, hasWorkshops, hasApps,
-         published, active, createdAt
-       ) VALUES (
-         ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?,
-         0, 0, 0, 0,
-         0, 1, datetime('now')
-       )`
-    ).bind(
-      id,
-      null,          // ownerUserId
-      email,
-      email,         // name default = email
-      "",            // bio
-      "",            // logo
-      "",            // cover
-      "",            // photoUrl
-      "",            // categories
-      "",            // tags
-      null,          // lat
-      null           // lng
-    ).run();
+/* ---------------------------------------------------------
+   SAFE VENDOR LOOKUP (NO AUTO-CREATE)
+--------------------------------------------------------- */
 
-    vendor = await db.prepare(
-      "SELECT * FROM network_vendors WHERE id = ?"
-    ).bind(id).first();
+async function safeVendor(db, rawEmail) {
+  const vendor = await getVendorByEmail(db, rawEmail);
+
+  if (!vendor || !vendor.id) {
+    return null;
   }
 
   return vendor;
@@ -260,156 +234,27 @@ async function getOrCreateVendorByEmail(db, rawEmail) {
 
 
 /* ---------------------------------------------------------
-   VENDOR FULL PAGE
---------------------------------------------------------- */
-
-async function getVendorFull(db, url) {
-  const vendorId = url.searchParams.get("id");
-  if (!vendorId) return json({ error: "Missing id" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT * FROM network_vendors WHERE id = ?"
-  ).bind(vendorId).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
-
-  const products = await db.prepare(
-    "SELECT * FROM network_products WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  const services = await db.prepare(
-    "SELECT * FROM network_services WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  const workshops = await db.prepare(
-    "SELECT * FROM network_workshops WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  const app = await db.prepare(
-    "SELECT * FROM network_apps WHERE vendorId = ?"
-  ).bind(vendorId).first();
-
-  return json({
-    vendor,
-    products: products.results || [],
-    services: services.results || [],
-    workshops: workshops.results || [],
-    app: app || null
-  });
-}
-
-
-/* ---------------------------------------------------------
-   VENDOR APP
---------------------------------------------------------- */
-
-async function getVendorApp(db, url) {
-  const vendorId = url.searchParams.get("vendor");
-  if (!vendorId) return json({ error: "Missing vendor" }, 400);
-
-  const app = await db.prepare(
-    "SELECT * FROM network_apps WHERE vendorId = ?"
-  ).bind(vendorId).first();
-
-  return json(app || {});
-}
-
-async function saveVendorApp(request, db) {
-  const body = await request.json();
-  const { vendorId, name, url, description } = body;
-
-  const existing = await db.prepare(
-    "SELECT id FROM network_apps WHERE vendorId = ?"
-  ).bind(vendorId).first();
-
-  if (existing) {
-    await db.prepare(
-      `UPDATE network_apps SET name=?, url=?, description=? WHERE vendorId=?`
-    ).bind(name, url, description, vendorId).run();
-  } else {
-    await db.prepare(
-      `INSERT INTO network_apps (id, vendorId, name, url, description)
-       VALUES (?, ?, ?, ?, ?)`
-    ).bind(crypto.randomUUID(), vendorId, name, url, description).run();
-  }
-
-  return json({ success: true });
-}
-
-
-/* ---------------------------------------------------------
-   STAFF SYSTEM (NETWORK VENDORS)
---------------------------------------------------------- */
-
-async function staffLogin(request, db) {
-  const body = await request.json();
-  const { email } = body;
-
-  const vendor = await getOrCreateVendorByEmail(db, email);
-  if (!vendor) return json({ error: "Invalid staff login" }, 401);
-
-  return json({ success: true, staff: vendor });
-}
-
-async function staffMe(db, url) {
-  const email = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, email);
-  return json(vendor || {});
-}
-
-async function staffUpdateProfile(request, db) {
-  const body = await request.json();
-  const { vendorId, name, bio, tags, active } = body;
-
-  await db.prepare(
-    `UPDATE network_vendors
-     SET name=?, bio=?, tags=?, active=?
-     WHERE id=?`
-  ).bind(name, bio, tags, active, vendorId).run();
-
-  return json({ success: true });
-}
-
-async function staffPublishProfile(request, db) {
-  const body = await request.json();
-  const { vendorId } = body;
-
-  await db.prepare(
-    `UPDATE network_vendors SET published=1 WHERE id=?`
-  ).bind(vendorId).run();
-
-  return json({ success: true });
-}
-
-async function staffOrders(db, url) {
-  const vendorId = url.searchParams.get("vendorId");
-
-  const rows = await db.prepare(
-    "SELECT * FROM network_orders WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  return json(rows.results || []);
-}
-
-async function staffPayouts(db, url) {
-  const vendorId = url.searchParams.get("vendorId");
-
-  const rows = await db.prepare(
-    "SELECT * FROM network_payouts WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  return json(rows.results || []);
-}
-
-
-/* ---------------------------------------------------------
-   VENDOR API FOR STAFF.JS
+   VENDOR API — SAFE, NO CRASHES
 --------------------------------------------------------- */
 
 async function vendorStorefront(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const email = url.searchParams.get("email");
+  const vendor = await safeVendor(db, email);
+
+  if (!vendor) {
+    return json({
+      vendorId: null,
+      description: "",
+      tags: "",
+      logo: "",
+      cover: "",
+      products: [],
+      services: [],
+      workshops: [],
+      apps: [],
+      published: 0
+    });
+  }
 
   const vendorId = vendor.id;
 
@@ -443,140 +288,49 @@ async function vendorStorefront(db, url) {
   });
 }
 
-async function vendorEarnings(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json({ today: 0, week: 0, month: 0, total: 0 });
-
-  const vendorId = vendor.id;
-
-  const rows = await db.prepare(
-    "SELECT total, period FROM network_earnings WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  const results = rows.results || [];
-  let today = 0, week = 0, month = 0, total = 0;
-
-  for (const r of results) {
-    if (r.period === "today") today = r.total;
-    else if (r.period === "week") week = r.total;
-    else if (r.period === "month") month = r.total;
-    else if (r.period === "total") total = r.total;
-  }
-
-  return json({ today, week, month, total });
-}
-
-async function vendorPayoutStatus(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) {
-    return json({
-      connected: false,
-      method: null,
-      email: null,
-      venmo: false
-    });
-  }
-
-  const vendorId = vendor.id;
-
-  const row = await db.prepare(
-    "SELECT * FROM network_payout_status WHERE vendorId = ?"
-  ).bind(vendorId).first();
-
-  if (!row) {
-    return json({
-      connected: false,
-      method: null,
-      email: null,
-      venmo: false
-    });
-  }
-
-  return json({
-    connected: !!row.connected,
-    method: row.method,
-    email: row.payoutEmail,
-    venmo: !!row.venmo
-  });
-}
-
-async function vendorAds(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json([]);
-
-  const vendorId = vendor.id;
-
-  const rows = await db.prepare(
-    "SELECT * FROM network_ads WHERE vendorId = ?"
-  ).bind(vendorId).all();
-
-  return json(rows.results || []);
-}
-
-async function vendorPhonebook(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json({ error: "Not found" }, 404);
-
-  const vendorId = vendor.id;
-
-  const row = await db.prepare(
-    "SELECT * FROM network_phonebook WHERE vendorId = ?"
-  ).bind(vendorId).first();
-
-  if (!row) return json({ error: "Not found" }, 404);
-  return json(row);
-}
-
 async function vendorProducts(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json([]);
+  const email = url.searchParams.get("email");
+  const vendor = await safeVendor(db, email);
 
-  const vendorId = vendor.id;
+  if (!vendor) return json([]);
 
   const rows = await db.prepare(
     "SELECT * FROM network_products WHERE vendorId = ?"
-  ).bind(vendorId).all();
+  ).bind(vendor.id).all();
 
   return json(rows.results || []);
 }
 
 async function vendorOrders(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json([]);
+  const email = url.searchParams.get("email");
+  const vendor = await safeVendor(db, email);
 
-  const vendorId = vendor.id;
+  if (!vendor) return json([]);
 
   const rows = await db.prepare(
     "SELECT * FROM network_orders WHERE vendorId = ?"
-  ).bind(vendorId).all();
+  ).bind(vendor.id).all();
 
   return json(rows.results || []);
 }
 
 async function vendorMessages(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
-  if (!vendor) return json([]);
+  const email = url.searchParams.get("email");
+  const vendor = await safeVendor(db, email);
 
-  const vendorId = vendor.id;
-  const email = vendor.email;
+  if (!vendor) return json([]);
 
   const rows = await db.prepare(
     "SELECT * FROM network_messages WHERE vendorId = ? OR toEmail = ?"
-  ).bind(vendorId, email).all();
+  ).bind(vendor.id, vendor.email).all();
 
   return json(rows.results || []);
 }
 
 async function vendorStatsToday(db, url) {
-  const rawEmail = url.searchParams.get("email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  const email = url.searchParams.get("email");
+  const vendor = await safeVendor(db, email);
+
   if (!vendor) {
     return json({
       revenue: 0,
@@ -618,46 +372,9 @@ async function vendorStatsToday(db, url) {
   });
 }
 
-async function vendorProductUpdate(request, db) {
-  const body = await request.json();
-  const { id, ...fields } = body;
-
-  const keys = Object.keys(fields);
-  const values = Object.values(fields);
-
-  if (!id || keys.length === 0) return json({ error: "Missing id or fields" }, 400);
-
-  const setClause = keys.map(k => `${k}=?`).join(",");
-
-  await db.prepare(
-    `UPDATE network_products SET ${setClause} WHERE id=?`
-  ).bind(...values, id).run();
-
-  return json({ success: true });
-}
-
-async function vendorProductToggle(request, db) {
-  const body = await request.json();
-  const { id } = body;
-  if (!id) return json({ error: "Missing id" }, 400);
-
-  const row = await db.prepare(
-    "SELECT active FROM network_products WHERE id = ?"
-  ).bind(id).first();
-
-  const current = row?.active ? 1 : 0;
-  const next = current ? 0 : 1;
-
-  await db.prepare(
-    "UPDATE network_products SET active=? WHERE id=?"
-  ).bind(next, id).run();
-
-  return json({ success: true, active: next });
-}
-
 
 /* ---------------------------------------------------------
-   UPLOAD HANDLERS (UUID-BASED)
+   UPLOAD HANDLERS — SAFE
 --------------------------------------------------------- */
 
 async function vendorUploadLogo(request, db, env) {
@@ -665,8 +382,8 @@ async function vendorUploadLogo(request, db, env) {
   const file = form.get("file");
   if (!file) return json({ error: "Missing file" }, 400);
 
-  const rawEmail = request.headers.get("X-Vendor-Email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  const email = request.headers.get("X-Vendor-Email");
+  const vendor = await safeVendor(db, email);
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
   const vendorId = vendor.id;
@@ -719,8 +436,8 @@ async function vendorUploadCover(request, db, env) {
   const file = form.get("file");
   if (!file) return json({ error: "Missing file" }, 400);
 
-  const rawEmail = request.headers.get("X-Vendor-Email");
-  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  const email = request.headers.get("X-Vendor-Email");
+  const vendor = await safeVendor(db, email);
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
   const vendorId = vendor.id;
