@@ -1,222 +1,64 @@
-/* BACKGROUND */
-.messages-bg {
-  position: fixed;
-  inset: 0;
-  background: url('/assets/img/cloud/cloud.jpg') center/cover no-repeat;
-  z-index: -1;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages</title>
+  <link rel="stylesheet" href="/public/pages/messages/messages.css">
+</head>
 
-/* HEADER */
-.messages-header {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background: rgba(0,0,0,0.7);
-  border-bottom: 2px solid #f7d354;
-}
+<body>
+<div id="messagesApp">
 
-/* LEFT (EMPTY BUT STABLE) */
-.messages-header-left {
-  width: 45px;
-  flex-shrink: 0;
-}
+  <!-- HEADER -->
+  <header class="msg-header">
+    <div class="msg-title">Messages</div>
+    <div class="msg-user">
+      <img id="userAvatar" class="avatar">
+      <span id="userName"></span>
+    </div>
+  </header>
 
-/* CENTER TITLE */
-.messages-header-center {
-  flex: 1;
-  text-align: center;
-}
+  <main class="msg-main">
 
-.messages-title {
-  font-family: Cinzel;
-  font-size: 26px;
-  color: #f7d354;
-  text-shadow: 0 0 8px #f7d354;
-}
+    <!-- LEFT SIDEBAR: THREADS -->
+    <aside class="msg-sidebar">
+      <div class="sidebar-header">Conversations</div>
+      <ul id="threadList"></ul>
+    </aside>
 
-/* RIGHT — CLOUDTALK ICON MENU TRIGGER */
-.messages-header-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
-  width: 60px;
-}
+    <!-- MESSAGE PANEL -->
+    <section class="msg-panel">
 
-.messages-compose-icon {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #f7d354;
-  cursor: pointer;
-}
+      <div class="panel-header">
+        <img id="threadAvatar" class="avatar-small">
+        <div class="thread-info">
+          <h2 id="threadName">Select a conversation</h2>
+          <span id="threadStatus"></span>
+        </div>
+      </div>
 
-/* MAIN VIEW */
-.messages-view {
-  padding: 15px;
-  max-width: 900px;
-  margin: 0 auto 60px; /* leave room for footer */
-}
+      <div id="messageContainer" class="message-container"></div>
 
-/* INBOX */
-.inbox-item {
-  background: rgba(0,0,0,0.65);
-  border: 2px solid #f7d354;
-  border-radius: 16px;
-  padding: 12px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
+      <div class="msg-input-row">
+        <textarea id="msgInput" placeholder="Type a message..."></textarea>
+        <button id="sendBtn">Send</button>
+      </div>
 
-.inbox-item:hover {
-  background: rgba(0,0,0,0.8);
-}
+    </section>
 
-.inbox-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #f7d354;
-  margin-right: 12px;
-}
+    <!-- RIGHT SIDEBAR: CLOUD FAMILY + PHONEBOOK -->
+    <aside class="msg-sidebar-right">
+      <div class="sidebar-header">Cloud Family</div>
+      <ul id="familyList"></ul>
 
-.inbox-info {
-  flex: 1;
-}
+      <div class="sidebar-header">Phonebook</div>
+      <ul id="phonebookList"></ul>
+    </aside>
 
-.inbox-name {
-  font-family: Cinzel;
-  color: #f7d354;
-  font-size: 18px;
-}
+  </main>
 
-.inbox-preview {
-  color: #fff;
-  font-size: 14px;
-  opacity: 0.8;
-}
+</div>
 
-/* THREAD */
-.thread-container {
-  background: rgba(0,0,0,0.65);
-  border: 2px solid #f7d354;
-  border-radius: 16px;
-  padding: 15px;
-}
-
-.thread-messages {
-  max-height: 60vh;
-  overflow-y: auto;
-  padding-right: 5px;
-}
-
-.msg-bubble {
-  max-width: 75%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 14px;
-  font-size: 15px;
-  line-height: 1.4;
-}
-
-.msg-me {
-  background: #f7d354;
-  color: #000;
-  margin-left: auto;
-}
-
-.msg-them {
-  background: #222;
-  color: #fff;
-  border: 1px solid #f7d354;
-}
-
-/* COMPOSE */
-.compose-box {
-  margin-top: 15px;
-  display: flex;
-  gap: 10px;
-}
-
-.compose-input {
-  flex: 1;
-  background: #111;
-  border: 2px solid #f7d354;
-  border-radius: 14px;
-  padding: 10px;
-  color: #fff;
-}
-
-.compose-send {
-  background: #f7d354;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 14px;
-  font-family: Cinzel;
-  cursor: pointer;
-}
-
-/* REQUESTS */
-.request-item {
-  background: rgba(0,0,0,0.65);
-  border: 2px solid #f7d354;
-  border-radius: 16px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.request-actions {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.request-btn {
-  flex: 1;
-  background: #222;
-  border: 2px solid #f7d354;
-  color: #f7d354;
-  padding: 8px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-/* FOOTER NAV */
-.messages-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.85);
-  border-top: 2px solid #f7d354;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-}
-
-.footer-btn {
-  background: none;
-  border: none;
-  color: #f7d354;
-  font-family: Cinzel;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* MOBILE TIGHTENING */
-@media (max-width: 600px) {
-  .messages-title {
-    font-size: 20px;
-  }
-
-  .messages-view {
-    padding: 10px;
-  }
-
-  .footer-btn {
-    font-size: 14px;
-  }
-}
+<script type="module" src="/public/pages/messages/messages.js"></script>
+</body>
+</html>
