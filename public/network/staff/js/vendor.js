@@ -1,4 +1,5 @@
-// VENDOR ENGINE — FINAL VERSION (MATCHES work-network.js + staff.js)
+// VENDOR ENGINE — FINAL WORKING VERSION
+// Matches: network_vendors schema + safe staff.js + safe backend
 
 import {
   staffGetProducts,
@@ -31,7 +32,9 @@ const vendorLogoUpload = document.getElementById("vendorLogoUpload");
 const vendorLogoImg = document.getElementById("vendorLogoImg");
 const coverUpload = document.getElementById("coverUpload");
 
-// CLOUD USER ONLY
+/* ---------------------------------------------------------
+   CLOUD USER
+--------------------------------------------------------- */
 export function connectCloudUser() {
   const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
 
@@ -44,7 +47,9 @@ export function connectCloudUser() {
   }
 }
 
-// TIME
+/* ---------------------------------------------------------
+   TIME
+--------------------------------------------------------- */
 function updateTime() {
   const now = new Date();
   timeStat.textContent = now.toLocaleTimeString("en-US", {
@@ -58,7 +63,9 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// WEATHER + LOCATION
+/* ---------------------------------------------------------
+   WEATHER + LOCATION
+--------------------------------------------------------- */
 export async function detectBeltlineLocation() {
   const zones = [
     { name: "Eastside Trail", latMin: 33.745, latMax: 33.760, lngMin: -84.370, lngMax: -84.335 },
@@ -72,6 +79,7 @@ export async function detectBeltlineLocation() {
     const lng = pos.coords.longitude;
 
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&temperature_unit=fahrenheit`;
+
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -100,6 +108,7 @@ export async function detectBeltlineLocation() {
         break;
       }
     }
+
     locationStat.textContent = `Location: ${zone}`;
 
     initVendorMap({
@@ -115,10 +124,11 @@ export async function detectBeltlineLocation() {
   });
 }
 
-// STATS
+/* ---------------------------------------------------------
+   STATS
+--------------------------------------------------------- */
 export async function loadStats() {
   const stats = await staffGetTodayStats();
-  if (!stats) return;
 
   statRevenue.textContent = `$${stats.revenue || 0}`;
   statRevenueSub.textContent = `${stats.ordersCount || 0} orders`;
@@ -127,7 +137,9 @@ export async function loadStats() {
   statMessages.textContent = stats.newMessages || 0;
 }
 
-// PRODUCTS
+/* ---------------------------------------------------------
+   PRODUCTS
+--------------------------------------------------------- */
 export async function loadProducts() {
   const products = await staffGetProducts();
   const safeProducts = Array.isArray(products) ? products : [];
@@ -139,7 +151,7 @@ export async function loadProducts() {
     card.className = "product-card";
 
     card.innerHTML = `
-      <img src="${p.image || '/network/img/network-logo.jpg'}" alt="${p.name || ''}">
+      <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name || ''}">
       <div class="product-name">${p.name || "Unnamed product"}</div>
       <div class="product-meta">
         $${p.price || 0} • ${p.active ? "Active" : "Inactive"}
@@ -194,7 +206,9 @@ export async function loadProducts() {
   });
 }
 
-// ORDERS
+/* ---------------------------------------------------------
+   ORDERS
+--------------------------------------------------------- */
 export async function loadOrders() {
   const orders = await staffGetOrders();
   const safeOrders = Array.isArray(orders) ? orders : [];
@@ -213,7 +227,9 @@ export async function loadOrders() {
   });
 }
 
-// MESSAGES
+/* ---------------------------------------------------------
+   MESSAGES
+--------------------------------------------------------- */
 export async function loadMessages() {
   const messages = await staffGetMessages();
   const safeMessages = Array.isArray(messages) ? messages : [];
@@ -231,13 +247,17 @@ export async function loadMessages() {
   });
 }
 
-// UPLOAD HELPERS — use cloud_user email
+/* ---------------------------------------------------------
+   UPLOAD HELPERS
+--------------------------------------------------------- */
 function getVendorEmail() {
   const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
   return cloudUser?.email || null;
 }
 
-// UPLOAD HANDLERS
+/* ---------------------------------------------------------
+   UPLOAD HANDLERS
+--------------------------------------------------------- */
 vendorLogoUpload.addEventListener("change", async () => {
   const file = vendorLogoUpload.files[0];
   if (!file) return;
@@ -283,7 +303,9 @@ coverUpload.addEventListener("change", async () => {
   });
 });
 
-// INIT
+/* ---------------------------------------------------------
+   INIT
+--------------------------------------------------------- */
 export async function initVendorDashboard() {
   connectCloudUser();
   await loadStats();
@@ -295,7 +317,9 @@ export async function initVendorDashboard() {
 
 initVendorDashboard();
 
-// LOGOUT
+/* ---------------------------------------------------------
+   LOGOUT
+--------------------------------------------------------- */
 window.logout = function() {
   localStorage.removeItem("cloud_user");
   window.location.href = "/network/pages/login.html";
