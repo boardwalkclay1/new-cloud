@@ -564,11 +564,3 @@ async function vendorMessages(db, url) {
 }
 
 async function vendorStatsToday(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if
