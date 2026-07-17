@@ -1,1 +1,85 @@
+<!-- public/pages/chat/rooms/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Beltline Chat Rooms</title>
+  <link rel="stylesheet" href="/public/pages/chat/rooms/chat.css">
+</head>
+<body>
+  <div id="chatApp">
+    <header class="chat-header">
+      <div class="logo">Beltline Rooms</div>
+      <div class="user-profile">
+        <img id="userAvatar" src="/assets/img/default-avatar.png" alt="avatar">
+        <div class="user-meta">
+          <span id="userName">Guest</span>
+          <select id="nameColorSelect">
+            <option value="#00bcd4">Teal</option>
+            <option value="#ff4081">Pink</option>
+            <option value="#ffeb3b">Yellow</option>
+            <option value="#4caf50">Green</option>
+            <option value="#ffffff">White</option>
+          </select>
+        </div>
+      </div>
+    </header>
 
+    <main class="chat-main">
+      <aside class="rooms-sidebar">
+        <div class="rooms-header">Rooms</div>
+        <ul id="roomsList"></ul>
+        <button id="createRoomBtn">+ Create Room</button>
+      </aside>
+
+      <section class="chat-section">
+        <div class="chat-room-header">
+          <div>
+            <h2 id="roomTitle">Lobby</h2>
+            <span id="roomTopic">Welcome to Beltline Chat</span>
+          </div>
+          <div class="room-users">
+            <span id="roomUserCount">0 online</span>
+          </div>
+        </div>
+
+        <div class="chat-toolbar">
+          <select id="fontSelect">
+            <option value="system">System</option>
+            <option value="'Courier New', monospace">Courier</option>
+            <option value="'Comic Sans MS', cursive">Comic Sans</option>
+            <option value="'Times New Roman', serif">Times</option>
+          </select>
+
+          <select id="emojiSelect">
+            <option value="">😀 Emojis</option>
+            <option value="😀">😀</option>
+            <option value="😂">😂</option>
+            <option value="😍">😍</option>
+            <option value="😎">😎</option>
+            <option value="🤔">🤔</option>
+            <option value="😭">😭</option>
+            <option value="👍">👍</option>
+            <option value="🔥">🔥</option>
+            <option value="❤️">❤️</option>
+          </select>
+        </div>
+
+        <div id="messagesContainer" class="messages-container"></div>
+
+        <div class="chat-input-row">
+          <textarea id="messageInput" placeholder="Type your message..."></textarea>
+          <button id="sendBtn">Send</button>
+        </div>
+      </section>
+
+      <aside class="users-sidebar">
+        <div class="users-header">Users</div>
+        <ul id="usersList"></ul>
+      </aside>
+    </main>
+  </div>
+
+  <script src="/public/pages/chat/rooms/chat.js"></script>
+</body>
+</html>
