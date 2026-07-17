@@ -1,6 +1,6 @@
 // work-network.js
 // FULL NETWORK BACKEND — PUBLIC + STAFF + VENDOR + CHECKOUT + UPLOADS
-// CLEANED TO USE vendorId (UUID) INTERNALLY, EMAIL ONLY AS LOOKUP
+// FIXED: robust email lookup + auto-create vendor from email
 
 export async function handleNetwork(path, request, db, url, env) {
 
@@ -202,6 +202,43 @@ async function deleteItem(request, db, table) {
   return json({ success: true });
 }
 
+/* ---------------------------------------------------------
+   EMAIL → VENDOR (ROBUST + AUTO-CREATE)
+--------------------------------------------------------- */
+
+async function getOrCreateVendorByEmail(db, rawEmail) {
+  if (!rawEmail) return null;
+
+  const email = rawEmail.trim().toLowerCase();
+
+  let vendor = await db.prepare(
+    "SELECT * FROM network_vendors WHERE LOWER(email) = ?"
+  ).bind(email).first();
+
+  if (!vendor) {
+    const id = crypto.randomUUID();
+    await db.prepare(
+      `INSERT INTO network_vendors (id, email, name, description, tags, logo, cover, published, createdAt)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
+    ).bind(
+      id,
+      email,
+      email,                 // name default = email
+      "",                    // description
+      "",                    // tags
+      "",                    // logo
+      "",                    // cover
+      0                      // published
+    ).run();
+
+    vendor = await db.prepare(
+      "SELECT * FROM network_vendors WHERE id = ?"
+    ).bind(id).first();
+  }
+
+  return vendor;
+}
+
 
 /* ---------------------------------------------------------
    VENDOR FULL PAGE
@@ -289,23 +326,16 @@ async function staffLogin(request, db) {
   const body = await request.json();
   const { email } = body;
 
-  const staff = await db.prepare(
-    "SELECT * FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
+  const vendor = await getOrCreateVendorByEmail(db, email);
+  if (!vendor) return json({ error: "Invalid staff login" }, 401);
 
-  if (!staff) return json({ error: "Invalid staff login" }, 401);
-
-  return json({ success: true, staff });
+  return json({ success: true, staff: vendor });
 }
 
 async function staffMe(db, url) {
   const email = url.searchParams.get("email");
-
-  const staff = await db.prepare(
-    "SELECT * FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  return json(staff || {});
+  const vendor = await getOrCreateVendorByEmail(db, email);
+  return json(vendor || {});
 }
 
 async function staffUpdateProfile(request, db) {
@@ -358,13 +388,8 @@ async function staffPayouts(db, url) {
 --------------------------------------------------------- */
 
 async function vendorStorefront(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT * FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
   const vendorId = vendor.id;
@@ -400,14 +425,9 @@ async function vendorStorefront(db, url) {
 }
 
 async function vendorEarnings(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) return json({ today: 0, week: 0, month: 0, total: 0 });
 
   const vendorId = vendor.id;
 
@@ -429,14 +449,16 @@ async function vendorEarnings(db, url) {
 }
 
 async function vendorPayoutStatus(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) {
+    return json({
+      connected: false,
+      method: null,
+      email: null,
+      venmo: false
+    });
+  }
 
   const vendorId = vendor.id;
 
@@ -462,14 +484,9 @@ async function vendorPayoutStatus(db, url) {
 }
 
 async function vendorAds(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) return json([]);
 
   const vendorId = vendor.id;
 
@@ -481,14 +498,9 @@ async function vendorAds(db, url) {
 }
 
 async function vendorPhonebook(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) return json({ error: "Not found" }, 404);
 
   const vendorId = vendor.id;
 
@@ -501,14 +513,9 @@ async function vendorPhonebook(db, url) {
 }
 
 async function vendorProducts(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) return json([]);
 
   const vendorId = vendor.id;
 
@@ -520,14 +527,9 @@ async function vendorProducts(db, url) {
 }
 
 async function vendorOrders(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) return json([]);
 
   const vendorId = vendor.id;
 
@@ -539,16 +541,12 @@ async function vendorOrders(db, url) {
 }
 
 async function vendorMessages(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) return json([]);
 
   const vendorId = vendor.id;
+  const email = vendor.email;
 
   const rows = await db.prepare(
     "SELECT * FROM network_messages WHERE vendorId = ? OR toEmail = ?"
@@ -558,14 +556,17 @@ async function vendorMessages(db, url) {
 }
 
 async function vendorStatsToday(db, url) {
-  const email = url.searchParams.get("email");
-  if (!email) return json({ error: "Missing email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
-
-  if (!vendor) return json({ error: "Vendor not found" }, 404);
+  const rawEmail = url.searchParams.get("email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
+  if (!vendor) {
+    return json({
+      revenue: 0,
+      ordersCount: 0,
+      activeProducts: 0,
+      openOrders: 0,
+      newMessages: 0
+    });
+  }
 
   const vendorId = vendor.id;
 
@@ -645,12 +646,8 @@ async function vendorUploadLogo(request, db, env) {
   const file = form.get("file");
   if (!file) return json({ error: "Missing file" }, 400);
 
-  const email = request.headers.get("X-Vendor-Email");
-  if (!email) return json({ error: "Missing vendor email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
+  const rawEmail = request.headers.get("X-Vendor-Email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
   const vendorId = vendor.id;
@@ -703,12 +700,8 @@ async function vendorUploadCover(request, db, env) {
   const file = form.get("file");
   if (!file) return json({ error: "Missing file" }, 400);
 
-  const email = request.headers.get("X-Vendor-Email");
-  if (!email) return json({ error: "Missing vendor email" }, 400);
-
-  const vendor = await db.prepare(
-    "SELECT id FROM network_vendors WHERE email = ?"
-  ).bind(email).first();
+  const rawEmail = request.headers.get("X-Vendor-Email");
+  const vendor = await getOrCreateVendorByEmail(db, rawEmail);
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
   const vendorId = vendor.id;
