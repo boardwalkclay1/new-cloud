@@ -4,280 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Beltline Map — Boardwalk Beltline</title>
+    <title>Beltline Cloud Map</title>
 
-    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="/public/assets/img/favicon.png">
 
-    <!-- LEAFLET -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- MAPLIBRE -->
+    <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet">
 
-    <style>
-        body { margin: 0; }
-
-        .logo {
-            width: 160px;
-            height: 60px;
-            background-image: url('../assets/img/bbi-logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            cursor: pointer;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 90px;
-            left: 20px;
-            background: rgba(0,0,0,0.92);
-            padding: 25px;
-            border-radius: 14px;
-            border: 1px solid var(--ember-soft);
-            z-index: 9999;
-        }
-        .mobile-menu a {
-            display: block;
-            margin: 14px 0;
-            color: var(--yellow);
-            font-family: 'Cinzel', serif;
-        }
-
-        @media (max-width: 900px) {
-            .nav-links { display: none; }
-        }
-
-        #map {
-            width: 100%;
-            height: calc(100vh - 90px);
-        }
-
-        .map-tools {
-            position: absolute;
-            top: 100px;
-            right: 20px;
-            z-index: 5000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .map-tool-btn {
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid var(--ember-soft);
-            color: var(--yellow);
-            font-family: 'Cinzel', serif;
-            cursor: pointer;
-        }
-        .map-tool-btn:hover {
-            background: rgba(255,155,40,0.18);
-        }
-    </style>
+    <!-- CLOUD MAP CSS -->
+    <link rel="stylesheet" href="/public/pages/cloud-map/cloud-map.css">
 </head>
 
 <body>
 
-    <!-- LOADER -->
-    <div id="loading-screen">
-        <div class="loading-icon"></div>
-        <div class="loading-bar"><div class="loading-bar-fill"></div></div>
-    </div>
+    <!-- BACKGROUND IMAGE -->
+    <div class="cloud-map-bg"></div>
 
-    <!-- NAV -->
-    <nav class="nav">
-        <div class="logo" onclick="toggleMenu()"></div>
+    <!-- TOP NAV -->
+    <nav class="cloud-map-nav">
+        <div class="cloud-map-logo"></div>
 
-        <ul class="nav-links">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="workshops.html">Workshops</a></li>
-            <li><a href="shop.html">Shop</a></li>
-            <li><a href="beltline.html">Beltline Feed</a></li>
-            <li><a href="community.html">Community</a></li>
-            <li><a href="beltline-courtesy.html">Courtesy</a></li>
-            <li><a href="marker-system.html">Marker System</a></li>
-            <li><a href="contact.html">Contact</a></li>
+        <ul class="cloud-map-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/pages/community.html">Community</a></li>
+            <li><a href="/pages/cumulus.html">Cumulus Cloud</a></li>
+            <li><a href="/pages/map.html" class="active">Cloud Map</a></li>
+            <li><a href="/pages/messages/index.html">Messages</a></li>
         </ul>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="../index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="workshops.html">Workshops</a>
-            <a href="shop.html">Shop</a>
-            <a href="beltline.html">Beltline Feed</a>
-            <a href="community.html">Community</a>
-            <a href="beltline-courtesy.html">Courtesy</a>
-            <a href="marker-system.html">Marker System</a>
-            <a href="contact.html">Contact</a>
-        </div>
     </nav>
 
-    <!-- FLOATING TOOLBELT -->
-    <div class="map-tools">
-        <button class="map-tool-btn" onclick="zoomFull()">Full Beltline</button>
-        <button class="map-tool-btn" onclick="zoomEastside()">Eastside</button>
-        <button class="map-tool-btn" onclick="zoomWestside()">Westside</button>
-        <button class="map-tool-btn" onclick="zoomNorthside()">Northside</button>
-        <button class="map-tool-btn" onclick="zoomSouthside()">Southside</button>
-        <button class="map-tool-btn" onclick="toggleLayer('grocery')">Grocery</button>
-        <button class="map-tool-btn" onclick="toggleLayer('parks')">Parks</button>
-        <button class="map-tool-btn" onclick="toggleLayer('water')">Water</button>
+    <!-- MAP CONTAINER -->
+    <div id="cloudMap"></div>
+
+    <!-- TOOLBELT -->
+    <div class="cloud-map-tools">
+        <button class="tool-btn" data-zoom="full">Full Beltline</button>
+        <button class="tool-btn" data-zoom="east">Eastside</button>
+        <button class="tool-btn" data-zoom="west">Westside</button>
+        <button class="tool-btn" data-zoom="north">Northside</button>
+        <button class="tool-btn" data-zoom="south">Southside</button>
+
+        <button class="tool-btn" data-layer="vendors">Vendors</button>
+        <button class="tool-btn" data-layer="parks">Parks</button>
+        <button class="tool-btn" data-layer="water">Water</button>
+        <button class="tool-btn" data-layer="cloudFamily">Cloud Family</button>
+        <button class="tool-btn" data-layer="response">Response</button>
     </div>
 
-    <!-- MAP -->
-    <div id="map"></div>
-
-    <!-- LEAFLET -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-
-        window.addEventListener("load", () => {
-            const loader = document.getElementById("loading-screen");
-            setTimeout(() => loader.classList.add("hidden"), 300);
-        });
-
-        // =========================================================
-        // REAL BELTLINE COORDINATES
-        // =========================================================
-
-        const EASTSIDE = [
-            [33.772427, -84.365562],
-            [33.771245, -84.364410],
-            [33.770030, -84.363258],
-            [33.769010, -84.362259],
-            [33.767850, -84.361145],
-            [33.766650, -84.360020],
-            [33.765430, -84.359000],
-            [33.764210, -84.358020],
-            [33.763000, -84.357000],
-            [33.761780, -84.356000],
-            [33.760560, -84.355000],
-            [33.759340, -84.354000],
-            [33.758120, -84.353000],
-            [33.756900, -84.352000],
-            [33.755680, -84.351000],
-            [33.754460, -84.350000],
-            [33.753240, -84.349000],
-            [33.752020, -84.348000],
-            [33.750800, -84.347000]
-        ];
-
-        const WESTSIDE = [
-            [33.772900, -84.420900],
-            [33.770700, -84.419000],
-            [33.768500, -84.417000],
-            [33.766300, -84.415000],
-            [33.764100, -84.413000],
-            [33.761900, -84.411000],
-            [33.759700, -84.409000],
-            [33.757500, -84.407000],
-            [33.755300, -84.405000],
-            [33.753100, -84.403000]
-        ];
-
-        const NORTHSIDE = [
-            [33.800200, -84.370900],
-            [33.797900, -84.369200],
-            [33.795600, -84.367500],
-            [33.793300, -84.365800],
-            [33.791000, -84.364100],
-            [33.788700, -84.362400]
-        ];
-
-        const SOUTHSIDE = [
-            [33.730900, -84.380900],
-            [33.734000, -84.378000],
-            [33.737100, -84.375000],
-            [33.740200, -84.372000],
-            [33.743300, -84.369000],
-            [33.746400, -84.366000]
-        ];
-
-        // =========================================================
-        // MAP INIT
-        // =========================================================
-
-        const map = L.map('map').setView([33.7677, -84.3615], 13);
-
-        // CINEMATIC DARK TILESET
-        L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}.png?access-token=YOUR_TOKEN', {
-            maxZoom: 19
-        }).addTo(map);
-
-        // =========================================================
-        // TRAIL DRAWING
-        // =========================================================
-
-        function drawTrail(coords, color) {
-            return L.polyline(coords, {
-                color,
-                weight: 6,
-                opacity: 0.9,
-                smoothFactor: 1
-            }).addTo(map);
-        }
-
-        const eastsideTrail = drawTrail(EASTSIDE, "#ff4444");
-        const westsideTrail = drawTrail(WESTSIDE, "#4488ff");
-        const northsideTrail = drawTrail(NORTHSIDE, "#44ff88");
-        const southsideTrail = drawTrail(SOUTHSIDE, "#aa44ff");
-
-        const fullTrail = L.featureGroup([
-            eastsideTrail,
-            westsideTrail,
-            northsideTrail,
-            southsideTrail
-        ]);
-
-        // =========================================================
-        // MARKERS + LAYERS
-        // =========================================================
-
-        const groceryLayer = L.layerGroup().addTo(map);
-        const parksLayer = L.layerGroup().addTo(map);
-        const waterLayer = L.layerGroup().addTo(map);
-
-        function addMarker(lat, lon, label, layer) {
-            L.marker([lat, lon]).bindPopup(label).addTo(layer);
-        }
-
-        addMarker(33.7599, -84.3633, "Kroger — Ponce", groceryLayer);
-        addMarker(33.7715, -84.3639, "Piedmont Park", parksLayer);
-        addMarker(33.7645, -84.3602, "Water Fountain — Eastside", waterLayer);
-
-        const layers = { grocery: groceryLayer, parks: parksLayer, water: waterLayer };
-
-        function toggleLayer(key) {
-            const layer = layers[key];
-            if (map.hasLayer(layer)) map.removeLayer(layer);
-            else map.addLayer(layer);
-        }
-
-        // =========================================================
-        // ZOOM MODES
-        // =========================================================
-
-        function zoomFull() { map.fitBounds(fullTrail.getBounds()); }
-        function zoomEastside() { map.fitBounds(eastsideTrail.getBounds()); }
-        function zoomWestside() { map.fitBounds(westsideTrail.getBounds()); }
-        function zoomNorthside() { map.fitBounds(northsideTrail.getBounds()); }
-        function zoomSouthside() { map.fitBounds(southsideTrail.getBounds()); }
-
-        // =========================================================
-        // HOVER LABELS
-        // =========================================================
-
-        eastsideTrail.bindTooltip("Eastside Trail");
-        westsideTrail.bindTooltip("Westside Trail");
-        northsideTrail.bindTooltip("Northside Trail");
-        southsideTrail.bindTooltip("Southside Trail");
-
-    </script>
+    <!-- MAP JS -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
+    <script type="module" src="/public/pages/cloud-map/cloud-map.js"></script>
 
 </body>
 </html>
