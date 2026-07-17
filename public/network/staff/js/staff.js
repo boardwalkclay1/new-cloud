@@ -42,6 +42,7 @@ const Staff = {
 
     const emailParam = encodeURIComponent(cloudUser.email);
 
+    // ALL vendor API calls
     const store     = await this.fetchJSON(`/api/vendor/storefront?email=${emailParam}`);
     const earnings  = await this.fetchJSON(`/api/vendor/earnings?email=${emailParam}`);
     const payout    = await this.fetchJSON(`/api/vendor/payout/status?email=${emailParam}`);
@@ -57,7 +58,6 @@ const Staff = {
       email: cloudUser.email,
       name: cloudUser.name,
 
-      // vendorId from backend (UUID) so we can use it for preview/vendor page
       vendorId: safeStore.vendorId || null,
 
       description: safeStore.description || "",
@@ -107,7 +107,7 @@ const Staff = {
   },
 
   /* ---------------------------------------------------------
-     CLOUD MESSAGING
+     CLOUD MESSAGING (STAFF → vendor inbox)
   --------------------------------------------------------- */
   message(email) {
     window.location.href = `/pages/messages/index.html?to=${encodeURIComponent(email)}`;
