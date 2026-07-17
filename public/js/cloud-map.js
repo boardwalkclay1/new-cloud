@@ -1,7 +1,7 @@
-import * as maplibregl from "https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js";
+// MapLibre is global because we load it with a <script> tag in HTML
 
 /* ============================================================
-   INIT MAPLIBRE
+   INIT MAP
 ============================================================ */
 
 const map = new maplibregl.Map({
