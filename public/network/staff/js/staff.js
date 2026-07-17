@@ -122,7 +122,6 @@ const Staff = {
 
   previewPage() {
     const storefront = this.getStorefront();
-    // Use vendorId (UUID) if we have it, fall back to email
     const id = storefront?.vendorId || storefront?.email;
     if (!id) return;
     window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(id)}`;
@@ -140,7 +139,6 @@ const Staff = {
   async fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
-      // If backend returns 404/500, still try to parse JSON but mark error
       const data = await res.json().catch(() => null);
       if (!res.ok || !data) return { error: true };
       return data;
