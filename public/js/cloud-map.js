@@ -1,4 +1,4 @@
-import maplibregl from "https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js";
+import * as maplibregl from "https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js";
 
 /* ============================================================
    INIT MAPLIBRE
@@ -34,17 +34,5 @@ document.querySelectorAll(".tool-btn[data-zoom]").forEach(btn => {
         if (mode === "south") {
             map.flyTo({ center: [-84.3809, 33.7309], zoom: 14 });
         }
-    });
-});
-
-/* ============================================================
-   LAYER TOGGLES (PLACEHOLDER)
-============================================================ */
-
-document.querySelectorAll(".tool-btn[data-layer]").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const layer = btn.dataset.layer;
-        console.log("Toggle layer:", layer);
-        // You will add real layers later
     });
 });
