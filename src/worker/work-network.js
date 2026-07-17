@@ -1,4 +1,4 @@
-// work-network.js
+// work-network.js — FINAL WORKING VERSION
 // FULL NETWORK BACKEND — PUBLIC + STAFF + VENDOR + CHECKOUT + UPLOADS
 // MATCHES D1 SCHEMA EXACTLY
 
@@ -545,4 +545,30 @@ async function vendorMessages(db, url) {
   const email = url.searchParams.get("email");
   if (!email) return json({ error: "Missing email" }, 400);
 
-  const
+  const vendor = await db.prepare(
+    "SELECT id FROM network_vendors WHERE email = ?"
+  ).bind(email).first();
+
+  if (!vendor) return json({ error: "Vendor not found" }, 404);
+
+  const vendorId = vendor.id;
+
+  const rows = await db.prepare(
+    `SELECT id, vendorId, fromEmail, toEmail, body, preview, createdAt
+     FROM network_messages
+     WHERE vendorId = ? OR toEmail = ?
+     ORDER BY createdAt DESC`
+  ).bind(vendorId, email).all();
+
+  return json(rows.results || []);
+}
+
+async function vendorStatsToday(db, url) {
+  const email = url.searchParams.get("email");
+  if (!email) return json({ error: "Missing email" }, 400);
+
+  const vendor = await db.prepare(
+    "SELECT id FROM network_vendors WHERE email = ?"
+  ).bind(email).first();
+
+  if
