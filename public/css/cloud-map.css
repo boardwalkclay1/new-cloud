@@ -1,0 +1,48 @@
+/* FORCE BACKGROUND IMAGE */
+.cloud-map-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/img/cloud/cloud-map.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.40);
+    z-index: -9999; /* ALWAYS BEHIND EVERYTHING */
+}
+
+/* MAP CONTAINER */
+#cloudMap {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: transparent !important;
+    z-index: 1; /* ABOVE BACKGROUND */
+}
+
+/* TOOLBELT */
+.cloud-map-tools {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tool-btn {
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,200,80,0.4);
+    color: #ffd56a;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+}
+
+.tool-btn:hover {
+    background: rgba(255,200,80,0.18);
+}
