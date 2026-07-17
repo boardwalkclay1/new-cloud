@@ -1,10 +1,13 @@
 // /network/staff/js/staff.js
-// FINAL STAFF WRAPPER — MATCHES work-network.js EXACTLY
+// FINAL STAFF WRAPPER — SAFE, NON-BREAKING, MATCHES work-network.js
 
 const Staff = {
   cloudKey: "cloud_user",
   storeKey: "vendor_storefront",
 
+  /* ---------------------------------------------------------
+     CLOUD USER
+  --------------------------------------------------------- */
   getCloudUser() {
     const raw = localStorage.getItem(this.cloudKey);
     return raw ? JSON.parse(raw) : null;
@@ -14,6 +17,9 @@ const Staff = {
     localStorage.setItem(this.cloudKey, JSON.stringify(user));
   },
 
+  /* ---------------------------------------------------------
+     STOREFRONT CACHE
+  --------------------------------------------------------- */
   getStorefront() {
     const raw = localStorage.getItem(this.storeKey);
     return raw ? JSON.parse(raw) : null;
@@ -23,6 +29,9 @@ const Staff = {
     localStorage.setItem(this.storeKey, JSON.stringify(data));
   },
 
+  /* ---------------------------------------------------------
+     INIT DASHBOARD
+  --------------------------------------------------------- */
   async initDashboard() {
     const cloudUser = this.getCloudUser();
     if (!cloudUser || !cloudUser.email) {
@@ -32,17 +41,14 @@ const Staff = {
 
     const emailParam = encodeURIComponent(cloudUser.email);
 
-    // FIRST: resolve vendorId from email
+    // STOREFRONT (may auto-create vendor in backend)
     const store = await this.fetchJSON(`/api/vendor/storefront?email=${emailParam}`);
 
-    if (!store || store.error) {
-      console.warn("Vendor not found for this user.");
-      return;
-    }
+    const safeStore = store && !store.error ? store : {};
 
-    const vendorId = store.vendorId;
+    const vendorId = safeStore.vendorId || null;
 
-    // SECOND: load everything using vendorId
+    // OTHER LOADS — if 404 or error, they return safe defaults
     const earnings  = await this.fetchJSON(`/api/vendor/earnings?email=${emailParam}`);
     const payout    = await this.fetchJSON(`/api/vendor/payout/status?email=${emailParam}`);
     const ads       = await this.fetchJSON(`/api/vendor/ads?email=${emailParam}`);
@@ -56,34 +62,34 @@ const Staff = {
       name: cloudUser.name,
       vendorId,
 
-      description: store.description || "",
-      tags: store.tags || "",
-      logo: store.logo || "",
-      cover: store.cover || "",
-      products: store.products || [],
-      services: store.services || [],
-      workshops: store.workshops || [],
-      apps: store.apps || [],
+      description: safeStore.description || "",
+      tags: safeStore.tags || "",
+      logo: safeStore.logo || "",
+      cover: safeStore.cover || "",
+      products: Array.isArray(safeStore.products) ? safeStore.products : [],
+      services: Array.isArray(safeStore.services) ? safeStore.services : [],
+      workshops: Array.isArray(safeStore.workshops) ? safeStore.workshops : [],
+      apps: Array.isArray(safeStore.apps) ? safeStore.apps : [],
 
-      ads: ads || [],
-      phonebook: phonebook || null,
-      published: store.published || false,
+      ads: Array.isArray(ads) ? ads : [],
+      phonebook: phonebook && !phonebook.error ? phonebook : null,
+      published: safeStore.published || false,
 
-      earnings: earnings || {
+      earnings: earnings && !earnings.error ? earnings : {
         today: 0, week: 0, month: 0, total: 0
       },
 
-      payout: payout || {
+      payout: payout && !payout.error ? payout : {
         connected: false,
         method: null,
         email: null,
         venmo: false
       },
 
-      orders: orders || [],
-      messages: messages || [],
+      orders: Array.isArray(orders) ? orders : [],
+      messages: Array.isArray(messages) ? messages : [],
 
-      stats: stats || {
+      stats: stats && !stats.error ? stats : {
         revenue: 0,
         ordersCount: 0,
         activeProducts: 0,
@@ -99,17 +105,23 @@ const Staff = {
     }
   },
 
+  /* ---------------------------------------------------------
+     CLOUD MESSAGING
+  --------------------------------------------------------- */
   message(email) {
     window.location.href = `/pages/messages/index.html?to=${encodeURIComponent(email)}`;
   },
 
+  /* ---------------------------------------------------------
+     NAVIGATION
+  --------------------------------------------------------- */
   go(page) {
     window.location.href = `/network/staff/pages/${page}`;
   },
 
   previewPage() {
     const storefront = this.getStorefront();
-    const id = storefront?.vendorId;
+    const id = storefront?.vendorId || storefront?.email;
     if (!id) return;
     window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(id)}`;
   },
@@ -120,11 +132,19 @@ const Staff = {
     window.location.href = "/pages/login.html";
   },
 
+  /* ---------------------------------------------------------
+     FETCH HELPERS — NEVER BREAK UI
+  --------------------------------------------------------- */
   async fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
       const data = await res.json().catch(() => null);
-      if (!res.ok || !data) return { error: true };
+
+      // If backend returns 404 or non-JSON, just return a soft error object
+      if (!res.ok || data === null) {
+        return { error: true };
+      }
+
       return data;
     } catch (e) {
       console.error("fetchJSON error", e);
@@ -141,7 +161,7 @@ const Staff = {
         body: JSON.stringify(body)
       });
       const data = await res.json().catch(() => null);
-      if (!res.ok || !data) return { error: true };
+      if (!res.ok || data === null) return { error: true };
       return data;
     } catch (e) {
       console.error("postJSON error", e);
@@ -151,13 +171,14 @@ const Staff = {
 };
 
 /* ============================================================
-   EXPORTS — MATCH work-network.js EXACTLY
+   EXPORTS — SAFE WRAPPERS
 ============================================================ */
 
 export async function staffGetProducts() {
   const user = Staff.getCloudUser();
   if (!user) return [];
-  return await Staff.fetchJSON(`/api/vendor/products?email=${encodeURIComponent(user.email)}`);
+  const data = await Staff.fetchJSON(`/api/vendor/products?email=${encodeURIComponent(user.email)}`);
+  return Array.isArray(data) && !data.error ? data : [];
 }
 
 export async function staffUpdateProduct(id, data) {
@@ -171,25 +192,45 @@ export async function staffToggleVisibility(id) {
 export async function staffGetOrders() {
   const user = Staff.getCloudUser();
   if (!user) return [];
-  return await Staff.fetchJSON(`/api/vendor/orders?email=${encodeURIComponent(user.email)}`);
+  const data = await Staff.fetchJSON(`/api/vendor/orders?email=${encodeURIComponent(user.email)}`);
+  return Array.isArray(data) && !data.error ? data : [];
 }
 
 export async function staffGetMessages() {
   const user = Staff.getCloudUser();
   if (!user) return [];
-  return await Staff.fetchJSON(`/api/vendor/messages?email=${encodeURIComponent(user.email)}`);
+  const data = await Staff.fetchJSON(`/api/vendor/messages?email=${encodeURIComponent(user.email)}`);
+  return Array.isArray(data) && !data.error ? data : [];
 }
 
 export async function staffGetTodayStats() {
   const user = Staff.getCloudUser();
-  if (!user) return {
-    revenue: 0, ordersCount: 0, activeProducts: 0, openOrders: 0, newMessages: 0
-  };
+  if (!user) {
+    return {
+      revenue: 0,
+      ordersCount: 0,
+      activeProducts: 0,
+      openOrders: 0,
+      newMessages: 0
+    };
+  }
 
   const stats = await Staff.fetchJSON(`/api/vendor/stats/today?email=${encodeURIComponent(user.email)}`);
-  return stats.error ? {
-    revenue: 0, ordersCount: 0, activeProducts: 0, openOrders: 0, newMessages: 0
-  } : stats;
+
+  if (!stats || stats.error) {
+    return {
+      revenue: 0,
+      ordersCount: 0,
+      activeProducts: 0,
+      openOrders: 0,
+      newMessages: 0
+    };
+  }
+
+  return stats;
 }
 
+/* ============================================================
+   DEFAULT EXPORT
+============================================================ */
 export default Staff;
