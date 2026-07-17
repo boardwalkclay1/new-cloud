@@ -42,7 +42,6 @@ const Staff = {
 
     const emailParam = encodeURIComponent(cloudUser.email);
 
-    // ALL vendor API calls
     const store     = await this.fetchJSON(`/api/vendor/storefront?email=${emailParam}`);
     const earnings  = await this.fetchJSON(`/api/vendor/earnings?email=${emailParam}`);
     const payout    = await this.fetchJSON(`/api/vendor/payout/status?email=${emailParam}`);
@@ -178,11 +177,13 @@ export async function staffGetProducts() {
 }
 
 export async function staffUpdateProduct(id, data) {
-  return await Staff.postJSON(`/api/vendor/products/update?id=${id}`, data);
+  // backend expects JSON body with { id, ...fields }
+  return await Staff.postJSON(`/api/vendor/products/update`, { id, ...data });
 }
 
 export async function staffToggleVisibility(id) {
-  return await Staff.postJSON(`/api/vendor/products/toggle?id=${id}`, {});
+  // backend expects JSON body with { id }
+  return await Staff.postJSON(`/api/vendor/products/toggle`, { id });
 }
 
 export async function staffGetOrders() {
