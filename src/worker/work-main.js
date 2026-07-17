@@ -11,13 +11,13 @@ function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": FRONTEND_DOMAIN,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-User-Email, X-User-Id",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-User-Email, X-User-Id, X-Vendor-Email",
     "Access-Control-Max-Age": "86400"
   };
 }
 
 function wrap(res) {
-  const headers = new Headers(res.headers);
+  const headers = new Headers(res.headers || {});
   Object.entries(corsHeaders()).forEach(([k, v]) => headers.set(k, v));
   return new Response(res.body, { status: res.status, headers });
 }
@@ -35,15 +35,20 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    if (request.method === "OPTIONS")
+    // Global CORS preflight
+    if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders() });
+    }
 
     const db = env.DB_cloud;
-    if (!db)
-      return wrap(new Response(JSON.stringify({ error: "DB missing" }), { status: 500 }));
+    if (!db) {
+      return wrap(new Response(JSON.stringify({ error: "DB missing" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }));
+    }
 
     try {
-
       /* ---------------------------------------------------------
          CLOUD USER LOGIN — ORIGINAL ROUTE
       --------------------------------------------------------- */
@@ -61,7 +66,10 @@ export default {
           return wrap(new Response(JSON.stringify({
             success: false,
             error: "Invalid credentials"
-          }), { status: 401 }));
+          }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          }));
         }
 
         const user = results[0];
@@ -71,7 +79,10 @@ export default {
           return wrap(new Response(JSON.stringify({
             success: false,
             error: "Invalid credentials"
-          }), { status: 401 }));
+          }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          }));
         }
 
         user.roles = user.roles ? user.roles.split(",") : [];
@@ -79,7 +90,10 @@ export default {
         return wrap(new Response(JSON.stringify({
           success: true,
           user
-        }), { status: 200 }));
+        }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        }));
       }
 
       /* ---------------------------------------------------------
@@ -99,7 +113,10 @@ export default {
           return wrap(new Response(JSON.stringify({
             success: false,
             error: "Invalid credentials"
-          }), { status: 401 }));
+          }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          }));
         }
 
         const user = results[0];
@@ -109,7 +126,10 @@ export default {
           return wrap(new Response(JSON.stringify({
             success: false,
             error: "Invalid credentials"
-          }), { status: 401 }));
+          }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          }));
         }
 
         user.roles = user.roles ? user.roles.split(",") : [];
@@ -117,7 +137,10 @@ export default {
         return wrap(new Response(JSON.stringify({
           success: true,
           user
-        }), { status: 200 }));
+        }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        }));
       }
 
       /* ---------------------------------------------------------
@@ -133,13 +156,16 @@ export default {
         return wrap(new Response(JSON.stringify({
           success: true,
           status: body.approved ? "active" : "rejected"
-        }), { status: 200 }));
+        }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        }));
       }
 
       /* ---------------------------------------------------------
          NETWORK API (PUBLIC + STAFF + VENDOR + CHECKOUT)
       --------------------------------------------------------- */
-      const net = await handleNetwork(path, request, db, url);
+      const net = await handleNetwork(path, request, db, url, env);
       if (net) return wrap(net);
 
       /* ---------------------------------------------------------
@@ -158,7 +184,10 @@ export default {
       return wrap(new Response(JSON.stringify({
         error: "Worker crashed",
         detail: err.message
-      }), { status: 500 }));
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }));
     }
 
     /* ---------------------------------------------------------
@@ -167,20 +196,27 @@ export default {
     let key = path === "/" ? "index.html" : path.slice(1);
     const object = await env.R2.get(key);
 
-    if (object)
+    if (object) {
       return wrap(new Response(object.body, {
         headers: {
           "Content-Type": "text/html",
           "Cache-Control": "public, max-age=3600"
-        }
+        },
+        status: 200
       }));
+    }
 
     const fallback = await env.R2.get("index.html");
-    if (fallback)
+    if (fallback) {
       return wrap(new Response(fallback.body, {
-        headers: { "Content-Type": "text/html" }
+        headers: { "Content-Type": "text/html" },
+        status: 200
       }));
+    }
 
-    return wrap(new Response("Not found", { status: 404 }));
+    return wrap(new Response("Not found", {
+      status: 404,
+      headers: { "Content-Type": "text/plain" }
+    }));
   }
 };
