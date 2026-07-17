@@ -6,16 +6,20 @@
 
     <title>Beltline Cloud Map</title>
 
-    <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/cloud-map.css">
+    <!-- MAPTILER SDK -->
+    <link rel="stylesheet" href="https://cdn.maptiler.com/maptiler-sdk-js/v1.3.0/maptiler-sdk.css">
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.3.0/maptiler-sdk.umd.js"></script>
+
+    <!-- YOUR CSS -->
+    <link rel="stylesheet" href="/public/pages/cloud-map/cloud-map.css">
 </head>
 
 <body>
 
-    <!-- BACKGROUND IMAGE (FORCED, DIRECT CALL) -->
+    <!-- BACKGROUND IMAGE (FORCED) -->
     <div class="cloud-map-bg" style="background-image: url('/assets/img/cloud/cloud-map.jpg');"></div>
 
-    <!-- MAP CONTAINER -->
+    <!-- MAP -->
     <div id="cloudMap"></div>
 
     <!-- TOOLBELT -->
@@ -27,8 +31,8 @@
         <button class="tool-btn" data-zoom="south">Southside</button>
     </div>
 
-    <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
-    <script type="module" src="/js/cloud-map.js"></script>
+    <!-- YOUR JS -->
+    <script src="/public/pages/cloud-map/cloud-map.js"></script>
 
 </body>
 </html>
