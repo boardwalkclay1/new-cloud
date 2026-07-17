@@ -6,8 +6,6 @@
 
     <title>Beltline Cloud Map</title>
 
-    <link rel="icon" type="image/png" href="/public/assets/img/favicon.png">
-
     <!-- MAPLIBRE -->
     <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet">
 
@@ -17,10 +15,10 @@
 
 <body>
 
-    <!-- BACKGROUND IMAGE -->
+    <!-- BACKGROUND IMAGE (FORCED) -->
     <div class="cloud-map-bg"></div>
 
-    <!-- TOP NAV -->
+    <!-- NAV -->
     <nav class="cloud-map-nav">
         <div class="cloud-map-logo"></div>
 
@@ -51,8 +49,10 @@
         <button class="tool-btn" data-layer="response">Response</button>
     </div>
 
-    <!-- MAP JS -->
+    <!-- MAPLIBRE JS -->
     <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
+
+    <!-- YOUR MAP JS -->
     <script type="module" src="/public/pages/cloud-map/cloud-map.js"></script>
 
 </body>
