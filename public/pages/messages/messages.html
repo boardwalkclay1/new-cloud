@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages</title>
+  <link rel="stylesheet" href="/pages/messages/css/messages.css">
+</head>
+
+<body>
+<div id="messagesApp">
+
+  <!-- HEADER -->
+  <header class="msg-header">
+    <div class="msg-title">Messages</div>
+    <div class="msg-user">
+      <img id="userAvatar" class="avatar">
+      <span id="userName"></span>
+    </div>
+  </header>
+
+  <main class="msg-main">
+
+    <!-- LEFT SIDEBAR: THREADS -->
+    <aside class="msg-sidebar">
+      <div class="sidebar-header">Conversations</div>
+      <ul id="threadList"></ul>
+    </aside>
+
+    <!-- MESSAGE PANEL -->
+    <section class="msg-panel">
+
+      <div class="panel-header">
+        <img id="threadAvatar" class="avatar-small">
+        <div class="thread-info">
+          <h2 id="threadName">Select a conversation</h2>
+          <span id="threadStatus"></span>
+        </div>
+      </div>
+
+      <div id="messageContainer" class="message-container"></div>
+
+      <div class="msg-input-row">
+        <textarea id="msgInput" placeholder="Type a message..."></textarea>
+        <button id="sendBtn">Send</button>
+      </div>
+
+    </section>
+
+    <!-- RIGHT SIDEBAR: CLOUD FAMILY + PHONEBOOK -->
+    <aside class="msg-sidebar-right">
+      <div class="sidebar-header">Cloud Family</div>
+      <ul id="familyList"></ul>
+
+      <div class="sidebar-header">Phonebook</div>
+      <ul id="phonebookList"></ul>
+    </aside>
+
+  </main>
+
+</div>
+
+<script type="module" src="/pages/messages/js/messages.js"></script>
+</body>
+</html>
