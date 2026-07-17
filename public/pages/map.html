@@ -6,30 +6,14 @@
 
     <title>Beltline Cloud Map</title>
 
-    <!-- MAPLIBRE -->
     <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet">
-
-    <!-- CLOUD MAP CSS -->
-    <link rel="stylesheet" href="/public/pages/cloud-map/cloud-map.css">
+    <link rel="stylesheet" href="/pages/cloud-map/cloud-map.css">
 </head>
 
 <body>
 
-    <!-- BACKGROUND IMAGE (FORCED) -->
-    <div class="cloud-map-bg"></div>
-
-    <!-- NAV -->
-    <nav class="cloud-map-nav">
-        <div class="cloud-map-logo"></div>
-
-        <ul class="cloud-map-links">
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/pages/community.html">Community</a></li>
-            <li><a href="/pages/cumulus.html">Cumulus Cloud</a></li>
-            <li><a href="/pages/map.html" class="active">Cloud Map</a></li>
-            <li><a href="/pages/messages/index.html">Messages</a></li>
-        </ul>
-    </nav>
+    <!-- BACKGROUND IMAGE (FORCED, DIRECT CALL) -->
+    <div class="cloud-map-bg" style="background-image: url('/assets/img/cloud/cloud-map.jpg');"></div>
 
     <!-- MAP CONTAINER -->
     <div id="cloudMap"></div>
@@ -41,19 +25,10 @@
         <button class="tool-btn" data-zoom="west">Westside</button>
         <button class="tool-btn" data-zoom="north">Northside</button>
         <button class="tool-btn" data-zoom="south">Southside</button>
-
-        <button class="tool-btn" data-layer="vendors">Vendors</button>
-        <button class="tool-btn" data-layer="parks">Parks</button>
-        <button class="tool-btn" data-layer="water">Water</button>
-        <button class="tool-btn" data-layer="cloudFamily">Cloud Family</button>
-        <button class="tool-btn" data-layer="response">Response</button>
     </div>
 
-    <!-- MAPLIBRE JS -->
     <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
-
-    <!-- YOUR MAP JS -->
-    <script type="module" src="/public/pages/cloud-map/cloud-map.js"></script>
+    <script type="module" src="/pages/cloud-map/cloud-map.js"></script>
 
 </body>
 </html>
