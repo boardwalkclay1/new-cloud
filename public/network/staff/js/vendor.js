@@ -134,17 +134,19 @@ export async function loadStats() {
 // PRODUCTS
 export async function loadProducts() {
   const products = await staffGetProducts();
+  const safeProducts = Array.isArray(products) ? products : [];
+
   productsGrid.innerHTML = "";
 
-  products.forEach(p => {
+  safeProducts.forEach(p => {
     const card = document.createElement("div");
     card.className = "product-card";
 
     card.innerHTML = `
-      <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name}">
-      <div class="product-name">${p.name}</div>
+      <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name || ''}">
+      <div class="product-name">${p.name || "Unnamed product"}</div>
       <div class="product-meta">
-        $${p.price} • Inv: ${p.inventory} • ${p.visible ? "Visible" : "Hidden"}
+        $${p.price || 0} • Inv: ${p.inventory || 0} • ${p.visible ? "Visible" : "Hidden"}
       </div>
     `;
 
@@ -174,15 +176,17 @@ export async function loadProducts() {
 // ORDERS
 export async function loadOrders() {
   const orders = await staffGetOrders();
+  const safeOrders = Array.isArray(orders) ? orders : [];
+
   ordersList.innerHTML = "";
 
-  orders.forEach(o => {
+  safeOrders.forEach(o => {
     const item = document.createElement("div");
     item.className = "order-item";
     item.innerHTML = `
-      <strong>#${o.id}</strong> • ${o.status}<br>
-      ${o.customer} • $${o.total}<br>
-      ${o.items.length} items
+      <strong>#${o.id}</strong> • ${o.status || "pending"}<br>
+      ${o.buyerEmail || ""} • $${o.amount || 0}<br>
+      ${o.itemType || ""} • Qty: ${o.quantity || 1}
     `;
     ordersList.appendChild(item);
   });
@@ -191,17 +195,27 @@ export async function loadOrders() {
 // MESSAGES
 export async function loadMessages() {
   const messages = await staffGetMessages();
+  const safeMessages = Array.isArray(messages) ? messages : [];
+
   messagesList.innerHTML = "";
 
-  messages.forEach(m => {
+  safeMessages.forEach(m => {
     const item = document.createElement("div");
     item.className = "message-item";
     item.innerHTML = `
-      <strong>${m.from}</strong> • ${m.channel}<br>
-      ${m.preview}
+      <strong>${m.fromEmail || m.from || "Unknown"}</strong><br>
+      ${m.preview || m.body || ""}
     `;
     messagesList.appendChild(item);
   });
+}
+
+// UPLOAD HELPERS — include vendor email header
+function getVendorEmail() {
+  const beltlineUser = JSON.parse(localStorage.getItem("beltline_user") || "null");
+  const vendorUser = JSON.parse(localStorage.getItem("vendor_user") || "null");
+  const user = vendorUser || beltlineUser;
+  return user?.email || null;
 }
 
 // UPLOAD HANDLERS
@@ -209,17 +223,23 @@ vendorLogoUpload.addEventListener("change", async () => {
   const file = vendorLogoUpload.files[0];
   if (!file) return;
 
+  const email = getVendorEmail();
+  if (!email) return;
+
   const formData = new FormData();
   formData.append("file", file);
 
   const res = await fetch("/api/vendor/upload/logo", {
     method: "POST",
     body: formData,
-    credentials: "include"
+    credentials: "include",
+    headers: {
+      "X-Vendor-Email": email
+    }
   });
 
-  const data = await res.json();
-  if (data.success && data.url) {
+  const data = await res.json().catch(() => null);
+  if (data && data.success && data.url) {
     vendorLogoImg.src = data.url;
   }
 });
@@ -228,8 +248,14 @@ productImageUpload.addEventListener("change", async () => {
   const file = productImageUpload.files[0];
   if (!file) return;
 
+  // You need a way to know which product this image belongs to.
+  // For now, try to read a data attribute from the input:
+  const productId = productImageUpload.dataset.productId;
+  if (!productId) return;
+
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("productId", productId);
 
   await fetch("/api/vendor/upload/product-image", {
     method: "POST",
@@ -244,13 +270,19 @@ coverUpload.addEventListener("change", async () => {
   const file = coverUpload.files[0];
   if (!file) return;
 
+  const email = getVendorEmail();
+  if (!email) return;
+
   const formData = new FormData();
   formData.append("file", file);
 
   await fetch("/api/vendor/upload/cover", {
     method: "POST",
     body: formData,
-    credentials: "include"
+    credentials: "include",
+    headers: {
+      "X-Vendor-Email": email
+    }
   });
 });
 
