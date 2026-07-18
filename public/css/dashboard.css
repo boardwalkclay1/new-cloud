@@ -10,47 +10,48 @@ body {
   font-family: 'Inter', sans-serif;
   background: #000;
   color: var(--white);
+  overflow-x: hidden; /* prevents stretched elements */
 }
 
-/* MAIN CLOUD — GIANT CENTERED LOGO */
+/* MAIN CLOUD — FIXED SIZE + FIXED SPACING */
 .main-cloud {
-  width: 260px;
+  width: 180px;              /* smaller, balanced */
   height: auto;
   display: block;
-  margin: 40px auto 10px auto;
-  animation: floaty 6s infinite ease-in-out;
-  filter: drop-shadow(0px 0px 25px rgba(255,255,255,0.35));
+  margin: 25px auto 15px auto; /* reduced spacing */
+  animation: floaty 5s infinite ease-in-out;
+  filter: drop-shadow(0px 0px 15px rgba(255,255,255,0.25));
   cursor: pointer;
 }
 
-/* CLOUD ROW (Safety + CloudTalk) */
+/* CLOUD ROW — FIXED ICON SIZE */
 .cloud-row {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 25px;                 /* reduced gap */
   margin-top: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
-/* ⭐ CLOUD ICONS — TWICE THE SIZE */
+/* CLOUD ICONS — FIXED SIZE (NO MORE STRETCHING) */
 .cloud-row img {
-  height: 190px;   /* doubled from 95px */
+  height: 120px;             /* reduced from 190px */
   width: auto;
   animation: pulse 2.2s infinite ease-in-out;
   object-fit: contain;
   cursor: pointer;
 }
 
-/* WEATHER + LOCATION + TIME — CENTERED */
+/* WEATHER + LOCATION + TIME */
 .center-stats {
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   font-family: 'Cinzel', serif;
 }
 
 .center-stats .stat {
-  font-size: 1.2rem;
+  font-size: 1rem;           /* reduced from 1.2rem */
   margin: 6px 0;
   color: var(--yellow);
 }
@@ -62,7 +63,7 @@ body {
 }
 
 .profile-section img {
-  height: 110px;
+  height: 100px;
   width: auto;
   border-radius: 12px;
   border: 2px solid var(--yellow);
@@ -70,21 +71,22 @@ body {
 
 .profile-name {
   font-family: 'Cinzel', serif;
-  font-size: 1.4rem;
+  font-size: 1.2rem;         /* reduced */
   margin-top: 10px;
   color: var(--yellow);
 }
 
-/* SETTINGS + CARDS + LOGOS */
+/* SETTINGS ROW — FIXED SIZE + NO STRETCH */
 .settings-row {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 25px;
   margin-top: 25px;
+  flex-wrap: wrap;           /* prevents stretching */
 }
 
 .settings-row img {
-  height: 70px;
+  height: 65px;              /* reduced */
   width: auto;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -94,16 +96,25 @@ body {
   transform: scale(1.08);
 }
 
+/* Prevent stretched text in card links */
+.settings-row a,
+.settings-row div,
+.settings-row span {
+  font-size: 0.9rem;
+  white-space: nowrap;       /* stops long stretching */
+  text-align: center;
+}
+
 /* FLOAT + PULSE ANIMATIONS */
 @keyframes floaty {
   0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
   100% { transform: translateY(0); }
 }
 
 @keyframes pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.12); }
+  50% { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
 
@@ -112,7 +123,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 310px;
+  width: 300px;              /* reduced */
   height: 100vh;
   background: rgba(10, 42, 67, 0.96);
   border-right: 3px solid var(--yellow);
@@ -131,15 +142,14 @@ body {
 @media (max-width: 768px) {
 
   .main-cloud {
-    width: 200px;
+    width: 150px;
   }
 
-  /* ⭐ MOBILE-SAFE CLOUD ICONS */
   .cloud-row img {
-    height: 160px; /* still huge but fits mobile */
+    height: 110px;
   }
 
   .settings-row img {
-    height: 60px;
+    height: 55px;
   }
 }
