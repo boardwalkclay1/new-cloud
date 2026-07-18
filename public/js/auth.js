@@ -1,6 +1,16 @@
-// /js/auth.js — BELTLINE CLOUD AUTH ENGINE (WITH REAL EMAIL VERIFICATION)
+// /js/auth.js — BELTLINE CLOUD AUTH ENGINE (REAL VERIFICATION + HASHED LOGIN)
 
 const API = "https://api.beltlinecloud.com";
+
+/* ---------------------------------------------------------
+   SHA-256 HASH (MATCHES WORKER)
+--------------------------------------------------------- */
+async function sha256Hex(str) {
+    const data = new TextEncoder().encode(str);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
 
 const Auth = {
 
@@ -34,14 +44,21 @@ const Auth = {
     },
 
     // ---------------------------------------------------------
-    // CLOUD USER SIGNUP (GENERATES REAL VERIFICATION LINK)
+    // CLOUD USER SIGNUP (REAL VERIFICATION EMAIL)
     // ---------------------------------------------------------
     async signupCloud(body) {
         try {
+            // Hash password BEFORE sending to Worker
+            const passwordHash = await sha256Hex(body.password);
+
             const res = await fetch(`${API}/api/users/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
+                body: JSON.stringify({
+                    email: body.email,
+                    name: body.name,
+                    passwordHash
+                })
             });
 
             const data = await res.json();
@@ -51,7 +68,6 @@ const Auth = {
                 return;
             }
 
-            // Backend already sends the verification email
             alert("Account created! Check your email to verify your account.");
 
         } catch (err) {
@@ -61,14 +77,16 @@ const Auth = {
     },
 
     // ---------------------------------------------------------
-    // CLOUD USER LOGIN (NO REDIRECT)
+    // CLOUD USER LOGIN (HASHED + VERIFIED)
     // ---------------------------------------------------------
     async loginCloud(email, password) {
         try {
+            const passwordHash = await sha256Hex(password);
+
             const res = await fetch(`${API}/api/users/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password: passwordHash })
             });
 
             const data = await res.json();
