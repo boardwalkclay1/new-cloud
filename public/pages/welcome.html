@@ -1,51 +1,95 @@
-const EMAIL_HTML = `
 <!DOCTYPE html>
 <html>
   <body style="margin:0; padding:0; background:#eef2f7; font-family:Arial, sans-serif;">
 
-    <div style="max-width:650px; margin:auto; background:white; padding:40px; border-radius:14px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+    <!-- FULL BACKGROUND WRAPPER -->
+    <div style="
+      max-width:650px;
+      margin:auto;
+      background:white;
+      padding:0;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 6px 28px rgba(0,0,0,0.12);
+    ">
 
-      <div style="text-align:center; margin-bottom:25px;">
-        <img src="https://beltlinecloud.com/assets/img/cloud/logo.png"
+      <!-- HEADER WITH BACKGROUND IMAGE -->
+      <div style="
+        background:url('https://beltlinecloud.com/assets/img/cloud/lone-cloud.jpg');
+        background-size:cover;
+        background-position:center;
+        padding:60px 20px;
+        text-align:center;
+      ">
+        <img src="https://beltlinecloud.com/public/assets/img/cloud/cloud-logo.jpg"
              alt="Beltline Cloud Logo"
-             style="width:150px; border-radius:10px;">
+             style="width:160px; background:white; padding:12px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
       </div>
 
-      <h1 style="text-align:center; color:#222; margin-bottom:10px; font-size:28px;">
-        Welcome to Beltline Cloud
-      </h1>
+      <!-- CONTENT -->
+      <div style="padding:40px;">
 
-      <p style="text-align:center; color:#555; font-size:16px; margin-bottom:35px;">
-        Your digital journey starts now.
-      </p>
+        <h1 style="text-align:center; color:#222; margin-bottom:10px; font-size:30px;">
+          Welcome to <span style="color:#4a90e2;">Beltline Cloud</span>
+        </h1>
 
-      <p style="font-size:16px; color:#444; line-height:1.7;">
-        Before you get started, please verify your email to activate your account.
-      </p>
+        <p style="text-align:center; color:#666; font-size:16px; margin-bottom:35px;">
+          Your journey into the Cloud begins now.
+        </p>
 
-      <div style="text-align:center; margin:40px 0;">
-        <a href="{{verifyUrl}}"
-           style="background:#4a90e2; color:white; padding:14px 28px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:16px;">
-          Verify Your Email
-        </a>
+        <p style="font-size:16px; color:#444; line-height:1.7;">
+          Hey there,
+        </p>
+
+        <p style="font-size:16px; color:#444; line-height:1.7;">
+          Thank you for joining <strong style="color:#4a90e2;">Beltline Cloud</strong> — the digital network of the Atlanta Beltline.
+          You’re now part of a growing community of creators, vendors, residents, and innovators building the future of the Beltline together.
+        </p>
+
+        <p style="font-size:16px; color:#444; line-height:1.7;">
+          Before you get started, please verify your email to activate your Cloud account.
+        </p>
+
+        <!-- VERIFY BUTTON -->
+        <div style="text-align:center; margin:40px 0;">
+          <a href="{{verifyUrl}}"
+             style="
+               background:#4a90e2;
+               color:white;
+               padding:16px 32px;
+               border-radius:10px;
+               text-decoration:none;
+               font-weight:bold;
+               font-size:17px;
+               box-shadow:0 4px 12px rgba(0,0,0,0.15);
+             ">
+            Verify Your Cloud Account
+          </a>
+        </div>
+
+        <!-- FALLBACK LINK -->
+        <p style="font-size:14px; color:#777; text-align:center; margin-bottom:40px;">
+          If the button doesn’t work, copy and paste this link:<br>
+          <span style="color:#4a90e2;">{{verifyUrl}}</span>
+        </p>
+
+        <p style="font-size:16px; color:#444; line-height:1.7;">
+          Once verified, your account will be fully active.  
+          You can explore your dashboard, customize your storefront, publish products or services, and connect with the Cloud community instantly.
+        </p>
+
+        <p style="font-size:16px; color:#444; line-height:1.7;">
+          If you ever need help, guidance, or want to expand your Cloud presence, we’re here for you.
+        </p>
+
+        <!-- SIGNATURE -->
+        <p style="margin-top:40px; font-size:16px; color:#333; line-height:1.7;">
+          — <span style="color:#4a90e2;">The Cloud Creator</span><br>
+          <span style="color:#777;">Beltline Cloud</span>
+        </p>
+
       </div>
-
-      <p style="font-size:14px; color:#777; text-align:center; margin-bottom:40px;">
-        If the button doesn’t work, copy and paste this link:<br>
-        <span style="color:#4a90e2;">{{verifyUrl}}</span>
-      </p>
-
-      <p style="font-size:16px; color:#444; line-height:1.7;">
-        Thank you for joining <strong>Beltline Cloud</strong> — the official digital network of the Atlanta Beltline.
-      </p>
-
-      <p style="margin-top:40px; font-size:16px; color:#333; line-height:1.7;">
-        — The Cloud Creator<br>
-        <span style="color:#777;">Beltline Cloud</span>
-      </p>
-
     </div>
 
   </body>
 </html>
-`;
