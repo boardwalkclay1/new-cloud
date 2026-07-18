@@ -1,4 +1,4 @@
-// auth.js — BELTLINE CLOUD AUTH ENGINE (NO REDIRECT LOGIC)
+// /js/auth.js — BELTLINE CLOUD AUTH ENGINE (WITH REAL EMAIL VERIFICATION)
 
 const API = "https://api.beltlinecloud.com";
 
@@ -34,7 +34,7 @@ const Auth = {
     },
 
     // ---------------------------------------------------------
-    // CLOUD USER SIGNUP
+    // CLOUD USER SIGNUP (GENERATES REAL VERIFICATION LINK)
     // ---------------------------------------------------------
     async signupCloud(body) {
         try {
@@ -45,29 +45,18 @@ const Auth = {
             });
 
             const data = await res.json();
+
             if (!data.success) {
                 alert(data.error || "Signup failed.");
                 return;
             }
 
-            await this.sendVerificationEmail(data.user.email, data.user.id);
-
+            // Backend already sends the verification email
             alert("Account created! Check your email to verify your account.");
+
         } catch (err) {
             console.error("signupCloud error:", err);
             alert("Signup failed. Please try again.");
-        }
-    },
-
-    async sendVerificationEmail(email, userId) {
-        try {
-            await fetch(`${API}/api/users/verify/send`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, userId })
-            });
-        } catch (err) {
-            console.error("sendVerificationEmail error:", err);
         }
     },
 
@@ -85,25 +74,23 @@ const Auth = {
             const data = await res.json();
 
             if (!data.success || !data.user) {
-                alert("Invalid login.");
+                alert(data.error || "Invalid login.");
                 return;
             }
 
-            // Save cloud_user
-            this.saveUser(data.user);
+            if (!data.user.verified) {
+                alert("Please verify your email before logging in.");
+                return;
+            }
 
-            // NO REDIRECT HERE
+            this.saveUser(data.user);
             return data.user;
 
         } catch (err) {
             console.error("loginCloud error:", err);
             alert("Login failed. Please try again.");
         }
-    },
-
-    // ---------------------------------------------------------
-    // BOOT LOGIC REMOVED
-    // ---------------------------------------------------------
+    }
 };
 
 // EXPORT
