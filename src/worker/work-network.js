@@ -1,6 +1,5 @@
 // work-network.js
-// FULL NETWORK BACKEND — FIXED TO MATCH REAL network_vendors SCHEMA
-// NO INVALID COLUMNS — NO 500 ERRORS — SAFE EMPTY RETURNS
+// FULL NETWORK BACKEND — UPDATED FOR R2 + MULTI-BUSINESS VENDORS
 
 export async function handleNetwork(path, request, db, url, env) {
 
@@ -133,7 +132,7 @@ export async function handleNetwork(path, request, db, url, env) {
 
 
   /* -----------------------------
-     VENDOR UPLOAD ROUTES
+     VENDOR UPLOAD ROUTES (R2)
   ----------------------------- */
 
   if (path === "/api/vendor/upload/logo" && request.method === "POST")
@@ -204,7 +203,7 @@ async function deleteItem(request, db, table) {
 
 
 /* ---------------------------------------------------------
-   EMAIL → VENDOR (MATCHES REAL SCHEMA)
+   EMAIL → VENDOR
 --------------------------------------------------------- */
 
 async function getVendorByEmail(db, rawEmail) {
@@ -217,24 +216,15 @@ async function getVendorByEmail(db, rawEmail) {
   ).bind(email).first();
 }
 
-
-/* ---------------------------------------------------------
-   SAFE VENDOR LOOKUP (NO AUTO-CREATE)
---------------------------------------------------------- */
-
 async function safeVendor(db, rawEmail) {
   const vendor = await getVendorByEmail(db, rawEmail);
-
-  if (!vendor || !vendor.id) {
-    return null;
-  }
-
+  if (!vendor || !vendor.id) return null;
   return vendor;
 }
 
 
 /* ---------------------------------------------------------
-   VENDOR API — SAFE, NO CRASHES
+   VENDOR API
 --------------------------------------------------------- */
 
 async function vendorStorefront(db, url) {
@@ -374,86 +364,95 @@ async function vendorStatsToday(db, url) {
 
 
 /* ---------------------------------------------------------
-   UPLOAD HANDLERS — SAFE
+   UPDATED UPLOAD HANDLERS — R2
 --------------------------------------------------------- */
 
 async function vendorUploadLogo(request, db, env) {
   const form = await request.formData();
   const file = form.get("file");
-  if (!file) return json({ error: "Missing file" }, 400);
+  const vendorId = form.get("vendorId");
 
-  const email = request.headers.get("X-Vendor-Email");
-  const vendor = await safeVendor(db, email);
+  if (!file || !vendorId)
+    return json({ error: "Missing file or vendorId" }, 400);
+
+  const vendor = await db.prepare(
+    "SELECT * FROM network_vendors WHERE id = ?"
+  ).bind(vendorId).first();
+
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
-  const vendorId = vendor.id;
-  const key = `network/vendors/${vendorId}/logo.png`;
+  const key = `businesses/${vendorId}/logo.jpg`;
 
   await env.R2.put(key, file.stream(), {
     httpMetadata: { contentType: file.type }
   });
 
-  const urlPath = `/network/vendors/${vendorId}/logo.png`;
+  const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
 
   await db.prepare(
     "UPDATE network_vendors SET logo = ? WHERE id = ?"
-  ).bind(urlPath, vendorId).run();
+  ).bind(publicUrl, vendorId).run();
 
-  return json({ success: true, url: urlPath });
+  return json({ success: true, url: publicUrl });
 }
 
 async function vendorUploadProductImage(request, db, env) {
   const form = await request.formData();
   const file = form.get("file");
   const productId = form.get("productId");
+  const vendorId = form.get("vendorId");
 
-  if (!file || !productId)
-    return json({ error: "Missing file or productId" }, 400);
+  if (!file || !productId || !vendorId)
+    return json({ error: "Missing file, productId, or vendorId" }, 400);
 
   const product = await db.prepare(
-    "SELECT vendorId FROM network_products WHERE id = ?"
-  ).bind(productId).first();
+    "SELECT * FROM network_products WHERE id = ? AND vendorId = ?"
+  ).bind(productId, vendorId).first();
+
   if (!product) return json({ error: "Product not found" }, 404);
 
-  const vendorId = product.vendorId;
-  const key = `network/vendors/${vendorId}/products/${productId}.png`;
+  const key = `businesses/${vendorId}/products/${productId}.jpg`;
 
   await env.R2.put(key, file.stream(), {
     httpMetadata: { contentType: file.type }
   });
 
-  const urlPath = `/network/vendors/${vendorId}/products/${productId}.png`;
+  const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
 
   await db.prepare(
     "UPDATE network_products SET image = ? WHERE id = ?"
-  ).bind(urlPath, productId).run();
+  ).bind(publicUrl, productId).run();
 
-  return json({ success: true, url: urlPath });
+  return json({ success: true, url: publicUrl });
 }
 
 async function vendorUploadCover(request, db, env) {
   const form = await request.formData();
   const file = form.get("file");
-  if (!file) return json({ error: "Missing file" }, 400);
+  const vendorId = form.get("vendorId");
 
-  const email = request.headers.get("X-Vendor-Email");
-  const vendor = await safeVendor(db, email);
+  if (!file || !vendorId)
+    return json({ error: "Missing file or vendorId" }, 400);
+
+  const vendor = await db.prepare(
+    "SELECT * FROM network_vendors WHERE id = ?"
+  ).bind(vendorId).first();
+
   if (!vendor) return json({ error: "Vendor not found" }, 404);
 
-  const vendorId = vendor.id;
-  const key = `network/vendors/${vendorId}/cover.png`;
+  const key = `businesses/${vendorId}/cover.jpg`;
 
   await env.R2.put(key, file.stream(), {
     httpMetadata: { contentType: file.type }
   });
 
-  const urlPath = `/network/vendors/${vendorId}/cover.png`;
+  const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
 
   await db.prepare(
     "UPDATE network_vendors SET cover = ? WHERE id = ?"
-  ).bind(urlPath, vendorId).run();
+  ).bind(publicUrl, vendorId).run();
 
-  return json({ success: true, url: urlPath });
+  return json({ success: true, url: publicUrl });
 }
 
 
