@@ -1,5 +1,5 @@
-// VENDOR ENGINE — FINAL WORKING VERSION
-// Matches: network_vendors schema + safe staff.js + safe backend
+// /network/staff/js/vendor.js
+// FINAL — multi-business aware, R2-ready, matches staff.js storefront
 
 import {
   staffGetProducts,
@@ -11,7 +11,9 @@ import {
 
 import { initVendorMap } from "/network/staff/js/vendor-map.js";
 
-// DOM
+/* ---------------------------------------------------------
+   DOM
+--------------------------------------------------------- */
 const productsGrid = document.getElementById("productsGrid");
 const ordersList = document.getElementById("ordersList");
 const messagesList = document.getElementById("messagesList");
@@ -33,10 +35,26 @@ const vendorLogoImg = document.getElementById("vendorLogoImg");
 const coverUpload = document.getElementById("coverUpload");
 
 /* ---------------------------------------------------------
-   CLOUD USER
+   HELPERS
+--------------------------------------------------------- */
+function getCloudUser() {
+  return JSON.parse(localStorage.getItem("cloud_user") || "null");
+}
+
+function getStorefront() {
+  return JSON.parse(localStorage.getItem("vendor_storefront") || "null");
+}
+
+function getVendorId() {
+  const store = getStorefront();
+  return store?.vendorId || null;
+}
+
+/* ---------------------------------------------------------
+   CLOUD USER DISPLAY
 --------------------------------------------------------- */
 export function connectCloudUser() {
-  const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
+  const cloudUser = getCloudUser();
 
   if (cloudUser && cloudUser.name) {
     sidebarUser.textContent = `Connected: ${cloudUser.name}`;
@@ -89,12 +107,12 @@ export async function detectBeltlineLocation() {
 
       let emoji = "⛅";
       if (code === 0) emoji = "☀️";
-      if ([1,2,3].includes(code)) emoji = "🌤️";
-      if ([45,48].includes(code)) emoji = "🌫️";
-      if ([51,53,55].includes(code)) emoji = "🌦️";
-      if ([61,63,65].includes(code)) emoji = "🌧️";
-      if ([71,73,75].includes(code)) emoji = "❄️";
-      if ([95,96,99].includes(code)) emoji = "⛈️";
+      if ([1, 2, 3].includes(code)) emoji = "🌤️";
+      if ([45, 48].includes(code)) emoji = "🌫️";
+      if ([51, 53, 55].includes(code)) emoji = "🌦️";
+      if ([61, 63, 65].includes(code)) emoji = "🌧️";
+      if ([71, 73, 75].includes(code)) emoji = "❄️";
+      if ([95, 96, 99].includes(code)) emoji = "⛈️";
 
       weatherStat.textContent = `Weather: ${emoji} ${temp}°F`;
     } catch {
@@ -191,11 +209,15 @@ export async function loadProducts() {
       const productId = input.dataset.productId;
       if (!file || !productId) return;
 
+      const vendorId = getVendorId();
+      if (!vendorId) return;
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("productId", productId);
+      formData.append("vendorId", vendorId);
 
-      await fetch("/api/vendor/upload/product-image", {
+      await fetch(`/api/vendor/upload/product-image?vendorId=${encodeURIComponent(vendorId)}`, {
         method: "POST",
         body: formData,
         credentials: "include"
@@ -248,33 +270,23 @@ export async function loadMessages() {
 }
 
 /* ---------------------------------------------------------
-   UPLOAD HELPERS
---------------------------------------------------------- */
-function getVendorEmail() {
-  const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
-  return cloudUser?.email || null;
-}
-
-/* ---------------------------------------------------------
    UPLOAD HANDLERS
 --------------------------------------------------------- */
 vendorLogoUpload.addEventListener("change", async () => {
   const file = vendorLogoUpload.files[0];
   if (!file) return;
 
-  const email = getVendorEmail();
-  if (!email) return;
+  const vendorId = getVendorId();
+  if (!vendorId) return;
 
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("vendorId", vendorId);
 
-  const res = await fetch("/api/vendor/upload/logo", {
+  const res = await fetch(`/api/vendor/upload/logo?vendorId=${encodeURIComponent(vendorId)}`, {
     method: "POST",
     body: formData,
-    credentials: "include",
-    headers: {
-      "X-Vendor-Email": email
-    }
+    credentials: "include"
   });
 
   const data = await res.json().catch(() => null);
@@ -287,19 +299,17 @@ coverUpload.addEventListener("change", async () => {
   const file = coverUpload.files[0];
   if (!file) return;
 
-  const email = getVendorEmail();
-  if (!email) return;
+  const vendorId = getVendorId();
+  if (!vendorId) return;
 
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("vendorId", vendorId);
 
-  await fetch("/api/vendor/upload/cover", {
+  await fetch(`/api/vendor/upload/cover?vendorId=${encodeURIComponent(vendorId)}`, {
     method: "POST",
     body: formData,
-    credentials: "include",
-    headers: {
-      "X-Vendor-Email": email
-    }
+    credentials: "include"
   });
 });
 
