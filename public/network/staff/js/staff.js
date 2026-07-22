@@ -1,221 +1,214 @@
-// /network/staff/js/staff.js
-// FINAL — SAFE, NON-BREAKING, MATCHES work-network.js + your REAL vendor schema
 
-const Staff = {
-  cloudKey: "cloud_user",
-  storeKey: "vendor_storefront",
+    initVendorMap({
+      lat,
+      lng,
+      zone,
+      containerId: "vendorMapContainer"
+    });
+  }, () => {
+    locationStat.textContent = "Location: unavailable";
+    weatherStat.textContent = "Weather: unavailable";
+    initVendorMap({ containerId: "vendorMapContainer" });
+  });
+}
 
-  /* ---------------------------------------------------------
-     CLOUD USER
-  --------------------------------------------------------- */
-  getCloudUser() {
-    const raw = localStorage.getItem(this.cloudKey);
-    return raw ? JSON.parse(raw) : null;
-  },
+/* ---------------------------------------------------------
+   STATS
+--------------------------------------------------------- */
+export async function loadStats() {
+  const stats = await staffGetTodayStats();
 
-  saveCloudUser(user) {
-    localStorage.setItem(this.cloudKey, JSON.stringify(user));
-  },
+  statRevenue.textContent = `$${stats.revenue || 0}`;
+  statRevenueSub.textContent = `${stats.ordersCount || 0} orders`;
+  statProducts.textContent = stats.activeProducts || 0;
+  statOpenOrders.textContent = stats.openOrders || 0;
+  statMessages.textContent = stats.newMessages || 0;
+}
 
-  /* ---------------------------------------------------------
-     STOREFRONT CACHE
-  --------------------------------------------------------- */
-  getStorefront() {
-    const raw = localStorage.getItem(this.storeKey);
-    return raw ? JSON.parse(raw) : null;
-  },
+/* ---------------------------------------------------------
+   PRODUCTS
+--------------------------------------------------------- */
+export async function loadProducts() {
+  const products = await staffGetProducts();
+  const safeProducts = Array.isArray(products) ? products : [];
 
-  saveStorefront(data) {
-    localStorage.setItem(this.storeKey, JSON.stringify(data));
-  },
+  productsGrid.innerHTML = "";
 
-  /* ---------------------------------------------------------
-     INIT DASHBOARD — NEVER BREAKS
-  --------------------------------------------------------- */
-  async initDashboard() {
-    const cloudUser = this.getCloudUser();
-    if (!cloudUser || !cloudUser.email) {
-      window.location.href = "/pages/login.html";
-      return;
-    }
+  safeProducts.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "product-card";
 
-    const emailParam = encodeURIComponent(cloudUser.email);
+    card.innerHTML = `
+      <img src="${p.image || '/assets/img/placeholder.jpg'}" alt="${p.name || ''}">
+      <div class="product-name">${p.name || "Unnamed product"}</div>
+      <div class="product-meta">
+        $${p.price || 0} • ${p.active ? "Active" : "Inactive"}
+      </div>
 
-    // ALWAYS returns safe defaults even if vendor not found
-    const store = await this.safeGET(`/api/vendor/storefront?email=${emailParam}`);
+      <label class="upload-btn">
+        Upload Image
+        <input type="file" class="product-image-input" data-product-id="${p.id}" accept="image/*">
+      </label>
+    `;
 
-    const storefront = {
-      email: cloudUser.email,
-      name: cloudUser.name,
+    const actions = document.createElement("div");
+    actions.className = "product-actions";
 
-      vendorId: store.vendorId || null,
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.onclick = () => window.location.href = "/network/staff/pages/products.html";
 
-      description: store.description || "",
-      tags: store.tags || "",
-      logo: store.logo || "",
-      cover: store.cover || "",
-      products: store.products || [],
-      services: store.services || [],
-      workshops: store.workshops || [],
-      apps: store.apps || [],
-
-      ads: store.ads || [],
-      phonebook: store.phonebook || null,
-      published: store.published || false,
-
-      earnings: store.earnings || {
-        today: 0, week: 0, month: 0, total: 0
-      },
-
-      payout: store.payout || {
-        connected: false,
-        method: null,
-        email: null,
-        venmo: false
-      },
-
-      orders: store.orders || [],
-      messages: store.messages || [],
-
-      stats: store.stats || {
-        revenue: 0,
-        ordersCount: 0,
-        activeProducts: 0,
-        openOrders: 0,
-        newMessages: 0
-      }
+    const toggleBtn = document.createElement("button");
+    toggleBtn.textContent = p.active ? "Deactivate" : "Activate";
+    toggleBtn.onclick = async () => {
+      await staffToggleVisibility(p.id);
+      await loadProducts();
+      await loadStats();
     };
 
-    this.saveStorefront(storefront);
+    actions.appendChild(editBtn);
+    actions.appendChild(toggleBtn);
+    card.appendChild(actions);
 
-    if (window.Vendor) {
-      Vendor.init(storefront, cloudUser);
-    }
-  },
+    productsGrid.appendChild(card);
+  });
 
-  /* ---------------------------------------------------------
-     SAFE GET — NEVER RETURNS 404/500 TO UI
-  --------------------------------------------------------- */
-  async safeGET(url) {
-    try {
-      const res = await fetch(url, { credentials: "include" });
+  document.querySelectorAll(".product-image-input").forEach(input => {
+    input.addEventListener("change", async () => {
+      const file = input.files[0];
+      const productId = input.dataset.productId;
+      if (!file || !productId) return;
 
-      // If backend returns 404 or 500 → return safe defaults
-      if (!res.ok) {
-        return {};
-      }
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("productId", productId);
 
-      const data = await res.json().catch(() => ({}));
-      return data || {};
-    } catch (e) {
-      console.error("safeGET error", e);
-      return {};
-    }
-  },
-
-  /* ---------------------------------------------------------
-     SAFE POST
-  --------------------------------------------------------- */
-  async safePOST(url, body) {
-    try {
-      const res = await fetch(url, {
+      await fetch("/api/vendor/upload/product-image", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(body)
+        body: formData,
+        credentials: "include"
       });
 
-      if (!res.ok) return {};
-      const data = await res.json().catch(() => ({}));
-      return data || {};
-    } catch (e) {
-      console.error("safePOST error", e);
-      return {};
+      await loadProducts();
+    });
+  });
+}
+
+/* ---------------------------------------------------------
+   ORDERS
+--------------------------------------------------------- */
+export async function loadOrders() {
+  const orders = await staffGetOrders();
+  const safeOrders = Array.isArray(orders) ? orders : [];
+
+  ordersList.innerHTML = "";
+
+  safeOrders.forEach(o => {
+    const item = document.createElement("div");
+    item.className = "order-item";
+    item.innerHTML = `
+      <strong>#${o.id}</strong> • ${o.status || o.paymentStatus || "pending"}<br>
+      ${o.buyerEmail || ""}<br>
+      ${o.itemType || ""} • Qty: ${o.quantity || 1}
+    `;
+    ordersList.appendChild(item);
+  });
+}
+
+/* ---------------------------------------------------------
+   MESSAGES
+--------------------------------------------------------- */
+export async function loadMessages() {
+  const messages = await staffGetMessages();
+  const safeMessages = Array.isArray(messages) ? messages : [];
+
+  messagesList.innerHTML = "";
+
+  safeMessages.forEach(m => {
+    const item = document.createElement("div");
+    item.className = "message-item";
+    item.innerHTML = `
+      <strong>${m.toEmail || "Customer"}</strong><br>
+      ${m.text || ""}
+    `;
+    messagesList.appendChild(item);
+  });
+}
+
+/* ---------------------------------------------------------
+   UPLOAD HELPERS
+--------------------------------------------------------- */
+function getVendorEmail() {
+  const cloudUser = JSON.parse(localStorage.getItem("cloud_user") || "null");
+  return cloudUser?.email || null;
+}
+
+/* ---------------------------------------------------------
+   UPLOAD HANDLERS
+--------------------------------------------------------- */
+vendorLogoUpload.addEventListener("change", async () => {
+  const file = vendorLogoUpload.files[0];
+  if (!file) return;
+
+  const email = getVendorEmail();
+  if (!email) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch("/api/vendor/upload/logo", {
+    method: "POST",
+    body: formData,
+    credentials: "include",
+    headers: {
+      "X-Vendor-Email": email
     }
-  },
+  });
 
-  /* ---------------------------------------------------------
-     CLOUD MESSAGING
-  --------------------------------------------------------- */
-  message(email) {
-    window.location.href = `/pages/messages/index.html?to=${encodeURIComponent(email)}`;
-  },
-
-  /* ---------------------------------------------------------
-     NAVIGATION
-  --------------------------------------------------------- */
-  go(page) {
-    window.location.href = `/network/staff/pages/${page}`;
-  },
-
-  previewPage() {
-    const storefront = this.getStorefront();
-    const id = storefront?.vendorId || storefront?.email;
-    if (!id) return;
-    window.location.href = `/network/pages/vendor.html?id=${encodeURIComponent(id)}`;
-  },
-
-  logout() {
-    localStorage.removeItem(this.cloudKey);
-    localStorage.removeItem(this.storeKey);
-    window.location.href = "/pages/login.html";
+  const data = await res.json().catch(() => null);
+  if (data && data.success && data.url) {
+    vendorLogoImg.src = data.url;
   }
+});
+
+coverUpload.addEventListener("change", async () => {
+  const file = coverUpload.files[0];
+  if (!file) return;
+
+  const email = getVendorEmail();
+  if (!email) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await fetch("/api/vendor/upload/cover", {
+    method: "POST",
+    body: formData,
+    credentials: "include",
+    headers: {
+      "X-Vendor-Email": email
+    }
+  });
+});
+
+/* ---------------------------------------------------------
+   INIT
+--------------------------------------------------------- */
+export async function initVendorDashboard() {
+  connectCloudUser();
+  await loadStats();
+  await loadProducts();
+  await loadOrders();
+  await loadMessages();
+  await detectBeltlineLocation();
+}
+
+initVendorDashboard();
+
+/* ---------------------------------------------------------
+   LOGOUT
+--------------------------------------------------------- */
+window.logout = function() {
+  localStorage.removeItem("cloud_user");
+  window.location.href = "/network/pages/login.html";
 };
-
-/* ============================================================
-   EXPORTS — ALWAYS SAFE
-============================================================ */
-
-export async function staffGetProducts() {
-  const user = Staff.getCloudUser();
-  if (!user) return [];
-  const data = await Staff.safeGET(`/api/vendor/products?email=${encodeURIComponent(user.email)}`);
-  return Array.isArray(data) ? data : [];
-}
-
-export async function staffUpdateProduct(id, data) {
-  return await Staff.safePOST(`/api/vendor/products/update`, { id, ...data });
-}
-
-export async function staffToggleVisibility(id) {
-  return await Staff.safePOST(`/api/vendor/products/toggle`, { id });
-}
-
-export async function staffGetOrders() {
-  const user = Staff.getCloudUser();
-  if (!user) return [];
-  const data = await Staff.safeGET(`/api/vendor/orders?email=${encodeURIComponent(user.email)}`);
-  return Array.isArray(data) ? data : [];
-}
-
-export async function staffGetMessages() {
-  const user = Staff.getCloudUser();
-  if (!user) return [];
-  const data = await Staff.safeGET(`/api/vendor/messages?email=${encodeURIComponent(user.email)}`);
-  return Array.isArray(data) ? data : [];
-}
-
-export async function staffGetTodayStats() {
-  const user = Staff.getCloudUser();
-  if (!user) {
-    return {
-      revenue: 0,
-      ordersCount: 0,
-      activeProducts: 0,
-      openOrders: 0,
-      newMessages: 0
-    };
-  }
-
-  const stats = await Staff.safeGET(`/api/vendor/stats/today?email=${encodeURIComponent(user.email)}`);
-
-  return {
-    revenue: stats.revenue || 0,
-    ordersCount: stats.ordersCount || 0,
-    activeProducts: stats.activeProducts || 0,
-    openOrders: stats.openOrders || 0,
-    newMessages: stats.newMessages || 0
-  };
-}
-
-export default Staff;
