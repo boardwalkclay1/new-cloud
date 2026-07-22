@@ -8,6 +8,11 @@
 <link rel="icon" type="image/jpg" href="/assets/img/network-logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/network/staff/css/vendor.css">
+
+<!-- REQUIRED: MapLibre -->
+<script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -52,8 +57,7 @@
 
         <!-- LOGO + UPLOAD -->
         <div class="top-logo-wrap">
-          <!-- FIXED: NO MORE go-time -->
-          <img id="vendorLogoImg" alt="Vendor Logo" src="/assets/img/placeholder.jpg">
+          <img id="vendorLogoImg" alt="Vendor Logo">
           <label class="upload-btn">
             Upload Logo
             <input type="file" id="vendorLogoUpload" accept="image/*">
@@ -114,6 +118,11 @@
           <label class="upload-btn">
             Upload Product Image
             <input type="file" id="productImageUpload" accept="image/*">
+          </label>
+
+          <label class="upload-btn">
+            Upload Product Video
+            <input type="file" id="productVideoUpload" accept="video/*">
           </label>
         </div>
 
