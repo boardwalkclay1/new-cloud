@@ -1,4 +1,4 @@
-// /js/auth.js — BELTLINE CLOUD AUTH ENGINE (REAL VERIFICATION + HASHED LOGIN)
+// /js/auth.js — BELTLINE CLOUD AUTH ENGINE (CLOUD + FAST ROLL + RESPONSE + VENDOR)
 
 const API = "https://api.beltlinecloud.com";
 
@@ -14,41 +14,43 @@ async function sha256Hex(str) {
 
 const Auth = {
 
-    // ---------------------------------------------------------
-    // SAVE + LOAD CLOUD USER
-    // ---------------------------------------------------------
+    /* ---------------------------------------------------------
+       CLOUD USER STORAGE
+    --------------------------------------------------------- */
     saveUser(user) {
-        try {
-            localStorage.setItem("cloud_user", JSON.stringify(user));
-        } catch (err) {
-            console.error("Error saving cloud_user:", err);
-        }
+        localStorage.setItem("cloud_user", JSON.stringify(user));
     },
 
     getUser() {
-        try {
-            const raw = localStorage.getItem("cloud_user");
-            return raw ? JSON.parse(raw) : null;
-        } catch (err) {
-            console.error("Error loading cloud_user:", err);
-            return null;
-        }
+        const raw = localStorage.getItem("cloud_user");
+        return raw ? JSON.parse(raw) : null;
     },
 
     clearUser() {
-        try {
-            localStorage.removeItem("cloud_user");
-        } catch (err) {
-            console.error("Error clearing cloud_user:", err);
-        }
+        localStorage.removeItem("cloud_user");
     },
 
-    // ---------------------------------------------------------
-    // CLOUD USER SIGNUP (REAL VERIFICATION EMAIL)
-    // ---------------------------------------------------------
+    /* ---------------------------------------------------------
+       SERVICE USER STORAGE (Fast Roll / Response / Vendor)
+    --------------------------------------------------------- */
+    saveServiceUser(service, data) {
+        localStorage.setItem(`${service}_user`, JSON.stringify(data));
+    },
+
+    getServiceUser(service) {
+        const raw = localStorage.getItem(`${service}_user`);
+        return raw ? JSON.parse(raw) : null;
+    },
+
+    clearServiceUser(service) {
+        localStorage.removeItem(`${service}_user`);
+    },
+
+    /* ---------------------------------------------------------
+       CLOUD SIGNUP (EMAIL VERIFICATION)
+    --------------------------------------------------------- */
     async signupCloud(body) {
         try {
-            // Hash password BEFORE sending to Worker
             const passwordHash = await sha256Hex(body.password);
 
             const res = await fetch(`${API}/api/users/signup`, {
@@ -76,9 +78,9 @@ const Auth = {
         }
     },
 
-    // ---------------------------------------------------------
-    // CLOUD USER LOGIN (HASHED + VERIFIED)
-    // ---------------------------------------------------------
+    /* ---------------------------------------------------------
+       CLOUD LOGIN (HASHED + VERIFIED)
+    --------------------------------------------------------- */
     async loginCloud(email, password) {
         try {
             const passwordHash = await sha256Hex(password);
@@ -108,6 +110,153 @@ const Auth = {
             console.error("loginCloud error:", err);
             alert("Login failed. Please try again.");
         }
+    },
+
+    /* ---------------------------------------------------------
+       FAST ROLL — JOIN SERVICE
+    --------------------------------------------------------- */
+    async joinFastRoll(body) {
+        try {
+            const res = await fetch(`${API}/api/fastroll/join`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+
+            const data = await res.json();
+
+            if (!data.success) {
+                alert("Failed to join Fast Roll.");
+                return;
+            }
+
+            return data.riderId;
+
+        } catch (err) {
+            console.error("joinFastRoll error:", err);
+            alert("Fast Roll signup failed.");
+        }
+    },
+
+    /* ---------------------------------------------------------
+       FAST ROLL — SET PIN
+    --------------------------------------------------------- */
+    async setFastRollPin(userId, pin) {
+        const res = await fetch(`${API}/api/fastroll/pin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, pin })
+        });
+
+        const data = await res.json();
+        return data.success;
+    },
+
+    /* ---------------------------------------------------------
+       FAST ROLL — PIN LOGIN
+    --------------------------------------------------------- */
+    async loginFastRoll(userId, pin) {
+        const res = await fetch(`${API}/api/fastroll/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, pin })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            alert(data.error || "Invalid PIN.");
+            return null;
+        }
+
+        this.saveServiceUser("fastroll", data.rider);
+        return data.rider;
+    },
+
+    /* ---------------------------------------------------------
+       RESPONSE UNIT — JOIN SERVICE
+    --------------------------------------------------------- */
+    async joinResponse(body) {
+        const res = await fetch(`${API}/api/response/join`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+        return data.success ? data.memberId : null;
+    },
+
+    async setResponsePin(userId, pin) {
+        const res = await fetch(`${API}/api/response/pin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, pin })
+        });
+
+        const data = await res.json();
+        return data.success;
+    },
+
+    async loginResponse(userId, pin) {
+        const res = await fetch(`${API}/api/response/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, pin })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            alert(data.error || "Invalid PIN.");
+            return null;
+        }
+
+        this.saveServiceUser("response", data.member);
+        return data.member;
+    },
+
+    /* ---------------------------------------------------------
+       VENDOR NETWORK — JOIN SERVICE
+    --------------------------------------------------------- */
+    async joinVendor(body) {
+        const res = await fetch(`${API}/api/vendor/join`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+        return data.success ? data.vendorId : null;
+    },
+
+    async setVendorPin(ownerUserId, pin) {
+        const res = await fetch(`${API}/api/vendor/pin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ownerUserId, pin })
+        });
+
+        const data = await res.json();
+        return data.success;
+    },
+
+    async loginVendor(ownerUserId, pin) {
+        const res = await fetch(`${API}/api/vendor/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ownerUserId, pin })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            alert(data.error || "Invalid PIN.");
+            return null;
+        }
+
+        this.saveServiceUser("vendor", data.vendor);
+        return data.vendor;
     }
 };
 
