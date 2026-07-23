@@ -2,63 +2,120 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Messages</title>
+  <title>Beltline Cloud Messages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.png">
+
+  <!-- Social Preview -->
+  <meta property="og:title" content="Beltline Cloud Messages">
+  <meta property="og:description" content="Unified messaging across Cloud, Vendors, Fast Roll, Response Unit, and Chatrooms.">
+  <meta property="og:image" content="https://beltlinecloud.com/assets/img/cloud/lone-cloud.jpg">
+  <meta property="og:url" content="https://beltlinecloud.com/messages">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beltline Cloud Messages">
+  <meta name="twitter:description" content="Unified messaging across Cloud, Vendors, Fast Roll, Response Unit, and Chatrooms.">
+  <meta name="twitter:image" content="https://beltlinecloud.com/assets/img/cloud/lone-cloud.jpg">
+
   <link rel="stylesheet" href="/pages/messages/css/messages.css">
 </head>
 
 <body>
 <div id="messagesApp">
 
-  <!-- HEADER -->
+  <!-- TOP BAR -->
   <header class="msg-header">
     <div class="msg-title">Messages</div>
+
+    <nav class="msg-tabs">
+      <button class="msg-tab active" data-view="cloud">Cloud</button>
+      <button class="msg-tab" data-view="vendors">Vendors</button>
+      <button class="msg-tab" data-view="fastroll">Fast Roll</button>
+      <button class="msg-tab" data-view="response">Response Unit</button>
+      <button class="msg-tab" data-view="chatrooms-text">Chatrooms (Text)</button>
+      <button class="msg-tab" data-view="chatrooms-voice">Chatrooms (Voice)</button>
+    </nav>
+
     <div class="msg-user">
-      <img id="userAvatar" class="avatar">
+      <img id="userAvatar" class="avatar" src="/assets/img/cloud/default-avatar.jpg" alt="User">
       <span id="userName"></span>
     </div>
   </header>
 
   <main class="msg-main">
 
-    <!-- LEFT SIDEBAR: THREADS -->
+    <!-- LEFT SIDEBAR -->
     <aside class="msg-sidebar">
-      <div class="sidebar-header">Conversations</div>
+      <div class="sidebar-header">
+        <span id="sidebarTitle">Conversations</span>
+      </div>
+
+      <div class="sidebar-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="unread">Unread</button>
+        <button class="filter-btn" data-filter="cloudfam">Cloud Fam</button>
+      </div>
+
       <ul id="threadList"></ul>
     </aside>
 
-    <!-- MESSAGE PANEL -->
+    <!-- CENTER PANEL -->
     <section class="msg-panel">
 
       <div class="panel-header">
-        <img id="threadAvatar" class="avatar-small">
+        <img id="threadAvatar" class="avatar-small" src="/assets/img/cloud/default-avatar.jpg" alt="Thread">
         <div class="thread-info">
           <h2 id="threadName">Select a conversation</h2>
           <span id="threadStatus"></span>
         </div>
+
+        <div class="thread-actions">
+          <button id="threadCallBtn" title="Start Call">📞</button>
+          <button id="threadMuteBtn" title="Mute">🔇</button>
+          <button id="threadBlockBtn" title="Block">🚫</button>
+          <button id="threadDeleteBtn" title="Delete">🗑️</button>
+        </div>
       </div>
 
-      <div id="messageContainer" class="message-container"></div>
+      <div id="messages-view" class="message-container"></div>
 
       <div class="msg-input-row">
+        <div class="msg-input-tools">
+          <input type="file" id="msgAttachment" class="hidden" />
+          <button id="attachBtn" title="Attach file">📎</button>
+          <button id="voiceBtn" title="Record voice">🎙️</button>
+        </div>
+
         <textarea id="msgInput" placeholder="Type a message..."></textarea>
         <button id="sendBtn">Send</button>
       </div>
 
     </section>
 
-    <!-- RIGHT SIDEBAR: CLOUD FAMILY + PHONEBOOK -->
+    <!-- RIGHT SIDEBAR -->
     <aside class="msg-sidebar-right">
+
       <div class="sidebar-header">Cloud Family</div>
       <ul id="familyList"></ul>
 
       <div class="sidebar-header">Phonebook</div>
       <ul id="phonebookList"></ul>
+
+      <div class="sidebar-header">Text Chatrooms</div>
+      <ul id="chatroomTextList"></ul>
+
+      <div class="sidebar-header">Voice Chatrooms</div>
+      <ul id="chatroomVoiceList"></ul>
+
     </aside>
 
   </main>
 
 </div>
 
-<script type="module" src="/pages/messages/js/messages.js"></script>
+<script type="module" src="/pages/messages/js/foolcloud-messages.js"></script>
 </body>
 </html>
