@@ -7,8 +7,6 @@
 
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-
-  <!-- APPLE TOUCH ICON -->
   <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
 
   <!-- SOCIAL PREVIEW -->
@@ -30,7 +28,7 @@
 
 <body>
 
-<!-- BACKGROUND IN HTML (CORRECT PATH, NO PUBLIC) -->
+<!-- BACKGROUND -->
 <div style="
   position: fixed;
   inset: 0;
@@ -40,59 +38,135 @@
 "></div>
 
 <header class="events-header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo">
-  <h2 id="eventTitle">Event</h2>
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo" alt="Cloud Events">
+  <div class="events-header-info">
+    <h2 id="eventTitle">Event</h2>
+    <span id="eventTagline"></span>
+  </div>
 </header>
 
-<section class="events-section">
-  <div id="eventDetails" class="event-details-card">
-    <!-- JS injects title, date, location, description, price, host -->
-  </div>
+<main class="events-main">
 
-  <div class="event-ticket-panel">
-    <label>Tickets
-      <input type="number" id="ticketQuantity" min="1" value="1">
-    </label>
+  <!-- LEFT: EVENT DETAILS -->
+  <section class="events-section">
 
-    <div id="ticketPriceDisplay" class="event-price-display"></div>
+    <div id="eventDetails" class="event-details-card">
+      <!-- JS injects:
+           - title
+           - date/time
+           - location
+           - description
+           - organizer name
+           - organizer logo
+           - event photos
+           - ticket tiers (early bird, regular, VIP)
+      -->
+    </div>
 
-    <button id="buyTicketBtn" class="events-btn-primary">
-      Buy Ticket
-    </button>
-  </div>
-</section>
+    <!-- ORGANIZER / PLATFORM INFO -->
+    <div class="event-organizer-card">
+      <h3>Event Host</h3>
+      <div id="organizerInfo">
+        <!-- JS: organizer name, Cloud user handle, social links, follower counts -->
+      </div>
 
-<!-- UNIFIED EVENTS JS -->
-<script src="/pages/events/js/events.js"></script>
-</body>
-</html>
-  filter: brightness(0.35);
-  z-index: -1;
-"></div>
+      <div class="event-platform-note">
+        <p>
+          Tickets are sold and fulfilled by the event organizer. Beltline Cloud is a platform only and is not
+          responsible for the event, refunds, or any issues before, during, or after the event.
+        </p>
+      </div>
+    </div>
 
-<header class="events-header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo">
-  <h2 id="eventTitle">Event</h2>
-</header>
+    <!-- SOCIAL / REFERRAL -->
+    <div class="event-social-card">
+      <h3>Share & Invite</h3>
+      <div id="eventReferralLink"></div>
+      <div class="event-social-buttons">
+        <button id="shareTwitterBtn">Share on X</button>
+        <button id="shareInstagramBtn">Share on Instagram</button>
+        <button id="shareFacebookBtn">Share on Facebook</button>
+        <button id="copyReferralBtn">Copy Referral Link</button>
+      </div>
+    </div>
 
-<section class="events-section">
-  <div id="eventDetails" class="event-details-card">
-    <!-- JS injects title, date, location, description, price, host -->
-  </div>
+  </section>
 
-  <div class="event-ticket-panel">
-    <label>Tickets
-      <input type="number" id="ticketQuantity" min="1" value="1">
-    </label>
+  <!-- RIGHT: TICKETS + LEGAL -->
+  <aside class="events-sidebar">
 
-    <div id="ticketPriceDisplay" class="event-price-display"></div>
+    <!-- TICKET PANEL -->
+    <div class="event-ticket-panel">
+      <h3>Tickets</h3>
 
-    <button id="buyTicketBtn" class="events-btn-primary">
-      Buy Ticket
-    </button>
-  </div>
-</section>
+      <!-- JS: inject ticket tiers, prices, remaining counts -->
+      <div id="ticketTierList">
+        <!-- Example structure:
+             <button data-tier-id="early" class="ticket-tier-btn active">
+               Early Bird • $10 • 50 left
+             </button>
+        -->
+      </div>
 
-<script src="/pages/events/js/events.js"></script>
+      <label class="ticket-quantity-label">
+        Quantity
+        <input type="number" id="ticketQuantity" min="1" value="1">
+      </label>
+
+      <div id="ticketPriceDisplay" class="event-price-display">
+        <!-- JS: total price, fees, platform fee breakdown -->
+      </div>
+
+      <!-- LEGAL ACK FOR BUYERS (optional, can be enforced in JS) -->
+      <label class="legal-checkbox">
+        <input type="checkbox" id="buyerLegalAgree">
+        <span>
+          I understand tickets are provided by the event organizer and Beltline Cloud is not responsible for
+          refunds or event issues.
+        </span>
+      </label>
+
+      <button id="buyTicketBtn" class="events-btn-primary">
+        Buy Ticket
+      </button>
+
+      <!-- TICKET PREVIEW (QR / CODE) -->
+      <div id="ticketPreview" class="ticket-preview">
+        <!-- After purchase, JS injects:
+             - QR code image or SVG
+             - ticket ID
+             - event name
+             - date/time
+             - seat/section if applicable
+        -->
+      </div>
+    </div>
+
+    <!-- EVENT DASHBOARD ENTRY (FOR HOSTS) -->
+    <div class="event-host-dashboard-entry">
+      <h3>Host an Event</h3>
+      <p>
+        Cloud users can create and manage events with full ticketing, history, and analytics.
+      </p>
+
+      <label class="legal-checkbox">
+        <input type="checkbox" id="hostLegalAgree">
+        <span>
+          I agree that I am solely responsible for my event, ticket sales, refunds, and attendee safety.
+          Beltline Cloud is a platform only and is not liable for any event-related issues.
+        </span>
+      </label>
+
+      <button id="openHostDashboardBtn" class="events-btn-secondary">
+        Open Events Dashboard
+      </button>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- UNIFIED EVENTS JS (handles: loading event, ticket purchase, QR generation, emails, dashboard routing) -->
+<script type="module" src="/pages/events/js/events.js"></script>
 </body>
 </html>
