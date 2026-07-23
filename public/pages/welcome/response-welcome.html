@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Beltline Response Unit Verification</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://beltlinecloud.com/public/assets/img/cloud/cloud-logo.jpg">
+
+  <!-- Social Preview -->
+  <meta property="og:title" content="Beltline Response Unit Activation">
+  <meta property="og:description" content="Verify your Response Unit credentials and set your secure PIN.">
+  <meta property="og:image" content="https://beltlinecloud.com/assets/img/cloud/lone-cloud.jpg">
+  <meta property="og:url" content="https://beltlinecloud.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://beltlinecloud.com/assets/img/cloud/lone-cloud.jpg">
+  <meta name="twitter:title" content="Beltline Response Unit Activation">
+  <meta name="twitter:description" content="Verify your Response Unit credentials and set your secure PIN.">
+</head>
+
+<body style="margin:0; padding:0; background:#eef2f7; font-family:'Trebuchet MS','Segoe UI',Arial,sans-serif;">
+
+  <div style="max-width:650px; margin:auto; background:white; border-radius:16px; overflow:hidden; box-shadow:0 6px 28px rgba(0,0,0,0.12);">
+
+    <!-- HEADER -->
+    <div style="background:url('https://beltlinecloud.com/assets/img/cloud/lone-cloud.jpg'); background-size:cover; background-position:center; padding:60px 20px; text-align:center;">
+      <img src="https://beltlinecloud.com/public/assets/img/response/response-logo.png"
+           style="width:160px; background:white; padding:12px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+    </div>
+
+    <!-- CONTENT -->
+    <div style="padding:40px;">
+      <h1 style="text-align:center; color:#222; font-size:30px; font-weight:bold;">
+        Activate Your <span style="color:#e24a4a;">Response Unit Profile</span>
+      </h1>
+
+      <p style="text-align:center; color:#666; font-size:16px; margin-bottom:35px;">
+        Your verification is required to join the Beltline Response Unit.
+      </p>
+
+      <p style="font-size:16px; color:#444; line-height:1.7;">
+        You’ve been selected to join the <strong style="color:#e24a4a;">Beltline Response Unit</strong> — a rapid‑action support team dedicated to safety, assistance, and real‑time response across the Atlanta Beltline.
+      </p>
+
+      <p style="font-size:16px; color:#444; line-height:1.7;">
+        Please verify your email to activate your Response credentials.
+      </p>
+
+      <!-- VERIFY BUTTON -->
+      <div style="text-align:center; margin:40px 0;">
+        <a href="{{verifyUrl}}"
+           style="background:#e24a4a; color:white; padding:16px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:17px;">
+          Verify Response Unit Account
+        </a>
+      </div>
+
+      <!-- FALLBACK -->
+      <p style="font-size:14px; color:#777; text-align:center; margin-bottom:40px;">
+        If the button doesn’t work, use this link:<br>
+        <span style="color:#e24a4a;">{{verifyUrl}}</span>
+      </p>
+
+      <p style="font-size:16px; color:#444; line-height:1.7;">
+        After verification, set your <strong>4‑digit Response PIN</strong> to access your secure dashboard:
+      </p>
+
+      <!-- PIN BUTTON -->
+      <div style="text-align:center; margin:30px 0;">
+        <a href="{{pinSetupUrl}}"
+           style="background:#222; color:white; padding:14px 28px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px;">
+          Set Your Response PIN
+        </a>
+      </div>
+
+      <p style="margin-top:40px; font-size:16px; color:#333; line-height:1.7;">
+        — <span style="color:#e24a4a;">Response Command</span><br>
+        <span style="color:#777;">Beltline Cloud</span>
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>
