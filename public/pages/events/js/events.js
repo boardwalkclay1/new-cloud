@@ -1,113 +1,61 @@
-/* CLOUD EVENTS — MASTER JS FILE */
+// /pages/events/js/events.js
+// MAIN EVENTS CONTROLLER
+// Loads modules and orchestrates the entire Cloud Events system
 
-/* ------------------------------
-   NAVIGATION
------------------------------- */
-function goTo(path) {
-  window.location.href = path;
-}
+import { loadUpcomingEvents, renderUpcomingEventsStrip } from "./modules/events-upcoming.js";
+import { loadEventDetails, renderEventDetails } from "./modules/events-details.js";
+import { loadPurchases, renderPurchasesSection } from "./modules/events-purchases.js";
+import { setupTicketing } from "./modules/events-ticketing.js";
+import { setupHostEntry } from "./modules/events-host.js";
+import { setupReferralAndSocial } from "./modules/events-referral.js";
 
-/* ------------------------------
-   UPCOMING EVENTS FEED (events.html)
------------------------------- */
-if (document.getElementById("eventsFeed")) {
-  fetch("/api/events/list")
-    .then(res => res.json())
-    .then(events => {
-      const feed = document.getElementById("eventsFeed");
-      feed.innerHTML = "";
+const API = "https://api.beltlinecloud.com";
+const Auth = window.Auth;
 
-      events.forEach(evt => {
-        const card = document.createElement("div");
-        card.className = "event-card";
-        card.innerHTML = `
-          <div class="event-title">${evt.title}</div>
-          <div class="event-info">${evt.date}</div>
-          <div class="event-info">${evt.location}</div>
-          <div class="event-info">Price: $${evt.price}</div>
-          <div class="events-btn-primary" onclick="goTo('/pages/events/pages/event.html?id=${evt.id}')">
-            View Event
-          </div>
-        `;
-        feed.appendChild(card);
-      });
-    });
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = Auth?.currentUser || null;
 
-/* ------------------------------
-   CREATE EVENT (create.html)
------------------------------- */
-if (document.getElementById("createEventForm")) {
-  document.getElementById("createEventForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  /* ---------------------------------------------------------
+     1. UPCOMING EVENTS (everyone sees this)
+  --------------------------------------------------------- */
+  const upcomingStrip = renderUpcomingEventsStrip();
+  document.querySelector(".events-section").prepend(upcomingStrip);
 
-    const formData = new FormData(e.target);
-    const eventObj = Object.fromEntries(formData.entries());
+  const upcomingEvents = await loadUpcomingEvents();
+  upcomingStrip.populate(upcomingEvents);
 
-    await fetch("/api/events/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(eventObj)
-    });
 
-    goTo("/pages/events/pages/events.html");
-  });
-}
+  /* ---------------------------------------------------------
+     2. USER PURCHASE HISTORY (only Cloud users)
+  --------------------------------------------------------- */
+  if (user) {
+    const purchasesSection = renderPurchasesSection();
+    document.querySelector(".events-section").appendChild(purchasesSection);
 
-/* ------------------------------
-   EVENT DETAILS + TICKET PURCHASE (event.html)
------------------------------- */
-if (document.getElementById("eventDetails")) {
-  const params = new URLSearchParams(window.location.search);
-  const eventId = params.get("id");
+    const purchases = await loadPurchases(user.id);
+    purchasesSection.populate(purchases);
+  }
 
-  fetch(`/api/events/get?id=${eventId}`)
-    .then(res => res.json())
-    .then(evt => {
-      document.getElementById("eventTitle").innerText = evt.title;
 
-      document.getElementById("eventDetails").innerHTML = `
-        <div class="event-title">${evt.title}</div>
-        <div class="event-info">${evt.date}</div>
-        <div class="event-info">${evt.location}</div>
-        <div class="event-info">${evt.description}</div>
-      `;
+  /* ---------------------------------------------------------
+     3. EVENT DETAILS (if eventId is in URL)
+  --------------------------------------------------------- */
+  const url = new URL(window.location.href);
+  const eventId = url.searchParams.get("eventId");
 
-      const ticketPriceDisplay = document.getElementById("ticketPriceDisplay");
+  if (eventId) {
+    const event = await loadEventDetails(eventId);
 
-      function updatePrice() {
-        const qty = Number(document.getElementById("ticketQuantity").value);
-        const total = qty * evt.price;
-        ticketPriceDisplay.innerText = "Total: $" + total.toFixed(2);
-      }
+    if (event) {
+      renderEventDetails(event);
+      setupReferralAndSocial(event);
+      setupTicketing(event, user);
+    }
+  }
 
-      updatePrice();
-      document.getElementById("ticketQuantity").addEventListener("input", updatePrice);
-    });
-}
 
-/* ------------------------------
-   MY EVENTS (mine.html)
------------------------------- */
-if (document.getElementById("myHostedEvents")) {
-  document.getElementById("myHostedEvents").innerHTML = `
-    <div class="event-card">
-      <div class="event-title">Your Hosted Event</div>
-      <div class="event-info">Coming Soon</div>
-    </div>
-  `;
-
-  document.getElementById("myTickets").innerHTML = `
-    <div class="event-card">
-      <div class="event-title">Your Tickets</div>
-      <div class="event-info">Coming Soon</div>
-    </div>
-  `;
-}
-
-/* ------------------------------
-   QR SCANNER (scan.html)
------------------------------- */
-if (document.getElementById("scannerContainer")) {
-  document.getElementById("scanResult").innerText = "Scanner Ready";
-}
+  /* ---------------------------------------------------------
+     4. HOST ENTRY (legal agreement → dashboard)
+  --------------------------------------------------------- */
+  setupHostEntry(user);
+});
