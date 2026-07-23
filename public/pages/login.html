@@ -2,17 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Login — Beltline Cloud</title>
 
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background: url('/assets/img/cloud/cloud-login-back.jpg') center/cover no-repeat;
-      color: white;
+      height: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
       font-family: "Inter", sans-serif;
+      -webkit-text-size-adjust: 100%;
     }
+
+    body {
+      background: url('/assets/img/cloud/cloud-login-back.jpg') center center / cover no-repeat fixed;
+      /* Mobile background lock */
+      background-attachment: fixed;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
     .container {
       max-width: 420px;
       margin: 0 auto;
@@ -20,12 +32,15 @@
       background: rgba(0,0,0,0.55);
       border-radius: 14px;
       margin-top: 60px;
+      backdrop-filter: blur(4px);
     }
+
     h1 {
       text-align: center;
       color: #ffd700;
       margin-bottom: 20px;
     }
+
     input {
       width: 100%;
       padding: 14px;
@@ -36,6 +51,7 @@
       color: white;
       font-size: 16px;
     }
+
     button {
       width: 100%;
       padding: 14px;
@@ -47,14 +63,27 @@
       font-weight: 700;
       cursor: pointer;
     }
+
     p {
       text-align: center;
       margin-top: 20px;
       opacity: 0.8;
     }
+
     a {
       color: #ffd700;
       text-decoration: none;
+    }
+
+    /* Mobile Fixes */
+    @media (max-width: 600px) {
+      body {
+        background-attachment: scroll; /* iOS fix */
+        background-size: cover;
+      }
+      .container {
+        margin-top: 30px;
+      }
     }
   </style>
 </head>
@@ -71,7 +100,6 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
-  <!-- Load the correct login engine -->
   <script src="/js/auth-login.js"></script>
 
   <script>
@@ -86,11 +114,9 @@
 
       try {
         const user = await AuthLogin.login(email, password);
-
         if (user) {
           window.location.href = "/pages/dashboard.html";
         }
-
       } catch (err) {
         alert(err.message || "Login failed.");
       }
