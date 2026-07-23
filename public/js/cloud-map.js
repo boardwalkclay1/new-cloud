@@ -45,19 +45,18 @@ function drawMap() {
 
     const tileSize = 256;
 
-    // FLOAT tile position of the center
     const floatTile = lonLatToTileFloat(center.lon, center.lat, zoom);
 
-    // INTEGER tile index (OSM requires this)
     const baseX = Math.floor(floatTile.x);
     const baseY = Math.floor(floatTile.y);
 
-    // FRACTIONAL offset inside the tile
     const offsetX = (floatTile.x - baseX) * tileSize;
     const offsetY = (floatTile.y - baseY) * tileSize;
 
     const tilesAcross = Math.ceil(canvas.width / tileSize) + 2;
     const tilesDown = Math.ceil(canvas.height / tileSize) + 2;
+
+    const maxTile = Math.pow(2, zoom) - 1; // ⭐ FIXED
 
     for (let dx = -tilesAcross / 2; dx < tilesAcross / 2; dx++) {
         for (let dy = -tilesDown / 2; dy < tilesDown / 2; dy++) {
@@ -65,13 +64,12 @@ function drawMap() {
             const x = baseX + dx;
             const y = baseY + dy;
 
-            // OSM tile boundaries
-            if (x < 0 || y < 0) continue;
+            // ⭐ FIXED: VALID TILE CHECK
+            if (x < 0 || x > maxTile || y < 0 || y > maxTile) continue;
 
             const img = new Image();
             img.src = `https://tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
 
-            // Correct pixel placement
             const px = canvas.width / 2 + dx * tileSize - offsetX;
             const py = canvas.height / 2 + dy * tileSize - offsetY;
 
