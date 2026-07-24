@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Host Dashboard — Beltline Cloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
+  <link rel="stylesheet" href="/pages/events/host/css/dashboard.css">
+</head>
+
+<body data-page="host-dashboard">
+
+<div id="dashboardApp">
+
+  <!-- TOP BAR -->
+  <header class="dash-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="dash-logo">
+    <h1>Event Host Dashboard</h1>
+
+    <div class="dash-user">
+      <span id="hostName"></span>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <!-- LEFT MENU -->
+  <aside class="dash-menu">
+    <button class="menu-item active" data-view="overview">Overview</button>
+    <button class="menu-item" data-view="create">Create Event</button>
+    <button class="menu-item" data-view="events">My Events</button>
+    <button class="menu-item" data-view="tickets">Ticket Scans</button>
+    <button class="menu-item" data-view="payouts">Payouts</button>
+    <button class="menu-item" data-view="settings">Settings</button>
+  </aside>
+
+  <!-- MAIN PANEL -->
+  <main id="dashPanel" class="dash-panel">
+    <!-- JS loads modules here -->
+  </main>
+
+</div>
+
+<script type="module" src="/pages/events/host/js/dashboard.js"></script>
+</body>
+</html>
