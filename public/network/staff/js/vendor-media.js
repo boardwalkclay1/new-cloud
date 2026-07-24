@@ -1,7 +1,7 @@
 // vendor-media.js
 // Handles logo, cover, and future gallery uploads (FULLY UPDATED)
 
-import { getVendorId, getVendorData } from "./vendor-context.js";
+import { getVendorId, getVendorData } from "/network/staff/js/vendor-context.js";
 
 const vendorLogoUpload = document.getElementById("vendorLogoUpload");
 const vendorLogoImg = document.getElementById("vendorLogoImg");
