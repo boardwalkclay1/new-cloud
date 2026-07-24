@@ -5,159 +5,188 @@
   <title>Safety Cloud Dashboard — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-  <link rel="stylesheet" href="/css/safety-cloud.css">
 
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <!-- SOCIAL -->
   <meta property="og:title" content="Safety Cloud Dashboard — Beltline Cloud">
-  <meta property="og:description" content="Your Beltline safety dashboard with alerts, Safe‑Clod motion detection, markers, incident center, and emergency tools.">
-  <meta property="og:image" content="/music/img/safety-cloud.jpg">
+  <meta property="og:description" content="Your Beltline safety command center with alerts, motion detection, markers, incident center, and emergency tools.">
+  <meta property="og:image" content="/assets/img/cloud/safety-cloud.jpg">
   <meta property="og:type" content="website">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/safety-cloud.css">
 </head>
 
 <body data-page="safety-home">
 
-  <!-- BACKGROUND -->
-  <div class="page-bg" style="background-image:url('/music/img/safety-cloud.jpg');"></div>
+<!-- BACKGROUND -->
+<div class="page-bg" style="background-image:url('/assets/img/cloud/safety-cloud.jpg');"></div>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="logo">
-      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
-    </div>
+<!-- SIDE MENU -->
+<div id="sideMenu" class="side-menu hidden">
+  <div class="side-menu-header">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="side-logo">
+    <h3>Safety Cloud Menu</h3>
+  </div>
 
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/pages/music.html">Cloud Radio</a>
-      <a href="/events/index.html">Events</a>
-      <a href="/network/public/pages/index.html">Network</a>
-      <a href="/cloud/login.html">Login</a>
-    </div>
-  </nav>
+  <ul class="side-menu-links">
+    <li><a href="/">🏠 Home</a></li>
+    <li><a href="/pages/music.html">🎵 Cloud Radio</a></li>
+    <li><a href="/events/index.html">🎫 Events</a></li>
+    <li><a href="/network/public/pages/index.html">🌐 Network</a></li>
+    <li><a href="/cloud/login.html">🔐 Login</a></li>
+  </ul>
+</div>
 
-  <!-- RESPONSE UNIT — FEATURED -->
-  <section class="response-highlight">
-    <h2>⚡ Join the Beltline Response Unit</h2>
-    <p>Become part of the elite Beltline safety team.</p>
-    <a class="response-btn" href="/pages/response/signup.html">Join Response Unit</a>
-  </section>
+<!-- TOP BAR -->
+<nav class="top-bar">
+  <div class="top-left">
+    <button id="menuBtn" class="menu-btn">☰</button>
+    <span class="top-title">Safety Cloud</span>
+  </div>
 
-  <!-- EMERGENCY BUTTON -->
-  <button id="globalAlertBtn" class="global-alert-btn" data-route="/pages/response/signup.html">
-    ⚠️ Emergency — Contact Response Unit
-  </button>
+  <div class="top-right">
+    <img src="/assets/img/icons/response-unit.png" class="top-icon" title="Response Unit">
+    <img src="/assets/img/icons/cloud-talk.png" class="top-icon" title="Cloud Talk">
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <header class="hero">
-    <h1>Safety Cloud Dashboard</h1>
-    <p>Your Beltline safety command center — alerts, motion safety, markers, incident center, and emergency tools.</p>
-  </header>
+<!-- FULL DESCRIPTION DROPDOWN -->
+<section class="full-description">
+  <h2 onclick="toggleFullDesc()" class="full-desc-title">
+    Safety Cloud Overview ▼
+  </h2>
 
-  <!-- SAFETY CLOUD GRID -->
-  <section class="dashboard-grid">
+  <div id="fullDescContent" class="full-desc-content hidden">
+    <p>
+      Safety Cloud is the Beltline’s unified safety system. It connects motion detection,
+      emergency markers, incident reporting, community alerts, weather hazards, and the
+      Beltline Response Unit into one powerful dashboard.
+    </p>
 
-    <!-- MOTION SAFETY -->
-    <div class="dash-card">
-      <h3>Safe‑Clod Motion Safety</h3>
+    <p>
+      Every category below contains detailed tools and descriptions. Click any section to expand
+      and learn more about how Safety Cloud protects the Beltline community.
+    </p>
+  </div>
+</section>
+
+<!-- MAIN GRID WITH DROPDOWNS -->
+<section class="dashboard-grid">
+
+  <!-- CATEGORY: MOTION SAFETY -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('motionDrop')" class="drop-title">Safe‑Clod Motion Safety ▼</h3>
+    <div id="motionDrop" class="drop-content hidden">
       <p>Smart motion detection for kidnapping, falls, snatches, and dangerous movement.</p>
       <a class="dash-btn" href="/pages/safety/safe-cloud.html">Open Safe‑Clod</a>
     </div>
+  </div>
 
-    <!-- INCIDENT CENTER -->
-    <div class="dash-card">
-      <h3>Incident Center</h3>
-      <p>Report incidents, track emergencies, and coordinate response unit activity.</p>
+  <!-- CATEGORY: INCIDENT CENTER -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('incidentDrop')" class="drop-title">Incident Center ▼</h3>
+    <div id="incidentDrop" class="drop-content hidden">
+      <p>Report incidents, track emergencies, and coordinate Response Unit activity.</p>
       <a class="dash-btn" href="/pages/safety/incident-center.html">Open Incident Center</a>
-    </div>
-
-    <!-- COMMUNITY ALERTS -->
-    <div class="dash-card">
-      <h3>Community Alerts</h3>
-      <p>Trail closures, hazards, lost pets, and emergency updates.</p>
-      <a class="dash-btn" href="/pages/safety/alerts.html">View Alerts</a>
-    </div>
-
-    <!-- WEATHER -->
-    <div class="dash-card">
-      <h3>Weather Safety</h3>
-      <p>Storm warnings, heat advisories, and Beltline weather hazards.</p>
-      <a class="dash-btn" href="/pages/safety/alerts.html#weather">Weather Alerts</a>
-    </div>
-
-    <!-- LIVE FEED -->
-    <div class="dash-card">
-      <h3>Live Safety Feed</h3>
-      <p>Real-time updates from the Beltline community.</p>
-      <a class="dash-btn" href="/pages/safety/live-feed.html">Open Live Feed</a>
-    </div>
-
-    <!-- MARKER SYSTEM -->
-    <div class="dash-card">
-      <h3>Marker System</h3>
-      <p>Learn how to use Beltline emergency pole markers and location stickers.</p>
-      <a class="dash-btn" href="/pages/safety/markers/index.html">Marker System</a>
-    </div>
-
-    <div class="dash-card">
-      <h3>Marker Categories</h3>
-      <p>Understand marker types, colors, and emergency meanings.</p>
-      <a class="dash-btn" href="/pages/safety/markers/categories.html">Marker Categories</a>
-    </div>
-
-    <!-- EMERGENCY TOOLS -->
-    <div class="dash-card">
-      <h3>Emergency Tools</h3>
-      <p>Quick access to emergency instructions and location reporting.</p>
-      <a class="dash-btn" href="/pages/safety/emergency.html">Emergency Tools</a>
-    </div>
-
-    <div class="dash-card">
-      <h3>Send User Alert</h3>
-      <p>Send direct alerts to Cloud users in emergencies.</p>
-      <a class="dash-btn" href="/pages/safety/send-user-alert.html">Send Alert</a>
-    </div>
-
-    <!-- LOST / FOUND / STOLEN — DROPDOWN CATEGORY -->
-    <div class="dash-card dropdown">
-      <h3 onclick="toggleLostFound()" class="dropdown-title">Lost • Found • Stolen ▼</h3>
-
-      <div id="lostFoundMenu" class="dropdown-content hidden">
-
-        <a class="dropdown-link" href="/pages/safety/lost-found.html">Lost & Found Center</a>
-
-        <a class="dropdown-link" href="/pages/safety/report-lost.html">Report Lost Item</a>
-
-        <a class="dropdown-link" href="/pages/safety/report-found.html">Report Found Item</a>
-
-        <a class="dropdown-link" href="/pages/safety/stolen.html">Stolen Reports</a>
-
-        <a class="dropdown-link" href="/pages/safety/report-stolen.html">Report Stolen Item</a>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- SAFETY CLOUD HELPER -->
-  <div id="safetyHelper" class="safety-helper">
-    <img src="/assets/img/cloud/cloud-logo.jpg" id="helperLogo" style="height:70px;">
-    <div id="helperBubble" class="helper-bubble hidden">
-      <p>Welcome to Safety Cloud! I’m here to help you stay safe on the Beltline. Click me anytime for guidance.</p>
     </div>
   </div>
 
-  <footer class="footer">
-    © 2026 Beltline Cloud Inc — Safety Cloud protects the Beltline community.
-  </footer>
+  <!-- CATEGORY: COMMUNITY ALERTS -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('alertsDrop')" class="drop-title">Community Alerts ▼</h3>
+    <div id="alertsDrop" class="drop-content hidden">
+      <p>Trail closures, hazards, lost pets, and emergency updates.</p>
+      <a class="dash-btn" href="/pages/safety/alerts.html">View Alerts</a>
+    </div>
+  </div>
 
-  <script>
-    function toggleLostFound() {
-      const menu = document.getElementById("lostFoundMenu");
-      menu.classList.toggle("hidden");
-    }
-  </script>
+  <!-- CATEGORY: WEATHER -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('weatherDrop')" class="drop-title">Weather Safety ▼</h3>
+    <div id="weatherDrop" class="drop-content hidden">
+      <p>Storm warnings, heat advisories, and Beltline weather hazards.</p>
+      <a class="dash-btn" href="/pages/safety/alerts.html#weather">Weather Alerts</a>
+    </div>
+  </div>
 
-  <script type="module" src="/js/safe-cloud.js"></script>
+  <!-- CATEGORY: LIVE FEED -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('liveDrop')" class="drop-title">Live Safety Feed ▼</h3>
+    <div id="liveDrop" class="drop-content hidden">
+      <p>Real-time updates from the Beltline community.</p>
+      <a class="dash-btn" href="/pages/safety/live-feed.html">Open Live Feed</a>
+    </div>
+  </div>
+
+  <!-- CATEGORY: MARKER SYSTEM -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('markerDrop')" class="drop-title">Marker System ▼</h3>
+    <div id="markerDrop" class="drop-content hidden">
+      <p>Learn how to use Beltline emergency pole markers and location stickers.</p>
+      <a class="dash-btn" href="/pages/safety/markers/index.html">Marker System</a>
+      <a class="dash-btn" href="/pages/safety/markers/categories.html">Marker Categories</a>
+    </div>
+  </div>
+
+  <!-- CATEGORY: EMERGENCY TOOLS -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('toolsDrop')" class="drop-title">Emergency Tools ▼</h3>
+    <div id="toolsDrop" class="drop-content hidden">
+      <p>Quick access to emergency instructions and location reporting.</p>
+      <a class="dash-btn" href="/pages/safety/emergency.html">Emergency Tools</a>
+      <a class="dash-btn" href="/pages/safety/send-user-alert.html">Send User Alert</a>
+    </div>
+  </div>
+
+  <!-- CATEGORY: LOST / FOUND / STOLEN -->
+  <div class="dash-dropdown">
+    <h3 onclick="toggleDrop('lostDrop')" class="drop-title">Lost • Found • Stolen ▼</h3>
+    <div id="lostDrop" class="drop-content hidden">
+      <a class="dropdown-link" href="/pages/safety/lost-found.html">Lost & Found Center</a>
+      <a class="dropdown-link" href="/pages/safety/report-lost.html">Report Lost Item</a>
+      <a class="dropdown-link" href="/pages/safety/report-found.html">Report Found Item</a>
+      <a class="dropdown-link" href="/pages/safety/stolen.html">Stolen Reports</a>
+      <a class="dropdown-link" href="/pages/safety/report-stolen.html">Report Stolen Item</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- RESPONSE UNIT FEATURE -->
+<section class="response-highlight">
+  <h2>⚡ Join the Beltline Response Unit</h2>
+  <p>Become part of the elite Beltline safety team.</p>
+  <a class="response-btn" href="/pages/response/signup.html">Join Response Unit</a>
+</section>
+
+<!-- EMERGENCY BUTTON -->
+<button id="globalAlertBtn" class="global-alert-btn" data-route="/pages/response/signup.html">
+  ⚠️ Emergency — Contact Response Unit
+</button>
+
+<!-- FOOTER -->
+<footer class="footer">
+  © 2026 Beltline Cloud Inc — Safety Cloud protects the Beltline community.
+</footer>
+
+<!-- JS -->
+<script>
+  function toggleDrop(id) {
+    document.getElementById(id).classList.toggle("hidden");
+  }
+
+  function toggleFullDesc() {
+    document.getElementById("fullDescContent").classList.toggle("hidden");
+  }
+
+  document.getElementById("menuBtn").onclick = () => {
+    document.getElementById("sideMenu").classList.toggle("hidden");
+  };
+</script>
+
+<script type="module" src="/js/safe-cloud.js"></script>
+
 </body>
 </html>
