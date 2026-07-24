@@ -1,7 +1,16 @@
-/* GLOBAL RESET */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ============================================================
+   SAFETY CLOUD — FULL REDESIGN (Beltline Cloud 2026)
+   ============================================================ */
 
-/* CLOUD BRAND COLORS */
+/* GLOBAL RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* BRAND COLORS */
 :root {
   --green: #00e68a;
   --green-soft: #00b86b;
@@ -15,7 +24,10 @@
   --alert-glow: rgba(255,59,59,0.55);
 }
 
-/* BACKGROUND */
+/* ============================================================
+   BACKGROUND
+   ============================================================ */
+
 .page-bg {
   position: fixed;
   inset: 0;
@@ -23,9 +35,18 @@
   background-position: center;
   filter: brightness(0.40) saturate(1.2);
   z-index: -1;
+  animation: bgPulse 12s ease-in-out infinite alternate;
 }
 
-/* NAV */
+@keyframes bgPulse {
+  from { filter: brightness(0.40) saturate(1.2); }
+  to   { filter: brightness(0.55) saturate(1.35); }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
 .nav {
   display: flex;
   justify-content: space-between;
@@ -35,6 +56,12 @@
   backdrop-filter: blur(10px);
   border-bottom: 2px solid var(--green);
   box-shadow: 0 0 22px rgba(0,230,138,0.25);
+  animation: fadeDown 0.8s ease;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .logo img {
@@ -48,7 +75,6 @@
   filter: drop-shadow(0 0 22px var(--orange-soft));
 }
 
-/* NAV LINKS */
 .nav-links {
   display: flex;
   gap: 26px;
@@ -70,13 +96,23 @@
   color: var(--dark);
   border-color: var(--orange);
   box-shadow: 0 0 14px var(--orange-soft);
+  transform: translateY(-3px);
 }
 
-/* HERO */
+/* ============================================================
+   HERO
+   ============================================================ */
+
 .hero {
   text-align: center;
   padding: 160px 20px 100px;
   color: var(--white);
+  animation: fadeUp 1s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .hero h1 {
@@ -88,6 +124,13 @@
   display: inline-block;
   box-shadow: 0 0 28px rgba(255,123,0,0.45);
   border: 2px solid var(--orange);
+  animation: glowPulse 3s infinite ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 28px rgba(255,123,0,0.45); }
+  50% { box-shadow: 0 0 40px rgba(255,123,0,0.65); }
+  100% { box-shadow: 0 0 28px rgba(255,123,0,0.45); }
 }
 
 .hero p {
@@ -99,9 +142,13 @@
   border-radius: 10px;
   display: inline-block;
   border: 1px solid rgba(255,255,255,0.15);
+  animation: fadeIn 1.2s ease;
 }
 
-/* EMERGENCY BUTTON */
+/* ============================================================
+   EMERGENCY BUTTON
+   ============================================================ */
+
 .global-alert-btn {
   position: fixed;
   bottom: 20px;
@@ -117,6 +164,11 @@
   z-index: 999;
   box-shadow: 0 0 22px var(--alert-glow);
   animation: pulseAlert 1.4s infinite ease-in-out;
+  transition: 0.3s ease;
+}
+
+.global-alert-btn:hover {
+  transform: scale(1.05);
 }
 
 @keyframes pulseAlert {
@@ -125,12 +177,16 @@
   100% { box-shadow: 0 0 22px var(--alert-glow); }
 }
 
-/* SECTION */
+/* ============================================================
+   SECTION
+   ============================================================ */
+
 .section {
   max-width: 1100px;
   margin: 50px auto;
   padding: 20px;
   color: var(--white);
+  animation: fadeIn 1s ease;
 }
 
 .section h2 {
@@ -154,15 +210,22 @@
   border: 1px solid rgba(255,255,255,0.15);
 }
 
-/* DASHBOARD GRID */
+/* ============================================================
+   DASHBOARD GRID
+   ============================================================ */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 26px;
   padding: 30px;
+  animation: fadeUp 1.2s ease;
 }
 
-/* DASH CARDS */
+/* ============================================================
+   DASH CARDS
+   ============================================================ */
+
 .dash-card {
   background: rgba(0,0,0,0.65);
   border: 2px solid var(--green);
@@ -171,7 +234,14 @@
   box-shadow: 0 0 18px rgba(0,230,138,0.35);
   transition: 0.3s ease;
   backdrop-filter: blur(6px);
+  animation: cardFade 1.4s ease;
 }
+
+@keyframes cardFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .dash-card:hover {
   transform: translateY(-6px);
   border-color: var(--orange);
@@ -200,9 +270,13 @@
   background: var(--green);
   color: var(--dark);
   box-shadow: 0 0 14px rgba(0,230,138,0.45);
+  transform: translateY(-3px);
 }
 
-/* SAFETY HELPER */
+/* ============================================================
+   SAFETY HELPER
+   ============================================================ */
+
 .safety-helper {
   position: fixed;
   bottom: 100px;
@@ -219,7 +293,6 @@
   width: 260px;
   margin-bottom: 10px;
   border: 1px solid rgba(255,255,255,0.25);
-  font-family: 'Inter', sans-serif;
   animation: fadeIn 0.3s ease;
 }
 
@@ -236,7 +309,10 @@
   filter: drop-shadow(0 0 18px var(--orange));
 }
 
-/* FOOTER */
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
 .footer {
   text-align: center;
   padding: 40px;
@@ -245,10 +321,14 @@
   background: rgba(0,0,0,0.55);
   border-top: 2px solid var(--green);
   box-shadow: 0 -4px 18px rgba(0,230,138,0.25);
+  animation: fadeIn 1.4s ease;
 }
 
-/* ANIMATION */
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
