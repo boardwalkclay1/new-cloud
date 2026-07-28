@@ -2,96 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Edit Cloud Profile</title>
+  <title>Edit Profile — Beltline Cloud</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="/assets/img/cloud/cloud-logo.jpg">
   <link rel="stylesheet" href="/pages/profile/css/profile.css">
 </head>
 
-<body data-page="profile-edit">
+<body data-page="edit-profile">
 
-  <!-- Global Nav -->
-  <nav class="nav">
-    <div class="logo">
-      <img src="/assets/img/cloud/cloud-logo.jpg" onclick="location.href='/'">
+  <header class="profile-topbar">
+    <img src="/assets/img/cloud/cloud-logo.jpg" class="top-logo" onclick="location.href='/pages/profile/pages/index.html'">
+    <h2>Edit Profile</h2>
+  </header>
+
+  <main class="edit-container">
+
+    <section class="edit-section">
+      <h3>Avatar</h3>
+      <img id="editAvatarPreview" class="avatar-img" src="/assets/img/cloud/default-avatar.jpg">
+      <input type="file" id="editAvatar" accept="image/*">
+    </section>
+
+    <section class="edit-section">
+      <h3>Header</h3>
+      <img id="editHeaderPreview" class="header-img" src="/assets/img/cloud/default-header.jpg">
+      <input type="file" id="editHeader" accept="image/*">
+    </section>
+
+    <section class="edit-section">
+      <h3>Profile Info</h3>
+      <label>Display Name</label>
+      <input id="editDisplayName">
+
+      <label>Username</label>
+      <input id="editUsername">
+
+      <label>Bio</label>
+      <textarea id="editBio"></textarea>
+    </section>
+
+    <section class="edit-section">
+      <h3>Social Links</h3>
+      <label>TikTok</label>
+      <input id="editTikTok">
+
+      <label>Instagram</label>
+      <input id="editInstagram">
+
+      <label>Facebook</label>
+      <input id="editFacebook">
+
+      <label>Website</label>
+      <input id="editWebsite">
+    </section>
+
+    <section class="edit-section">
+      <h3>Preferences</h3>
+      <label>Feed Preference</label>
+      <select id="editFeedPref">
+        <option value="beltline">Beltline First</option>
+        <option value="global">Global First</option>
+      </select>
+
+      <label>Chatroom Access</label>
+      <select id="editChatPref">
+        <option value="beltline">Beltline + Global</option>
+        <option value="global">Global Only</option>
+      </select>
+
+      <label>Call Settings</label>
+      <select id="editCallPref">
+        <option value="everyone">Everyone</option>
+        <option value="friends">Friends Only</option>
+        <option value="none">No Calls</option>
+      </select>
+    </section>
+
+    <div class="edit-actions">
+      <button id="saveEditBtn" class="primary-btn">Save Changes</button>
+      <button id="cancelEditBtn" class="secondary-btn">Cancel</button>
     </div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/pages/music.html">Cloud Radio</a>
-      <a href="/events/index.html">Events</a>
-      <a href="/network/public/pages/index.html">Network</a>
-      <a href="/pages/safety/index.html">Safety CLOUD</a>
-      <a href="/pages/feed/index.html">Feed</a>
-      <a href="/pages/profile/index.html">Profile</a>
-    </div>
-  </nav>
 
-  <!-- Permanent Cloud Chat Icon -->
-  <div class="cloud-chat-icon" onclick="location.href='/pages/chat/index.html'">
-    💬
-  </div>
+  </main>
 
-  <h1>Edit Profile</h1>
-
-  <form id="profileSettingsForm" class="settings-form">
-
-    <label>Name</label>
-    <input id="setName" type="text">
-
-    <label>Bio</label>
-    <textarea id="setBio"></textarea>
-
-    <label>Identity Tags</label>
-    <select id="setTags" multiple>
-      <option>Skater</option>
-      <option>Longboard Dancer</option>
-      <option>Vendor</option>
-      <option>Walker</option>
-      <option>Night Rider</option>
-      <option>Beltline Elder</option>
-      <option>Fast Roll</option>
-    </select>
-
-    <label>Safety CLOUD Default Mode</label>
-    <select id="setSafetyMode">
-      <option value="nightrider">Night Rider</option>
-      <option value="highrisk">High-Risk Zone</option>
-      <option value="vendor">Vendor</option>
-      <option value="fall">Fall Protection</option>
-      <option value="snatch">Phone Snatch</option>
-    </select>
-
-    <label>Alert Routing</label>
-    <select id="setAlertRouting">
-      <option value="cloud">Cloud Users</option>
-      <option value="contacts">Emergency Contacts</option>
-      <option value="police">Authorities</option>
-      <option value="all">All Three</option>
-    </select>
-
-    <button class="cloud-btn" type="submit">Save Settings</button>
-
-  </form>
-
-  <script type="module">
-    import { updateProfileSettings } from "./js/profile.js";
-
-    const userId = localStorage.getItem("cloud_user_id");
-
-    document.getElementById("profileSettingsForm").onsubmit = async (e) => {
-      e.preventDefault();
-
-      const settings = {
-        name: document.getElementById("setName").value,
-        bio: document.getElementById("setBio").value,
-        tags: Array.from(document.getElementById("setTags").selectedOptions).map(o => o.value),
-        safety_mode: document.getElementById("setSafetyMode").value,
-        alert_routing: document.getElementById("setAlertRouting").value
-      };
-
-      await updateProfileSettings(userId, settings);
-      location.href = "/pages/profile/index.html";
-    };
-  </script>
-
+  <script type="module" src="/pages/profile/js/edit.js"></script>
 </body>
 </html>
