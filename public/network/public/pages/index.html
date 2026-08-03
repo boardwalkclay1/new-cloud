@@ -5,343 +5,33 @@
   <title>The Network — Explore Beltline Vendors</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- FAVICON (UNCHANGED) -->
   <link rel="icon" type="image/jpeg" href="/network/img/network-logo.jpg">
+
+  <!-- SOCIAL PREVIEW (UNCHANGED) -->
+  <meta property="og:title" content="The Network — Explore Beltline Vendors">
+  <meta property="og:description" content="Explore Beltline vendors, storefronts, products, services, workshops, and apps — all powered by Cloud users.">
+  <meta property="og:image" content="/network/img/cloud-network.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://beltlinecloud.com/network">
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Network — Explore Beltline Vendors">
+  <meta name="twitter:description" content="Explore Beltline vendors and storefronts.">
+  <meta name="twitter:image" content="/network/img/cloud-network.jpg">
+
+  <!-- MAIN NETWORK CSS -->
   <link rel="stylesheet" href="/network/public/css/style.css">
-
-  <style>
-    :root {
-      --bg-overlay: rgba(5, 6, 12, 0.88);
-      --card-bg: rgba(255,255,255,0.06);
-      --card-border: rgba(255,255,255,0.16);
-      --accent: #00e0ff;
-      --accent-soft: rgba(0,224,255,0.18);
-      --text-soft: rgba(255,255,255,0.82);
-    }
-
-    body {
-      margin: 0;
-      background: url('/network/public/img/cloud-network.jpg') center/cover no-repeat fixed;
-      color: #fff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(0,0,0,0.75), rgba(0,0,0,0.9));
-      z-index: -1;
-    }
-
-    .page-shell {
-      min-height: 100vh;
-      background: linear-gradient(160deg, rgba(0,0,0,0.7), rgba(5,6,12,0.95));
-    }
-
-    .network-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: var(--bg-overlay);
-    }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .nav-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-    .nav-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-    .nav-sub {
-      font-size: 0.75rem;
-      opacity: 0.75;
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .nav-pill {
-      padding: 7px 13px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.04);
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.2s ease;
-      white-space: nowrap;
-    }
-    .nav-pill:hover {
-      background: rgba(255,255,255,0.16);
-    }
-    .nav-link {
-      font-size: 0.8rem;
-      opacity: 0.85;
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 999px;
-      transition: 0.2s ease;
-      white-space: nowrap;
-    }
-    .nav-link:hover {
-      background: rgba(255,255,255,0.12);
-      opacity: 1;
-    }
-
-    .network-hero {
-      padding: 26px 18px 8px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .hero-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .hero-title {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .hero-sub {
-      font-size: 0.95rem;
-      opacity: 0.82;
-      max-width: 640px;
-    }
-    .hero-user {
-      font-size: 0.8rem;
-      opacity: 0.85;
-      text-align: right;
-    }
-    .hero-user span {
-      color: var(--accent);
-      font-weight: 600;
-    }
-    .hero-tags {
-      margin-top: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .hero-tag {
-      font-size: 0.78rem;
-      padding: 5px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.04);
-    }
-
-    .network-section {
-      padding: 22px 18px 8px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .section-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-    .section-sub {
-      font-size: 0.82rem;
-      opacity: 0.78;
-    }
-
-    .scroll-feed {
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      padding: 10px 0 4px;
-      scroll-behavior: smooth;
-    }
-    .scroll-feed::-webkit-scrollbar {
-      height: 6px;
-    }
-    .scroll-feed::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.04);
-    }
-    .scroll-feed::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.22);
-      border-radius: 999px;
-    }
-
-    .feed-card {
-      min-width: 220px;
-      max-width: 260px;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-      border-radius: 16px;
-      padding: 11px 11px 10px;
-      border: 1px solid var(--card-border);
-      cursor: pointer;
-      transition: 0.22s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .feed-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.55);
-      border-color: rgba(255,255,255,0.28);
-    }
-    .feed-pill {
-      font-size: 0.72rem;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.22);
-      display: inline-block;
-      margin-bottom: 6px;
-      opacity: 0.9;
-    }
-    .feed-title {
-      font-size: 0.96rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #fff;
-    }
-    .feed-meta {
-      font-size: 0.8rem;
-      opacity: 0.82;
-      margin-bottom: 4px;
-    }
-    .feed-price {
-      font-size: 0.86rem;
-      font-weight: 600;
-      color: var(--accent);
-    }
-
-    .vendor-strip {
-      margin-top: 16px;
-    }
-    .vendor-strip-title {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      margin-bottom: 6px;
-    }
-    .vendor-feed {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      scroll-behavior: smooth;
-    }
-    .vendor-card {
-      min-width: 180px;
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 10px;
-      border: 1px solid var(--card-border);
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-    .vendor-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.26);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    }
-    .vendor-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-    .vendor-tags {
-      font-size: 0.78rem;
-      opacity: 0.8;
-    }
-
-    .network-explain {
-      padding: 26px 18px 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .explain-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .explain-item {
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.04);
-      margin-bottom: 10px;
-      overflow: hidden;
-    }
-    .explain-header {
-      padding: 10px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-    .explain-label {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .explain-toggle {
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-    .explain-body {
-      padding: 10px 12px 12px;
-      font-size: 0.84rem;
-      opacity: 0.86;
-      display: none;
-    }
-    .explain-item.open .explain-body {
-      display: block;
-    }
-
-    @media (max-width: 800px) {
-      .network-hero,
-      .network-section,
-      .network-explain {
-        padding: 20px 14px;
-      }
-      .network-nav {
-        padding: 10px 12px;
-      }
-      .hero-title {
-        font-size: 1.7rem;
-      }
-      .hero-title-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .hero-user {
-        text-align: left;
-      }
-    }
-  </style>
 </head>
 
 <body>
+
 <div class="page-shell">
 
   <nav class="network-nav">
     <div class="nav-left">
-      <img src="/assets/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
+      <img src="/network/img/network-logo.jpg" class="nav-logo" alt="The Network Logo">
       <div>
         <div class="nav-title">The Network</div>
         <div class="nav-sub">Beltline vendors • Cloud-powered storefronts • Fast Roll riders</div>
@@ -460,7 +150,7 @@
     <div class="explain-item">
       <div class="explain-header" onclick="toggleExplain(this.parentElement)">
         <span class="explain-label">How does checkout and payout work?</span>
-      <span class="explain-toggle">Details ▾</span>
+        <span class="explain-toggle">Details ▾</span>
       </div>
       <div class="explain-body">
         When a buyer checks out, a secure order is created and routed through the Network. Vendors see orders and payouts in their
@@ -482,7 +172,9 @@
 
 </div>
 
+<!-- JS -->
 <script type="module" src="/network/public/js/customer.js"></script>
+
 <script>
   function scrollToSection(id) {
     const el = document.getElementById(id);
@@ -494,5 +186,6 @@
     item.classList.toggle("open");
   }
 </script>
+
 </body>
 </html>
