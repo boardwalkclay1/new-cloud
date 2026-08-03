@@ -1,12 +1,18 @@
 // public/pages/events/js/events.js
 // MAIN EVENTS CONTROLLER — orchestrates all modules
 
-import { loadUpcomingEvents, renderUpcomingEventsStrip } from "/pages/events/js/modules/events-upcoming.js";
+// ALWAYS use RELATIVE imports when inside the same folder tree
+import { loadUpcomingEvents, renderUpcomingEventsStrip } from "./modules/events-upcoming.js";
 import { loadEventDetails, renderEventDetails } from "./modules/events-details.js";
 import { loadPurchases, renderPurchasesSection } from "./modules/events-purchases.js";
 import { setupTicketing } from "./modules/events-ticketing.js";
 import { setupHostEntry } from "./modules/events-host.js";
 import { setupReferralAndSocial } from "./modules/events-referral.js";
+
+// GLOBAL NAV FUNCTION (your HTML calls this)
+export function goTo(path) {
+  window.location.href = path;
+}
 
 const Auth = window.Auth;
 
