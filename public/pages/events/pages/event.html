@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- FAVICON -->
-  <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
-  <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
+  <link rel="icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
+  <link rel="apple-touch-icon" type="image/jpeg" href="/assets/img/cloud/cloud-logo.jpg">
 
   <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="Event • Cloud Events">
@@ -29,16 +29,10 @@
 <body>
 
 <!-- BACKGROUND -->
-<div style="
-  position: fixed;
-  inset: 0;
-  background: url('/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
-  filter: brightness(0.35);
-  z-index: -1;
-"></div>
+<div class="events-bg"></div>
 
 <header class="events-header">
-  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo" alt="Cloud Events">
+  <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo" alt="Cloud Events Logo">
   <div class="events-header-info">
     <h2 id="eventTitle">Event</h2>
     <span id="eventTagline"></span>
@@ -50,25 +44,12 @@
   <!-- LEFT: EVENT DETAILS -->
   <section class="events-section">
 
-    <div id="eventDetails" class="event-details-card">
-      <!-- JS injects:
-           - title
-           - date/time
-           - location
-           - description
-           - organizer name
-           - organizer logo
-           - event photos
-           - ticket tiers (early bird, regular, VIP)
-      -->
-    </div>
+    <div id="eventDetails" class="event-details-card"></div>
 
     <!-- ORGANIZER / PLATFORM INFO -->
     <div class="event-organizer-card">
       <h3>Event Host</h3>
-      <div id="organizerInfo">
-        <!-- JS: organizer name, Cloud user handle, social links, follower counts -->
-      </div>
+      <div id="organizerInfo"></div>
 
       <div class="event-platform-note">
         <p>
@@ -95,29 +76,18 @@
   <!-- RIGHT: TICKETS + LEGAL -->
   <aside class="events-sidebar">
 
-    <!-- TICKET PANEL -->
     <div class="event-ticket-panel">
       <h3>Tickets</h3>
 
-      <!-- JS: inject ticket tiers, prices, remaining counts -->
-      <div id="ticketTierList">
-        <!-- Example structure:
-             <button data-tier-id="early" class="ticket-tier-btn active">
-               Early Bird • $10 • 50 left
-             </button>
-        -->
-      </div>
+      <div id="ticketTierList"></div>
 
       <label class="ticket-quantity-label">
         Quantity
         <input type="number" id="ticketQuantity" min="1" value="1">
       </label>
 
-      <div id="ticketPriceDisplay" class="event-price-display">
-        <!-- JS: total price, fees, platform fee breakdown -->
-      </div>
+      <div id="ticketPriceDisplay" class="event-price-display"></div>
 
-      <!-- LEGAL ACK FOR BUYERS (optional, can be enforced in JS) -->
       <label class="legal-checkbox">
         <input type="checkbox" id="buyerLegalAgree">
         <span>
@@ -126,23 +96,11 @@
         </span>
       </label>
 
-      <button id="buyTicketBtn" class="events-btn-primary">
-        Buy Ticket
-      </button>
+      <button id="buyTicketBtn" class="events-btn-primary">Buy Ticket</button>
 
-      <!-- TICKET PREVIEW (QR / CODE) -->
-      <div id="ticketPreview" class="ticket-preview">
-        <!-- After purchase, JS injects:
-             - QR code image or SVG
-             - ticket ID
-             - event name
-             - date/time
-             - seat/section if applicable
-        -->
-      </div>
+      <div id="ticketPreview" class="ticket-preview"></div>
     </div>
 
-    <!-- EVENT DASHBOARD ENTRY (FOR HOSTS) -->
     <div class="event-host-dashboard-entry">
       <h3>Host an Event</h3>
       <p>
@@ -166,7 +124,7 @@
 
 </main>
 
-<!-- UNIFIED EVENTS JS (handles: loading event, ticket purchase, QR generation, emails, dashboard routing) -->
+<!-- UNIFIED EVENTS JS -->
 <script type="module" src="/pages/events/js/events.js"></script>
 </body>
 </html>
