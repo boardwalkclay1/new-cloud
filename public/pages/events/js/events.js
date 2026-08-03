@@ -1,7 +1,7 @@
 // public/pages/events/js/events.js
 // MAIN EVENTS CONTROLLER — orchestrates all modules
 
-import { loadUpcomingEvents, renderUpcomingEventsStrip } from "./modules/events-upcoming.js";
+import { loadUpcomingEvents, renderUpcomingEventsStrip } from "/pages/events/js/modules/events-upcoming.js";
 import { loadEventDetails, renderEventDetails } from "./modules/events-details.js";
 import { loadPurchases, renderPurchasesSection } from "./modules/events-purchases.js";
 import { setupTicketing } from "./modules/events-ticketing.js";
