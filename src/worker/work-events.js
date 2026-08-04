@@ -1,6 +1,6 @@
 // src/worker/events/work-events.js
 // CLOUD EVENTS SYSTEM
-// Tables: events, event_tier, event_ticket, event_purchase, event_host
+// Tables: events, event_tier, event_ticket, event_purchase, event_host, event_host_pin
 
 export async function handleEvents(path, request, db, url, env) {
 
@@ -248,7 +248,6 @@ async function paypalCreate(request, db, env) {
     total
   ).run();
 
-  // Placeholder: integrate real PayPal API here
   const approvalUrl = `${env.PAYPAL_REDIRECT_BASE}/approve?purchaseId=${purchaseId}`;
 
   return json({ success: true, approvalUrl, purchaseId });
