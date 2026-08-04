@@ -18,7 +18,6 @@
 
     body {
       background: url('/assets/img/cloud/cloud-login-back.jpg') center center / cover no-repeat fixed;
-      /* Mobile background lock */
       background-attachment: fixed;
       background-size: cover;
       background-repeat: no-repeat;
@@ -75,10 +74,9 @@
       text-decoration: none;
     }
 
-    /* Mobile Fixes */
     @media (max-width: 600px) {
       body {
-        background-attachment: scroll; /* iOS fix */
+        background-attachment: scroll;
         background-size: cover;
       }
       .container {
@@ -100,6 +98,7 @@
     <p>Don’t have an account? <a href="/pages/signup.html">Create one</a></p>
   </div>
 
+  <!-- Correct auth engine -->
   <script src="/js/auth.js"></script>
 
   <script>
@@ -113,7 +112,7 @@
       }
 
       try {
-        const user = await AuthLogin.login(email, password);
+        const user = await Auth.loginCloud(email, password);
         if (user) {
           window.location.href = "/pages/dashboard.html";
         }
