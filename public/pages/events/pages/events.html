@@ -30,7 +30,7 @@
 
 <body>
 
-<!-- BACKGROUND IN HTML (NO PUBLIC, CORRECT PATH) -->
+<!-- BACKGROUND -->
 <div style="
   position: fixed;
   inset: 0;
@@ -64,6 +64,12 @@
   <h3 class="events-section-title">Upcoming Events</h3>
   <div id="eventsFeed" class="events-grid"></div>
 </section>
+
+<script>
+  function goTo(path) {
+    window.location.href = path;
+  }
+</script>
 
 <script type="module" src="/pages/events/js/events.js"></script>
 </body>
