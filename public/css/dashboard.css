@@ -10,39 +10,39 @@ body {
   font-family: 'Inter', sans-serif;
   background: #000;
   color: var(--white);
-  overflow-x: hidden; /* prevents stretched elements */
+  overflow-x: hidden;
 }
 
-/* MAIN CLOUD — FIXED SIZE + FIXED SPACING */
+/* MAIN CLOUD */
 .main-cloud {
-  width: 180px;              /* smaller, balanced */
+  width: 180px;
   height: auto;
   display: block;
-  margin: 25px auto 15px auto; /* reduced spacing */
+  margin: 25px auto 15px auto;
   animation: floaty 5s infinite ease-in-out;
   filter: drop-shadow(0px 0px 15px rgba(255,255,255,0.25));
   cursor: pointer;
 }
 
-/* CLOUD ROW — FIXED ICON SIZE */
+/* CLOUD ROW */
 .cloud-row {
   display: flex;
   justify-content: center;
-  gap: 25px;                 /* reduced gap */
+  gap: 25px;
   margin-top: 10px;
   margin-bottom: 20px;
 }
 
-/* CLOUD ICONS — FIXED SIZE (NO MORE STRETCHING) */
+/* CLOUD ICONS */
 .cloud-row img {
-  height: 120px;             /* reduced from 190px */
+  height: 120px;
   width: auto;
   animation: pulse 2.2s infinite ease-in-out;
   object-fit: contain;
   cursor: pointer;
 }
 
-/* WEATHER + LOCATION + TIME */
+/* STATS */
 .center-stats {
   text-align: center;
   margin-top: 10px;
@@ -51,7 +51,7 @@ body {
 }
 
 .center-stats .stat {
-  font-size: 1rem;           /* reduced from 1.2rem */
+  font-size: 1rem;
   margin: 6px 0;
   color: var(--yellow);
 }
@@ -71,22 +71,22 @@ body {
 
 .profile-name {
   font-family: 'Cinzel', serif;
-  font-size: 1.2rem;         /* reduced */
+  font-size: 1.2rem;
   margin-top: 10px;
   color: var(--yellow);
 }
 
-/* SETTINGS ROW — FIXED SIZE + NO STRETCH */
+/* SETTINGS ROW */
 .settings-row {
   display: flex;
   justify-content: center;
   gap: 25px;
   margin-top: 25px;
-  flex-wrap: wrap;           /* prevents stretching */
+  flex-wrap: wrap;
 }
 
 .settings-row img {
-  height: 65px;              /* reduced */
+  height: 65px;
   width: auto;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -96,16 +96,15 @@ body {
   transform: scale(1.08);
 }
 
-/* Prevent stretched text in card links */
 .settings-row a,
 .settings-row div,
 .settings-row span {
   font-size: 0.9rem;
-  white-space: nowrap;       /* stops long stretching */
+  white-space: nowrap;
   text-align: center;
 }
 
-/* FLOAT + PULSE ANIMATIONS */
+/* ANIMATIONS */
 @keyframes floaty {
   0% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -123,7 +122,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 300px;              /* reduced */
+  width: 300px;
   height: 100vh;
   background: rgba(10, 42, 67, 0.96);
   border-right: 3px solid var(--yellow);
@@ -140,7 +139,6 @@ body {
 
 /* MOBILE */
 @media (max-width: 768px) {
-
   .main-cloud {
     width: 150px;
   }
