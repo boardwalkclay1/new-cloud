@@ -32,7 +32,7 @@ export function renderUpcomingEventsStrip() {
       card.className = "events-upcoming-card";
 
       card.innerHTML = `
-        <img src="${ev.photoUrl}" class="events-upcoming-photo">
+        <img src="${ev.mainPhotoUrl}" class="events-upcoming-photo">
         <div class="events-upcoming-info">
           <h4>${ev.title}</h4>
           <div class="events-upcoming-meta">
@@ -48,7 +48,6 @@ export function renderUpcomingEventsStrip() {
       scroller.appendChild(card);
     });
 
-    // Auto-scroll
     let pos = 0;
     setInterval(() => {
       pos += 1;
