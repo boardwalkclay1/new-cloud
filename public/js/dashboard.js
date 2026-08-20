@@ -1,9 +1,12 @@
-import { Auth } from "/js/auth.js";
+/* ---------------------------------------------------------
+   AUTH (GLOBAL)
+--------------------------------------------------------- */
+const Auth = window.Auth;
 
 /* ---------------------------------------------------------
    CLOUD USER
 --------------------------------------------------------- */
-const user = Auth.current();
+const user = Auth.getUser();
 
 if (!user) {
   window.location.href = "/pages/login.html";
@@ -11,15 +14,20 @@ if (!user) {
 }
 
 document.getElementById("cloudName").textContent = user.name || "Cloud User";
-document.getElementById("cloudEmail").textContent = user.email;
+document.getElementById("cloudEmail").textContent = user.email || "";
 
 /* ---------------------------------------------------------
    BADGES
 --------------------------------------------------------- */
 async function loadBadges() {
   try {
-    const res = await Auth.listBadges(user.id);
+    if (!Auth.listBadges) {
+      console.warn("Auth.listBadges() not implemented yet.");
+      document.getElementById("badgeList").innerHTML = "<p>No badges yet.</p>";
+      return;
+    }
 
+    const res = await Auth.listBadges(user.id);
     const container = document.getElementById("badgeList");
     container.innerHTML = "";
 
@@ -123,6 +131,6 @@ menuClose.onclick = () => cloudMenu.classList.remove("open");
    LOGOUT
 --------------------------------------------------------- */
 window.logout = function () {
-  Auth.logout();
+  Auth.clearUser();
   window.location.href = "/pages/login.html";
 };
