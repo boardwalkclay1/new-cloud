@@ -40,7 +40,7 @@
     </nav>
 
     <div class="msg-user">
-      <img id="userAvatar" class="avatar" src="/assets/img/cloud/default-avatar.jpg" alt="User">
+      <img id="userAvatar" class="avatar" src="/assets/img/cloud/default-avatar.png" alt="User">
       <span id="userName"></span>
     </div>
   </header>
@@ -66,7 +66,7 @@
     <section class="msg-panel">
 
       <div class="panel-header">
-        <img id="threadAvatar" class="avatar-small" src="/assets/img/cloud/default-avatar.jpg" alt="Thread">
+        <img id="threadAvatar" class="avatar-small" src="/assets/img/cloud/default-avatar.png" alt="Thread">
         <div class="thread-info">
           <h2 id="threadName">Select a conversation</h2>
           <span id="threadStatus"></span>
@@ -116,6 +116,11 @@
 
 </div>
 
-<script type="module" src="/pages/messages/js/messages.js"></script>
+<!-- FIX #1: Load Auth FIRST -->
+<script src="/js/auth.js"></script>
+
+<!-- FIX #2: Load messages.js normally (NOT a module) -->
+<script src="/pages/messages/js/messages.js"></script>
+
 </body>
 </html>
