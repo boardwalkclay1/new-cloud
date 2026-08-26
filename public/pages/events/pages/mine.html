@@ -8,53 +8,46 @@
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/assets/img/cloud/cloud-logo.jpg">
 
-  <!-- APPLE TOUCH ICON -->
-  <link rel="apple-touch-icon" href="/assets/img/cloud/cloud-logo.jpg">
-
   <!-- SOCIAL PREVIEW -->
   <meta property="og:title" content="My Events • Cloud Events">
-  <meta property="og:description" content="View and manage your hosted events and purchased tickets on Beltline Cloud.">
+  <meta property="og:description" content="Your hosted events, tickets, analytics, and check‑ins — all in one place.">
   <meta property="og:image" content="/assets/img/cloud/events-cloud.jpg">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://beltlinecloud.com/events/mine">
 
-  <!-- TWITTER CARD -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="My Events • Cloud Events">
-  <meta name="twitter:description" content="View and manage your hosted events and purchased tickets.">
-  <meta name="twitter:image" content="/assets/img/cloud/events-cloud.jpg">
-
-  <!-- EVENTS CSS -->
-  <link rel="stylesheet" href="/pages/events/css/events.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/pages/events/css/mine.css">
 </head>
 
 <body>
 
-<!-- BACKGROUND IN HTML (NOT CSS) -->
-<div style="
-  position: fixed;
-  inset: 0;
-  background: url('/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
-  filter: brightness(0.35);
-  z-index: -1;
-"></div>
+<div class="events-bg"></div>
 
 <header class="events-header">
   <img src="/assets/img/cloud/cloud-logo.jpg" class="events-logo">
   <h2>My Events</h2>
 </header>
 
-<section class="events-section">
-  <h3 class="events-section-title">Events I’m Hosting</h3>
-  <div id="myHostedEvents" class="events-grid"></div>
-</section>
+<main class="events-main">
 
-<section class="events-section">
-  <h3 class="events-section-title">Tickets I’ve Bought</h3>
-  <div id="myTickets" class="events-grid"></div>
-</section>
+  <!-- HOSTED EVENTS -->
+  <section class="events-section">
+    <h3 class="events-section-title">Events I’m Hosting</h3>
+    <div id="myHostedEvents" class="events-grid"></div>
+  </section>
 
-<!-- UNIFIED EVENTS JS -->
-<script src="/pages/events/js/events.js"></script>
+  <!-- TICKETS -->
+  <section class="events-section">
+    <h3 class="events-section-title">Tickets I’ve Bought</h3>
+    <div id="myTickets" class="events-grid"></div>
+  </section>
+
+</main>
+
+<!-- AUTH FIRST -->
+<script src="/js/auth.js"></script>
+
+<!-- EVENTS JS -->
+<script src="/pages/events/js/mine.js"></script>
+
 </body>
 </html>
