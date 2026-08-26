@@ -1,14 +1,26 @@
-// /public/pages/messages/messages.js
-// UPDATED UNIVERSAL MESSAGES JS — CLOUD + NETWORK + RESPONSE
+/* ---------------------------------------------------------
+   AUTH (GLOBAL)
+--------------------------------------------------------- */
+const Auth = window.Auth;
 
-import { Auth } from "/js/auth.js";
+if (!Auth) {
+  console.error("Auth not loaded");
+  throw new Error("Auth not loaded");
+}
 
-const user = Auth.current();
+/* ---------------------------------------------------------
+   CLOUD USER
+--------------------------------------------------------- */
+const user = Auth.getUser();
+
 if (!user) {
   window.location.href = "/pages/login.html";
   throw new Error("User not logged in");
 }
 
+/* ---------------------------------------------------------
+   ELEMENTS
+--------------------------------------------------------- */
 const viewEl = document.getElementById("messages-view") || document.getElementById("messageContainer");
 const threadListEl = document.getElementById("threadList");
 const familyListEl = document.getElementById("familyList");
@@ -18,19 +30,26 @@ const userNameEl = document.getElementById("userName");
 const threadNameEl = document.getElementById("threadName");
 const threadStatusEl = document.getElementById("threadStatus");
 
+/* ---------------------------------------------------------
+   USER DISPLAY
+--------------------------------------------------------- */
 if (userAvatarEl) userAvatarEl.src = user.photoUrl || "/assets/img/cloud/default-avatar.jpg";
 if (userNameEl) userNameEl.textContent = user.name || user.email;
 
-/* ROUTER */
-export function switchMessagesView(view, threadId = null, meta = {}) {
-  if (view === "inbox") loadInbox();
+/* ---------------------------------------------------------
+   ROUTER (GLOBAL)
+--------------------------------------------------------- */
+window.switchMessagesView = function(view, threadId = null, meta = {}) {
+  if (view === "inbox" || view === "cloud") loadInbox();
   if (view === "thread") loadThread(threadId, meta);
   if (view === "compose") loadCompose();
   if (view === "requests") loadRequests();
   if (view === "settings") loadMessageSettings();
-}
+};
 
-/* INBOX: CLOUD + NETWORK + RESPONSE */
+/* ---------------------------------------------------------
+   INBOX LOADER
+--------------------------------------------------------- */
 async function loadInbox() {
   if (!viewEl) return;
   viewEl.innerHTML = "<div class='loading'>Loading inbox...</div>";
@@ -43,6 +62,7 @@ async function loadInbox() {
 
   const threads = [];
 
+  /* CLOUD THREADS */
   (cloud || []).forEach(m => {
     threads.push({
       type: "cloud",
@@ -54,6 +74,7 @@ async function loadInbox() {
     });
   });
 
+  /* VENDOR THREADS */
   (network || []).forEach(m => {
     threads.push({
       type: "network",
@@ -65,6 +86,7 @@ async function loadInbox() {
     });
   });
 
+  /* RESPONSE UNIT THREADS */
   (response || []).forEach(m => {
     threads.push({
       type: "response",
@@ -97,35 +119,35 @@ async function loadInbox() {
       </div>
     `;
 
-    if (threadListEl) threadListEl.appendChild(li);
+    threadListEl.appendChild(li);
   });
 }
 
-/* THREAD: CLOUD / NETWORK / RESPONSE */
+/* ---------------------------------------------------------
+   THREAD VIEW
+--------------------------------------------------------- */
 async function loadThread(threadId, { type = "cloud", meta = {} } = {}) {
   if (!viewEl) return;
+
   viewEl.innerHTML = "<div class='loading'>Loading conversation...</div>";
 
   let messages = [];
 
   if (type === "cloud") {
     const res = await fetch(`/api/work/message/thread?userId=${user.id}&threadId=${encodeURIComponent(meta.threadId || threadId)}`);
-    const data = await res.json();
-    messages = Array.isArray(data) ? data : [];
+    messages = await res.json();
     if (threadNameEl) threadNameEl.textContent = "Cloud conversation";
   }
 
   if (type === "network") {
     const res = await fetch(`/api/network/messages/thread?fromUserId=${user.id}&vendorId=${encodeURIComponent(meta.vendorId)}`);
-    const data = await res.json();
-    messages = Array.isArray(data) ? data : [];
+    messages = await res.json();
     if (threadNameEl) threadNameEl.textContent = "Vendor messages";
   }
 
   if (type === "response") {
     const res = await fetch(`/api/response/messages/thread?userId=${user.id}&withId=${encodeURIComponent(meta.withId)}`);
-    const data = await res.json();
-    messages = Array.isArray(data) ? data : [];
+    messages = await res.json();
     if (threadNameEl) threadNameEl.textContent = "Response messages";
   }
 
@@ -145,8 +167,10 @@ async function loadThread(threadId, { type = "cloud", meta = {} } = {}) {
   messages.forEach(m => {
     const bubble = document.createElement("div");
     const senderId = m.fromId || m.senderId;
+
     bubble.className = "msg-bubble " + (senderId === user.id ? "msg-me" : "msg-them");
     bubble.textContent = m.text || "";
+
     msgBox.appendChild(bubble);
   });
 
@@ -197,9 +221,12 @@ async function loadThread(threadId, { type = "cloud", meta = {} } = {}) {
   };
 }
 
-/* COMPOSE: NEW CLOUD THREAD */
+/* ---------------------------------------------------------
+   COMPOSE NEW CLOUD THREAD
+--------------------------------------------------------- */
 function loadCompose() {
   if (!viewEl) return;
+
   viewEl.innerHTML = `
     <div class="thread-container">
       <div class="compose-box">
@@ -227,9 +254,12 @@ function loadCompose() {
   };
 }
 
-/* REQUESTS: USE RESPONSE SYSTEM FOR NOW */
+/* ---------------------------------------------------------
+   REQUESTS
+--------------------------------------------------------- */
 async function loadRequests() {
   if (!viewEl) return;
+
   viewEl.innerHTML = "<div class='loading'>Loading requests...</div>";
 
   const res = await fetch(`/api/response/messages/requests?userId=${user.id}`).catch(() => null);
@@ -270,9 +300,12 @@ window.declineRequest = async function(id) {
   loadRequests();
 };
 
-/* SETTINGS */
+/* ---------------------------------------------------------
+   SETTINGS
+--------------------------------------------------------- */
 function loadMessageSettings() {
   if (!viewEl) return;
+
   viewEl.innerHTML = `
     <div class="thread-container">
       <h3 style="font-family:Cinzel; color:#f7d354;">Message Settings</h3>
@@ -281,50 +314,63 @@ function loadMessageSettings() {
   `;
 }
 
-/* CLOUD FAMILY + PHONEBOOK SIDEBARS */
+/* ---------------------------------------------------------
+   SIDEBARS
+--------------------------------------------------------- */
 (async function loadSidebars() {
+
+  /* CLOUD FAMILY */
   if (familyListEl) {
     const res = await fetch(`/api/work/family/list?userId=${user.id}`).catch(() => null);
     const data = res ? await res.json() : [];
+
     familyListEl.innerHTML = "";
+
     (data || []).forEach(f => {
       const li = document.createElement("li");
       li.innerHTML = `<span>${f.familyId}</span>`;
-      li.onclick = () => switchMessagesView("thread", `cloud-${f.familyId}`, { type: "cloud", meta: { withId: f.familyId } });
+      li.onclick = () =>
+        switchMessagesView("thread", `cloud-${f.familyId}`, {
+          type: "cloud",
+          meta: { withId: f.familyId }
+        });
+
       familyListEl.appendChild(li);
     });
   }
 
+  /* PHONEBOOK */
   if (phonebookListEl) {
     const res = await fetch(`/api/vendor/phonebook?email=${encodeURIComponent(user.email)}`).catch(() => null);
     const data = res ? await res.json() : [];
+
     phonebookListEl.innerHTML = "";
+
     (data || []).forEach(p => {
       const li = document.createElement("li");
       li.innerHTML = `<span>${p.name || p.phone}</span>`;
-      li.onclick = () => switchMessagesView("thread", `phone-${p.id}`, { type: "cloud", meta: { withId: p.userId } });
+      li.onclick = () =>
+        switchMessagesView("thread", `phone-${p.id}`, {
+          type: "cloud",
+          meta: { withId: p.userId }
+        });
+
       phonebookListEl.appendChild(li);
     });
   }
 })();
 
-/* AUTO LOAD VIEW */
+/* ---------------------------------------------------------
+   AUTO LOAD VIEW
+--------------------------------------------------------- */
 const params = new URLSearchParams(window.location.search);
 const view = params.get("view");
 switchMessagesView(view || "inbox");
 
-/* MENU */
-const menu = document.getElementById("cloudMenu");
-const trigger = document.getElementById("menuTrigger");
-const closeBtn = document.getElementById("menuClose");
-
-if (trigger && menu && closeBtn) {
-  trigger.onclick = () => menu.classList.add("open");
-  closeBtn.onclick = () => menu.classList.remove("open");
-}
-
-/* LOGOUT */
+/* ---------------------------------------------------------
+   LOGOUT
+--------------------------------------------------------- */
 window.logout = function () {
-  Auth.logout();
+  Auth.clearUser();
   window.location.href = "/pages/login.html";
 };
