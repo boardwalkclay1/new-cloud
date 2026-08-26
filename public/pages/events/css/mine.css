@@ -1,0 +1,113 @@
+.events-bg {
+  position: fixed;
+  inset: 0;
+  background: url('/assets/img/cloud/events-cloud.jpg') center/cover no-repeat;
+  filter: brightness(0.35);
+  z-index: -1;
+}
+
+.events-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  color: #fff;
+}
+
+.events-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.events-main {
+  padding: 20px;
+}
+
+.events-section {
+  margin-bottom: 40px;
+}
+
+.events-section-title {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.event-card,
+.ticket-card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 15px;
+  color: #fff;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: 0.25s ease;
+}
+
+.event-card:hover,
+.ticket-card:hover {
+  transform: scale(1.03);
+  filter: drop-shadow(0 0 10px #ffd700);
+}
+
+.event-banner {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.event-title,
+.ticket-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.event-meta,
+.ticket-meta,
+.ticket-id {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 6px;
+}
+
+.event-stats {
+  margin-top: 10px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-actions,
+.ticket-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.event-actions button,
+.ticket-actions button {
+  padding: 8px 12px;
+  background: #ffd700;
+  color: #000;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+}
+
+.loading,
+.empty {
+  color: #fff;
+  opacity: 0.8;
+  padding: 20px;
+}
