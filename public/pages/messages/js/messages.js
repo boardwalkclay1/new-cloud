@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------
-   AUTH (GLOBAL)
+   AUTH + USER
 --------------------------------------------------------- */
 const Auth = window.Auth;
 
@@ -8,9 +8,6 @@ if (!Auth) {
   throw new Error("Auth not loaded");
 }
 
-/* ---------------------------------------------------------
-   CLOUD USER
---------------------------------------------------------- */
 const user = Auth.getUser();
 
 if (!user) {
@@ -30,14 +27,12 @@ const userNameEl = document.getElementById("userName");
 const threadNameEl = document.getElementById("threadName");
 const threadStatusEl = document.getElementById("threadStatus");
 
-/* ---------------------------------------------------------
-   USER DISPLAY
---------------------------------------------------------- */
+/* USER DISPLAY */
 if (userAvatarEl) userAvatarEl.src = user.photoUrl || "/assets/img/cloud/default-avatar.jpg";
 if (userNameEl) userNameEl.textContent = user.name || user.email;
 
 /* ---------------------------------------------------------
-   ROUTER (GLOBAL)
+   ROUTER
 --------------------------------------------------------- */
 window.switchMessagesView = function(view, threadId = null, meta = {}) {
   if (view === "inbox" || view === "cloud") loadInbox();
@@ -48,7 +43,7 @@ window.switchMessagesView = function(view, threadId = null, meta = {}) {
 };
 
 /* ---------------------------------------------------------
-   INBOX LOADER
+   INBOX: CLOUD + NETWORK + RESPONSE
 --------------------------------------------------------- */
 async function loadInbox() {
   if (!viewEl) return;
@@ -62,7 +57,6 @@ async function loadInbox() {
 
   const threads = [];
 
-  /* CLOUD THREADS */
   (cloud || []).forEach(m => {
     threads.push({
       type: "cloud",
@@ -74,7 +68,6 @@ async function loadInbox() {
     });
   });
 
-  /* VENDOR THREADS */
   (network || []).forEach(m => {
     threads.push({
       type: "network",
@@ -86,7 +79,6 @@ async function loadInbox() {
     });
   });
 
-  /* RESPONSE UNIT THREADS */
   (response || []).forEach(m => {
     threads.push({
       type: "response",
@@ -135,19 +127,19 @@ async function loadThread(threadId, { type = "cloud", meta = {} } = {}) {
 
   if (type === "cloud") {
     const res = await fetch(`/api/work/message/thread?userId=${user.id}&threadId=${encodeURIComponent(meta.threadId || threadId)}`);
-    messages = await res.json();
+    messages = Array.isArray(await res.json()) ? await res.json() : [];
     if (threadNameEl) threadNameEl.textContent = "Cloud conversation";
   }
 
   if (type === "network") {
     const res = await fetch(`/api/network/messages/thread?fromUserId=${user.id}&vendorId=${encodeURIComponent(meta.vendorId)}`);
-    messages = await res.json();
+    messages = Array.isArray(await res.json()) ? await res.json() : [];
     if (threadNameEl) threadNameEl.textContent = "Vendor messages";
   }
 
   if (type === "response") {
     const res = await fetch(`/api/response/messages/thread?userId=${user.id}&withId=${encodeURIComponent(meta.withId)}`);
-    messages = await res.json();
+    messages = Array.isArray(await res.json()) ? await res.json() : [];
     if (threadNameEl) threadNameEl.textContent = "Response messages";
   }
 
@@ -167,10 +159,8 @@ async function loadThread(threadId, { type = "cloud", meta = {} } = {}) {
   messages.forEach(m => {
     const bubble = document.createElement("div");
     const senderId = m.fromId || m.senderId;
-
     bubble.className = "msg-bubble " + (senderId === user.id ? "msg-me" : "msg-them");
     bubble.textContent = m.text || "";
-
     msgBox.appendChild(bubble);
   });
 
@@ -222,7 +212,7 @@ async function loadThread(threadId, { type = "cloud", meta = {} } = {}) {
 }
 
 /* ---------------------------------------------------------
-   COMPOSE NEW CLOUD THREAD
+   COMPOSE: NEW CLOUD THREAD
 --------------------------------------------------------- */
 function loadCompose() {
   if (!viewEl) return;
@@ -318,43 +308,26 @@ function loadMessageSettings() {
    SIDEBARS
 --------------------------------------------------------- */
 (async function loadSidebars() {
-
-  /* CLOUD FAMILY */
   if (familyListEl) {
     const res = await fetch(`/api/work/family/list?userId=${user.id}`).catch(() => null);
     const data = res ? await res.json() : [];
-
     familyListEl.innerHTML = "";
-
     (data || []).forEach(f => {
       const li = document.createElement("li");
       li.innerHTML = `<span>${f.familyId}</span>`;
-      li.onclick = () =>
-        switchMessagesView("thread", `cloud-${f.familyId}`, {
-          type: "cloud",
-          meta: { withId: f.familyId }
-        });
-
+      li.onclick = () => switchMessagesView("thread", `cloud-${f.familyId}`, { type: "cloud", meta: { withId: f.familyId } });
       familyListEl.appendChild(li);
     });
   }
 
-  /* PHONEBOOK */
   if (phonebookListEl) {
     const res = await fetch(`/api/vendor/phonebook?email=${encodeURIComponent(user.email)}`).catch(() => null);
     const data = res ? await res.json() : [];
-
     phonebookListEl.innerHTML = "";
-
     (data || []).forEach(p => {
       const li = document.createElement("li");
       li.innerHTML = `<span>${p.name || p.phone}</span>`;
-      li.onclick = () =>
-        switchMessagesView("thread", `phone-${p.id}`, {
-          type: "cloud",
-          meta: { withId: p.userId }
-        });
-
+      li.onclick = () => switchMessagesView("thread", `phone-${p.id}`, { type: "cloud", meta: { withId: p.userId } });
       phonebookListEl.appendChild(li);
     });
   }
