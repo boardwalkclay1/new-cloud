@@ -1,0 +1,160 @@
+/* ---------------------------------------------------------
+   GLOBAL
+--------------------------------------------------------- */
+body {
+  margin: 0;
+  background: #0b0e11;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+}
+
+#dashboardApp {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ---------------------------------------------------------
+   HEADER
+--------------------------------------------------------- */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.05);
+  padding: 15px 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+}
+
+.dash-logo {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dash-header h1 {
+  margin: 0;
+  font-size: 26px;
+  color: #f7d354;
+}
+
+.dash-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#logoutBtn {
+  background: #f7d354;
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   LAYOUT
+--------------------------------------------------------- */
+.dash-menu {
+  width: 240px;
+  background: rgba(255,255,255,0.04);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.menu-item {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.menu-item:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.menu-item.active {
+  background: #f7d354;
+  color: #000;
+  font-weight: 600;
+}
+
+.dash-panel {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* ---------------------------------------------------------
+   PANEL CONTENT
+--------------------------------------------------------- */
+.dash-section {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 25px;
+  backdrop-filter: blur(6px);
+  margin-bottom: 25px;
+}
+
+.dash-section h2 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #f7d354;
+}
+
+.dash-section p {
+  font-size: 15px;
+  opacity: 0.85;
+  margin-top: 10px;
+}
+
+/* ---------------------------------------------------------
+   SCROLLBARS
+--------------------------------------------------------- */
+.dash-menu::-webkit-scrollbar,
+.dash-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dash-menu::-webkit-scrollbar-thumb,
+.dash-panel::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------- */
+@media (max-width: 900px) {
+  #dashboardApp {
+    flex-direction: column;
+  }
+
+  .dash-menu {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .menu-item {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
